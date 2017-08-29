@@ -3,11 +3,11 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { NumericDisplayPage } from '../pages/pages';
+import { NumericDisplayPage, ProgramPage } from '../pages/pages';
 @Component({
   templateUrl: 'app.html'
 })
-export class AITApp {
+export class AppComponent {
   rootPage:any = NumericDisplayPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
@@ -19,4 +19,3 @@ export class AITApp {
     });
   }
 }
-

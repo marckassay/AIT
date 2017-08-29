@@ -36,11 +36,12 @@ $app-direction: ltr;
 $colors: (
   primary:    #488aff,
   secondary:  #32db64,
+  go:         #00b04f,
+  stop:       #bf0000,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #101010
 );
-
 
 // App iOS Variables
 // --------------------------------------------------
@@ -86,3 +87,22 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+@font-face {
+  font-family: 'selawk';
+  src: url('#{$font-path}/selawk.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+ }
+
+ @font-face {
+  font-family: 'selawksb';
+  src: url('#{$font-path}/selawksb.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+ }
+
+$font-family-base: "selawk";
+$font-family-ios-base: $font-family-base;
+$font-family-md-base: $font-family-base;
+$font-family-wp-base: $font-family-base;

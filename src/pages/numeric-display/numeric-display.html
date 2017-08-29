@@ -4,16 +4,8 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>NumericDisplay</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-  <h6 ion-text [color]="dynamicColor">50/</h6>
-  <h6 ion-text [color]="dynamicColor">10</h6>
-</ion-content>
+<div>
+  <p ion-text class="active" [color]="isActive ? go : stop ">50/</p>
+  <p ion-text class="rest" [color]="isActive ? stop : go">10</p>
+  <p ion-text class="time" [color]="now">6.13.123</p>
+</div>
