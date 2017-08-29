@@ -4,22 +4,23 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
-import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import { AITApp } from './app.component'
+import { NumericDisplayPage, ProgramPage } from '../pages/pages';
+
 
 @NgModule({
   declarations: [
-    MyApp,
-    HomePage
+    NumericDisplayPage,
+    ProgramPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(AITApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    HomePage
+    AITApp,
+    NumericDisplayPage
   ],
   providers: [
     StatusBar,
