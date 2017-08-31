@@ -4,10 +4,10 @@ import { NumericDisplayPage } from './numeric-display';
 
 @NgModule({
   declarations: [
-    NumericDisplayPage,
+    NumericDisplayPage
   ],
   imports: [
-    IonicPageModule.forChild(NumericDisplayPage),
+    IonicPageModule.forChild([NumericDisplayPage]),
   ],
 })
 export class NumericDisplayPageModule {}
