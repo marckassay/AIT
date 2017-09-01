@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Input, Output, EventEmitter } from '@angular/core';
-import { SimpleTimer } from 'ng2-simple-timer';
+import Rx from 'rxjs/Rx';
 
-/**
- * Generated class for the NumericDisplayPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
+export enum IntervalState {
+  Loaded = 0,
+  GetReady = 1,
+  Active = 2,
+  Rest = 3,
+  Finished = 4
+}
 
 @IonicPage()
 @Component({
@@ -17,49 +17,80 @@ import { SimpleTimer } from 'ng2-simple-timer';
 })
 export class NumericDisplayPage implements OnInit {
 
-  counter0 = 50;
-	timer0Id: string;
+  state: IntervalState;
+  timer: AnotherIntervalTimer;
+  getReady: number;
+  activeTime: number;
+  restTime: number;
+  rounds: number;
 
-  isActive = true;
-  colorVar = '#ffd800'
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.state = IntervalState.Loaded;
+    this.getReady = 5;
+    this.activeTime = 50;
+    this.restTime = 10;
+    this.rounds = 12;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private st: SimpleTimer) {
+    this.initTimer();
+  }
+
+  initTimer(): void {
+    this.timer = new AnotherIntervalTimer();
+    this.state = IntervalState.Rest;
+
+    this.timer.initialize(this.activeTime, this.restTime, this.rounds, this.getReady);
+    this.timer.source.subscribe(this.onNext, this.onError, this.onComplete);
+  }
+
+  onNext(): void {
 
   }
 
-  ionViewDidLoad() {
+  onError(): void {
+
+  }
+
+  onComplete(): void {
+
+  }
+
+  ionViewDidLoad(): void {
     console.log('ionViewDidLoad NumericDisplayPage');
   }
 
-	ngOnInit() {
-    this.st.newTimer('1sec',1);
-    this.subscribeTimer0();
-  }
-  delAllTimer() {
-    this.st.delTimer('1sec');
-  }
+	ngOnInit(): void  {
 
-	subscribeTimer0() {
-		if (this.timer0Id) {
-			// Unsubscribe if timer Id is defined
-			this.st.unsubscribe(this.timer0Id);
-			this.timer0Id = undefined;
-			console.log('timer 0 Unsubscribed.');
-		} else {
-			// Subscribe if timer Id is undefined
-			this.timer0Id = this.st.subscribe('1sec', () => {
-        this.counter0--
-        if(this.counter0 < 40) {
+  }
+}
 
+export class AnotherIntervalTimer {
+  source;
+  subscription;
+
+  initialize(activeTime:number, restTime:number, rounds:number, getReady:number=-1) {
+
+    let roundTime: number = (activeTime + restTime);
+    let totalTime: number = roundTime * rounds;
+    let timerRounds: number = rounds;
+    let offset: number;
+
+    this.source = Rx.Observable.timer(0, 1000)
+      .timeInterval()
+      .map(function (x) {
+        let remainingSeconds = totalTime - x.value;
+        console.log("remainingSeconds: "+remainingSeconds)
+        console.log("x: "+x.value)
+        if(remainingSeconds % roundTime == 0) {
+          timerRounds--;
+          offset = restTime * timerRounds;
+          console.log("At the "+remainingSeconds+" second-mark, enter into rest state");
+        } else if(remainingSeconds % activeTime == offset) {
+          console.log("At the "+remainingSeconds+" second-mark, enter into active state");
         }
-        console.log(this.counter0);
-      });
-			console.log('timer 0 Subscribed.');
-		}
-		console.log(this.st.getSubscription());
-  }
+        return x.value;
+      })
+      .take(totalTime);
 
-  get counter() {
-    return this.counter0;
+    this.subscription = this.source.subscribe();
   }
 }

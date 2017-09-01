@@ -1,12 +1,23 @@
 <!--
-  Generated template for the NumericDisplayPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
+export enum IntervalState {
+  Loaded = 0,
+  GetReady = 1,
+  Active = 2,
+  Rest = 3,
+  Finished = 4
+}
 -->
-<div>
-  <p ion-text class="active" color="go">{{counter}}/</p>
-  <p ion-text class="rest" color="stop">10</p>
-  <p ion-text class="rounds" color="go">1/12</p>
-  <p ion-text class="time" color="go">6.13.123</p>
+<div [ngSwitch]="state">
+  <!-- IntervalState.Active = 2 -->
+  <ng-container *ngSwitchCase="2">
+    <div class="activeGo">45</div>
+    <div class="restStop">{{restTime}}</div>
+  </ng-container>
+  <!-- IntervalState.Rest = 3 -->
+  <ng-container *ngSwitchCase="3">
+    <div class="activeStop">{{activeTime}}</div>
+    <div class="restGo">9</div>
+  </ng-container>
 </div>
+<div class="roundsGo">6/{{rounds}}</div>
+<div class="timeGetReady">6:13.1</div>

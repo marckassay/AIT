@@ -1,8 +1,36 @@
 page-numeric-display {
-  .active, .rest {
+  .activeGo {
     font-family: selawksb;
     font-size: 16.0rem;
     margin: -40px 0 0 0;
+    color: appColor( go );
+  }
+
+  .activeGetReady {
+    @extend .activeGo;
+    color: appColor( getready );
+  }
+
+  .activeStop {
+    @extend .activeGo;
+    color: appColor( stop );
+  }
+
+  .restGo {
+    font-family: selawksb;
+    font-size: 16.0rem;
+    margin: -40px 0 0 0;
+    color: appColor( go );
+  }
+
+  .restGetReady {
+    @extend .restGo;
+    color: appColor( getready );
+  }
+
+  .restStop {
+    @extend .restGo;
+    color: appColor( stop );
   }
 
   .rounds {

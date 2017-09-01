@@ -28,3 +28,7 @@
   font-weight: normal;
   font-style: normal;
  }
+
+ @function appColor($name) {
+  @return color($colors, $name)
+ }
