@@ -42,8 +42,8 @@ export class NumericDisplayPage implements OnInit {
     this.timer.source.subscribe(this.onNext, this.onError, this.onComplete);
   }
 
-  onNext(): void {
-
+  onNext(e:IIntervalTimerEmission): void {
+    console.log("-->"+e.state+" "+e.remainingTime);
   }
 
   onError(): void {
@@ -63,7 +63,13 @@ export class NumericDisplayPage implements OnInit {
   }
 }
 
+export interface IIntervalTimerEmission {
+	readonly state: IntervalState;
+	readonly remainingTime: number;
+	readonly currentRound: number;
+}
 export class AnotherIntervalTimer {
+
   source;
   subscription;
 
@@ -71,26 +77,35 @@ export class AnotherIntervalTimer {
 
     let roundTime: number = (activeTime + restTime);
     let totalTime: number = roundTime * rounds;
-    let timerRounds: number = rounds;
-    let offset: number;
+    let currentRound: number = rounds;
+    let offsetTime: number;
+    let state: IntervalState;
 
     this.source = Rx.Observable.timer(0, 1000)
       .timeInterval()
       .map(function (x) {
-        let remainingSeconds = totalTime - x.value;
-        console.log("remainingSeconds: "+remainingSeconds)
-        console.log("x: "+x.value)
-        if(remainingSeconds % roundTime == 0) {
-          timerRounds--;
-          offset = restTime * timerRounds;
-          console.log("At the "+remainingSeconds+" second-mark, enter into rest state");
-        } else if(remainingSeconds % activeTime == offset) {
-          console.log("At the "+remainingSeconds+" second-mark, enter into active state");
+        let remainingTime = totalTime - x.value;
+        offsetTime = currentRound * restTime;
+
+        if(remainingTime % roundTime == 0) {
+          if(remainingTime == 0) {
+              state = IntervalState.Finished;
+
+              return {state: state, remainingTime: 0, currentRound: -1};
+          }else{
+              currentRound--;
+              state = IntervalState.Rest;
+
+              return {state: state, remainingTime: remainingTime, currentRound: currentRound};
+          }
+        } else if( ((remainingTime - offsetTime) % activeTime) == 0 ) {
+            state = IntervalState.Active;
+
+            return {state: state, remainingTime: remainingTime, currentRound: currentRound};
+        } else {
+          return {state: state, remainingTime: remainingTime, currentRound: currentRound};
         }
-        return x.value;
       })
       .take(totalTime);
-
-    this.subscription = this.source.subscribe();
   }
 }
