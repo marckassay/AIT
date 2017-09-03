@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import Rx from 'rxjs/Rx';
-
-export enum IntervalState {
-  Loaded = 0,
-  GetReady = 1,
-  Active = 2,
-  Rest = 3,
-  Finished = 4
-}
+// import { Observable } from 'rxjs/Observable';
+// import 'rxjs/add/observable/timer';
+// import 'rxjs/add/operator/timeInterval';
+// import 'rxjs/add/operator/take';
+// import 'rxjs/add/operator/map';
 
 @IonicPage()
 @Component({
@@ -17,33 +14,40 @@ export enum IntervalState {
 })
 export class NumericDisplayPage implements OnInit {
 
-  state: IntervalState;
   timer: AnotherIntervalTimer;
-  getReady: number;
+  emitted: IIntervalTimerEmission;
   activeTime: number;
   restTime: number;
-  rounds: number;
+  intervals: number;
+  getReady: number;
+
+  state: IntervalState;
+  remainingTime: number;
+  remainingIntervalTime: number;
+  currentInterval: number;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.state = IntervalState.Loaded;
     this.getReady = 5;
     this.activeTime = 50;
     this.restTime = 10;
-    this.rounds = 12;
-
-    this.initTimer();
+    this.intervals = 12;
+    this.remainingTime = 50*10*12;
+    this.remainingIntervalTime = 10;
+    this.currentInterval = this.intervals;
   }
 
   initTimer(): void {
     this.timer = new AnotherIntervalTimer();
-    this.state = IntervalState.Rest;
+    this.timer.initialize(this.activeTime, this.restTime, this.intervals);
+    this.timer.source.subscribe((e) => {
+      this.state = e.state;
+      this.remainingIntervalTime = e.remainingIntervalTime;
+      this.remainingTime = e.remainingTime;
+      this.currentInterval = e.currentInterval;
 
-    this.timer.initialize(this.activeTime, this.restTime, this.rounds, this.getReady);
-    this.timer.source.subscribe(this.onNext, this.onError, this.onComplete);
-  }
-
-  onNext(e:IIntervalTimerEmission): void {
-    console.log("-->"+e.state+" "+e.remainingTime);
+    }, this.onError, this.onComplete);
   }
 
   onError(): void {
@@ -59,52 +63,64 @@ export class NumericDisplayPage implements OnInit {
   }
 
 	ngOnInit(): void  {
-
+    this.initTimer();
   }
+}
+
+export enum IntervalState {
+  Loaded = 0,
+  GetReady = 1,
+  Active = 2,
+  Rest = 3,
+  Completed = 4,
+  Error = 5
 }
 
 export interface IIntervalTimerEmission {
 	readonly state: IntervalState;
-	readonly remainingTime: number;
-	readonly currentRound: number;
+  readonly remainingTime: number;
+  readonly remainingIntervalTime: number;
+	readonly currentInterval: number;
 }
 export class AnotherIntervalTimer {
 
   source;
   subscription;
 
-  initialize(activeTime:number, restTime:number, rounds:number, getReady:number=-1) {
+  initialize(activeTime:number, restTime:number, intervals:number, getReady:number=-1) {
 
     let roundTime: number = (activeTime + restTime);
-    let totalTime: number = roundTime * rounds;
-    let currentRound: number = rounds;
+    let totalTime: number = roundTime * intervals;
+    let currentInterval: number = intervals;
     let offsetTime: number;
     let state: IntervalState;
+    let remainingIntervalTime: number;
 
     this.source = Rx.Observable.timer(0, 1000)
       .timeInterval()
       .map(function (x) {
         let remainingTime = totalTime - x.value;
-        offsetTime = currentRound * restTime;
+        offsetTime = currentInterval * restTime;
 
         if(remainingTime % roundTime == 0) {
           if(remainingTime == 0) {
-              state = IntervalState.Finished;
-
-              return {state: state, remainingTime: 0, currentRound: -1};
-          }else{
-              currentRound--;
+              state = IntervalState.Completed;
+          } else {
+              currentInterval--;
               state = IntervalState.Rest;
-
-              return {state: state, remainingTime: remainingTime, currentRound: currentRound};
+              remainingIntervalTime = restTime;
           }
         } else if( ((remainingTime - offsetTime) % activeTime) == 0 ) {
             state = IntervalState.Active;
-
-            return {state: state, remainingTime: remainingTime, currentRound: currentRound};
+            remainingIntervalTime = activeTime;
         } else {
-          return {state: state, remainingTime: remainingTime, currentRound: currentRound};
+          remainingIntervalTime--;
         }
+
+        return { state: state,
+                 remainingTime: remainingTime,
+                 remainingIntervalTime: remainingIntervalTime,
+                 currentInterval: currentInterval};
       })
       .take(totalTime);
   }

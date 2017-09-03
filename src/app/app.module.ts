@@ -6,7 +6,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { AppComponent } from './app.component'
 import { NumericDisplayPage, ProgramPage } from '../pages/pages';
-import { SimpleTimer } from 'ng2-simple-timer';
 
 
 @NgModule({
@@ -27,7 +26,6 @@ import { SimpleTimer } from 'ng2-simple-timer';
   providers: [
     StatusBar,
     SplashScreen,
-    SimpleTimer,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

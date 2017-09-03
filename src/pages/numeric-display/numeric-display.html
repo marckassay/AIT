@@ -4,20 +4,25 @@ export enum IntervalState {
   GetReady = 1,
   Active = 2,
   Rest = 3,
-  Finished = 4
+  Completed = 4,
+  Error = 5
 }
--->
 <div [ngSwitch]="state">
-  <!-- IntervalState.Active = 2 -->
-  <ng-container *ngSwitchCase="2">
-    <div class="activeGo">45</div>
-    <div class="restStop">{{restTime}}</div>
-  </ng-container>
-  <!-- IntervalState.Rest = 3 -->
-  <ng-container *ngSwitchCase="3">
-    <div class="activeStop">{{activeTime}}</div>
-    <div class="restGo">9</div>
-  </ng-container>
+-->
+
+<div [ngSwitch]="state">
+      <!-- IntervalState.Active = 2 -->
+      <ng-container *ngSwitchCase="2">
+        <div class="activeGo">{{remainingIntervalTime}}</div>
+        <div class="restStop">{{restTime}}</div>
+      </ng-container>
+      <!-- IntervalState.Rest = 3 -->
+      <ng-container *ngSwitchCase="3">
+        <div class="activeStop">{{activeTime}}</div>
+        <div class="restGo">{{remainingIntervalTime}}</div>
+      </ng-container>
+  <div>
+    <div class="intervalGo">{{currentInterval}}\/{{intervals}}</div>
+    <div class="timeGo">{{remainingTime}}</div>
+  </div>
 </div>
-<div class="roundsGo">6/{{rounds}}</div>
-<div class="timeGetReady">6:13.1</div>

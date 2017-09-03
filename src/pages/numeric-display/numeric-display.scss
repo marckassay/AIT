@@ -33,14 +33,17 @@ page-numeric-display {
     color: appColor( stop );
   }
 
-  .rounds {
+  .intervalGo {
     font-family: selawksb;
-    font-size: 12.0rem;
+    font-size: 14.0rem;
     margin: 0 0 0 0;
+    color: appColor( go );
   }
 
-  .time {
-    font-size: 12.0rem;
+  .timeGo {
+    font-family: selawksb;
+    font-size: 14.0rem;
     margin: 0 0 0 0;
+    color: appColor( go );
   }
 }
