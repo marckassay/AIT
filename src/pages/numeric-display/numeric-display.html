@@ -11,16 +11,23 @@ export enum IntervalState {
 -->
 
 <div [ngSwitch]="state">
+      <!-- IntervalState.Loaded = 0 -->
+      <ng-container *ngSwitchCase="0">
+        <div class="activeLoaded">{{activeTime}}</div>
+        <div class="restLoaded">\/{{restTime}}</div>
+        <div class="intervalLoaded">1\/{{intervals}}</div>
+        <div class="timeLoaded">{{toISORemainingTime}}</div>
+      </ng-container>
       <!-- IntervalState.Active = 2 -->
       <ng-container *ngSwitchCase="2">
         <div class="activeGo">{{remainingIntervalTime}}</div>
-        <div class="restStop">{{restTime}}</div>
+        <div class="restStop">\/{{restTime}}</div>
         <div class="intervalGo">{{currentInterval}}\/{{intervals}}</div>
         <div class="timeGo">{{remainingTime}}</div>
       </ng-container>
       <!-- IntervalState.Rest = 3 -->
       <ng-container *ngSwitchCase="3">
-        <div class="activeStop">{{activeTime}}</div>
+        <div class="activeStop">{{activeTime}}\/</div>
         <div class="restGo">{{remainingIntervalTime}}</div>
         <div class="intervalStop">{{currentInterval}}\/{{intervals}}</div>
         <div class="timeStop">{{remainingTime}}</div>

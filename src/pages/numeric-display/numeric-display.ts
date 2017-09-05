@@ -33,7 +33,7 @@ export class NumericDisplayPage implements OnInit {
     this.activeTime = 50;
     this.restTime = 10;
     this.intervals = 12;
-    this.remainingTime = 50*10*12;
+    this.remainingTime = ((this.activeTime + this.restTime) * this.intervals);
     this.remainingIntervalTime = 10;
     this.currentInterval = this.intervals;
   }
@@ -56,20 +56,18 @@ export class NumericDisplayPage implements OnInit {
     });
   }
 
-  onError(): void {
-
-  }
-
-  onComplete(): void {
-
-  }
-
   ionViewDidLoad(): void {
     console.log('ionViewDidLoad NumericDisplayPage');
   }
 
 	ngOnInit(): void  {
-    this.initTimer();
+    //this.initTimer();
+  }
+
+  get toISORemainingTime() {
+    let s = new Date(0);
+    s.setMilliseconds(this.remainingTime * 1000);
+    return s.toISOString().substr(14,7);
   }
 }
 
@@ -102,32 +100,38 @@ export class AnotherIntervalTimer {
     let state: IntervalState;
     let remainingIntervalTime: number;
 
-    this.source = Rx.Observable.timer(0, 100)
+    const millisecond: number = 1000;
+    const precision: number = 10; // one-tenth
+
+    this.source = Rx.Observable.timer(0, millisecond/precision)
       .timeInterval()
       .map(function (x) {
-        let remainingTime = totalTime - (x.value/10);
+        let s = new Date(0);
+        let remainingTime = totalTime - (x.value/precision);
         offsetTime = currentInterval * restTime;
 
         if(remainingTime % roundTime == 0) {
           if(remainingTime == 0) {
-              state = IntervalState.Completed;
+            state = IntervalState.Completed;
           } else {
-              currentInterval--;
-              state = IntervalState.Rest;
-              remainingIntervalTime = restTime;
+            currentInterval--;
+            state = IntervalState.Rest;
+            remainingIntervalTime = restTime;
           }
         } else if( ((remainingTime - offsetTime) % activeTime) == 0 ) {
-            state = IntervalState.Active;
-            remainingIntervalTime = activeTime;
+          state = IntervalState.Active;
+          remainingIntervalTime = activeTime;
         } else if (Math.round(remainingTime) == remainingTime){
           remainingIntervalTime--;
         }
 
+        s.setMilliseconds((totalTime * millisecond) - (remainingTime * millisecond));
+
         return { state: state,
-                 remainingTime: remainingTime,
+                 remainingTime: s.toISOString().substr(14,7), // returns this partial time segment: 01:23.4
                  remainingIntervalTime: remainingIntervalTime,
                  currentInterval: (intervals - currentInterval)};
       })
-      .take(totalTime*10);
+      .take(totalTime*precision);
   }
 }
