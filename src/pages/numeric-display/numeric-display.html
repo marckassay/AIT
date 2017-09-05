@@ -15,14 +15,21 @@ export enum IntervalState {
       <ng-container *ngSwitchCase="2">
         <div class="activeGo">{{remainingIntervalTime}}</div>
         <div class="restStop">{{restTime}}</div>
+        <div class="intervalGo">{{currentInterval}}\/{{intervals}}</div>
+        <div class="timeGo">{{remainingTime}}</div>
       </ng-container>
       <!-- IntervalState.Rest = 3 -->
       <ng-container *ngSwitchCase="3">
         <div class="activeStop">{{activeTime}}</div>
         <div class="restGo">{{remainingIntervalTime}}</div>
+        <div class="intervalStop">{{currentInterval}}\/{{intervals}}</div>
+        <div class="timeStop">{{remainingTime}}</div>
       </ng-container>
-  <div>
-    <div class="intervalGo">{{currentInterval}}\/{{intervals}}</div>
-    <div class="timeGo">{{remainingTime}}</div>
-  </div>
+      <!-- IntervalState.Completed = 4 -->
+      <ng-container *ngSwitchCase="4">
+        <div class="activeCompleted">{{activeTime}}</div>
+        <div class="restCompleted">{{restTime}}</div>
+        <div class="intervalCompleted">{{currentInterval}}\/{{intervals}}</div>
+        <div class="timeCompleted">0</div>
+      </ng-container>
 </div>

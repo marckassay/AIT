@@ -13,14 +13,20 @@ page-numeric-display {
 
   .activeStop {
     @extend .activeGo;
-    color: appColor( stop );
+    font-size: 12.0rem;
+    color: appColor( go );
+  }
+
+  .activeCompleted {
+    @extend .activeGo;
+    color: appColor( primary );
   }
 
   .restGo {
     font-family: selawksb;
     font-size: 16.0rem;
     margin: -40px 0 0 0;
-    color: appColor( go );
+    color: appColor( stop );
   }
 
   .restGetReady {
@@ -30,7 +36,13 @@ page-numeric-display {
 
   .restStop {
     @extend .restGo;
+    font-size: 12.0rem;
     color: appColor( stop );
+  }
+
+  .restCompleted {
+    @extend .restGo;
+    color: appColor( primary );
   }
 
   .intervalGo {
@@ -40,10 +52,40 @@ page-numeric-display {
     color: appColor( go );
   }
 
+  .intervalGetReady {
+    @extend .intervalGo;
+    color: appColor( getready );
+  }
+
+  .intervalStop {
+    @extend .intervalGo;
+    color: appColor( stop );
+  }
+
+  .intervalCompleted {
+    @extend .intervalGo;
+    color: appColor( primary );
+  }
+
   .timeGo {
     font-family: selawksb;
     font-size: 14.0rem;
     margin: 0 0 0 0;
     color: appColor( go );
+  }
+
+  .timeGetReady {
+    @extend .timeGo;
+    color: appColor( getready );
+  }
+
+  .timeStop {
+    @extend .timeGo;
+    color: appColor( stop );
+  }
+
+  .timeCompleted {
+    @extend .timeGo;
+    color: appColor( primary );
   }
 }

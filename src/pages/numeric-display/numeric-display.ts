@@ -47,7 +47,13 @@ export class NumericDisplayPage implements OnInit {
       this.remainingTime = e.remainingTime;
       this.currentInterval = e.currentInterval;
 
-    }, this.onError, this.onComplete);
+    }, (err) => {
+
+    }, () => {
+      this.state = IntervalState.Completed;
+      this.remainingIntervalTime = 0;
+      this.remainingTime = 0;
+    });
   }
 
   onError(): void {
@@ -96,10 +102,10 @@ export class AnotherIntervalTimer {
     let state: IntervalState;
     let remainingIntervalTime: number;
 
-    this.source = Rx.Observable.timer(0, 1000)
+    this.source = Rx.Observable.timer(0, 100)
       .timeInterval()
       .map(function (x) {
-        let remainingTime = totalTime - x.value;
+        let remainingTime = totalTime - (x.value/10);
         offsetTime = currentInterval * restTime;
 
         if(remainingTime % roundTime == 0) {
@@ -113,15 +119,15 @@ export class AnotherIntervalTimer {
         } else if( ((remainingTime - offsetTime) % activeTime) == 0 ) {
             state = IntervalState.Active;
             remainingIntervalTime = activeTime;
-        } else {
+        } else if (Math.round(remainingTime) == remainingTime){
           remainingIntervalTime--;
         }
 
         return { state: state,
                  remainingTime: remainingTime,
                  remainingIntervalTime: remainingIntervalTime,
-                 currentInterval: currentInterval};
+                 currentInterval: (intervals - currentInterval)};
       })
-      .take(totalTime);
+      .take(totalTime*10);
   }
 }
