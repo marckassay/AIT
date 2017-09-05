@@ -61,10 +61,10 @@ export class NumericDisplayPage implements OnInit {
   }
 
 	ngOnInit(): void  {
-    //this.initTimer();
+    this.initTimer();
   }
 
-  get toISORemainingTime() {
+  get isoRemainingTime() {
     let s = new Date(0);
     s.setMilliseconds(this.remainingTime * 1000);
     return s.toISOString().substr(14,7);
@@ -128,7 +128,7 @@ export class AnotherIntervalTimer {
         s.setMilliseconds((totalTime * millisecond) - (remainingTime * millisecond));
 
         return { state: state,
-                 remainingTime: s.toISOString().substr(14,7), // returns this partial time segment: 01:23.4
+                 remainingTime: s.toISOString().substr(14,7), // returns this partial time segment: 01:02.3
                  remainingIntervalTime: remainingIntervalTime,
                  currentInterval: (intervals - currentInterval)};
       })
