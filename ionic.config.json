@@ -1,6 +1,6 @@
 {
   "name": "AIT",
-  "app_id": "",
+  "app_id": "caa4f4ae",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}

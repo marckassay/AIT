@@ -35,22 +35,22 @@ export enum IntervalState {
     <ion-col col-auto>
       <div [ngSwitch]="state">
         <ng-container *ngSwitchCase="0">
-            <div class="restLoaded">\/{{restTime}}</div>
+          <div class="restLoaded">\/{{restTime}}</div>
         </ng-container>
         <ng-container *ngSwitchCase="1">
-            <div class="restStop">\/{{restTime}}</div>
+          <div class="restStop">\/{{restTime}}</div>
         </ng-container>
         <ng-container *ngSwitchCase="2">
-            <div class="restStop">\/{{restTime}}</div>
+          <div class="restStop">\/{{restTime}}</div>
         </ng-container>
         <ng-container *ngSwitchCase="3">
-            <div class="restGo">{{remainingIntervalTime}}</div>
+          <div class="restGo">{{remainingIntervalTime}}</div>
         </ng-container>
         <ng-container *ngSwitchCase="4">
-            <div class="restCompleted">{{restTime}}</div>
+          <div class="restCompleted">{{restTime}}</div>
         </ng-container>
         <ng-container *ngSwitchCase="5">
-            <div class="restStop">):</div>
+          <div class="restStop">):</div>
         </ng-container>
       </div>
     </ion-col>
@@ -98,7 +98,7 @@ export enum IntervalState {
           <div class="timeCompleted">{{isoRemainingTime}}</div>
         </ng-container>
         <ng-container *ngSwitchCase="5">
-          <div class="timeStop">:|</div>
+          <div class="timeStop">:?</div>
         </ng-container>
       </div>
     </ion-col>

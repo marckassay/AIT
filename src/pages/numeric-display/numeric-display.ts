@@ -46,7 +46,6 @@ export class NumericDisplayPage implements OnInit {
       this.remainingIntervalTime = e.remainingIntervalTime;
       this.remainingTime = e.remainingTime;
       this.currentInterval = e.currentInterval;
-
     }, (err) => {
 
     }, () => {
@@ -91,7 +90,7 @@ export class AnotherIntervalTimer {
   source;
   subscription;
 
-  initialize(activeTime:number, restTime:number, intervals:number, getReady:number=-1) {
+  initialize(activeTime:number, restTime:number, intervals:number, getReady:number=3) {
 
     let roundTime: number = (activeTime + restTime);
     let totalTime: number = roundTime * intervals;
@@ -110,7 +109,9 @@ export class AnotherIntervalTimer {
         let remainingTime = totalTime - (x.value/precision);
         offsetTime = currentInterval * restTime;
 
-        if(remainingTime % roundTime == 0) {
+        if(remainingTime % (roundTime + getReady) == 0) {
+          state = IntervalState.GetReady;
+        } else if(remainingTime % roundTime == 0) {
           if(remainingTime == 0) {
             state = IntervalState.Completed;
           } else {
@@ -118,6 +119,8 @@ export class AnotherIntervalTimer {
             state = IntervalState.Rest;
             remainingIntervalTime = restTime;
           }
+        } else if( (remainingTime - offsetTime) % (activeTime + getReady) == 0 ) {
+          state = IntervalState.GetReady;
         } else if( ((remainingTime - offsetTime) % activeTime) == 0 ) {
           state = IntervalState.Active;
           remainingIntervalTime = activeTime;
