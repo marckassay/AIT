@@ -21,6 +21,7 @@ export class NumericDisplayPage implements OnInit {
   intervals: number;
   getReady: number;
 
+  public intervalState = IntervalState;
   state: IntervalState;
   remainingTime: number;
   remainingIntervalTime: number;
@@ -46,6 +47,12 @@ export class NumericDisplayPage implements OnInit {
       this.remainingIntervalTime = e.remainingIntervalTime;
       this.remainingTime = e.remainingTime;
       this.currentInterval = e.currentInterval;
+
+      console.log(e.state);
+      console.log(e.remainingIntervalTime);
+      console.log(e.remainingTime);
+      console.log(e.currentInterval);
+      console.log(' ');
     }, (err) => {
 
     }, () => {
@@ -62,21 +69,18 @@ export class NumericDisplayPage implements OnInit {
 	ngOnInit(): void  {
     this.initTimer();
   }
-
-  get isoRemainingTime() {
-    let s = new Date(0);
-    s.setMilliseconds(this.remainingTime * 1000);
-    return s.toISOString().substr(14,7);
-  }
 }
 
 export enum IntervalState {
-  Loaded = 0,
-  GetReady = 1,
-  Active = 2,
-  Rest = 3,
-  Completed = 4,
-  Error = 5
+  Loaded    = 1,
+  GetReady  = 2,
+  Active    = 4,
+  Rest      = 8,
+  Completed = 16,
+  Error     = 32,
+
+  ActiveWarning = Active + GetReady,
+  RestWarning   = Rest + GetReady
 }
 
 export interface IIntervalTimerEmission {
@@ -92,10 +96,10 @@ export class AnotherIntervalTimer {
 
   initialize(activeTime:number, restTime:number, intervals:number, getReady:number=3) {
 
-    let roundTime: number = (activeTime + restTime);
-    let totalTime: number = roundTime * intervals;
+    let intervalTime: number = (activeTime + restTime);
+    let totalTime: number = intervalTime * intervals;
     let currentInterval: number = intervals;
-    let offsetTime: number;
+    let modulusOffset: number;
     let state: IntervalState;
     let remainingIntervalTime: number;
 
@@ -107,11 +111,9 @@ export class AnotherIntervalTimer {
       .map(function (x) {
         let s = new Date(0);
         let remainingTime = totalTime - (x.value/precision);
-        offsetTime = currentInterval * restTime;
+        modulusOffset = currentInterval * restTime;
 
-        if(remainingTime % (roundTime + getReady) == 0) {
-          state = IntervalState.GetReady;
-        } else if(remainingTime % roundTime == 0) {
+        if(remainingTime % intervalTime == 0) {
           if(remainingTime == 0) {
             state = IntervalState.Completed;
           } else {
@@ -119,9 +121,10 @@ export class AnotherIntervalTimer {
             state = IntervalState.Rest;
             remainingIntervalTime = restTime;
           }
-        } else if( (remainingTime - offsetTime) % (activeTime + getReady) == 0 ) {
-          state = IntervalState.GetReady;
-        } else if( ((remainingTime - offsetTime) % activeTime) == 0 ) {
+        } else if ( ((remainingTime - modulusOffset - getReady) % activeTime) == 0 ) {
+          state += IntervalState.GetReady;
+          remainingIntervalTime--;
+        } else if ( ((remainingTime - modulusOffset) % activeTime) == 0 ) {
           state = IntervalState.Active;
           remainingIntervalTime = activeTime;
         } else if (Math.round(remainingTime) == remainingTime){

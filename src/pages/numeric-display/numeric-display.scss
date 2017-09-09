@@ -1,11 +1,15 @@
 page-numeric-display {
+  @function getSpecializedState($state) {
+    @return color($colors, $name)
+   }
+
   .activeGo {
     font-family: selawksb;
     font-size: 22.0rem;
     color: appColor( go );
   }
 
-  .activeGetReady, .activeLoaded {
+  .activeLoaded {
     @extend .activeGo;
     color: appColor( getready );
   }
@@ -21,6 +25,11 @@ page-numeric-display {
     color: appColor( primary );
   }
 
+  .activeGetReady {
+    @extend .activeStop;
+    color: appColor( getready );
+  }
+
   .restGo {
     font-family: selawksb;
     font-size: 22.0rem;
@@ -32,7 +41,12 @@ page-numeric-display {
     font-size: 6.0rem;
   }
 
-  .restGetReady, .restLoaded {
+  .restLoaded {
+    @extend .restGo;
+    color: appColor( getready );
+  }
+
+  .restGetReady {
     @extend .restStop;
     color: appColor( getready );
   }

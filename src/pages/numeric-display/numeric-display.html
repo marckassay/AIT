@@ -1,105 +1,51 @@
-<!--
-export enum IntervalState {
-  Loaded = 0,
-  GetReady = 1,
-  Active = 2,
-  Rest = 3,
-  Completed = 4,
-  Error = 5
-}
--->
 <ion-grid no-padding>
   <ion-row align-items-baseline>
     <ion-col col-auto>
       <div [ngSwitch]="state">
-        <ng-container *ngSwitchCase="0">
-          <div class="activeLoaded">{{activeTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="1">
-          <div class="activeGo">{{remainingIntervalTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="2">
-          <div class="activeGo">{{remainingIntervalTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="3">
-          <div class="activeStop">{{activeTime}}\/</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="4">
-          <div class="activeCompleted">{{activeTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="5">
-          <div class="activeStop">:?</div>
-        </ng-container>
+          <div *ngSwitchCase="intervalState.Loaded"         class="activeLoaded">{{activeTime}}</div>
+          <div *ngSwitchCase="intervalState.Active"         class="activeGo">{{remainingIntervalTime}}</div>
+          <div *ngSwitchCase="intervalState.ActiveWarning"  class="activeGo">{{remainingIntervalTime}}</div>
+          <div *ngSwitchCase="intervalState.Rest"           class="activeStop">{{activeTime}}\/</div>
+          <div *ngSwitchCase="intervalState.RestWarning"    class="activeGetReady">{{activeTime}}\/</div>
+          <div *ngSwitchCase="intervalState.Completed"      class="activeCompleted">{{activeTime}}</div>
+          <div *ngSwitchCase="intervalState.Error"          class="activeStop">:?</div>
       </div>
     </ion-col>
     <ion-col col-auto>
       <div [ngSwitch]="state">
-        <ng-container *ngSwitchCase="0">
-          <div class="restLoaded">\/{{restTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="1">
-          <div class="restStop">\/{{restTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="2">
-          <div class="restStop">\/{{restTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="3">
-          <div class="restGo">{{remainingIntervalTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="4">
-          <div class="restCompleted">{{restTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="5">
-          <div class="restStop">):</div>
-        </ng-container>
+          <div *ngSwitchCase="intervalState.Loaded"         class="restLoaded">\/{{restTime}}</div>
+          <div *ngSwitchCase="intervalState.Active"         class="restStop">\/{{restTime}}</div>
+          <div *ngSwitchCase="intervalState.ActiveWarning"  class="restGetReady">\/{{restTime}}</div>
+          <div *ngSwitchCase="intervalState.Rest"           class="restGo">{{remainingIntervalTime}}</div>
+          <div *ngSwitchCase="intervalState.RestWarning"    class="restGo">{{remainingIntervalTime}}</div>
+          <div *ngSwitchCase="intervalState.Completed"      class="restCompleted">\/{{restTime}}</div>
+          <div *ngSwitchCase="intervalState.Error"          class="restStop">):</div>
       </div>
     </ion-col>
   </ion-row>
   <ion-row justify-content-end>
     <ion-col col-auto>
       <div [ngSwitch]="state">
-        <ng-container *ngSwitchCase="0">
-          <div class="intervalLoaded">1\/{{intervals}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="1">
-          <div class="intervalLoaded">1\/{{intervals}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="2">
-          <div class="intervalGo">{{currentInterval}}\/{{intervals}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="3">
-          <div class="intervalStop">{{currentInterval}}\/{{intervals}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="4">
-          <div class="intervalCompleted">{{currentInterval}}\/{{intervals}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="5">
-          <div class="intervalStop">:/</div>
-        </ng-container>
+          <div *ngSwitchCase="intervalState.Loaded"         class="intervalLoaded">1\/{{intervals}}</div>
+          <div *ngSwitchCase="intervalState.Active"         class="intervalGo">{{currentInterval}}\/{{intervals}}</div>
+          <div *ngSwitchCase="intervalState.ActiveWarning"  class="intervalGetReady">{{currentInterval}}\/{{intervals}}</div>
+          <div *ngSwitchCase="intervalState.Rest"           class="intervalStop">{{currentInterval}}\/{{intervals}}</div>
+          <div *ngSwitchCase="intervalState.RestWarning"    class="intervalGetReady">{{currentInterval}}\/{{intervals}}</div>
+          <div *ngSwitchCase="intervalState.Completed"      class="intervalCompleted">{{currentInterval}}\/{{intervals}}</div>
+          <div *ngSwitchCase="intervalState.Error"          class="intervalStop">:/</div>
       </div>
     </ion-col>
   </ion-row>
   <ion-row justify-content-start>
     <ion-col col-auto>
       <div [ngSwitch]="state">
-        <ng-container *ngSwitchCase="0">
-          <div class="timeLoaded">{{isoRemainingTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="1">
-          <div class="timeLoaded">{{isoRemainingTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="2">
-          <div class="timeGo">{{remainingTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="3">
-          <div class="timeStop">{{remainingTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="4">
-          <div class="timeCompleted">{{isoRemainingTime}}</div>
-        </ng-container>
-        <ng-container *ngSwitchCase="5">
-          <div class="timeStop">:?</div>
-        </ng-container>
+          <div *ngSwitchCase="intervalState.Loaded"         class="timeLoaded">{{remainingTime}}</div>
+          <div *ngSwitchCase="intervalState.Active"         class="timeGo">{{remainingTime}}</div>
+          <div *ngSwitchCase="intervalState.ActiveWarning"  class="timeGetReady">{{remainingTime}}</div>
+          <div *ngSwitchCase="intervalState.Rest"           class="timeStop">{{remainingTime}}</div>
+          <div *ngSwitchCase="intervalState.RestWarning"    class="timeGetReady">{{remainingTime}}</div>
+          <div *ngSwitchCase="intervalState.Completed"      class="timeCompleted">{{remainingTime}}</div>
+          <div *ngSwitchCase="intervalState.Error"          class="timeStop">:?</div>
       </div>
     </ion-col>
   </ion-row>
