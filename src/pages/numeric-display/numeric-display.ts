@@ -90,7 +90,6 @@ export interface IIntervalTimerEmission {
 	readonly currentInterval: number;
 }
 export class AnotherIntervalTimer {
-
   source;
   subscription;
 

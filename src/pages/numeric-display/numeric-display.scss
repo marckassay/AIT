@@ -1,8 +1,4 @@
 page-numeric-display {
-  @function getSpecializedState($state) {
-    @return color($colors, $name)
-   }
-
   .activeGo {
     font-family: selawksb;
     font-size: 22.0rem;
