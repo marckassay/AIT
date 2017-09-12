@@ -14,7 +14,8 @@ import { NumericDisplayPage, ProgramPage } from '../pages/pages';
   declarations: [
     AppComponent,
     NumericDisplayPage,
-    ProgramPage
+    ProgramPage,
+    ngAudio
   ],
   imports: [
     BrowserModule,
