@@ -38,7 +38,7 @@ page-numeric-display {
   }
 
   .restLoaded {
-    @extend .restGo;
+    @extend .restStop;
     color: appColor( getready );
   }
 
@@ -48,7 +48,7 @@ page-numeric-display {
   }
 
   .restCompleted {
-    @extend .restGo;
+    @extend .restStop;
     color: appColor( primary );
   }
 
