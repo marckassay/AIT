@@ -7,7 +7,7 @@
           <div *ngSwitchCase="intervalState.ActiveStopWarning"class="activeGo">{{remainingIntervalTime}}</div>
           <div *ngSwitchCase="intervalState.Rest"           class="activeStop">{{activeTime}}\/</div>
           <div *ngSwitchCase="intervalState.RestStopWarning"class="activeGetReady">{{activeTime}}\/</div>
-          <div *ngSwitchCase="intervalState.Completed"      class="activeCompleted">{{activeTime}}\/</div>
+          <div *ngSwitchCase="intervalState.Completed"      class="activeCompleted">{{activeTime}}</div>
           <div *ngSwitchCase="intervalState.Error"          class="activeStop">:?</div>
       </div>
     </ion-col>
