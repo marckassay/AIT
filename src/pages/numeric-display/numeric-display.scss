@@ -1,7 +1,17 @@
+$font-size-go-portrait:         60vw;
+$font-size-go-landscape:        50vh;
+$font-size-stop-portrait:       15vw;
+$font-size-stop-landscape:      10vh;
+$font-size-interval-portrait:   25vw;
+$font-size-interval-landscape:  25vh;
+$font-size-time-portrait:       25vw;
+$font-size-time-landscape:      25vh;
+
 page-numeric-display {
   .activeGo {
     font-family: selawksb;
-    font-size: 22.0rem;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
     color: appColor( go );
   }
 
@@ -10,13 +20,12 @@ page-numeric-display {
     color: appColor( getready );
   }
 
-  //@media screen and (min-width: 480px) {
-    .activeStop {
-      @extend .activeGo;
-      font-size: 6.0rem;
-      color: appColor( go );
-    }
-  //}
+  .activeStop {
+    @extend .activeGo;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+    color: appColor( go );
+  }
 
   .activeCompleted {
     @extend .activeGo;
@@ -30,13 +39,15 @@ page-numeric-display {
 
   .restGo {
     font-family: selawksb;
-    font-size: 22.0rem;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
     color: appColor( stop );
   }
 
   .restStop {
     @extend .restGo;
-    font-size: 6.0rem;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
   }
 
   .restLoaded {
@@ -54,10 +65,19 @@ page-numeric-display {
     color: appColor( primary );
   }
 
+  #intervalColPortrait {
+    @media screen and (orientation:portrait) { display: inherit; }
+    @media screen and (orientation:landscape) { display: none; }
+  }
+  #intervalColLandscape {
+    @media screen and (orientation:portrait) { display: none; }
+    @media screen and (orientation:landscape) { display: inherit; }
+  }
+
   .intervalGo {
     font-family: selawk;
-    font-size: 12.0rem;
-    margin-top: -40px;
+    @media screen and (orientation:portrait) { font-size: $font-size-interval-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-interval-landscape; }
     color: appColor( go );
   }
 
@@ -78,8 +98,8 @@ page-numeric-display {
 
   .timeGo {
     font-family: selawk;
-    font-size: 10.0rem;
-    margin: 0 0 0 0;
+    @media screen and (orientation:portrait) { font-size: $font-size-time-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-time-landscape; }
     color: appColor( go );
   }
 
