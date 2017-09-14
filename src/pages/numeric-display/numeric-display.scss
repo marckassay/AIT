@@ -10,11 +10,13 @@ page-numeric-display {
     color: appColor( getready );
   }
 
-  .activeStop {
-    @extend .activeGo;
-    font-size: 6.0rem;
-    color: appColor( go );
-  }
+  //@media screen and (min-width: 480px) {
+    .activeStop {
+      @extend .activeGo;
+      font-size: 6.0rem;
+      color: appColor( go );
+    }
+  //}
 
   .activeCompleted {
     @extend .activeGo;

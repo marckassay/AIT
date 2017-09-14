@@ -28,7 +28,7 @@ export interface IIntervalEmission {
 
 export class AnotherIntervalTimer {
   source;
-  subscription;
+  totalTimeISO:string;
 
   initialize(activeTime:number, restTime:number, intervals:number, getReady:number=3) {
     const millisecond: number = 1000;
@@ -43,10 +43,18 @@ export class AnotherIntervalTimer {
     let state: IntervalState;
     let remainingIntervalTime: number;
 
+    function getRemainingTimeISO (remainingmilliseconds: number):string {
+      let s = new Date(0);
+      s.setMilliseconds(totalmilliseconds - remainingmilliseconds);
+      // returns this partial time segment: 01:02.3
+      return s.toISOString().substr(14,7);
+    }
+
+    this.totalTimeISO = getRemainingTimeISO(0);
+
     this.source = Rx.Observable.timer(0, millisecond/precision)
       .timeInterval()
       .map(function (x) {
-        let s = new Date(0);
         let remainingTime = totalTime - (x.value/precision);
         let remainingmilliseconds: number = remainingTime * millisecond;
         modulusOffset = currentInterval * restTime;
@@ -88,9 +96,7 @@ export class AnotherIntervalTimer {
           remainingIntervalTime--;
         }
 
-        s.setMilliseconds(totalmilliseconds - remainingmilliseconds);
-        // returns this partial time segment: 01:02.3
-        let remainingTimeISO:string = s.toISOString().substr(14,7);
+        let remainingTimeISO:string = getRemainingTimeISO(totalmilliseconds - remainingmilliseconds);
 
         // if currently in warning state and on a whole second (not being the first second of this warning)...
         if( (state & IntervalState.GetReady) == IntervalState.GetReady &&

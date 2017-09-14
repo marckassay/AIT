@@ -22,7 +22,8 @@ $app-direction: ltr;
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
 
-$background-color: #191919;
+//$background-color: #191919;
+$background-color: #e6e6e6;
 $font-size-base: 10px;
 
 // Named Color Variables
@@ -33,7 +34,7 @@ $font-size-base: 10px;
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
-$colors: (
+$default_colors: (
   primary:    #488aff,
   secondary:  #32db64,
   go:         #00b04f,
@@ -41,6 +42,27 @@ $colors: (
   getready:   #ffd800,
   light:      #f4f4f4,
   dark:       #101010
+);
+
+
+$posh_monokai_colors: (
+  primary:    #66d9ef,
+  secondary:  #32db64,
+  go:         #a6e22e,
+  stop:       #f92672,
+  getready:   #e6db74,
+  light:      #f4f4f4,
+  dark:       #272822
+);
+
+$monoinverted_colors: (
+  primary:    #363636,
+  secondary:  #363636,
+  go:         #363636,
+  stop:       #a6a6a6,
+  getready:   #292929,
+  light:      #f4f4f4,
+  dark:       #e6e6e6
 );
 
 // App iOS Variables

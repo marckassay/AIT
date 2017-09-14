@@ -1,19 +1,12 @@
-// http://ionicframework.com/docs/theming/
-
-
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
+// overriding build/main.css (line: ~4994) since this app
+// is sensitive to viewport sizes and needs specific font sizes
+html {
+  font-size: 62.5%;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  text-size-adjust: none;
+}
 
 @font-face {
   font-family: 'selawk';
@@ -30,5 +23,5 @@
  }
 
  @function appColor($name) {
-  @return color($colors, $name)
+  @return color($monoinverted_colors, $name);
  }

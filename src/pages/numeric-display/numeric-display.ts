@@ -35,7 +35,7 @@ export class NumericDisplayPage implements OnInit {
     return _state_temp;
   }
 
-  remainingTime: number;
+  remainingTime: number | string;
   remainingIntervalTime: number;
   currentInterval: number;
 
@@ -70,8 +70,10 @@ export class NumericDisplayPage implements OnInit {
     }, (err) => {
 
     }, () => {
-      this._state = IntervalState.Completed;
+
       AITSoundboard.CompleteSound();
+      this._state = IntervalState.Completed;
+      this.remainingTime = this.timer.totalTimeISO;
     });
   }
 
