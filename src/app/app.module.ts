@@ -7,14 +7,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { AppComponent } from './app.component'
-import { NumericDisplayPage, ProgramPage } from '../pages/pages';
+import { IntervalDisplayPage } from '../pages/pages';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NumericDisplayPage,
-    ProgramPage
+    IntervalDisplayPage
   ],
   imports: [
     BrowserModule,
@@ -23,7 +22,7 @@ import { NumericDisplayPage, ProgramPage } from '../pages/pages';
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent,
-    NumericDisplayPage
+    IntervalDisplayPage
   ],
   providers: [
     StatusBar,

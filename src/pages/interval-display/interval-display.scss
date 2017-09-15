@@ -7,7 +7,7 @@ $font-size-interval-landscape:  25vh;
 $font-size-time-portrait:       25vw;
 $font-size-time-landscape:      25vh;
 
-page-numeric-display {
+page-interval-display {
   .activeGo {
     font-family: selawksb;
     @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }

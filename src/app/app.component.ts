@@ -3,13 +3,13 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { NumericDisplayPage, ProgramPage } from '../pages/pages';
+import { IntervalDisplayPage } from '../pages/pages';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class AppComponent {
-  rootPage:any = NumericDisplayPage;
+  rootPage:any = IntervalDisplayPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, screenOrientation: ScreenOrientation) {
     platform.ready().then(() => {

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { NumericDisplayPage } from './numeric-display';
+import { IntervalDisplayPage } from './interval-display';
 
 @NgModule({
   declarations: [
-    NumericDisplayPage
+    IntervalDisplayPage
   ],
   imports: [
-    IonicPageModule.forChild([NumericDisplayPage]),
+    IonicPageModule.forChild([IntervalDisplayPage]),
   ],
 })
 export class NumericDisplayPageModule {}

@@ -5,10 +5,10 @@ import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../ap
 
 @IonicPage()
 @Component({
-  selector: 'page-numeric-display',
-  templateUrl: 'numeric-display.html'
+  selector: 'page-interval-display',
+  templateUrl: 'interval-display.html'
 })
-export class NumericDisplayPage implements OnInit {
+export class IntervalDisplayPage implements OnInit {
 
   timer: AnotherIntervalTimer;
   emitted: IIntervalEmission;
