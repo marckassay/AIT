@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AITSoundboard } from '../../app/core/AITSoundboard';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
+import { FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
 
 @IonicPage()
 @Component({
@@ -16,8 +17,8 @@ export class IntervalDisplayPage implements OnInit {
   restTime: number;
   intervals: number;
   getReady: number = 0;
-
-  public intervalState = IntervalState;
+  // @Input()
+  public states = IntervalState;
 
   _state: IntervalState;
 
@@ -41,6 +42,7 @@ export class IntervalDisplayPage implements OnInit {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this._state = IntervalState.Loaded;
+
     this.activeTime = 50;
     this.restTime = 10;
     this.intervals = 12;
@@ -77,10 +79,13 @@ export class IntervalDisplayPage implements OnInit {
     });
   }
 
+  resetTimer(): void {
+    this.initTimer();
+  }
+
   ionViewDidLoad(): void {
   }
 
 	ngOnInit(): void  {
-    this.initTimer();
   }
 }

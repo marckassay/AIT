@@ -1,0 +1,17 @@
+<ion-content fullscreen>
+  <ion-fab center middle #fabMenu>
+    <button ion-fab (click)="actionRequest('actions.Main', fabMenu)"></button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="actionRequest('actions.StartPause', fabMenu)" class="startPause"><ion-icon class="material-icons">play_circle_outline</ion-icon></button>
+    </ion-fab-list>
+    <ion-fab-list side="right">
+      <button ion-fab (click)="actionRequest('actions.Program', fabMenu)" class="program"><ion-icon class="material-icons">settings</ion-icon></button>
+    </ion-fab-list>
+    <ion-fab-list side="bottom">
+      <button ion-fab (click)="actionRequest('actions.Reset', fabMenu)" class="reset"><ion-icon class="material-icons">restore</ion-icon></button>
+    </ion-fab-list>
+    <ion-fab-list side="left">
+      <button ion-fab (click)="actionRequest('actions.Home', fabMenu)" class="home"><ion-icon class="material-icons">home</ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

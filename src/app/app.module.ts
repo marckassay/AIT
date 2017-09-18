@@ -8,12 +8,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { AppComponent } from './app.component'
 import { IntervalDisplayPage } from '../pages/pages';
+import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    IntervalDisplayPage
+    IntervalDisplayPage,
+    FabContainerComponent
   ],
   imports: [
     BrowserModule,
