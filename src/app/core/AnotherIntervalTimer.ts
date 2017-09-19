@@ -1,4 +1,5 @@
-import Rx from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 
 export enum IntervalState {
   Loaded    = 1,
@@ -20,98 +21,114 @@ export enum IntervalState {
 }
 
 export interface IIntervalEmission {
-	readonly state: IntervalState;
-  readonly remainingTime: number;
-  readonly remainingIntervalTime: number;
-	readonly currentInterval: number;
+	 state: IntervalState;
+   remainingTime: string;
+   remainingIntervalTime: number;
+	 currentInterval: number;
 }
 
 export class AnotherIntervalTimer {
-  source;
+  source: Observable<IIntervalEmission>;
   totalTimeISO:string;
 
-  initialize(activeTime:number, restTime:number, intervals:number, getReady:number=3) {
-    const millisecond: number = 1000;
-    const precision: number = 10; // one-tenth
+  millisecond: number = 1000;
+  precision: number = 10; // one-tenth
 
-    let intervalTime: number = (activeTime + restTime);
-    let totalTime: number = intervalTime * intervals;
-    const totalmilliseconds = totalTime * millisecond;
+  intervalTime: number;
+  totalTime: number;
+  totalmilliseconds: number;
 
-    let currentInterval: number = intervals;
-    let modulusOffset: number;
-    let state: IntervalState;
-    let remainingIntervalTime: number;
+  currentInterval: number;
+  modulusOffset: number;
+  state: IntervalState;
+  remainingIntervalTime: number;
 
-    function getRemainingTimeISO (remainingmilliseconds: number):string {
-      let s = new Date(0);
-      s.setMilliseconds(totalmilliseconds - remainingmilliseconds);
-      // returns this partial time segment: 01:02.3
-      return s.toISOString().substr(14,7);
+  constructor(private activeTime:number, private restTime:number, private intervals:number, private getReady:number=3) {
+    this.intervalTime = activeTime + restTime;
+    this.totalTime = this.intervalTime * this.intervals;
+    this.totalmilliseconds = this.totalTime * this.millisecond;
+
+    this.initializeTimer();
+  }
+
+  initializeTimer(): void {
+    this.currentInterval = this.intervals;
+
+    this.totalTimeISO = this.getRemainingTimeISO(0);
+
+    this.source = Observable.timer(0, this.millisecond/this.precision)
+      .timeInterval()
+      .map((x) => this.cycle(x))
+      .take(this.totalTime*this.precision);//precision acting as a factor here
+  }
+
+  cycle(x): IIntervalEmission {
+    let remainingTime = this.totalTime - (x.value/this.precision);
+    let remainingmilliseconds: number = remainingTime * this.millisecond;
+    this.modulusOffset = this.currentInterval * this.restTime;
+
+    // strip away Start and/or Instant states if needed...those are momentary "sub" states
+    if (this.state & IntervalState.Start) {
+      this.state -= IntervalState.Start;
+    }
+    if (this.state & IntervalState.Instant) {
+      this.state -= IntervalState.Instant;
     }
 
-    this.totalTimeISO = getRemainingTimeISO(0);
+    // is it time to enter into Rest (and also check if we are Completed before changing to Rest)...
+    if(remainingTime % this.intervalTime == 0) {
+      if(remainingTime == 0) {
+        this.state = IntervalState.Completed;
+      } else {
+        this.currentInterval--;
+        this.state = IntervalState.RestStart;
+        this.remainingIntervalTime = this.restTime;
+      }
+    }
+    // is it time to enter into Warning states...(interesting that this 'else if' works for both warning states)
+    else if ( ((remainingTime - this.modulusOffset - this.getReady) % this.activeTime) == 0 ) {
+      if(this.state & IntervalState.Rest) {
+        this.state = IntervalState.RestStopWarningOnTheSecond;
+      } else if(this.state & IntervalState.Active) {
+        this.state = IntervalState.ActiveStopWarningOnTheSecond;
+      }
+      this.remainingIntervalTime--;
+    }
+    // is it time to enter into Active states...
+    else if ( ((remainingTime - this.modulusOffset) % this.activeTime) == 0 ) {
+      this.state = IntervalState.ActiveStart;
+      this.remainingIntervalTime = this.activeTime;
+    }
+    // decrement remainingIntervalTime only when time is a whole number (because timer is ticking at 100 ms rate...
+    else if (Math.round(remainingTime) == remainingTime) {
+      this.remainingIntervalTime--;
+    }
 
-    this.source = Rx.Observable.timer(0, millisecond/precision)
-      .timeInterval()
-      .map(function (x) {
-        let remainingTime = totalTime - (x.value/precision);
-        let remainingmilliseconds: number = remainingTime * millisecond;
-        modulusOffset = currentInterval * restTime;
+    let remainingTimeISO:string = this.getRemainingTimeISO(this.totalmilliseconds - remainingmilliseconds);
 
-        // strip away Start and/or Instant states if needed...those are momentary "sub" states
-        if (state & IntervalState.Start) {
-          state -= IntervalState.Start;
-        }
-        if (state & IntervalState.Instant) {
-          state -= IntervalState.Instant;
-        }
+    // if currently in warning state and on a whole second (not being the first second of this warning)...
+    if( (this.state & IntervalState.GetReady) == IntervalState.GetReady &&
+        (((this.state & IntervalState.RestStopWarningOnTheSecond) != IntervalState.RestStopWarningOnTheSecond) && ((this.state & IntervalState.ActiveStopWarningOnTheSecond) != IntervalState.ActiveStopWarningOnTheSecond))  &&
+        (remainingTimeISO.split('.')[1] == '0')
+    ) {
+      // by adding this, it will construct an xWarningOnTheSecond state...
+      this.state += IntervalState.Instant;
+    }
 
-        // is it time to enter into Rest (and also check if we are Completed before changing to Rest)...
-        if(remainingTime % intervalTime == 0) {
-          if(remainingTime == 0) {
-            state = IntervalState.Completed;
-          } else {
-            currentInterval--;
-            state = IntervalState.RestStart;
-            remainingIntervalTime = restTime;
-          }
-        }
-        // is it time to enter into Warning states...(interesting that this 'else if' works for both warning states)
-        else if ( ((remainingTime - modulusOffset - getReady) % activeTime) == 0 ) {
-          if(state & IntervalState.Rest) {
-            state = IntervalState.RestStopWarningOnTheSecond;
-          } else if(state & IntervalState.Active) {
-            state = IntervalState.ActiveStopWarningOnTheSecond;
-          }
-          remainingIntervalTime--;
-        }
-        // is it time to enter into Active states...
-        else if ( ((remainingTime - modulusOffset) % activeTime) == 0 ) {
-          state = IntervalState.ActiveStart;
-          remainingIntervalTime = activeTime;
-        }
-        // decrement remainingIntervalTime only when time is a whole number (because timer is ticking at 100 ms rate...
-        else if (Math.round(remainingTime) == remainingTime) {
-          remainingIntervalTime--;
-        }
+    return { state: this.state,
+              remainingTime: remainingTimeISO,
+              remainingIntervalTime: this.remainingIntervalTime,
+              currentInterval: (this.intervals - this.currentInterval) };
+  }
 
-        let remainingTimeISO:string = getRemainingTimeISO(totalmilliseconds - remainingmilliseconds);
+  getRemainingTimeISO (remainingmilliseconds: number): string {
+    let s = new Date(0);
+    s.setMilliseconds(this.totalmilliseconds - remainingmilliseconds);
+    // returns this partial time segment: 01:02.3
+    return s.toISOString().substr(14,7);
+  }
 
-        // if currently in warning state and on a whole second (not being the first second of this warning)...
-        if( (state & IntervalState.GetReady) == IntervalState.GetReady &&
-           (((state & IntervalState.RestStopWarningOnTheSecond) != IntervalState.RestStopWarningOnTheSecond) && ((state & IntervalState.ActiveStopWarningOnTheSecond) != IntervalState.ActiveStopWarningOnTheSecond))  &&
-           (remainingTimeISO.split('.')[1] == '0')
-        ) {
-          // by adding this, it will construct an xWarningOnTheSecond state...
-          state += IntervalState.Instant;
-        }
+  public pause(): void {
 
-        return { state: state,
-                 remainingTime: remainingTimeISO,
-                 remainingIntervalTime: remainingIntervalTime,
-                 currentInterval: (intervals - currentInterval) };
-      })
-      .take(totalTime*precision);//precision acting as a factor here
   }
 }

@@ -1,6 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FabContainer } from 'ionic-angular';
-import {Icon} from 'ionic-angular';
 
 export interface FabEmission {
   action: FabAction
