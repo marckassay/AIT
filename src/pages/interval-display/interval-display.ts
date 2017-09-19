@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AITSoundboard } from '../../app/core/AITSoundboard';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
-import { FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
+import { FabContainerComponent, FabAction, FabEmission } from '../../app/components/fabcontainer.component/fabcontainer.component'
 
 @IonicPage()
 @Component({
@@ -10,18 +10,20 @@ import { FabContainerComponent } from '../../app/components/fabcontainer.compone
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage implements OnInit {
-
+  fabContainerHide: boolean;
   timer: AnotherIntervalTimer;
   emitted: IIntervalEmission;
   activeTime: number;
   restTime: number;
   intervals: number;
   getReady: number = 0;
-  // @Input()
+
+  remainingTime: number | string;
+  remainingIntervalTime: number;
+  currentInterval: number;
+
   public states = IntervalState;
-
   _state: IntervalState;
-
   // if _state contains irrevlant bits to the view, "reduce" by removing those bits
   get viewState (): IntervalState {
     let _state_temp = this._state;
@@ -36,12 +38,9 @@ export class IntervalDisplayPage implements OnInit {
     return _state_temp;
   }
 
-  remainingTime: number | string;
-  remainingIntervalTime: number;
-  currentInterval: number;
-
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this._state = IntervalState.Loaded;
+    this.fabContainerHide = false;
 
     this.activeTime = 50;
     this.restTime = 10;
@@ -50,11 +49,17 @@ export class IntervalDisplayPage implements OnInit {
 
     this.remainingIntervalTime = this.restTime;
     this.currentInterval = this.intervals;
+
+    this.instantiateTimer();
   }
 
-  initTimer(): void {
+  instantiateTimer() {
     this.timer = new AnotherIntervalTimer();
     this.timer.initialize(this.activeTime, this.restTime, this.intervals, this.getReady);
+    this.remainingTime = this.timer.totalTimeISO;
+  }
+
+  subscribeTimer(): void {
     this.timer.source.subscribe((e: IIntervalEmission) => {
 
       // play sound each second for getReady states
@@ -79,13 +84,37 @@ export class IntervalDisplayPage implements OnInit {
     });
   }
 
+  startTimer(): void {
+    this.subscribeTimer();
+  }
+  pauseTimer(): void {
+    //this.initTimer();
+  }
   resetTimer(): void {
-    this.initTimer();
+    this.instantiateTimer();
   }
 
   ionViewDidLoad(): void {
   }
 
 	ngOnInit(): void  {
+  }
+
+  onAction(emission: FabEmission) {
+
+    switch (emission.action)
+    {
+      case FabAction.Start:
+          this.startTimer();
+        break;
+      case FabAction.Pause:
+          this.pauseTimer();
+        break;
+      case FabAction.Reset:
+          this.resetTimer();
+        break;
+    }
+
+    emission.container.close();
   }
 }

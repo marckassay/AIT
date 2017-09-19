@@ -2,6 +2,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FabContainer } from 'ionic-angular';
 import {Icon} from 'ionic-angular';
 
+export interface FabEmission {
+  action: FabAction
+  container: FabContainer
+}
+
 export enum FabAction {
   Main,
   Start,
@@ -21,7 +26,7 @@ export enum FabState {
   templateUrl: 'fabcontainer.component.html'
 })
 export class FabContainerComponent {
-  @Output() onAction = new EventEmitter<FabAction>();
+  @Output() onAction = new EventEmitter<FabEmission>();
 
   _viewState: FabState;
   get viewState(): FabState {
@@ -38,7 +43,7 @@ export class FabContainerComponent {
     this._viewState = FabState.Start;
   }
 
-  actionRequest(action: FabAction, fab: FabContainer) {
+  actionRequest(action: FabAction, fabMenu: FabContainer) {
     if(action == FabAction.Start) {
       this.viewState = FabState.Pause;
     } else if(action == FabAction.Pause) {
@@ -46,7 +51,7 @@ export class FabContainerComponent {
     }
 
     if(action != FabAction.Main) {
-      this.onAction.emit(action);
+      this.onAction.emit({action: action, container: fabMenu});
     }
   }
 }
