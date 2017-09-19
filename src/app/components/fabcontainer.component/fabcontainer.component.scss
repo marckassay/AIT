@@ -1,5 +1,9 @@
 fab-container {
-  ion-content > ion-fab > button {
+
+  .start {
     color: appColor( go );
+  }
+  .pause {
+    color: appColor( stop );
   }
 }

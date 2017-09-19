@@ -1,19 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FabContainer } from 'ionic-angular';
 import {Icon} from 'ionic-angular';
 
+export enum FabAction {
+  Main,
+  Start,
+  Pause,
+  Program,
+  Reset,
+  Home
+}
 
 export enum FabState {
   Start,
   Pause
-}
-
-export enum FabAction {
-  Main,
-  StartPause,
-  Program,
-  Reset,
-  Home
 }
 
 @Component({
@@ -21,31 +21,32 @@ export enum FabAction {
   templateUrl: 'fabcontainer.component.html'
 })
 export class FabContainerComponent {
-  public currentState: FabState;
-  @Input() states = FabState;
-  @Input() actions = FabAction;
+  @Output() onAction = new EventEmitter<FabAction>();
+
+  _viewState: FabState;
+  get viewState(): FabState {
+    return this._viewState;
+  }
+  set viewState (value:FabState) {
+    this._viewState = value;
+  }
+
+  public states = FabState;
+  public actions = FabAction;
 
   constructor () {
-    this.currentState = FabState.Pause;
+    this._viewState = FabState.Start;
   }
 
   actionRequest(action: FabAction, fab: FabContainer) {
-
-    switch (action) {
-      case FabAction.StartPause:
-        this.currentState = (this.currentState == FabState.Pause) ? FabState.Start : FabState.Pause;
-       // this.initTimer();
-        break;
-      case FabAction.Program:
-
-        break;
-      case FabAction.Reset:
-        //this.resetTimer();
-        break;
-      case FabAction.Home:
-
-        break;
+    if(action == FabAction.Start) {
+      this.viewState = FabState.Pause;
+    } else if(action == FabAction.Pause) {
+      this.viewState = FabState.Start;
     }
-    fab.close();
+
+    if(action != FabAction.Main) {
+      this.onAction.emit(action);
+    }
   }
 }
