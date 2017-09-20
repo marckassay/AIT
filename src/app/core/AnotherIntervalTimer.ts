@@ -57,13 +57,12 @@ export class AnotherIntervalTimer {
     this.totalTimeISO = this.getRemainingTimeISO(0);
 
     this.source = Observable.timer(0, this.millisecond/this.precision)
-      .timeInterval()
-      .map((x) => this.cycle(x))
+      .map((x) => this.interval(x))
       .take(this.totalTime*this.precision);//precision acting as a factor here
   }
 
-  cycle(x): IIntervalEmission {
-    let remainingTime = this.totalTime - (x.value/this.precision);
+  interval(x): IIntervalEmission {
+    let remainingTime = this.totalTime - (x/this.precision);
     let remainingmilliseconds: number = remainingTime * this.millisecond;
     this.modulusOffset = this.currentInterval * this.restTime;
 
