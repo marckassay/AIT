@@ -1,5 +1,6 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
+import { EventEmitter } from '@angular/core';
 
 export enum IntervalState {
   Loaded    = 1,
@@ -29,6 +30,9 @@ export interface IIntervalEmission {
 
 export class AnotherIntervalTimer {
   source: Observable<IIntervalEmission>;
+  pauser: EventEmitter<boolean>;// = new Subject();//Observable<boolean>;
+  subscription: Observable<any>;
+
   totalTimeISO:string;
 
   millisecond: number = 1000;
@@ -42,6 +46,7 @@ export class AnotherIntervalTimer {
   modulusOffset: number;
   state: IntervalState;
   remainingIntervalTime: number;
+  timelinePosition: number = 0;
 
   constructor(private activeTime:number, private restTime:number, private intervals:number, private getReady:number=3) {
     this.intervalTime = activeTime + restTime;
@@ -55,14 +60,17 @@ export class AnotherIntervalTimer {
     this.currentInterval = this.intervals;
 
     this.totalTimeISO = this.getRemainingTimeISO(0);
+    // making 'source' local with type 'any' so that it can be used in the switchMap without type issues...
+    this.source = Observable.timer(0, this.millisecond/this.precision).map((x) => this.interval(x));
 
-    this.source = Observable.timer(0, this.millisecond/this.precision)
-      .map((x) => this.interval(x))
-      .take(this.totalTime*this.precision);//precision acting as a factor here
+    this.pauser = new EventEmitter<boolean>(true);//.startWith(false);;//Observable<boolean>();
+
+    this.subscription = (this.pauser as Observable<boolean>).switchMap((paused) => (paused) ? Observable.never() : this.source)
+              .take(this.totalTime*this.precision);//precision acting as a factor here
   }
 
   interval(x): IIntervalEmission {
-    let remainingTime = this.totalTime - (x/this.precision);
+    let remainingTime = this.totalTime - (this.timelinePosition/this.precision);
     let remainingmilliseconds: number = remainingTime * this.millisecond;
     this.modulusOffset = this.currentInterval * this.restTime;
 
@@ -114,6 +122,9 @@ export class AnotherIntervalTimer {
       this.state += IntervalState.Instant;
     }
 
+    // 'x' has no value of use in this function. timelinePosition is its successor...
+    this.timelinePosition++;
+
     return { state: this.state,
               remainingTime: remainingTimeISO,
               remainingIntervalTime: this.remainingIntervalTime,
@@ -127,7 +138,16 @@ export class AnotherIntervalTimer {
     return s.toISOString().substr(14,7);
   }
 
-  public pause(): void {
+  public play(): void {
+    this.pauser.emit(false);
+  }
 
+  public pause(): void {
+    this.pauser.emit(true);
+  }
+
+  public reset(): void {
+    this.timelinePosition = 0;
+    this.pause();
   }
 }

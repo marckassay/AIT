@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AITSoundboard } from '../../app/core/AITSoundboard';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission } from '../../app/components/fabcontainer.component/fabcontainer.component'
+import { Subscription, Observable } from 'rxjs';
 
 @IonicPage()
 @Component({
@@ -10,13 +11,13 @@ import { FabAction, FabEmission } from '../../app/components/fabcontainer.compon
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage implements OnInit {
-  fabContainerHide: boolean;
   timer: AnotherIntervalTimer;
   emitted: IIntervalEmission;
   activeTime: number;
   restTime: number;
   intervals: number;
   getReady: number = 0;
+  subscription: Subscription;
 
   remainingTime: string;
   remainingIntervalTime: number;
@@ -39,12 +40,16 @@ export class IntervalDisplayPage implements OnInit {
   }
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+
+  }
+
+  ngOnInit(): void {
     this.initializeDisplay();
+
   }
 
   initializeDisplay() {
     this._state = IntervalState.Loaded;
-    this.fabContainerHide = false;
 
     this.activeTime = 50;
     this.restTime = 10;
@@ -59,12 +64,13 @@ export class IntervalDisplayPage implements OnInit {
 
   instantiateTimer() {
     this.timer = new AnotherIntervalTimer(this.activeTime, this.restTime, this.intervals, this.getReady);
-    //this.timer.initialize();
+    //this.subscribeTimer();
+
     this.remainingTime = this.timer.totalTimeISO;
   }
 
   subscribeTimer(): void {
-    this.timer.source.subscribe((e: IIntervalEmission) => {
+    this.subscription = this.timer.subscription.subscribe((e: IIntervalEmission) => {
 
       // play sound each second for getReady states
       if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant)) {
@@ -72,6 +78,9 @@ export class IntervalDisplayPage implements OnInit {
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
         AITSoundboard.LongBeep();
       }
+      console.log(e)
+     // console.log(e.remainingIntervalTime)
+     // console.log(e.remainingTime)
 
       this._state = e.state;
       this.remainingIntervalTime = e.remainingIntervalTime;
@@ -88,37 +97,25 @@ export class IntervalDisplayPage implements OnInit {
     });
   }
 
-  startTimer(): void {
-    this.subscribeTimer();
-  }
-  pauseTimer(): void {
-    this.timer.pause();
-  }
-  resetTimer(): void {
-    this.initializeDisplay();
-  }
-
-  ionViewDidLoad(): void {
-  }
-
-	ngOnInit(): void  {
-  }
-
   onAction(emission: FabEmission) {
-
     switch (emission.action)
     {
       case FabAction.Start:
-          this.startTimer();
+        if(!this.subscription) {
+          console.log("sub")
+          this.subscribeTimer();
+        } else {
+          console.log("play")
+          this.timer.play();
+        }
         break;
       case FabAction.Pause:
-          this.pauseTimer();
+        this.timer.pause();
         break;
       case FabAction.Reset:
-          this.resetTimer();
+        this.timer.reset();
         break;
     }
-
     emission.container.close();
   }
 }
