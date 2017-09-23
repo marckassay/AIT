@@ -13,11 +13,11 @@ import { Subscription, Observable } from 'rxjs';
 export class IntervalDisplayPage implements OnInit {
   timer: AnotherIntervalTimer;
   emitted: IIntervalEmission;
+  subscription: Subscription;
   activeTime: number;
   restTime: number;
   intervals: number;
   getReady: number = 0;
-  subscription: Subscription;
 
   remainingTime: string;
   remainingIntervalTime: number;
@@ -53,7 +53,7 @@ export class IntervalDisplayPage implements OnInit {
 
     this.activeTime = 50;
     this.restTime = 10;
-    this.intervals = 12;
+    this.intervals = 4;
     this.getReady = 3;
 
     this.remainingIntervalTime = this.restTime;
@@ -64,13 +64,14 @@ export class IntervalDisplayPage implements OnInit {
 
   instantiateTimer() {
     this.timer = new AnotherIntervalTimer(this.activeTime, this.restTime, this.intervals, this.getReady);
-    //this.subscribeTimer();
+
+    this.subscribeTimer();
 
     this.remainingTime = this.timer.totalTimeISO;
   }
 
   subscribeTimer(): void {
-    this.subscription = this.timer.subscription.subscribe((e: IIntervalEmission) => {
+    this.subscription = this.timer.publication.subscribe((e: IIntervalEmission) => {
 
       // play sound each second for getReady states
       if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant)) {
@@ -79,9 +80,6 @@ export class IntervalDisplayPage implements OnInit {
         AITSoundboard.LongBeep();
       }
       console.log(e)
-     // console.log(e.remainingIntervalTime)
-     // console.log(e.remainingTime)
-
       this._state = e.state;
       this.remainingIntervalTime = e.remainingIntervalTime;
       this.remainingTime = e.remainingTime;
@@ -101,19 +99,14 @@ export class IntervalDisplayPage implements OnInit {
     switch (emission.action)
     {
       case FabAction.Start:
-        if(!this.subscription) {
-          console.log("sub")
-          this.subscribeTimer();
-        } else {
-          console.log("play")
-          this.timer.play();
-        }
+        this.timer.play();
         break;
       case FabAction.Pause:
         this.timer.pause();
         break;
       case FabAction.Reset:
-        this.timer.reset();
+        this.subscription.unsubscribe();
+        this.initializeDisplay();
         break;
     }
     emission.container.close();

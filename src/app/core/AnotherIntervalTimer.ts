@@ -1,4 +1,4 @@
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Observable, Subscription, AnonymousSubject } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { EventEmitter } from '@angular/core';
 
@@ -31,7 +31,7 @@ export interface IIntervalEmission {
 export class AnotherIntervalTimer {
   source: Observable<IIntervalEmission>;
   pauser: EventEmitter<boolean>;// = new Subject();//Observable<boolean>;
-  subscription: Observable<any>;
+  publication: Observable<any>;
 
   totalTimeISO:string;
 
@@ -63,9 +63,9 @@ export class AnotherIntervalTimer {
     // making 'source' local with type 'any' so that it can be used in the switchMap without type issues...
     this.source = Observable.timer(0, this.millisecond/this.precision).map((x) => this.interval(x));
 
-    this.pauser = new EventEmitter<boolean>(true);//.startWith(false);;//Observable<boolean>();
+    this.pauser = new EventEmitter<boolean>(true);
 
-    this.subscription = (this.pauser as Observable<boolean>).switchMap((paused) => (paused) ? Observable.never() : this.source)
+    this.publication = (this.pauser as Observable<boolean>).switchMap((paused) => (paused) ? Observable.never() : this.source)
               .take(this.totalTime*this.precision);//precision acting as a factor here
   }
 
