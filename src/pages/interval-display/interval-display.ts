@@ -79,7 +79,7 @@ export class IntervalDisplayPage implements OnInit {
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
         AITSoundboard.LongBeep();
       }
-      console.log(e)
+      console.log(e);
       this._state = e.state;
       this.remainingIntervalTime = e.remainingIntervalTime;
       this.remainingTime = e.remainingTime;

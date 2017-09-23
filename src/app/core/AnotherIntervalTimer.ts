@@ -29,8 +29,9 @@ export interface IIntervalEmission {
 }
 
 export class AnotherIntervalTimer {
-  source: Observable<IIntervalEmission>;
-  pauser: EventEmitter<boolean>;// = new Subject();//Observable<boolean>;
+  countdownSource: Observable<IIntervalEmission>;
+  intervalSource: Observable<IIntervalEmission>;
+  pauser: EventEmitter<boolean>;
   publication: Observable<any>;
 
   totalTimeISO:string;
@@ -40,7 +41,6 @@ export class AnotherIntervalTimer {
 
   intervalTime: number;
   totalTime: number;
-  totalmilliseconds: number;
 
   currentInterval: number;
   modulusOffset: number;
@@ -48,10 +48,9 @@ export class AnotherIntervalTimer {
   remainingIntervalTime: number;
   timelinePosition: number = 0;
 
-  constructor(private activeTime:number, private restTime:number, private intervals:number, private getReady:number=3) {
+  constructor(private activeTime:number, private restTime:number, private intervals:number, private getReady:number=10) {
     this.intervalTime = activeTime + restTime;
     this.totalTime = this.intervalTime * this.intervals;
-    this.totalmilliseconds = this.totalTime * this.millisecond;
 
     this.initializeTimer();
   }
@@ -59,14 +58,20 @@ export class AnotherIntervalTimer {
   initializeTimer(): void {
     this.currentInterval = this.intervals;
 
-    this.totalTimeISO = this.getRemainingTimeISO(0);
-    // making 'source' local with type 'any' so that it can be used in the switchMap without type issues...
-    this.source = Observable.timer(0, this.millisecond/this.precision).map((x) => this.interval(x));
+    this.totalTimeISO = this.getRemainingTimeISO( this.totalTime * this.millisecond );
+
+    //this.countdownSource = new CountdownTimer(this.getReady);
+
+    this.intervalSource = Observable.timer(0, this.millisecond/this.precision).map((x) => this.interval(x));
+
+    let source = this.intervalSource//this.countdownSource.concat(this.intervalSource);
 
     this.pauser = new EventEmitter<boolean>(true);
 
-    this.publication = (this.pauser as Observable<boolean>).switchMap((paused) => (paused) ? Observable.never() : this.source)
-              .take(this.totalTime*this.precision);//precision acting as a factor here
+    this.publication = (this.pauser as Observable<boolean>)
+                          .switchMap( (paused) => (paused == true) ? Observable.never() : source )
+                          //.take( (this.totalTime + this.getReady) * this.precision );//precision acting as a factor here
+                          .take( (this.totalTime) * this.precision );//precision acting as a factor here
   }
 
   interval(x): IIntervalEmission {
@@ -111,7 +116,7 @@ export class AnotherIntervalTimer {
       this.remainingIntervalTime--;
     }
 
-    let remainingTimeISO:string = this.getRemainingTimeISO(this.totalmilliseconds - remainingmilliseconds);
+    let remainingTimeISO:string = this.getRemainingTimeISO(remainingmilliseconds);
 
     // if currently in warning state and on a whole second (not being the first second of this warning)...
     if( (this.state & IntervalState.GetReady) == IntervalState.GetReady &&
@@ -133,7 +138,7 @@ export class AnotherIntervalTimer {
 
   getRemainingTimeISO (remainingmilliseconds: number): string {
     let s = new Date(0);
-    s.setMilliseconds(this.totalmilliseconds - remainingmilliseconds);
+    s.setMilliseconds(remainingmilliseconds);
     // returns this partial time segment: 01:02.3
     return s.toISOString().substr(14,7);
   }
