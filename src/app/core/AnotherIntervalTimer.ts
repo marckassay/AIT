@@ -1,6 +1,7 @@
 import { Observable, Subscription, AnonymousSubject } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { EventEmitter } from '@angular/core';
+import { CountdownTimer, ICountdownEmission } from './CountdownTimer';
 
 export enum IntervalState {
   Loaded    = 1,
@@ -29,7 +30,7 @@ export interface IIntervalEmission {
 }
 
 export class AnotherIntervalTimer {
-  countdownSource: Observable<IIntervalEmission>;
+  countdownSource: Observable<ICountdownEmission>;
   intervalSource: Observable<IIntervalEmission>;
   pauser: EventEmitter<boolean>;
   publication: Observable<any>;
@@ -48,7 +49,8 @@ export class AnotherIntervalTimer {
   remainingIntervalTime: number;
   timelinePosition: number = 0;
 
-  constructor(private activeTime:number, private restTime:number, private intervals:number, private getReady:number=10) {
+  constructor(private activeTime:number, private restTime:number,
+    private intervals:number, private getReady:number=3, private countdown:number=10) {
     this.intervalTime = activeTime + restTime;
     this.totalTime = this.intervalTime * this.intervals;
 
@@ -60,22 +62,22 @@ export class AnotherIntervalTimer {
 
     this.totalTimeISO = this.getRemainingTimeISO( this.totalTime * this.millisecond );
 
-    //this.countdownSource = new CountdownTimer(this.getReady);
+    this.countdownSource = new CountdownTimer(this.countdown, this.getReady, true).source;
 
     this.intervalSource = Observable.timer(0, this.millisecond/this.precision).map((x) => this.interval(x));
 
-    let source = this.intervalSource//this.countdownSource.concat(this.intervalSource);
+    let source = this.countdownSource.concat(this.intervalSource);
 
     this.pauser = new EventEmitter<boolean>(true);
 
     this.publication = (this.pauser as Observable<boolean>)
                           .switchMap( (paused) => (paused == true) ? Observable.never() : source )
-                          //.take( (this.totalTime + this.getReady) * this.precision );//precision acting as a factor here
-                          .take( (this.totalTime) * this.precision );//precision acting as a factor here
+                          .take( (this.totalTime + this.countdown) * this.precision );//precision acting as a factor here
   }
 
   interval(x): IIntervalEmission {
-    let remainingTime = this.totalTime - (this.timelinePosition/this.precision);
+    let remainingTime = +((this.totalTime - (this.timelinePosition/this.precision)).toFixed(1));
+    console.log(remainingTime);
     let remainingmilliseconds: number = remainingTime * this.millisecond;
     this.modulusOffset = this.currentInterval * this.restTime;
 

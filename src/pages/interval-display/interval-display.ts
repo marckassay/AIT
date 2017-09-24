@@ -17,7 +17,8 @@ export class IntervalDisplayPage implements OnInit {
   activeTime: number;
   restTime: number;
   intervals: number;
-  getReady: number = 0;
+  getReady: number;
+  countdown: number;
 
   remainingTime: string;
   remainingIntervalTime: number;
@@ -53,8 +54,9 @@ export class IntervalDisplayPage implements OnInit {
 
     this.activeTime = 50;
     this.restTime = 10;
-    this.intervals = 4;
+    this.intervals = 2;
     this.getReady = 3;
+    this.countdown = 11;
 
     this.remainingIntervalTime = this.restTime;
     this.currentInterval = this.intervals;
@@ -63,7 +65,7 @@ export class IntervalDisplayPage implements OnInit {
   }
 
   instantiateTimer() {
-    this.timer = new AnotherIntervalTimer(this.activeTime, this.restTime, this.intervals, this.getReady);
+    this.timer = new AnotherIntervalTimer(this.activeTime, this.restTime, this.intervals, this.getReady, this.countdown);
 
     this.subscribeTimer();
 
@@ -71,7 +73,7 @@ export class IntervalDisplayPage implements OnInit {
   }
 
   subscribeTimer(): void {
-    this.subscription = this.timer.publication.subscribe((e: IIntervalEmission) => {
+    this.subscription = this.timer.publication.subscribe((e: any) => {
 
       // play sound each second for getReady states
       if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant)) {
@@ -79,7 +81,7 @@ export class IntervalDisplayPage implements OnInit {
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
         AITSoundboard.LongBeep();
       }
-      console.log(e);
+     // console.log(e);
       this._state = e.state;
       this.remainingIntervalTime = e.remainingIntervalTime;
       this.remainingTime = e.remainingTime;
