@@ -81,7 +81,7 @@ export class IntervalDisplayPage implements OnInit {
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
         AITSoundboard.LongBeep();
       }
-     // console.log(e);
+      console.log(e);
       this._state = e.state;
       this.remainingIntervalTime = e.remainingIntervalTime;
       this.remainingTime = e.remainingTime;
@@ -107,6 +107,7 @@ export class IntervalDisplayPage implements OnInit {
         this.timer.pause();
         break;
       case FabAction.Reset:
+        //this.timer.combindedSource.repeat(1); ??? maybe better?
         this.subscription.unsubscribe();
         this.initializeDisplay();
         break;

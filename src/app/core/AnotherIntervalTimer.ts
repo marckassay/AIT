@@ -32,7 +32,7 @@ export interface IIntervalEmission {
 export class AnotherIntervalTimer {
   countdownSource: Observable<ICountdownEmission>;
   intervalSource: Observable<IIntervalEmission>;
-  pauser: EventEmitter<boolean>;
+  pauser: Subject<boolean>;
   publication: Observable<any>;
 
   totalTimeISO:string;
@@ -66,10 +66,10 @@ export class AnotherIntervalTimer {
 
     this.intervalSource = Observable.timer(0, this.millisecond/this.precision).map((x) => this.interval(x));
 
-    let source = this.countdownSource.concat(this.intervalSource);
+    let source = Observable.concat(this.countdownSource, this.intervalSource);
 
-    this.pauser = new EventEmitter<boolean>(true);
-
+    this.pauser = new Subject<boolean>();
+    // starting off pauser with 'false' value will allow client to subscribe to source without items being emitted.
     this.publication = (this.pauser as Observable<boolean>)
                           .switchMap( (paused) => (paused == true) ? Observable.never() : source )
                           .take( (this.totalTime + this.countdown) * this.precision );//precision acting as a factor here
@@ -77,7 +77,6 @@ export class AnotherIntervalTimer {
 
   interval(x): IIntervalEmission {
     let remainingTime = +((this.totalTime - (this.timelinePosition/this.precision)).toFixed(1));
-    console.log(remainingTime);
     let remainingmilliseconds: number = remainingTime * this.millisecond;
     this.modulusOffset = this.currentInterval * this.restTime;
 
@@ -139,18 +138,15 @@ export class AnotherIntervalTimer {
   }
 
   getRemainingTimeISO (remainingmilliseconds: number): string {
-    let s = new Date(0);
-    s.setMilliseconds(remainingmilliseconds);
-    // returns this partial time segment: 01:02.3
-    return s.toISOString().substr(14,7);
+    return new Date(remainingmilliseconds).toISOString().substr(14,7);
   }
 
   public play(): void {
-    this.pauser.emit(false);
+    this.pauser.next(false);
   }
 
   public pause(): void {
-    this.pauser.emit(true);
+    this.pauser.next(true);
   }
 
   public reset(): void {
