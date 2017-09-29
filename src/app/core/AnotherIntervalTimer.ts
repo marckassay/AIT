@@ -1,7 +1,7 @@
-import { Observable, Subscription, AnonymousSubject } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
-import { EventEmitter } from '@angular/core';
-import { CountdownTimer, ICountdownEmission } from './CountdownTimer';
+import { CountdownTimer } from './CountdownTimer';
+import { ITimelinePosition } from '../app.component';
 
 export enum IntervalState {
   Loaded    = 1,
@@ -23,6 +23,7 @@ export enum IntervalState {
 }
 
 export interface IIntervalEmission {
+   timelinePosition: number;
 	 state: IntervalState;
    remainingTime: string;
    remainingIntervalTime: number;
@@ -30,16 +31,15 @@ export interface IIntervalEmission {
 }
 
 export class AnotherIntervalTimer {
-  countdownSource: Observable<ICountdownEmission>;
-  intervalSource: Observable<IIntervalEmission>;
+  timelineMaxLimit: number;
   pauser: Subject<boolean>;
-  publication: Observable<any>;
-
-  totalTimeISO:string;
+  source: Observable<ITimelinePosition>;
+  publication: Observable<ITimelinePosition>;
 
   millisecond: number = 1000;
   precision: number = 10; // one-tenth
 
+  totalTimeISO:string;
   intervalTime: number;
   totalTime: number;
 
@@ -49,10 +49,14 @@ export class AnotherIntervalTimer {
   remainingIntervalTime: number;
   timelinePosition: number = 0;
 
-  constructor(private activeTime:number, private restTime:number,
-    private intervals:number, private getReady:number=3, private countdown:number=10) {
+  constructor(private activeTime:number,
+              private restTime:number,
+              private intervals:number,
+              private getReady:number=3,
+              private countdown:number=10) {
     this.intervalTime = activeTime + restTime;
     this.totalTime = this.intervalTime * this.intervals;
+    this.timelineMaxLimit = this.totalTime * this.precision;// precision being used as a factor here...
 
     this.initializeTimer();
   }
@@ -62,20 +66,22 @@ export class AnotherIntervalTimer {
 
     this.totalTimeISO = this.getRemainingTimeISO( this.totalTime * this.millisecond );
 
-    this.countdownSource = new CountdownTimer(this.countdown, this.getReady, true).source;
-
-    this.intervalSource = Observable.timer(0, this.millisecond/this.precision).map((x) => this.interval(x));
-
-    let source = Observable.concat(this.countdownSource, this.intervalSource);
-
     this.pauser = new Subject<boolean>();
-    // starting off pauser with 'false' value will allow client to subscribe to source without items being emitted.
-    this.publication = (this.pauser as Observable<boolean>)
-                          .switchMap( (paused) => (paused == true) ? Observable.never() : source )
-                          .take( (this.totalTime + this.countdown) * this.precision );//precision acting as a factor here
+
+    const sequenceA = new CountdownTimer(this.countdown, this.getReady, true).source;
+
+    const sequenceB = Observable.timer(0, this.millisecond/this.precision)
+                                .map((x) => this.interval(x))
+                                .takeWhile((x: ITimelinePosition) => {return (x.timelinePosition <= this.timelineMaxLimit)});
+
+    this.source = Observable.concat(sequenceA, sequenceB);
+
+    this.pauser.next(true);
+
+    this.publication = this.pauser.switchMap( (paused) => (paused == true) ? Observable.never() : this.source );
   }
 
-  interval(x): IIntervalEmission {
+  interval(x: any): IIntervalEmission {
     let remainingTime = +((this.totalTime - (this.timelinePosition/this.precision)).toFixed(1));
     let remainingmilliseconds: number = remainingTime * this.millisecond;
     this.modulusOffset = this.currentInterval * this.restTime;
@@ -128,10 +134,8 @@ export class AnotherIntervalTimer {
       this.state += IntervalState.Instant;
     }
 
-    // 'x' has no value of use in this function. timelinePosition is its successor...
-    this.timelinePosition++;
-
-    return { state: this.state,
+    return {  timelinePosition: this.timelinePosition++,
+              state: this.state,
               remainingTime: remainingTimeISO,
               remainingIntervalTime: this.remainingIntervalTime,
               currentInterval: (this.intervals - this.currentInterval) };

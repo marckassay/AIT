@@ -21,3 +21,8 @@ export class AppComponent {
     });
   }
 }
+
+export interface ITimelinePosition
+{
+  timelinePosition: number;
+}

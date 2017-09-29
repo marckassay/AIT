@@ -1,6 +1,7 @@
 import { Observable, Subscription, AnonymousSubject } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { EventEmitter } from '@angular/core';
+import { ITimelinePosition } from '../app.component';
 
 export enum CountdownState {
   Loaded    = 1,
@@ -18,31 +19,29 @@ export enum CountdownState {
 
 export interface ICountdownEmission
 {
+  timelinePosition: number;
   state: CountdownState;
   remainingTime: string;
 }
 
 export class CountdownTimer
 {
-  source: Observable<ICountdownEmission>;
+  source: Observable<ITimelinePosition>;
 
   publication: Observable<any>;
 
-  totalTimeInSecondsISO:string;
+  state: CountdownState;
 
   millisecond: number = 1000;
-
   precision: number = 10; // one-tenth
 
   totalTimeInSeconds: number;
-
-  activeTimeInSeconds: number;
+  totalTimeInSecondsISO:string;
 
   modulusOffsetInSeconds:number;
 
-  state: CountdownState;
-
   timelinePosition: number = 0;
+  timelineMaxLimit: number;
 
   constructor(private time: number, private getReady: number, private timeInUnitsOfSeconds: boolean) {
     this.initializeTimer();
@@ -57,14 +56,15 @@ export class CountdownTimer
     }
     this.totalTimeInSeconds = this.time;
     this.totalTimeInSecondsISO = this.getRemainingTimeISO( this.totalTimeInSeconds * this.millisecond );
+    this.timelineMaxLimit = this.totalTimeInSeconds * this.precision;// precision being used as a factor here...
     this.modulusOffsetInSeconds = this.totalTimeInSeconds - this.getReady;
 
     this.source = Observable.timer(0, this.millisecond/this.precision)
                             .map( (x) => this.countdown(x) )
-                            .take( this.totalTimeInSeconds * this.precision );
+                            .takeWhile((x: ITimelinePosition) => {return x.timelinePosition <= this.timelineMaxLimit});
   }
 
-  countdown(x): ICountdownEmission {
+  countdown(x: any): ICountdownEmission {
     let remainingTimeInSeconds: number = +((this.totalTimeInSeconds - (this.timelinePosition/this.precision)).toFixed(1));
     let remainingTimeISO:string = this.getRemainingTimeISO( remainingTimeInSeconds * this.millisecond );
 
@@ -96,11 +96,9 @@ export class CountdownTimer
       this.state += CountdownState.Instant;
     }
 
-    // 'x' has no value of use in this function. timelinePosition is its successor...
-    this.timelinePosition++;
-
-    return { state: this.state,
-              remainingTime: remainingTimeISO };
+    return { timelinePosition: this.timelinePosition++,
+             state: this.state,
+             remainingTime: remainingTimeISO };
   }
 
   getRemainingTimeISO (remainingmilliseconds: number): string {

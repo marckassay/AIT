@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AITSoundboard } from '../../app/core/AITSoundboard';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission } from '../../app/components/fabcontainer.component/fabcontainer.component'
-import { Subscription, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @IonicPage()
 @Component({
@@ -107,7 +107,6 @@ export class IntervalDisplayPage implements OnInit {
         this.timer.pause();
         break;
       case FabAction.Reset:
-        //this.timer.combindedSource.repeat(1); ??? maybe better?
         this.subscription.unsubscribe();
         this.initializeDisplay();
         break;
