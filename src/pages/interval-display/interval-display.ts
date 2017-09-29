@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AITSoundboard } from '../../app/core/AITSoundboard';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
-import { FabAction, FabEmission } from '../../app/components/fabcontainer.component/fabcontainer.component'
+import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
 import { Subscription } from 'rxjs';
 
 @IonicPage()
@@ -11,6 +11,9 @@ import { Subscription } from 'rxjs';
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage implements OnInit {
+  @ViewChild(FabContainerComponent)
+  private menu: FabContainerComponent;
+
   timer: AnotherIntervalTimer;
   emitted: IIntervalEmission;
   subscription: Subscription;
@@ -54,9 +57,9 @@ export class IntervalDisplayPage implements OnInit {
 
     this.activeTime = 50;
     this.restTime = 10;
-    this.intervals = 2;
+    this.intervals = 12;
     this.getReady = 3;
-    this.countdown = 11;
+    this.countdown = 15;
 
     this.remainingIntervalTime = this.restTime;
     this.currentInterval = this.intervals;
@@ -107,6 +110,7 @@ export class IntervalDisplayPage implements OnInit {
         this.timer.pause();
         break;
       case FabAction.Reset:
+        this.menu.reset();
         this.subscription.unsubscribe();
         this.initializeDisplay();
         break;

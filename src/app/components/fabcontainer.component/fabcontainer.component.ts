@@ -53,4 +53,8 @@ export class FabContainerComponent {
       this.onAction.emit({action: action, container: fabMenu});
     }
   }
+
+  reset(): void {
+    this.viewState = FabState.Start;
+  }
 }

@@ -61,7 +61,7 @@ export class CountdownTimer
 
     this.source = Observable.timer(0, this.millisecond/this.precision)
                             .map( (x) => this.countdown(x) )
-                            .takeWhile((x: ITimelinePosition) => {return x.timelinePosition <= this.timelineMaxLimit});
+                            .takeWhile((x: ITimelinePosition) => {return x.timelinePosition < this.timelineMaxLimit});
   }
 
   countdown(x: any): ICountdownEmission {
