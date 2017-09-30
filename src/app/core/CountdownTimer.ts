@@ -1,6 +1,4 @@
-import { Observable, Subscription, AnonymousSubject } from 'rxjs/Rx';
-import { Subject } from 'rxjs/Subject';
-import { EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
 import { ITimelinePosition } from '../app.component';
 
 export enum CountdownState {
