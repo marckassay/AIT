@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{title}} Settings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row justify-content-start nowrap>
+      <ion-col align-self-baseline col-auto>
+        <div class="active">{{activerest.upper}}</div>
+      </ion-col>
+      <ion-col align-self-baseline col-auto>
+        <div class="rest">\/{{activerest.lower}}</div>
+      </ion-col>
+      <ion-col align-self-baseline col-10>
+        <div class="interval">1\/{{interval}}</div>
+      </ion-col>
+    </ion-row>
+    <ion-row justify-content-start>
+      <ion-col>
+        <div class="totaltime">{{totaltime}}</div>
+        <div class="totaltime">{{countdownLabel}} (countdown)</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- activerest -->
+  <ion-item>
+    <ion-range [(ngModel)]="activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
+      <ion-icon range-left md="material-icons" name="timeelapse"></ion-icon>
+      <ion-icon range-right md="material-icons" name="timeelapse"></ion-icon>
+    </ion-range>
+  </ion-item>
+
+  <!-- interval -->
+  <ion-item>
+    <ion-range [(ngModel)]="interval" [min]="intervalObject.min" [max]="intervalObject.max" step="1" snaps="true" pin="true">
+      <ion-icon range-left small name="time"></ion-icon>
+      <ion-icon range-right name="time"></ion-icon>
+    </ion-range>
+  </ion-item>
+
+  <!-- countdown -->
+  <ion-item>
+    <ion-range [(ngModel)]="countdown" min="5" max="60" step="5" snaps="true" pin="true">
+      <ion-icon range-left small name="time"></ion-icon>
+      <ion-icon range-right name="time"></ion-icon>
+    </ion-range>
+  </ion-item>
+</ion-content>

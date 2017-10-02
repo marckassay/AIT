@@ -7,7 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { AppComponent } from './app.component'
-import { IntervalDisplayPage } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 
 
@@ -15,6 +15,7 @@ import { FabContainerComponent } from './components/fabcontainer.component/fabco
   declarations: [
     AppComponent,
     IntervalDisplayPage,
+    IntervalSettingsPage,
     FabContainerComponent
   ],
   imports: [
@@ -24,7 +25,8 @@ import { FabContainerComponent } from './components/fabcontainer.component/fabco
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent,
-    IntervalDisplayPage
+    IntervalDisplayPage,
+    IntervalSettingsPage
   ],
   providers: [
     StatusBar,

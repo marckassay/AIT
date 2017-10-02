@@ -4,6 +4,7 @@ import { AITSoundboard } from '../../app/core/AITSoundboard';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
 import { Subscription } from 'rxjs';
+import { IntervalSettingsPage } from "../pages";
 
 @IonicPage()
 @Component({
@@ -113,6 +114,9 @@ export class IntervalDisplayPage implements OnInit {
         this.menu.reset();
         this.subscription.unsubscribe();
         this.initializeDisplay();
+        break;
+      case FabAction.Program:
+        this.navCtrl.push(IntervalSettingsPage);
         break;
     }
     emission.container.close();

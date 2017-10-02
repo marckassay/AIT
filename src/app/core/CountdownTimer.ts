@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Rx';
-import { ITimelinePosition } from '../app.component';
+import * as app from '../app.component';
 
 export enum CountdownState {
   Loaded    = 1,
@@ -24,7 +24,7 @@ export interface ICountdownEmission
 
 export class CountdownTimer
 {
-  source: Observable<ITimelinePosition>;
+  source: Observable<app.ITimelinePosition>;
 
   publication: Observable<any>;
 
@@ -53,18 +53,18 @@ export class CountdownTimer
       this.time *= 60;
     }
     this.totalTimeInSeconds = this.time;
-    this.totalTimeInSecondsISO = this.getRemainingTimeISO( this.totalTimeInSeconds * this.millisecond );
+    this.totalTimeInSecondsISO = app.getRemainingTimeISO( this.totalTimeInSeconds * this.millisecond );
     this.timelineMaxLimit = this.totalTimeInSeconds * this.precision;// precision being used as a factor here...
     this.modulusOffsetInSeconds = this.totalTimeInSeconds - this.getReady;
 
     this.source = Observable.timer(0, this.millisecond/this.precision)
                             .map( (x) => this.countdown(x) )
-                            .takeWhile((x: ITimelinePosition) => {return x.timelinePosition < this.timelineMaxLimit});
+                            .takeWhile((x: app.ITimelinePosition) => {return x.timelinePosition < this.timelineMaxLimit});
   }
 
   countdown(x: any): ICountdownEmission {
     let remainingTimeInSeconds: number = +((this.totalTimeInSeconds - (this.timelinePosition/this.precision)).toFixed(1));
-    let remainingTimeISO:string = this.getRemainingTimeISO( remainingTimeInSeconds * this.millisecond );
+    let remainingTimeISO:string = app.getRemainingTimeISO( remainingTimeInSeconds * this.millisecond );
 
     // strip away Start and/or Instant states if needed...those are momentary "sub" states
     if (this.state & CountdownState.Start) {
@@ -97,11 +97,5 @@ export class CountdownTimer
     return { timelinePosition: this.timelinePosition++,
              state: this.state,
              remainingTime: remainingTimeISO };
-  }
-
-  getRemainingTimeISO (remainingmilliseconds: number): string {
-    let s = new Date(remainingmilliseconds);
-    // returns this partial time segment: 01:02.3
-    return s.toISOString().substr(14,7);
   }
 }

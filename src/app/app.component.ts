@@ -24,5 +24,18 @@ export class AppComponent {
 
 export interface ITimelinePosition
 {
+  /**
+   * Used to indicate where in the Observable sequence it is currently at.
+   */
   timelinePosition: number;
+}
+
+export const millisecond: number = 1000;
+/**
+ * Returns this partial time segment, for an example:
+ *  01:02.3
+ * The example above is can be said, "1 minute, 2 point 3/10ths of a second"
+ */
+export function getRemainingTimeISO (remainingmilliseconds: number): string {
+  return new Date(remainingmilliseconds).toISOString().substr(14,7);
 }

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { CountdownTimer } from './CountdownTimer';
-import { ITimelinePosition } from '../app.component';
+import * as app from '../app.component';
 
 export enum IntervalState {
   Loaded    = 1,
@@ -33,8 +33,8 @@ export interface IIntervalEmission {
 export class AnotherIntervalTimer {
   timelineMaxLimit: number;
   pauser: Subject<boolean>;
-  source: Observable<ITimelinePosition>;
-  publication: Observable<ITimelinePosition>;
+  source: Observable<app.ITimelinePosition>;
+  publication: Observable<app.ITimelinePosition>;
 
   millisecond: number = 1000;
   precision: number = 10; // one-tenth
@@ -64,7 +64,7 @@ export class AnotherIntervalTimer {
   initializeTimer(): void {
     this.currentInterval = this.intervals;
 
-    this.totalTimeISO = this.getRemainingTimeISO( this.totalTime * this.millisecond );
+    this.totalTimeISO = app.getRemainingTimeISO( this.totalTime * this.millisecond );
 
     this.pauser = new Subject<boolean>();
 
@@ -72,7 +72,7 @@ export class AnotherIntervalTimer {
 
     const sequenceB = Observable.timer(0, this.millisecond/this.precision)
                                 .map((x) => this.interval(x))
-                                .takeWhile((x: ITimelinePosition) => {return (x.timelinePosition <= this.timelineMaxLimit)});
+                                .takeWhile((x: app.ITimelinePosition) => {return (x.timelinePosition <= this.timelineMaxLimit)});
 
     this.source = Observable.concat(sequenceA, sequenceB);
 
@@ -123,7 +123,7 @@ export class AnotherIntervalTimer {
       this.remainingIntervalTime--;
     }
 
-    let remainingTimeISO:string = this.getRemainingTimeISO(remainingmilliseconds);
+    let remainingTimeISO:string = app.getRemainingTimeISO(remainingmilliseconds);
 
     // if currently in warning state and on a whole second (not being the first second of this warning)...
     if( (this.state & IntervalState.GetReady) == IntervalState.GetReady &&
@@ -139,10 +139,6 @@ export class AnotherIntervalTimer {
               remainingTime: remainingTimeISO,
               remainingIntervalTime: this.remainingIntervalTime,
               currentInterval: (this.intervals - this.currentInterval) };
-  }
-
-  getRemainingTimeISO (remainingmilliseconds: number): string {
-    return new Date(remainingmilliseconds).toISOString().substr(14,7);
   }
 
   public play(): void {

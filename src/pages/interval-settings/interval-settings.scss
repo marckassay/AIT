@@ -1,0 +1,56 @@
+$font-size-active-portrait:     9vw;
+$font-size-active-landscape:    9vh;
+$font-size-rest-portrait:       6vw;
+$font-size-rest-landscape:      6vh;
+$font-size-interval-portrait:   6vw;
+$font-size-interval-landscape:  6vh;
+$font-size-totaltime-portrait:  6vw;
+$font-size-totaltime-landscape: 6vh;
+$font-size-countdown-portrait:  6vw;
+$font-size-countdown-landscape: 6vh;
+
+page-interval-settings {
+
+  .active {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-active-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-active-landscape; }
+    color: appColor( go );
+  }
+
+  .go-color {
+    color: appColor( go );
+  }
+
+  .stop-color {
+    color: appColor( stop );
+  }
+
+  .rest {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-rest-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-rest-landscape; }
+    color: appColor( stop );
+  }
+
+  .interval {
+    font-family: selawk;
+    @media screen and (orientation:portrait) { font-size: $font-size-interval-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-interval-landscape; }
+    color: appColor( go );
+  }
+
+  .totaltime {
+    font-family: selawk;
+    @media screen and (orientation:portrait) { font-size: $font-size-totaltime-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-totaltime-landscape; }
+    color: appColor( go );
+  }
+
+  .countdown {
+    font-family: selawk;
+    @media screen and (orientation:portrait) { font-size: $font-size-countdown-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-countdown-landscape; }
+    color: appColor( go );
+  }
+}

@@ -10,4 +10,4 @@ import { IntervalDisplayPage } from './interval-display';
     IonicPageModule.forChild([IntervalDisplayPage]),
   ],
 })
-export class NumericDisplayPageModule {}
+export class IntervalDisplayPageModule {}
