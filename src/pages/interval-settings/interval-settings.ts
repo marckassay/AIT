@@ -12,7 +12,7 @@ import { IntervalStorageData } from "../pages";
 export class IntervalSettingsPage implements OnInit {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    if(navParams.data) {
+    if((<IntervalStorageData>navParams.data).activerest) {
       this.data = navParams.data;
     } else {
       this.data = this.getDefaultData();

@@ -6,12 +6,14 @@ import { FabAction, FabEmission, FabContainerComponent } from '../../app/compone
 import { Subscription } from 'rxjs';
 import { IntervalSettingsPage } from "../pages";
 
+export interface Limits {
+  lower: number;
+  upper: number;
+}
+
 export interface IntervalStorageData {
   name: string;
-  activerest: {
-    lower: number;
-    upper: number;
-  };
+  activerest: Limits;
   activemaxlimit: number;
 
   intervals: number;
@@ -59,7 +61,7 @@ export class IntervalDisplayPage implements OnInit {
   }
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    if(navParams.data != undefined) {
+    if((<IntervalStorageData>navParams.data).activerest) {
       this.data = navParams.data;
     } else {
       this.data = this.getDefaultData();
@@ -146,7 +148,7 @@ export class IntervalDisplayPage implements OnInit {
   }
 
   getDefaultData(): IntervalStorageData {
-    return {  name: "Program #1 ",
+    return <IntervalStorageData>{  name: "Program #1 ",
               activerest: {lower: 10, upper: 50},
               activemaxlimit: 90,
               intervals: 12,
