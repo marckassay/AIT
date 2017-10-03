@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{title}} Settings</ion-title>
+    <ion-title>{{data!.name}} Settings</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -8,13 +8,14 @@
   <ion-grid>
     <ion-row justify-content-start nowrap>
       <ion-col align-self-baseline col-auto>
-        <div class="active">{{activerest.upper}}</div>
+        <div class="active">{{data!.activerest.upper}}</div>
       </ion-col>
       <ion-col align-self-baseline col-auto>
-        <div class="rest">\/{{activerest.lower}}</div>
+        <div class="rest">\/{{data!.activerest.lower}}</div>
       </ion-col>
-      <ion-col align-self-baseline col-10>
-        <div class="interval">1\/{{interval}}</div>
+      <ion-col col-3></ion-col>
+      <ion-col align-self-baseline col-7>
+        <div class="interval">1\/{{data!.intervals}}</div>
       </ion-col>
     </ion-row>
     <ion-row justify-content-start>
@@ -27,7 +28,7 @@
 
   <!-- activerest -->
   <ion-item>
-    <ion-range [(ngModel)]="activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
+    <ion-range [(ngModel)]="data!.activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
       <ion-icon range-left md="material-icons" name="timeelapse"></ion-icon>
       <ion-icon range-right md="material-icons" name="timeelapse"></ion-icon>
     </ion-range>
@@ -35,7 +36,7 @@
 
   <!-- interval -->
   <ion-item>
-    <ion-range [(ngModel)]="interval" [min]="intervalObject.min" [max]="intervalObject.max" step="1" snaps="true" pin="true">
+    <ion-range [(ngModel)]="data!.intervals" min="1" [max]="data!.intervalmaxlimit" step="1" snaps="true" pin="true">
       <ion-icon range-left small name="time"></ion-icon>
       <ion-icon range-right name="time"></ion-icon>
     </ion-range>
@@ -43,7 +44,7 @@
 
   <!-- countdown -->
   <ion-item>
-    <ion-range [(ngModel)]="countdown" min="5" max="60" step="5" snaps="true" pin="true">
+    <ion-range [(ngModel)]="data.countdown" min="5" max="data.countdownmaxlimit" step="5" snaps="true" pin="true">
       <ion-icon range-left small name="time"></ion-icon>
       <ion-icon range-right name="time"></ion-icon>
     </ion-range>

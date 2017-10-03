@@ -3,7 +3,7 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { IntervalDisplayPage } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 
 @Component({
   templateUrl: 'app.html'

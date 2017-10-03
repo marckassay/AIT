@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as app from '../../app/app.component';
+import { IntervalStorageData } from "../pages";
 
 @IonicPage()
 @Component({
@@ -8,28 +9,52 @@ import * as app from '../../app/app.component';
   templateUrl: 'interval-settings.html',
 })
 
-export class IntervalSettingsPage {
-  title: string;
-  activerest: any = { lower: 10,
-                      upper: 50 };
-  interval: number = 12;
-  intervalObject: any = { min: 1,
-                          max: 20 };
-  countdown: number = 30;
+export class IntervalSettingsPage implements OnInit {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    if(navParams.data) {
+      this.data = navParams.data;
+    } else {
+      this.data = this.getDefaultData();
+    }
+  }
+
+  ngOnInit(): void {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad IntervalSettingsPage');
+    console.log(this.data)
+  }
+
+  _data: IntervalStorageData;
+
+  get data(): IntervalStorageData {
+    return this._data;
+  }
+
+  set data(value: IntervalStorageData) {
+    this._data = value;
+  }
+
+  getDefaultData(): IntervalStorageData {
+    return {  name: "Program #1 ",
+              activerest: {lower: 10, upper: 50},
+              activemaxlimit: 90,
+              intervals: 12,
+              intervalmaxlimit: 20,
+              countdown: 15,
+              countdownmaxlimit: 60,
+              getready: 10,
+              isCountdownInSeconds: false };
   }
 
   get totaltime(): string {
-    const totaltimeInSeconds = (this.activerest.upper + this.activerest.lower) * this.interval;
+    const totaltimeInSeconds = (this.data.activerest.upper + this.data.activerest.lower) * this.data.intervals;
     return app.getRemainingTimeISO(totaltimeInSeconds * app.millisecond);
   }
 
   get countdownLabel(): string {
-    return ":"+this.countdown;
+    return ":"+this.data.countdown;
   }
 }

@@ -6,6 +6,25 @@ import { FabAction, FabEmission, FabContainerComponent } from '../../app/compone
 import { Subscription } from 'rxjs';
 import { IntervalSettingsPage } from "../pages";
 
+export interface IntervalStorageData {
+  name: string;
+  activerest: {
+    lower: number;
+    upper: number;
+  };
+  activemaxlimit: number;
+
+  intervals: number;
+  intervalmaxlimit: number;
+
+  countdown: number;
+  countdownmaxlimit: number;
+
+  isCountdownInSeconds: boolean;
+
+  getready: number;
+}
+
 @IonicPage()
 @Component({
   selector: 'page-interval-display',
@@ -18,11 +37,6 @@ export class IntervalDisplayPage implements OnInit {
   timer: AnotherIntervalTimer;
   emitted: IIntervalEmission;
   subscription: Subscription;
-  activeTime: number;
-  restTime: number;
-  intervals: number;
-  getReady: number;
-  countdown: number;
 
   remainingTime: string;
   remainingIntervalTime: number;
@@ -45,34 +59,33 @@ export class IntervalDisplayPage implements OnInit {
   }
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-
+    if(navParams.data != undefined) {
+      this.data = navParams.data;
+    } else {
+      this.data = this.getDefaultData();
+    }
   }
 
   ngOnInit(): void {
     this.initializeDisplay();
-
   }
 
   initializeDisplay() {
     this._state = IntervalState.Loaded;
-
-    this.activeTime = 50;
-    this.restTime = 10;
-    this.intervals = 12;
-    this.getReady = 3;
-    this.countdown = 15;
-
-    this.remainingIntervalTime = this.restTime;
-    this.currentInterval = this.intervals;
+    this.remainingIntervalTime = this.data.activerest.lower;
+    this.currentInterval = this.data.intervals;
 
     this.instantiateTimer();
   }
 
   instantiateTimer() {
-    this.timer = new AnotherIntervalTimer(this.activeTime, this.restTime, this.intervals, this.getReady, this.countdown);
-
+    this.timer = new AnotherIntervalTimer(this.data.activerest.upper,
+                                          this.data.activerest.lower,
+                                          this.data.intervals,
+                                          this.data.getready,
+                                          this.data.countdown);
     this.subscribeTimer();
-
+      console.log("this.timer.totalTimeISO: "+this.timer.totalTimeISO)
     this.remainingTime = this.timer.totalTimeISO;
   }
 
@@ -116,9 +129,31 @@ export class IntervalDisplayPage implements OnInit {
         this.initializeDisplay();
         break;
       case FabAction.Program:
-        this.navCtrl.push(IntervalSettingsPage);
+        this.navCtrl.push(IntervalSettingsPage, this.data);
         break;
     }
     emission.container.close();
+  }
+
+  _data: IntervalStorageData;
+
+  get data(): IntervalStorageData {
+    return this._data;
+  }
+
+  set data(value: IntervalStorageData) {
+    this._data = value;
+  }
+
+  getDefaultData(): IntervalStorageData {
+    return {  name: "Program #1 ",
+              activerest: {lower: 10, upper: 50},
+              activemaxlimit: 90,
+              intervals: 12,
+              intervalmaxlimit: 20,
+              countdown: 15,
+              countdownmaxlimit: 60,
+              getready: 10,
+              isCountdownInSeconds: false };
   }
 }
