@@ -5,6 +5,7 @@ import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../ap
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
 import { Subscription } from 'rxjs';
 import { IntervalSettingsPage } from "../pages";
+import { Storage } from '../../app/core/Storage';
 
 export interface Limits {
   lower: number;
@@ -12,6 +13,7 @@ export interface Limits {
 }
 
 export interface IntervalStorageData {
+  uuid: string;
   name: string;
   activerest: Limits;
   activemaxlimit: number;
@@ -60,8 +62,11 @@ export class IntervalDisplayPage implements OnInit {
     return _state_temp;
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    if((<IntervalStorageData>navParams.data).activerest) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) {
+    //this.data = navParams.data;
+
+    // TODO: this is just a crutch for dev...
+    if((<IntervalStorageData>navParams.data).uuid) {
       this.data = navParams.data;
     } else {
       this.data = this.getDefaultData();
@@ -70,6 +75,13 @@ export class IntervalDisplayPage implements OnInit {
 
   ngOnInit(): void {
     this.initializeDisplay();
+  }
+
+  ionViewWillEnter() {
+    if(this.storage.getItem("abcdef123456")) {
+      this.data = this.storage.getItem("abcdef123456") as any;
+      this.initializeDisplay();
+    }
   }
 
   initializeDisplay() {
@@ -87,7 +99,6 @@ export class IntervalDisplayPage implements OnInit {
                                           this.data.getready,
                                           this.data.countdown);
     this.subscribeTimer();
-      console.log("this.timer.totalTimeISO: "+this.timer.totalTimeISO)
     this.remainingTime = this.timer.totalTimeISO;
   }
 
@@ -131,7 +142,7 @@ export class IntervalDisplayPage implements OnInit {
         this.initializeDisplay();
         break;
       case FabAction.Program:
-        this.navCtrl.push(IntervalSettingsPage, this.data);
+        this.navCtrl.push(IntervalSettingsPage, this.data.uuid);
         break;
     }
     emission.container.close();
@@ -148,7 +159,8 @@ export class IntervalDisplayPage implements OnInit {
   }
 
   getDefaultData(): IntervalStorageData {
-    return <IntervalStorageData>{  name: "Program #1 ",
+    return {  uuid: "abcdef123456",
+              name: "Program #1 ",
               activerest: {lower: 10, upper: 50},
               activemaxlimit: 90,
               intervals: 12,
