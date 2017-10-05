@@ -6,35 +6,14 @@ import { FabAction, FabEmission, FabContainerComponent } from '../../app/compone
 import { Subscription } from 'rxjs';
 import { IntervalSettingsPage } from "../pages";
 import { Storage } from '../../app/core/Storage';
-
-export interface Limits {
-  lower: number;
-  upper: number;
-}
-
-export interface IntervalStorageData {
-  uuid: string;
-  name: string;
-  activerest: Limits;
-  activemaxlimit: number;
-
-  intervals: number;
-  intervalmaxlimit: number;
-
-  countdown: number;
-  countdownmaxlimit: number;
-
-  isCountdownInSeconds: boolean;
-
-  getready: number;
-}
+import { IntervalStorageData } from '../../app/app.component';
 
 @IonicPage()
 @Component({
   selector: 'page-interval-display',
   templateUrl: 'interval-display.html'
 })
-export class IntervalDisplayPage implements OnInit {
+export class IntervalDisplayPage {
   @ViewChild(FabContainerComponent)
   private menu: FabContainerComponent;
 
@@ -45,6 +24,16 @@ export class IntervalDisplayPage implements OnInit {
   remainingTime: string;
   remainingIntervalTime: number;
   currentInterval: number;
+
+  _data: IntervalStorageData;
+
+  get data(): IntervalStorageData {
+    return this._data;
+  }
+
+  set data(value: IntervalStorageData) {
+    this._data = value;
+  }
 
   public states = IntervalState;
   _state: IntervalState;
@@ -62,26 +51,33 @@ export class IntervalDisplayPage implements OnInit {
     return _state_temp;
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) {
-    //this.data = navParams.data;
-
-    // TODO: this is just a crutch for dev...
-    if((<IntervalStorageData>navParams.data).uuid) {
-      this.data = navParams.data;
-    } else {
-      this.data = this.getDefaultData();
-    }
-  }
-
-  ngOnInit(): void {
-    this.initializeDisplay();
-  }
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              public storage: Storage) {}
 
   ionViewWillEnter() {
-    if(this.storage.getItem("abcdef123456")) {
-      this.data = this.storage.getItem("abcdef123456") as any;
-      this.initializeDisplay();
+    this.preinitializeDisplay();
+  }
+
+  ionViewDidLoad() {
+    this.preinitializeDisplay();
+  }
+
+  preinitializeDisplay(): void {
+    const uuid = (<IntervalStorageData>this.navParams.data).uuid;
+
+    this.menu.reset();
+
+    if((<Subscription>this.subscription) && !this.subscription.closed) {
+      this.subscription.unsubscribe();
     }
+
+    this.storage.getItem(uuid).then((value) => {
+      this.data = value;
+      this.initializeDisplay();
+    }).catch((reject) => {
+      console.log("interval-display preinitializeDisplay error")
+    });
   }
 
   initializeDisplay() {
@@ -104,7 +100,6 @@ export class IntervalDisplayPage implements OnInit {
 
   subscribeTimer(): void {
     this.subscription = this.timer.publication.subscribe((e: any) => {
-
       // play sound each second for getReady states
       if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant)) {
         AITSoundboard.ShortBeep();
@@ -120,7 +115,6 @@ export class IntervalDisplayPage implements OnInit {
     }, (err) => {
 
     }, () => {
-
       AITSoundboard.CompleteSound();
       this._state = IntervalState.Completed;
       this.remainingTime = this.timer.totalTimeISO;
@@ -137,37 +131,12 @@ export class IntervalDisplayPage implements OnInit {
         this.timer.pause();
         break;
       case FabAction.Reset:
-        this.menu.reset();
-        this.subscription.unsubscribe();
-        this.initializeDisplay();
+        this.preinitializeDisplay();
         break;
       case FabAction.Program:
         this.navCtrl.push(IntervalSettingsPage, this.data.uuid);
         break;
     }
     emission.container.close();
-  }
-
-  _data: IntervalStorageData;
-
-  get data(): IntervalStorageData {
-    return this._data;
-  }
-
-  set data(value: IntervalStorageData) {
-    this._data = value;
-  }
-
-  getDefaultData(): IntervalStorageData {
-    return {  uuid: "abcdef123456",
-              name: "Program #1 ",
-              activerest: {lower: 10, upper: 50},
-              activemaxlimit: 90,
-              intervals: 12,
-              intervalmaxlimit: 20,
-              countdown: 15,
-              countdownmaxlimit: 60,
-              getready: 10,
-              isCountdownInSeconds: false };
   }
 }

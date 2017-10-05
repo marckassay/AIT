@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{data!.name}} Settings</ion-title>
+    <ion-title>{{data?.name}} Settings</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -8,14 +8,14 @@
   <ion-grid>
     <ion-row justify-content-start nowrap>
       <ion-col align-self-baseline col-auto>
-        <div class="active">{{data!.activerest.upper}}</div>
+        <div class="active">{{data?.activerest.upper}}</div>
       </ion-col>
       <ion-col align-self-baseline col-auto>
-        <div class="rest">\/{{data!.activerest.lower}}</div>
+        <div class="rest">\/{{data?.activerest.lower}}</div>
       </ion-col>
       <ion-col col-3></ion-col>
       <ion-col align-self-baseline col-7>
-        <div class="interval">1\/{{data!.intervals}}</div>
+        <div class="interval">1\/{{data?.intervals}}</div>
       </ion-col>
     </ion-row>
     <ion-row justify-content-start>
@@ -27,26 +27,28 @@
   </ion-grid>
 
   <!-- activerest -->
-  <ion-item>
-    <ion-range [(ngModel)]="data!.activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
-      <ion-icon range-left md="material-icons" name="timeelapse"></ion-icon>
-      <ion-icon range-right md="material-icons" name="timeelapse"></ion-icon>
-    </ion-range>
-  </ion-item>
+  <div *ngIf="data">
+    <ion-item>
+      <ion-range [(ngModel)]="data.activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
+        <ion-icon range-left md="material-icons" name="timeelapse"></ion-icon>
+        <ion-icon range-right md="material-icons" name="timeelapse"></ion-icon>
+      </ion-range>
+    </ion-item>
 
-  <!-- interval -->
-  <ion-item>
-    <ion-range [(ngModel)]="data!.intervals" min="1" [max]="data!.intervalmaxlimit" step="1" snaps="true" pin="true">
-      <ion-icon range-left small name="time"></ion-icon>
-      <ion-icon range-right name="time"></ion-icon>
-    </ion-range>
-  </ion-item>
+    <!-- interval -->
+    <ion-item>
+      <ion-range [(ngModel)]="data.intervals" min="1" [max]="data.intervalmaxlimit" step="1" snaps="true" pin="true">
+        <ion-icon range-left small name="time"></ion-icon>
+        <ion-icon range-right name="time"></ion-icon>
+      </ion-range>
+    </ion-item>
 
-  <!-- countdown -->
-  <ion-item>
-    <ion-range [(ngModel)]="data.countdown" min="5" max="data.countdownmaxlimit" step="5" snaps="true" pin="true">
-      <ion-icon range-left small name="time"></ion-icon>
-      <ion-icon range-right name="time"></ion-icon>
-    </ion-range>
-  </ion-item>
+    <!-- countdown -->
+    <ion-item>
+      <ion-range [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit" step="5" snaps="true" pin="true">
+        <ion-icon range-left small name="time"></ion-icon>
+        <ion-icon range-right name="time"></ion-icon>
+      </ion-range>
+    </ion-item>
+  </div>
 </ion-content>

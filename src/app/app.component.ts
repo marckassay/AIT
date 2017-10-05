@@ -1,25 +1,73 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { IntervalDisplayPage } from '../pages/pages';
+import { Storage } from './core/Storage';
 
 @Component({
-  templateUrl: 'app.html'
+  template: '<ion-nav #appnav [root]="rootPage"></ion-nav>'
 })
 export class AppComponent {
+  @ViewChild('appnav')
+  nav: NavController;
+
   rootPage:any = IntervalDisplayPage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, screenOrientation: ScreenOrientation) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, screenOrientation: ScreenOrientation, public storage: Storage) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
       screenOrientation.unlock();
+      this.stubData();
     });
+
+    platform.backButton.subscribe((x)=>{console.log("backButton clicked!")})
   }
+
+  stubData() {
+    this.storage.getItem("abc123").then((value) => {
+                    this.nav.setRoot(IntervalDisplayPage,value);
+                  }).catch((r)=>{
+                    const stub = {  uuid: "abc123",
+                    name: "Program #1 ",
+                    activerest: {lower: 12, upper: 50},
+                    activemaxlimit: 90,
+                    intervals: 12,
+                    intervalmaxlimit: 20,
+                    countdown: 15,
+                    countdownmaxlimit: 60,
+                    getready: 10,
+                    isCountdownInSeconds: false };
+                    this.nav.setRoot(IntervalDisplayPage,stub);
+                    this.storage.setItem(stub);
+                  });
+  }
+}
+
+export interface Limits {
+  lower: number;
+  upper: number;
+}
+
+export interface IntervalStorageData {
+  uuid: string;
+  name: string;
+  activerest: Limits;
+  activemaxlimit: number;
+
+  intervals: number;
+  intervalmaxlimit: number;
+
+  countdown: number;
+  countdownmaxlimit: number;
+
+  isCountdownInSeconds: boolean;
+
+  getready: number;
 }
 
 export interface ITimelinePosition
