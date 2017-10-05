@@ -10,7 +10,7 @@ import { Insomnia } from '@ionic-native/insomnia';
 import { AppComponent } from './app.component'
 import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
-import { Storage } from './core/Storage';
+import { Storage, StorageMock } from './core/Storage';
 import { NativeStorage } from '@ionic-native/native-storage';
 
 
@@ -35,8 +35,8 @@ import { NativeStorage } from '@ionic-native/native-storage';
     StatusBar,
     SplashScreen,
     ScreenOrientation,
+    { provide: Storage, useClass: StorageMock },
     NativeStorage,
-    Storage,
     Insomnia,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

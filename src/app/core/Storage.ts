@@ -22,3 +22,28 @@ export class Storage {
     });
   }
 }
+
+export class StorageMock {
+  _data;
+
+  constructor() {
+    this._data = {  uuid: "abc123",
+                    name: "Program #1 ",
+                    activerest: {lower: 12, upper: 50},
+                    activemaxlimit: 90,
+                    intervals: 12,
+                    intervalmaxlimit: 20,
+                    countdown: 15,
+                    countdownmaxlimit: 60,
+                    getready: 10,
+                    isCountdownInSeconds: false };
+  }
+
+  setItem(data: IntervalStorageData) {
+    this._data = data;
+  }
+
+  getItem(uuid: string): Promise<IntervalStorageData> {
+    return Promise.resolve<IntervalStorageData>(this._data);
+  }
+}

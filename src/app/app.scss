@@ -1,5 +1,6 @@
 // overriding build/main.css (line: ~4994) since this app
 // is sensitive to viewport sizes and needs specific font sizes
+
 html {
   font-size: 62.5%;
   -webkit-text-size-adjust: none;
@@ -23,6 +24,6 @@ html {
  }
 
  @function appColor($name) {
-  //@return color($posh_monokai_colors, $name);
-  @return color($monoinverted_colors, $name);
+  @return color($posh_monokai_colors, $name);
+  //@return color($monoinverted_colors, $name);
  }
