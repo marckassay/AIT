@@ -30,24 +30,24 @@
   <div *ngIf="data">
     <ion-item>
       <ion-range [(ngModel)]="data.activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
-        <ion-icon range-left md="material-icons" name="timeelapse"></ion-icon>
-        <ion-icon range-right md="material-icons" name="timeelapse"></ion-icon>
+        <ion-icon range-left name="access_time" class="material-icons" style="color:firebrick">access_time</ion-icon>
+        <ion-icon range-right name="access_time" class="material-icons" style="color:limegreen">access_time</ion-icon>
       </ion-range>
     </ion-item>
 
     <!-- interval -->
     <ion-item>
       <ion-range [(ngModel)]="data.intervals" min="1" [max]="data.intervalmaxlimit" step="1" snaps="true" pin="true">
-        <ion-icon range-left small name="time"></ion-icon>
-        <ion-icon range-right name="time"></ion-icon>
+        <ion-icon range-left small name="access_time" class="material-icons">access_time</ion-icon>
+        <ion-icon range-right name="access_time" class="material-icons">access_time</ion-icon>
       </ion-range>
     </ion-item>
 
     <!-- countdown -->
     <ion-item>
       <ion-range [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit" step="5" snaps="true" pin="true">
-        <ion-icon range-left small name="time"></ion-icon>
-        <ion-icon range-right name="time"></ion-icon>
+        <ion-icon range-left small name="access_time" class="material-icons">access_time</ion-icon>
+        <ion-icon range-right name="access_time" class="material-icons">access_time</ion-icon>
       </ion-range>
     </ion-item>
   </div>
