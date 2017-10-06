@@ -82,11 +82,11 @@ export class CountdownTimer
       this.state = CountdownState.Completed;
     }
     // is it time to enter into Warning/GetReady states...
-    else if ( remainingTimeInSeconds == this.getReady ) {
+    else if ((this.getReady > 0) && ( remainingTimeInSeconds == this.getReady)) {
       this.state = CountdownState.ActiveStopWarningOnTheSecond;
     }
     // if currently in warning state and on a whole second (not being the first second of this warning)...
-    else if( (this.state & CountdownState.GetReady) == CountdownState.GetReady &&
+    else if ( (this.state & CountdownState.GetReady) == CountdownState.GetReady &&
         ( (this.state & CountdownState.ActiveStopWarningOnTheSecond) != CountdownState.ActiveStopWarningOnTheSecond )  &&
         (remainingTimeISO.split('.')[1] == '0')
     ) {

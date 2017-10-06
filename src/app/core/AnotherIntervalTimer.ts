@@ -67,8 +67,8 @@ export class AnotherIntervalTimer {
     this.totalTimeISO = app.getRemainingTimeISO( this.totalTime * this.millisecond );
 
     this.pauser = new Subject<boolean>();
-
-    const sequenceA = new CountdownTimer(this.countdown, this.getReady, true).source;
+    // always silent the countdown timer when joined with another; beeps and UI maybe confusing to user
+    const sequenceA = new CountdownTimer(this.countdown, 0, true).source;
 
     const sequenceB = Observable.timer(0, this.millisecond/this.precision)
                                 .map((x) => this.interval(x))

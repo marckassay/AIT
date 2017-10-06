@@ -29,14 +29,14 @@ export class StorageMock {
   constructor() {
     this._data = {  uuid: "abc123",
                     name: "Program #1 ",
-                    activerest: {lower: 12, upper: 50},
+                    activerest: {lower: 10, upper: 50},
                     activemaxlimit: 90,
                     intervals: 12,
                     intervalmaxlimit: 20,
                     countdown: 15,
                     countdownmaxlimit: 60,
                     getready: 10,
-                    isCountdownInSeconds: false };
+                    isCountdownInSeconds: true };
   }
 
   setItem(data: IntervalStorageData) {
