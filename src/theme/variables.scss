@@ -22,7 +22,7 @@ $app-direction: ltr;
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
 $background-color: #000000;
-
+$toolbar-background: #080808;
 $font-size-base: 10px;
 
 // Named Color Variables
@@ -45,12 +45,16 @@ $default_colors: (
 
 
 $posh_monokai_colors: (
-  primary:    #66d9ef,
+  //primary:    #66d9ef,
   go:         #a6e22e,
   stop:       #f92672,
   getready:   #e6db74,
   light:      #f4f4f4,
-  dark:       #272822
+  dark:       #272822,
+  primary: (
+    base: #66d9ef,
+    contrast: #272822
+  )
 );
 
 $monoinverted_colors: (

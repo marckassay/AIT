@@ -9,10 +9,6 @@ $font-size-totaltime-landscape: 6vh;
 $font-size-countdown-portrait:  6vw;
 $font-size-countdown-landscape: 6vh;
 
-page-interval-settings > ion-header > ion-navbar {
-  background-color: appColor( dark );
-}
-
 page-interval-settings > ion-content {
   ion-icon {
     //font-family: "Material Icons";
@@ -21,19 +17,19 @@ page-interval-settings > ion-content {
     height: 24px;
   }
 
-  .active {
-    font-family: selawksb;
-    @media screen and (orientation:portrait) { font-size: $font-size-active-portrait; }
-    @media screen and (orientation:landscape) { font-size: $font-size-active-landscape; }
-    color: appColor( go );
-  }
-
   .go-color {
     color: appColor( go );
   }
 
   .stop-color {
     color: appColor( stop );
+  }
+
+  .active {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-active-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-active-landscape; }
+    color: appColor( go );
   }
 
   .rest {

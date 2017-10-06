@@ -1,5 +1,5 @@
 <ion-fab bottom right #fabMenu>
-  <button ion-fab (click)="actionRequest([actions.Main], fabMenu)" class="main"></button>
+  <button ion-fab (click)="actionRequest(actions.Main, fabMenu)" class="main"></button>
   <ion-fab-list side="top">
     <div *ngIf="viewState == states.Start">
     <button ion-fab (click)="actionRequest(actions.Start, fabMenu)" class="start"><ion-icon class="material-icons">play_circle_outline</ion-icon>
