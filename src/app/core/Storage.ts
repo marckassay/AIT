@@ -35,7 +35,7 @@ export class StorageMock {
                     intervalmaxlimit: 20,
                     countdown: 15,
                     countdownmaxlimit: 60,
-                    getready: 10,
+                    getready: 3,
                     isCountdownInSeconds: true };
   }
 

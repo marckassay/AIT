@@ -67,8 +67,16 @@ export class AnotherIntervalTimer {
     this.totalTimeISO = app.getRemainingTimeISO( this.totalTime * this.millisecond );
 
     this.pauser = new Subject<boolean>();
-    // always silent the countdown timer when joined with another; beeps and UI maybe confusing to user
-    const sequenceA = new CountdownTimer(this.countdown, 0, true).source;
+
+    // always advance the timelinePosition to by-pass the first rest segment of the first
+    // interval.  Because the CountdownTimer will give us the audibles and visuals. we
+    // dont want to get-ready for the start of a rest period...
+    this.timelinePosition = (this.restTime * this.precision)-1;
+    this.state = IntervalState.RestStopWarning;
+    this.remainingIntervalTime = 1;
+    this.currentInterval = this.intervals -1;
+
+    const sequenceA = new CountdownTimer(this.countdown, this.getReady, true).source;
 
     const sequenceB = Observable.timer(0, this.millisecond/this.precision)
                                 .map((x) => this.interval(x))
