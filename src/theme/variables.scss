@@ -21,9 +21,7 @@ $app-direction: ltr;
 // the Sass variables found in Ionic's source scss files.
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
-$background-color: #000000;
-$toolbar-background: #080808;
-$font-size-base: 10px;
+
 
 // Named Color Variables
 // --------------------------------------------------
@@ -43,18 +41,20 @@ $default_colors: (
   dark:       #101010
 );
 
-
 $posh_monokai_colors: (
-  //primary:    #66d9ef,
+  primary: (
+    base: #66d9ef,
+    contrast: #272822
+  ),
+  secondary: (
+    base: #66d9ef,
+    contrast: #f4f4f4
+  ),
   go:         #a6e22e,
   stop:       #f92672,
   getready:   #e6db74,
   light:      #f4f4f4,
-  dark:       #272822,
-  primary: (
-    base: #66d9ef,
-    contrast: #272822
-  )
+  dark:       #272822
 );
 
 $monoinverted_colors: (
@@ -68,6 +68,11 @@ $monoinverted_colors: (
 );
 
 $colors: $posh_monokai_colors;
+$background-color: #000000;
+$toolbar-background: #080808;
+$font-size-base: 10px;
+$toggle-md-active-color: color($colors, secondary) !default;
+$toggle-md-handle-background-color-off: lighten($toggle-md-active-color, 25%) !default;
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here

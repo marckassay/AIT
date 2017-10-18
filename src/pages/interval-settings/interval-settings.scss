@@ -17,6 +17,13 @@ page-interval-settings > ion-content {
     height: 24px;
   }
 
+  ion-item ion-label {
+    font-family: selawk;
+    @media screen and (orientation:portrait) { font-size: $font-size-countdown-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-countdown-landscape; }
+    color: appColor( go );
+  }
+
   .go-color {
     color: appColor( go );
   }

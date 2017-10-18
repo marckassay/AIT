@@ -12,10 +12,12 @@ export enum IntervalState {
   Error     = 32,
   Start     = 64,
   Instant   = 128,
+  Warning   = 256,
 
   ActiveStart = Active + Start + Instant,
   ActiveStopWarning = Active + GetReady,
   ActiveStopWarningOnTheSecond = ActiveStopWarning + Instant,
+  ActiveWarning = Active + Warning,
 
   RestStart = Rest + Start + Instant,
   RestStopWarning = Rest + GetReady,
@@ -53,7 +55,8 @@ export class AnotherIntervalTimer {
               private restTime:number,
               private intervals:number,
               private getReady:number=3,
-              private countdown:number=10) {
+              private countdown:number=10,
+              private warnings:app.CountdownWarnings) {
     this.intervalTime = activeTime + restTime;
     this.totalTime = this.intervalTime * this.intervals;
     this.timelineMaxLimit = this.totalTime * this.precision;// precision being used as a factor here...
@@ -94,25 +97,24 @@ export class AnotherIntervalTimer {
     let remainingmilliseconds: number = remainingTime * this.millisecond;
     this.modulusOffset = this.currentInterval * this.restTime;
 
-    // strip away Start and/or Instant states if needed...those are momentary "sub" states
+    // strip away Start, Warning and/or Instant states if needed...those are momentary "sub" states
     if (this.state & IntervalState.Start) {
       this.state -= IntervalState.Start;
     }
     if (this.state & IntervalState.Instant) {
       this.state -= IntervalState.Instant;
     }
-
-    // is it time to enter into Rest (and also check if we are Completed before changing to Rest)...
-    if(remainingTime % this.intervalTime == 0) {
-      if(remainingTime == 0) {
-        this.state = IntervalState.Completed;
-      } else {
-        this.currentInterval--;
-        this.state = IntervalState.RestStart;
-        this.remainingIntervalTime = this.restTime;
-      }
+    if (this.state & IntervalState.Warning) {
+      this.state -= IntervalState.Warning;
     }
-    // is it time to enter into Warning states...(interesting that this 'else if' works for both warning states)
+
+    // is it time to enter into Rest...
+    if(remainingTime % this.intervalTime == 0) {
+      this.currentInterval--;
+      this.state = IntervalState.RestStart;
+      this.remainingIntervalTime = this.restTime;
+    }
+    // is it time to enter into Warning states...
     else if ( ((remainingTime - this.modulusOffset - this.getReady) % this.activeTime) == 0 ) {
       if(this.state & IntervalState.Rest) {
         this.state = IntervalState.RestStopWarningOnTheSecond;
@@ -141,12 +143,26 @@ export class AnotherIntervalTimer {
       // by adding this, it will construct an xWarningOnTheSecond state...
       this.state += IntervalState.Instant;
     }
+    // if its Active state and if current-interval-time is at a enabled warning (5,10,15)...
+    else if(((this.state & IntervalState.Active) == IntervalState.Active) &&
+      this.atWarningTime(this.remainingIntervalTime) &&
+      (remainingTimeISO.split('.')[1] == '0')) {
+      this.state = IntervalState.ActiveWarning;
+    }
 
     return {  timelinePosition: this.timelinePosition++,
               state: this.state,
               remainingTime: remainingTimeISO,
               remainingIntervalTime: this.remainingIntervalTime,
               currentInterval: (this.intervals - this.currentInterval) };
+  }
+
+  atWarningTime(currentActiveTime:number): boolean {
+    if( ((this.warnings.fivesecond == true) && (currentActiveTime == 5)) ||
+        ((this.warnings.tensecond == true) && (currentActiveTime == 10)) ||
+        ((this.warnings.fifthteensecond == true) && (currentActiveTime == 15)) ){
+      return true;
+    }
   }
 
   public play(): void {

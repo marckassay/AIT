@@ -35,6 +35,12 @@ export class AppComponent {
   }
 }
 
+export interface CountdownWarnings {
+  fivesecond: boolean;
+  tensecond: boolean;
+  fifthteensecond: boolean;
+}
+
 export interface Limits {
   lower: number;
   upper: number;
@@ -55,6 +61,8 @@ export interface IntervalStorageData {
   isCountdownInSeconds: boolean;
 
   getready: number;
+
+  warnings: CountdownWarnings;
 }
 
 export interface ITimelinePosition

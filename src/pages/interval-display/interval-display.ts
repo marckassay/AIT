@@ -47,6 +47,9 @@ export class IntervalDisplayPage {
     if (_state_temp & IntervalState.Instant) {
       _state_temp -= IntervalState.Instant;
     }
+    if (_state_temp & IntervalState.Warning) {
+      _state_temp -= IntervalState.Warning;
+    }
 
     return _state_temp;
   }
@@ -93,7 +96,8 @@ export class IntervalDisplayPage {
                                           this.data.activerest.lower,
                                           this.data.intervals,
                                           this.data.getready,
-                                          this.data.countdown);
+                                          this.data.countdown,
+                                          this.data.warnings);
     this.subscribeTimer();
     this.remainingTime = this.timer.totalTimeISO;
   }
@@ -101,10 +105,11 @@ export class IntervalDisplayPage {
   subscribeTimer(): void {
     this.subscription = this.timer.publication.subscribe((e: any) => {
       // play sound each second for getReady states
-      if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant)) {
+      if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant) ||
+          ((e.state & IntervalState.ActiveWarning) == IntervalState.ActiveWarning) ) {
         AITSoundboard.ShortBeep();
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
-        AITSoundboard.LongBeep();
+        AITSoundboard.DoubleBeep();
       }
       console.log(e);
       this._state = e.state;
