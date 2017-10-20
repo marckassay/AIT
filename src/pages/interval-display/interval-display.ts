@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content, Navbar, MenuController } from 'ionic-angular';
 import { AITSoundboard } from '../../app/core/AITSoundboard';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
@@ -14,6 +14,9 @@ import { IntervalStorageData } from '../../app/app.component';
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage {
+  @ViewChild(Navbar)
+  navbar: Navbar;
+
   @ViewChild(FabContainerComponent)
   private menu: FabContainerComponent;
 
@@ -64,13 +67,13 @@ export class IntervalDisplayPage {
 
   ionViewDidLoad() {
     this.preinitializeDisplay();
+   // this.navbar.hideBackButton = true;
+    //this.navCtrl.insert(1, IntervalSettingsPage, "abc123");
   }
 
   preinitializeDisplay(): void {
     const uuid = (<IntervalStorageData>this.navParams.data).uuid;
-
     this.menu.reset();
-
     if((<Subscription>this.subscription) && !this.subscription.closed) {
       this.subscription.unsubscribe();
     }
@@ -109,7 +112,7 @@ export class IntervalDisplayPage {
           ((e.state & IntervalState.ActiveWarning) == IntervalState.ActiveWarning) ) {
         AITSoundboard.ShortBeep();
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
-        AITSoundboard.DoubleBeep();
+        AITSoundboard.TripleBeep();
       }
       console.log(e);
       this._state = e.state;
@@ -129,6 +132,11 @@ export class IntervalDisplayPage {
   onAction(emission: FabEmission) {
     switch (emission.action)
     {
+      case FabAction.Home:
+        this.timer.pause();
+       // this.navCtrl.popToRoot();
+        this.navCtrl.pop(null, null);
+        break;
       case FabAction.Start:
         this.timer.play();
         break;

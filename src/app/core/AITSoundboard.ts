@@ -11,7 +11,7 @@ export class AITSoundboard {
     AITSoundboard.sound_1.play();
   };
 
-  static DoubleBeep = () => {
+  static TripleBeep = () => {
     let interval = 0;
     let intervalId = setInterval(() => {
       if(interval === 0 || interval === 2){
@@ -26,15 +26,6 @@ export class AITSoundboard {
       }
       (interval === 2)? clearInterval(intervalId):interval++;
     },150);
-  };
-
-  static LongBeep = () => {
-    AITSoundboard.sound_1.stop();
-    AITSoundboard.sound_1.rate(1.0);
-    AITSoundboard.sound_1.loop(true);
-    AITSoundboard.sound_1.volume(1.0);
-    AITSoundboard.sound_1.fade(1,0,1000);
-    AITSoundboard.sound_1.play();
   };
 
   static CompleteSound = () => {

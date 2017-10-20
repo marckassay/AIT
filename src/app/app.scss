@@ -27,3 +27,7 @@ html {
   @return color($posh_monokai_colors, $name);
   //@return color($monoinverted_colors, $name);
  }
+
+ion-list {
+ color: appColor( primary );
+}

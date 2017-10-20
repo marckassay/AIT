@@ -1,37 +1,67 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController } from 'ionic-angular';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Platform, NavController, Menu, MenuController, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { IntervalDisplayPage } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { Storage } from './core/Storage';
 
 @Component({
-  template: '<ion-nav #appnav [root]="rootPage"></ion-nav>'
+  templateUrl: 'app.html'
 })
-export class AppComponent {
-  @ViewChild('appnav')
-  nav: NavController;
+export class AppComponent implements AfterViewInit {
+  @ViewChild(Nav)
+  navCtrl: Nav;
 
-  rootPage:any = IntervalDisplayPage;
+  @ViewChild(Menu)
+  menu: Menu;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, screenOrientation: ScreenOrientation, public storage: Storage) {
+  constructor(platform: Platform,
+              statusBar: StatusBar,
+              splashScreen: SplashScreen,
+              screenOrientation: ScreenOrientation,
+              public menuCtrl: MenuController,
+              public storage: Storage) {
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
       screenOrientation.unlock();
-      this.stubData();
+
+      //this.stubData();
+      this.navCtrl.setRoot(IntervalDisplayPage,"abc123");
+
     });
 
-    platform.backButton.subscribe((x)=>{console.log("backButton clicked!")})
+    platform.backButton.subscribe((x)=>{console.log("Device's back-button clicked!")})
   }
 
+  ngAfterViewInit(){
+
+  }
+/*
   stubData() {
     this.storage.getItem("abc123").then((value) => {
-                    this.nav.setRoot(IntervalDisplayPage,value);
+      this.content.swipeBackEnabled = true;
+                    //this.content.setRoot(IntervalDisplayPage,value);
+                    this.content.insertPages(1, [ {page: IntervalSettingsPage,  params: value},
+                                                  {page: IntervalDisplayPage,   params: value}
+                    ]);
+                    //this.content.push(IntervalDisplayPage, value);
+                    //this.rootPage = IntervalDisplayPage;
                   }).catch((r)=>{ console.log("app.component failed to get record")});
+  }
+*/
+
+  goToIntervalPage() {
+    //this.stubData();
+  }
+
+  closeMenu() {
+    this.menu.close()
+    this.menu.enable(true);
   }
 }
 

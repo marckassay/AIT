@@ -13,7 +13,6 @@ import { FabContainerComponent } from './components/fabcontainer.component/fabco
 import { Storage, StorageMock } from './core/Storage';
 import { NativeStorage } from '@ionic-native/native-storage';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +22,9 @@ import { NativeStorage } from '@ionic-native/native-storage';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(AppComponent)
+    IonicModule.forRoot(AppComponent, {
+      menuType: 'reveal'
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

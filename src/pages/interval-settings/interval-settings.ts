@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Menu } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { Storage } from '../../app/core/Storage';
 import { IntervalStorageData } from '../../app/app.component';
@@ -11,6 +11,8 @@ import { IntervalStorageData } from '../../app/app.component';
 })
 
 export class IntervalSettingsPage {
+  @ViewChild(Menu)
+  menu: Menu;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -60,5 +62,10 @@ export class IntervalSettingsPage {
   }
   set data(value: IntervalStorageData) {
     this._data = value;
+  }
+
+  closeMenu() {
+    this.menu.close()
+    this.menu.enable(true);
   }
 }
