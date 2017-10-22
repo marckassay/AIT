@@ -9,12 +9,29 @@ $font-size-totaltime-landscape: 6vh;
 $font-size-countdown-portrait:  6vw;
 $font-size-countdown-landscape: 6vh;
 
+page-interval-settings {
+  .content-md {
+    background-color: #1a1a1a;
+  }
+}
+page-interval-settings > ion-header {
+  position: relative;
+  .toolbar-background-md {
+    background-color: #2d2d2d;
+  }
+}
+
 page-interval-settings > ion-content {
+
   ion-icon {
     //font-family: "Material Icons";
     color: appColor( primary );
     width: 24px;
     height: 24px;
+  }
+
+  .item-md {
+    background-color: inherit;
   }
 
   ion-item ion-label {
