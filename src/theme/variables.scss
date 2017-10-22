@@ -70,6 +70,7 @@ $monoinverted_colors: (
 $colors: $posh_monokai_colors;
 $background-color: #000000;
 $toolbar-background: #080808;
+
 $font-size-base: 10px;
 $toggle-md-active-color: color($colors, secondary) !default;
 $toggle-md-handle-background-color-off: lighten($toggle-md-active-color, 25%) !default;

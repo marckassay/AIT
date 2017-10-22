@@ -28,7 +28,7 @@ export class StorageMock {
 
   constructor() {
     this._data = {  uuid: "abc123",
-                    name: "Program #1 ",
+                    name: "Program #1",
                     activerest: {lower: 10, upper: 20},
                     activemaxlimit: 90,
                     intervals: 12,

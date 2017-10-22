@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Menu } from 'ionic-angular';
+import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { Storage } from '../../app/core/Storage';
 import { IntervalStorageData } from '../../app/app.component';
@@ -8,39 +8,33 @@ import { IntervalStorageData } from '../../app/app.component';
 @Component({
   selector: 'page-interval-settings',
   templateUrl: 'interval-settings.html',
+  encapsulation: ViewEncapsulation.None,
+
 })
-
 export class IntervalSettingsPage {
-  @ViewChild(Menu)
-  menu: Menu;
-
-  constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    public storage: Storage) {}
+  constructor(public storage: Storage) { }
 
   ionViewWillEnter() {
-    this.preinitializeDisplay();
+    console.log("ionViewWillEnter")
   }
 
   ionViewDidLoad() {
-    this.preinitializeDisplay();
+    console.log("ionViewDidLoad")
   }
 
   ionViewWillLeave() {
+    console.log("ionViewWillLeave")
     this.storage.setItem(this.data);
   }
 
-  preinitializeDisplay(): void {
-    const uuid = this.navParams.data;
-    if(uuid) {
-      this.storage.getItem(uuid).then((value) => {
-        this.data = value;
-      });
-    }
+  initialize(uuid: string): void {
+    this.storage.getItem(uuid).then((value) => {
+      this.data = value;
+    });
   }
 
   get totaltime(): string {
-    if(this.data) {
+    if (this.data) {
       const totaltimeInSeconds = (this.data.activerest.upper + this.data.activerest.lower) * this.data.intervals;
       return app.getRemainingTimeISO(totaltimeInSeconds * app.millisecond);
     } else {
@@ -49,8 +43,8 @@ export class IntervalSettingsPage {
   }
 
   get countdownLabel(): string {
-    if(this.data) {
-      return ":"+this.data.countdown;
+    if (this.data) {
+      return ":" + this.data.countdown;
     } else {
       return ":0";
     }
@@ -65,7 +59,6 @@ export class IntervalSettingsPage {
   }
 
   closeMenu() {
-    this.menu.close()
-    this.menu.enable(true);
+
   }
 }

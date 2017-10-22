@@ -1,14 +1,22 @@
 <ion-menu side="left" [content]="navCtrl">
   <ion-header>
     <ion-toolbar>
-      <ion-title>AIT</ion-title>
+      <ion-title>AIT Left</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
-      <ion-list>
-        <button ion-item (click)="closeMenu()">Close Menu</button>
-      </ion-list>
+    <ion-list>
+      <button ion-item (click)="closeMenu()">Close Menu</button>
+    </ion-list>
   </ion-content>
 </ion-menu>
-<ion-nav ></ion-nav>
+
+<ion-menu side="right" [content]="navCtrl">
+  <ng-template #rightMenuInnerHTML></ng-template>
+</ion-menu>
+<!--
+This creates the Nav instance: navCtrl
+This class, Nav, implements and is a child component of NavController
+-->
+<ion-nav [root]="rootPage"></ion-nav>

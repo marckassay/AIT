@@ -14,9 +14,6 @@ import { IntervalStorageData } from '../../app/app.component';
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage {
-  @ViewChild(Navbar)
-  navbar: Navbar;
-
   @ViewChild(FabContainerComponent)
   private menu: FabContainerComponent;
 
@@ -59,6 +56,7 @@ export class IntervalDisplayPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public menuCtrl: MenuController,
               public storage: Storage) {}
 
   ionViewWillEnter() {
@@ -67,8 +65,6 @@ export class IntervalDisplayPage {
 
   ionViewDidLoad() {
     this.preinitializeDisplay();
-   // this.navbar.hideBackButton = true;
-    //this.navCtrl.insert(1, IntervalSettingsPage, "abc123");
   }
 
   preinitializeDisplay(): void {
@@ -134,8 +130,7 @@ export class IntervalDisplayPage {
     {
       case FabAction.Home:
         this.timer.pause();
-       // this.navCtrl.popToRoot();
-        this.navCtrl.pop(null, null);
+        this.menuCtrl.open("left");
         break;
       case FabAction.Start:
         this.timer.play();
@@ -147,7 +142,7 @@ export class IntervalDisplayPage {
         this.preinitializeDisplay();
         break;
       case FabAction.Program:
-        this.navCtrl.push(IntervalSettingsPage, this.data.uuid);
+        this.menuCtrl.open("right");
         break;
     }
     emission.container.close();

@@ -1,5 +1,5 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { Platform, NavController, Menu, MenuController, Nav } from 'ionic-angular';
+import { Component, ViewChild, AfterViewInit, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { Platform, MenuController, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
@@ -13,15 +13,18 @@ export class AppComponent implements AfterViewInit {
   @ViewChild(Nav)
   navCtrl: Nav;
 
-  @ViewChild(Menu)
-  menu: Menu;
+ rootPage:any;
+
+ @ViewChild('rightMenuInnerHTML', {read: ViewContainerRef})
+ rightMenuInnerHTML: ViewContainerRef;
 
   constructor(platform: Platform,
               statusBar: StatusBar,
               splashScreen: SplashScreen,
               screenOrientation: ScreenOrientation,
               public menuCtrl: MenuController,
-              public storage: Storage) {
+              public storage: Storage,
+              public componentFactoryResolver: ComponentFactoryResolver) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -29,39 +32,39 @@ export class AppComponent implements AfterViewInit {
       statusBar.styleDefault();
       splashScreen.hide();
       screenOrientation.unlock();
-
-      //this.stubData();
-      this.navCtrl.setRoot(IntervalDisplayPage,"abc123");
-
     });
 
-    platform.backButton.subscribe((x)=>{console.log("Device's back-button clicked!")})
+    platform.backButton.subscribe((x)=>{
+      console.log("Device's back-button clicked!")
+    });
   }
 
   ngAfterViewInit(){
+   this.setAndLoadRootWithData();
+   this.rightSideMenuComponent(IntervalSettingsPage, "abc123");
+  }
 
+  rightSideMenuComponent(component: any, uuid: string) {
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(component);
+    let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
+    componentInstance.instance.initialize(uuid);
   }
-/*
-  stubData() {
+
+  setAndLoadRootWithData() {
     this.storage.getItem("abc123").then((value) => {
-      this.content.swipeBackEnabled = true;
-                    //this.content.setRoot(IntervalDisplayPage,value);
-                    this.content.insertPages(1, [ {page: IntervalSettingsPage,  params: value},
-                                                  {page: IntervalDisplayPage,   params: value}
-                    ]);
-                    //this.content.push(IntervalDisplayPage, value);
-                    //this.rootPage = IntervalDisplayPage;
-                  }).catch((r)=>{ console.log("app.component failed to get record")});
+                    this.navCtrl.setRoot(IntervalDisplayPage,value);
+                  }).catch((r)=>{
+                    console.log("app.component failed to get record")
+                  });
   }
-*/
 
   goToIntervalPage() {
     //this.stubData();
   }
 
   closeMenu() {
-    this.menu.close()
-    this.menu.enable(true);
+  //  this.menu.close()
+  //  this.menu.enable(true);
   }
 }
 

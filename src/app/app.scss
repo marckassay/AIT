@@ -28,6 +28,7 @@ html {
   //@return color($monoinverted_colors, $name);
  }
 
-ion-list {
- color: appColor( primary );
+ion-menu > ion-content {
+  color: #080808;
+  background-color: #080808;
 }
