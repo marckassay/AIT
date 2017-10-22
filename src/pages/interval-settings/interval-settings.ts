@@ -9,7 +9,6 @@ import { IntervalStorageData } from '../../app/app.component';
   selector: 'page-interval-settings',
   templateUrl: 'interval-settings.html',
   encapsulation: ViewEncapsulation.None,
-
 })
 export class IntervalSettingsPage {
   constructor(public storage: Storage) { }

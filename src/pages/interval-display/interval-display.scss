@@ -11,9 +11,13 @@ page-interval-display {
   // its seems, perhaps using a grid in the content area, correct size isnt
   // calculated by ionic or Angular.  so we have 'ion-fixed' being used and
   // removing its margin-top the framework adds to the HTML *element*
-  //ion-content > div.fixed-content[style^="margin-top"] {
-  //    margin-top: 35px !important;
-  //}
+  ion-content > div.fixed-content[style^="margin-top"] {
+      margin-top: 35px !important;
+
+      [ion-fixed] {
+        z-index: inherit;
+      }
+  }
 
   .activeGo {
     font-family: selawksb;

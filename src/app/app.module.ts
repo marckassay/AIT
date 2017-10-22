@@ -12,12 +12,14 @@ import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { Storage, StorageMock } from './core/Storage';
 import { NativeStorage } from '@ionic-native/native-storage';
+import { HomePage } from '../pages/home/home';
 
 @NgModule({
   declarations: [
     AppComponent,
     IntervalDisplayPage,
     IntervalSettingsPage,
+    HomePage,
     FabContainerComponent
   ],
   imports: [
@@ -30,7 +32,8 @@ import { NativeStorage } from '@ionic-native/native-storage';
   entryComponents: [
     AppComponent,
     IntervalDisplayPage,
-    IntervalSettingsPage
+    IntervalSettingsPage,
+    HomePage
   ],
   providers: [
     StatusBar,
