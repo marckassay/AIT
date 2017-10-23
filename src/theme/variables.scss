@@ -54,7 +54,9 @@ $posh_monokai_colors: (
   stop:       #f92672,
   getready:   #e6db74,
   light:      #f4f4f4,
-  dark:       #272822
+  dark:       #272822,
+  black-2:  #2d2d2d,
+  black-3:  #1a1a1a
 );
 
 $monoinverted_colors: (
@@ -69,7 +71,12 @@ $monoinverted_colors: (
 
 $colors: $posh_monokai_colors;
 $background-color: #000000;
-$toolbar-background: #080808;
+
+$toolbar-background:         #080808;
+//$toolbar-border-color:       #b2b2b2 !default;
+//$toolbar-text-color:         $text-color !default;
+//$toolbar-active-color:       $link-color !default;
+//$toolbar-inactive-color:     #8c8c8c !default;
 
 $font-size-base: 10px;
 $toggle-md-active-color: color($colors, secondary) !default;
@@ -109,14 +116,14 @@ $toggle-md-handle-background-color-off: lighten($toggle-md-active-color, 25%) !d
 // The premium icon font for Ionic. For more info, please see:
 // http://ionicframework.com/docs/ionicons/
 
-@import "ionic.ionicons";
+//@import "ionic.ionicons";
 
 
 // Fonts
 // --------------------------------------------------
 
-@import "roboto";
-@import "noto-sans";
+//@import "roboto";
+//@import "noto-sans";
 
 $font-family-base: "selawk";
 $font-family-ios-base: $font-family-base;

@@ -6,39 +6,55 @@ $font-size-interval-portrait:   6vw;
 $font-size-interval-landscape:  6vh;
 $font-size-totaltime-portrait:  6vw;
 $font-size-totaltime-landscape: 6vh;
-$font-size-countdown-portrait:  6vw;
-$font-size-countdown-landscape: 6vh;
+$font-size-countdown-portrait:  5vw;
+$font-size-countdown-landscape: 5vh;
 
 page-interval-settings {
   .content-md {
-    background-color: #1a1a1a;
+    background-color: appColor( black-3 );
+  }
+
+  ion-label, ion-input {
+    font-family: selawk;
+    @media screen and (orientation:portrait) { font-size: $font-size-countdown-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-countdown-landscape; }
+    color: appColor( light );
   }
 }
+
 page-interval-settings > ion-header {
   position: relative;
+
   .toolbar-background-md {
-    background-color: #2d2d2d;
+    background-color: appColor( black-2 );
   }
 }
 
 page-interval-settings > ion-content {
+  .div-grid {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+
+    align-items: center;
+  }
+
+  ion-grid {
+    width: 120px !important;
+  }
 
   ion-icon {
-    //font-family: "Material Icons";
-    color: appColor( primary );
+    color: appColor( light );
     width: 24px;
     height: 24px;
   }
 
   .item-md {
     background-color: inherit;
-  }
-
-  ion-item ion-label {
-    font-family: selawk;
-    @media screen and (orientation:portrait) { font-size: $font-size-countdown-portrait; }
-    @media screen and (orientation:landscape) { font-size: $font-size-countdown-landscape; }
-    color: appColor( go );
   }
 
   .go-color {
@@ -81,6 +97,7 @@ page-interval-settings > ion-content {
     font-family: selawk;
     @media screen and (orientation:portrait) { font-size: $font-size-countdown-portrait; }
     @media screen and (orientation:landscape) { font-size: $font-size-countdown-landscape; }
-    color: appColor( go );
+    margin-left: 20px;
+    color: appColor( light );
   }
 }
