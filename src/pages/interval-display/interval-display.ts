@@ -1,10 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content, Navbar, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { AITSoundboard } from '../../app/core/AITSoundboard';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
 import { Subscription } from 'rxjs';
-import { IntervalSettingsPage } from "../pages";
 import { Storage } from '../../app/core/Storage';
 import { IntervalStorageData } from '../../app/app.component';
 
@@ -60,11 +59,22 @@ export class IntervalDisplayPage {
               public storage: Storage) {}
 
   ionViewWillEnter() {
+    console.log("i-d: ionViewWillEnter")
     this.preinitializeDisplay();
   }
 
   ionViewDidLoad() {
     this.preinitializeDisplay();
+  }
+
+  ionViewDidEnter () {
+    console.log("i-d: ionViewDidEnter")
+  }
+  ionViewWillLeave () {
+    console.log("i-d: ionViewWillLeave")
+  }
+  ionViewDidLeave () {
+    console.log("i-d: ionViewDidLeave")
   }
 
   preinitializeDisplay(): void {

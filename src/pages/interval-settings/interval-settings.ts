@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { Storage } from '../../app/core/Storage';

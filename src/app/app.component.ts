@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { Storage } from './core/Storage';
+import { HomeEmission, HomeAction } from '../pages/home/home';
 
 @Component({
   templateUrl: 'app.html'
@@ -13,18 +14,18 @@ export class AppComponent implements AfterViewInit {
   @ViewChild(Nav)
   navCtrl: Nav;
 
- rootPage:any;
+  rootPage: any;
 
- @ViewChild('rightMenuInnerHTML', {read: ViewContainerRef})
- rightMenuInnerHTML: ViewContainerRef;
+  @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })
+  rightMenuInnerHTML: ViewContainerRef;
 
   constructor(platform: Platform,
-              statusBar: StatusBar,
-              splashScreen: SplashScreen,
-              screenOrientation: ScreenOrientation,
-              public menuCtrl: MenuController,
-              public storage: Storage,
-              public componentFactoryResolver: ComponentFactoryResolver) {
+    statusBar: StatusBar,
+    splashScreen: SplashScreen,
+    screenOrientation: ScreenOrientation,
+    public menuCtrl: MenuController,
+    public storage: Storage,
+    public componentFactoryResolver: ComponentFactoryResolver) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -34,14 +35,14 @@ export class AppComponent implements AfterViewInit {
       screenOrientation.unlock();
     });
 
-    platform.backButton.subscribe((x)=>{
+    platform.backButton.subscribe((x) => {
       console.log("Device's back-button clicked!")
     });
   }
 
-  ngAfterViewInit(){
-   this.setAndLoadRootWithData();
-   this.rightSideMenuComponent(IntervalSettingsPage, "abc123");
+  ngAfterViewInit() {
+    this.setAndLoadRootWithData();
+    this.rightSideMenuComponent(IntervalSettingsPage, "abc123");
   }
 
   rightSideMenuComponent(component: any, uuid: string) {
@@ -52,19 +53,18 @@ export class AppComponent implements AfterViewInit {
 
   setAndLoadRootWithData() {
     this.storage.getItem("abc123").then((value) => {
-                    this.navCtrl.setRoot(IntervalDisplayPage,value);
-                  }).catch((r)=>{
-                    console.log("app.component failed to get record")
-                  });
+      this.navCtrl.setRoot(IntervalDisplayPage, value);
+    }).catch((r) => {
+      console.log("app.component failed to get record")
+    });
   }
 
-  goToIntervalPage() {
-    //this.stubData();
-  }
-
-  closeMenu() {
-  //  this.menu.close()
-  //  this.menu.enable(true);
+  onHomeAction(emission: HomeEmission) {
+    switch (emission.action) {
+      case HomeAction.IntervalTimer:
+        this.menuCtrl.toggle('left');
+        break;
+    }
   }
 }
 
@@ -98,8 +98,7 @@ export interface IntervalStorageData {
   warnings: CountdownWarnings;
 }
 
-export interface ITimelinePosition
-{
+export interface ITimelinePosition {
   /**
    * Used to indicate where in the Observable sequence it is currently at.
    */
@@ -112,6 +111,6 @@ export const millisecond: number = 1000;
  *  01:02.3
  * The example above is can be said, "1 minute, 2 point 3/10ths of a second"
  */
-export function getRemainingTimeISO (remainingmilliseconds: number): string {
-  return new Date(remainingmilliseconds).toISOString().substr(14,7);
+export function getRemainingTimeISO(remainingmilliseconds: number): string {
+  return new Date(remainingmilliseconds).toISOString().substr(14, 7);
 }
