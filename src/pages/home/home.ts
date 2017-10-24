@@ -1,6 +1,4 @@
 import { Component, ViewEncapsulation, EventEmitter, Output } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
-
 
 export enum HomeAction {
   IntervalTimer,
