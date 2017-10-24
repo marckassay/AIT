@@ -44,18 +44,16 @@ page-home {
   }
 
   .icon {
-    // display: inline-block;
     font-size: 0;
     width: 75px;
     height: 75px;
-    // margin: 0 auto;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
   }
 
   .button-md {
-    background-color: rgba(102, 217, 239, 0.16);
+    background-color: transparentize(appColor(primary), .9);
   }
 }
 

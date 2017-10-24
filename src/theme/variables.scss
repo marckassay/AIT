@@ -38,7 +38,7 @@ $default_colors: (
   stop:       #bf0000,
   getready:   #ffd800,
   light:      #f4f4f4,
-  dark:       #101010
+  dark:       #101010,
 );
 
 $posh_monokai_colors: (
@@ -50,29 +50,21 @@ $posh_monokai_colors: (
     base: #66d9ef,
     contrast: #f4f4f4
   ),
+  backfill: (
+    base: #000000,
+    contrast: #474747
+  ),
   go:         #a6e22e,
   stop:       #f92672,
   getready:   #e6db74,
   light:      #f4f4f4,
-  dark:       #272822,
   black-2:  #2d2d2d,
   black-3:  #1a1a1a
 );
 
-$monoinverted_colors: (
-  primary:    #363636,
-  secondary:  #363636,
-  go:         #363636,
-  stop:       #a6a6a6,
-  getready:   #292929,
-  light:      #f4f4f4,
-  dark:       #e6e6e6
-);
-
 $colors: $posh_monokai_colors;
-$background-color: #000000;
-
-$toolbar-background:         #080808;
+$background-color: color($colors, backfill);
+$toolbar-background: lighten(color($colors, backfill), 3%);
 //$toolbar-border-color:       #b2b2b2 !default;
 //$toolbar-text-color:         $text-color !default;
 //$toolbar-active-color:       $link-color !default;

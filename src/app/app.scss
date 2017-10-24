@@ -24,6 +24,5 @@ html {
  }
 
  @function appColor($name) {
-  @return color($posh_monokai_colors, $name);
-  //@return color($monoinverted_colors, $name);
+  @return color($colors, $name);
  }

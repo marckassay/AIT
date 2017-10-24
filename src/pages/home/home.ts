@@ -3,7 +3,8 @@ import { Component, ViewEncapsulation, EventEmitter, Output } from '@angular/cor
 export enum HomeAction {
   IntervalTimer,
   Countdown,
-  Stopwatch
+  Stopwatch,
+  Settings
 }
 
 export interface HomeEmission
@@ -28,6 +29,6 @@ export class HomePage {
   }
 
   onIntervalTimer() {
-  //  this.onAction.emit({action:HomeAction.IntervalTimer});
+    this.onAction.emit({action:HomeAction.IntervalTimer});
   }
 }

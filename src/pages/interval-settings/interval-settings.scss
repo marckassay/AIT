@@ -20,6 +20,12 @@ page-interval-settings {
     @media screen and (orientation:landscape) { font-size: $font-size-countdown-landscape; }
     color: appColor( light );
   }
+  ion-range {
+    margin: 5px 0;
+  }
+  ion-range, ion-toggle {
+    background-color: transparentize(appColor(primary), .9);
+  }
 }
 
 page-interval-settings > ion-header {
