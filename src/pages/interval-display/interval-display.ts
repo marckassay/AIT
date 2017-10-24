@@ -6,6 +6,7 @@ import { FabAction, FabEmission, FabContainerComponent } from '../../app/compone
 import { Subscription } from 'rxjs';
 import { Storage } from '../../app/core/Storage';
 import { IntervalStorageData } from '../../app/app.component';
+import { CountdownState, ICountdownEmission } from '../../app/core/CountdownTimer';
 
 @IonicPage()
 @Component({
@@ -120,11 +121,19 @@ export class IntervalDisplayPage {
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
         AITSoundboard.TripleBeep();
       }
-      console.log(e);
-      this._state = e.state;
-      this.remainingIntervalTime = e.remainingIntervalTime;
-      this.remainingTime = e.remainingTime;
-      this.currentInterval = e.currentInterval;
+
+      // TODO: this is indicitive to poor design.  UI is expecting a specific type but
+      // we are subscribe with rxjs for two types.
+      console.log(e.state)
+      if(e.currentInterval !== undefined) {
+        this.currentInterval = (e as IIntervalEmission).currentInterval;
+        this._state = (e as IIntervalEmission).state;
+        this.remainingIntervalTime = (e as IIntervalEmission).remainingIntervalTime;
+        this.remainingTime = e.remainingTime;
+      } else {
+        this._state = IntervalState.Countdown;
+        this.remainingTime = e.remainingTime;
+      }
 
     }, (err) => {
 

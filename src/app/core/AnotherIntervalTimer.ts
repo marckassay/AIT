@@ -13,6 +13,7 @@ export enum IntervalState {
   Start     = 64,
   Instant   = 128,
   Warning   = 256,
+  Countdown = 512,
 
   ActiveStart = Active + Start + Instant,
   ActiveStopWarning = Active + GetReady,
