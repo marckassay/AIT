@@ -6,15 +6,15 @@ $font-size-interval-portrait:   25vw;
 $font-size-interval-landscape:  25vh;
 $font-size-time-portrait:       25vw;
 $font-size-time-landscape:      25vh;
-$lighten-percent: 10%;
-$transparency-factor: .8;
+$lighten-percent:               10%;
+$transparency-factor:           .8;
 
 page-interval-display {
   // its seems, perhaps using a grid in the content area, correct size isnt
   // calculated by ionic or Angular.  so we have 'ion-fixed' being used and
   // removing its margin-top the framework adds to the HTML *element*
   ion-content > div.fixed-content[style^="margin-top"] {
-      margin-top: 35px !important;
+      margin-top: 0px !important;
 
       [ion-fixed] {
         z-index: inherit;

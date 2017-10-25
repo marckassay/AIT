@@ -6,8 +6,10 @@
 <ion-content>
   <fab-container (onAction)="onAction($event)">
   </fab-container>
+  <!-- this div is here to force it's content (ion-grid) to be fixed inside it.  Otherwise
+  Ionic will attach it to ion-scroll div. Probably has to do with the way its being sized. -->
   <div ion-fixed>
-    <ion-grid>
+    <ion-grid fixed>
       <ion-row align-items-baseline justify-content-center>
         <ion-col align-self-baseline align-self-stretch>
           <div [ngSwitch]="viewState" text-right>

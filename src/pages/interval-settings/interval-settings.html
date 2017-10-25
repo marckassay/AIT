@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-      <ion-input [(ngModel)]="name" class="settingsname" type="text" placeholder="Name: "></ion-input>
+    <ion-input [(ngModel)]="name" class="settingsname" type="text" placeholder="Name: "></ion-input>
   </ion-toolbar>
 </ion-header>
 
@@ -26,32 +26,30 @@
         <ion-col>
           <div class="totaltime">{{totaltime}}</div>
         </ion-col>
-        <ion-col col-11 col-auto></ion-col>
       </ion-row>
     </ion-grid>
   </div>
   <div class="countdown">{{countdownLabel}} (countdown)</div>
-  <ion-item-divider></ion-item-divider>
 
   <!-- activerest -->
   <div *ngIf="data">
     <ion-item>
       <ion-range [(ngModel)]="data.activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
-          <ion-label range-left>rest/active</ion-label>
+        <ion-label range-left>rest/active</ion-label>
       </ion-range>
     </ion-item>
 
     <!-- interval -->
     <ion-item>
       <ion-range [(ngModel)]="data.intervals" min="1" [max]="data.intervalmaxlimit" step="1" snaps="true" pin="true">
-          <ion-label range-left>intervals</ion-label>
+        <ion-label range-left>intervals</ion-label>
       </ion-range>
     </ion-item>
 
     <!-- countdown -->
     <ion-item>
       <ion-range [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit" step="5" snaps="true" pin="true">
-          <ion-label range-left>countdown</ion-label>
+        <ion-label range-left>countdown</ion-label>
       </ion-range>
     </ion-item>
 
