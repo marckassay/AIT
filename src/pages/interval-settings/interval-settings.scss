@@ -31,7 +31,7 @@ page-interval-settings {
   }
   ion-range,
   ion-toggle {
-    background-color: transparentize(appColor(primary), .9);
+    background-color: $home-bg-button-fill;
   }
 }
 

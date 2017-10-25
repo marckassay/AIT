@@ -6,8 +6,7 @@ $font-size-interval-portrait:   25vw;
 $font-size-interval-landscape:  25vh;
 $font-size-time-portrait:       25vw;
 $font-size-time-landscape:      25vh;
-$lighten-percent:               10%;
-$transparency-factor:           .8;
+
 
 page-interval-display {
   // its seems, perhaps using a grid in the content area, correct size isnt
@@ -52,7 +51,7 @@ page-interval-display {
 
   .activeCountdown {
     @extend .activeGo;
-    color: transparentize(lighten(color($colors, go), $lighten-percent), $transparency-factor);
+    color: $light-trans-go;
   }
 
   .restGo {
@@ -85,7 +84,7 @@ page-interval-display {
 
   .restCountdown {
     @extend .restStop;
-    color: transparentize(lighten(color($colors, go), $lighten-percent), $transparency-factor);
+    color: $light-trans-go;
   }
 
   #intervalColPortrait {
@@ -116,7 +115,7 @@ page-interval-display {
 
   .intervalCountdown {
     @extend .intervalGo;
-    color: transparentize(lighten(color($colors, go), $lighten-percent), $transparency-factor);
+    color: $light-trans-go;
   }
 
   .intervalCompleted {

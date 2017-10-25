@@ -70,6 +70,13 @@ $toolbar-background: lighten(color($colors, backfill), 3%);
 //$toolbar-active-color:       $link-color !default;
 //$toolbar-inactive-color:     #8c8c8c !default;
 
+$fill: color($colors, primary);
+$fill-light: lighten($fill, 30%);
+$home-bg-button-fill: transparentize($fill, .9);
+
+$lighten-percent:               10%;
+$transparency-factor:           .8;
+$light-trans-go: transparentize(lighten(color($colors, go), $lighten-percent), $transparency-factor);
 $font-size-base: 10px;
 $toggle-md-active-color: color($colors, secondary) !default;
 $toggle-md-handle-background-color-off: lighten($toggle-md-active-color, 25%) !default;

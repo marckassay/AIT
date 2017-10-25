@@ -1,7 +1,4 @@
 page-home {
-  $fill: appColor(primary);
-  $fill-light: lighten(appColor(primary), 30%);
-
   .content-md {
     background-color: appColor( black-3 );
   }
@@ -53,7 +50,7 @@ page-home {
   }
 
   .button-md {
-    background-color: transparentize(appColor(primary), .9);
+    background-color: $home-bg-button-fill;
   }
 }
 
