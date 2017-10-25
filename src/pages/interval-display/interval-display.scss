@@ -51,7 +51,7 @@ page-interval-display {
 
   .activeCountdown {
     @extend .activeGo;
-    color: $light-trans-go;
+    color: $display-disabled;
   }
 
   .restGo {
@@ -84,7 +84,7 @@ page-interval-display {
 
   .restCountdown {
     @extend .restStop;
-    color: $light-trans-go;
+    color: $display-disabled;
   }
 
   #intervalColPortrait {
@@ -115,7 +115,7 @@ page-interval-display {
 
   .intervalCountdown {
     @extend .intervalGo;
-    color: $light-trans-go;
+    color: $display-disabled;
   }
 
   .intervalCompleted {

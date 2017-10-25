@@ -1,28 +1,19 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
-
 // Font path is used to include ionicons,
 // roboto, and noto sans fonts
 $font-path: "../assets/fonts";
-
-
 // The app direction is used to include
 // rtl styles in your app. For more info, please see:
 // http://ionicframework.com/docs/theming/rtl-support/
 $app-direction: ltr;
-
-
 @import "ionic.globals";
-
-
 // Shared Variables
 // --------------------------------------------------
 // To customize the look and feel of this app, you can override
 // the Sass variables found in Ionic's source scss files.
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
-
-
 // Named Color Variables
 // --------------------------------------------------
 // Named colors makes it easy to reuse colors on various components.
@@ -30,100 +21,66 @@ $app-direction: ltr;
 // to match your app's branding. Ionic uses a Sass map of
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
+//$default_colors: ( primary : #488aff, secondary : #32db64, go : #00b04f, stop : #bf0000, getready : #ffd800, light : #f4f4f4, dark : #101010, );
 
-$default_colors: (
-  primary:    #488aff,
-  secondary:  #32db64,
-  go:         #00b04f,
-  stop:       #bf0000,
-  getready:   #ffd800,
-  light:      #f4f4f4,
-  dark:       #101010,
-);
-
-$posh_monokai_colors: (
+$colors-500: (
   primary: (
-    base: #66d9ef,
-    contrast: #272822
+    base: #03a9f4,
+    contrast: #EEEEEE
   ),
   secondary: (
-    base: #66d9ef,
-    contrast: #f4f4f4
+    base: #67daff,
+    contrast: #EEEEEE
   ),
-  backfill: (
-    base: #000000,
-    contrast: #474747
-  ),
-  go:         #a6e22e,
-  stop:       #f92672,
-  getready:   #e6db74,
-  light:      #f4f4f4,
-  black-2:  #2d2d2d,
-  black-3:  #1a1a1a
+  go : #4caf50,
+  stop : #f44336,
+  getready : #ffeb3b,
+  light : #EEEEEE,
+  black-25 : #444444,
+  black-12 : #222222,
+  black-custom: #111111,
+  background: #000000
 );
 
-$colors: $posh_monokai_colors;
-$background-color: color($colors, backfill);
-$toolbar-background: lighten(color($colors, backfill), 3%);
-//$toolbar-border-color:       #b2b2b2 !default;
-//$toolbar-text-color:         $text-color !default;
-//$toolbar-active-color:       $link-color !default;
-//$toolbar-inactive-color:     #8c8c8c !default;
+$colors: $colors-500;
 
-$fill: color($colors, primary);
-$fill-light: lighten($fill, 30%);
-$home-bg-button-fill: transparentize($fill, .9);
+$background-color: color($colors,background);
+//$toolbar-background: darken(color($colors,primary), 45%);
+$side-toolbar-background: color($colors, black-custom);//darken(grayscale( color($colors,primary) ), 40%);
+$side-background: color($colors, black-12);//darken(grayscale( color($colors,primary) ), 33%);
+$home-icon-fill: color($colors, primary);
+$home-icon-fill-light: lighten($home-icon-fill, 30%); // used on home page for the (rest) interval icon.
+$sidemenu-ui-background-fill: transparentize($home-icon-fill, .9);
 
-$lighten-percent:               10%;
-$transparency-factor:           .8;
-$light-trans-go: transparentize(lighten(color($colors, go), $lighten-percent), $transparency-factor);
+$display-disabled: transparentize(lighten(color($colors, go), 10%), .8);
+$toggle-md-handle-background-color-off: color($colors, light) !default;
+
 $font-size-base: 10px;
-$toggle-md-active-color: color($colors, secondary) !default;
-$toggle-md-handle-background-color-off: lighten($toggle-md-active-color, 25%) !default;
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
-
-
-
-
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-
-
-
 // App Windows Variables
 // --------------------------------------------------
 // Windows only Sass variables can go here
-
-
-
-
 // App Theme
 // --------------------------------------------------
 // Ionic apps can have different themes applied, which can
 // then be future customized. This import comes last
 // so that the above variables are used and Ionic's
 // default are overridden.
-
 @import "ionic.theme.default";
-
-
 // Ionicons
 // --------------------------------------------------
 // The premium icon font for Ionic. For more info, please see:
 // http://ionicframework.com/docs/ionicons/
-
 //@import "ionic.ionicons";
-
-
 // Fonts
 // --------------------------------------------------
-
 //@import "roboto";
 //@import "noto-sans";
-
 $font-family-base: "selawk";
 $font-family-ios-base: $font-family-base;
 $font-family-md-base: $font-family-base;

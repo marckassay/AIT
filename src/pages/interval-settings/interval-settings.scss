@@ -1,16 +1,16 @@
-$font-size-active-portrait : 9vw;
-$font-size-active-landscape : 9vh;
-$font-size-rest-portrait : 6vw;
-$font-size-rest-landscape : 6vh;
-$font-size-interval-portrait : 6vw;
-$font-size-interval-landscape : 6vh;
-$font-size-totaltime-portrait : 6vw;
-$font-size-totaltime-landscape: 6vh;
-$font-size-countdown-portrait : 5vw;
-$font-size-countdown-landscape: 5vh;
+$font-size-active-portrait : 10vw;
+$font-size-active-landscape : 10vh;
+$font-size-rest-portrait : 7vw;
+$font-size-rest-landscape : 7vh;
+$font-size-interval-portrait : 7vw;
+$font-size-interval-landscape : 7vh;
+$font-size-totaltime-portrait : 7vw;
+$font-size-totaltime-landscape: 7vh;
+$font-size-countdown-portrait : 6vw;
+$font-size-countdown-landscape: 6vh;
 page-interval-settings {
   .content-md {
-    background-color: appColor( black-3);
+    background-color: $side-background;
   }
   .item-md.item-block .item-inner {
     border-bottom: 1px;
@@ -31,14 +31,14 @@ page-interval-settings {
   }
   ion-range,
   ion-toggle {
-    background-color: $home-bg-button-fill;
+    background-color: $sidemenu-ui-background-fill;
   }
 }
 
 page-interval-settings>ion-header {
   position: relative;
   .toolbar-background-md {
-    background-color: appColor( black-2);
+    background-color: $side-toolbar-background;
   }
 }
 
