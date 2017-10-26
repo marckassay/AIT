@@ -1,9 +1,6 @@
 <ion-content>
-  <!-- this div is here to force it's content (ion-grid) to be fixed inside it.  Otherwise
-  Ionic will attach it to ion-scroll div. Probably has to do with the way its being sized. -->
-  <div ion-fixed>
-    <ion-grid fixed>
-      <ion-row align-items-baseline justify-content-center>
+    <ion-grid>
+      <ion-row align-items-baseline nowrap justify-content-start>
         <ion-col align-self-baseline align-self-stretch>
           <div [ngSwitch]="viewState" text-right>
             <div *ngSwitchCase="states.Countdown" class="activeCountdown">{{data.activerest.upper}}</div>
@@ -28,7 +25,8 @@
             <div *ngSwitchCase="states.Error" class="restStop">):</div>
           </div>
         </ion-col>
-        <ion-col id="intervalColLandscape" col-auto>
+        <ion-col col-auto></ion-col>
+        <ion-col id="intervalColLandscape">
           <div [ngSwitch]="viewState">
             <div *ngSwitchCase="states.Countdown" class="intervalCountdown">1\/{{data.intervals}}</div>
             <div *ngSwitchCase="states.Loaded" class="intervalLoaded">1\/{{data.intervals}}</div>
@@ -41,7 +39,7 @@
           </div>
         </ion-col>
       </ion-row>
-      <ion-row id="intervalColPortrait" justify-content-end>
+      <ion-row id="intervalColPortrait" align-items-baseline nowrap justify-content-end>
         <ion-col col-auto>
           <div [ngSwitch]="viewState">
             <div *ngSwitchCase="states.Countdown" class="intervalCountdown">1\/{{data.intervals}}</div>
@@ -55,7 +53,7 @@
           </div>
         </ion-col>
       </ion-row>
-      <ion-row justify-content-start>
+      <ion-row align-items-baseline nowrap justify-content-start>
         <ion-col col-auto>
           <div [ngSwitch]="viewState">
             <div *ngSwitchCase="states.Countdown" class="timeCountdown">{{remainingTime}}</div>
@@ -70,7 +68,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
 </ion-content>
 
 <fab-container (onAction)="onAction($event)"></fab-container>

@@ -9,15 +9,13 @@ $font-size-time-landscape:      25vh;
 
 
 page-interval-display {
-  // its seems, perhaps using a grid in the content area, correct size isnt
-  // calculated by ionic or Angular.  so we have 'ion-fixed' being used and
-  // removing its margin-top the framework adds to the HTML *element*
-  ion-content > div.fixed-content[style^="margin-top"] {
-      margin-top: 0px !important;
-     // width: ;
-      [ion-fixed] {
-        z-index: inherit;
-      }
+  ion-grid {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    height: 100%;
+    height: -moz-available;
+    height: -webkit-fill-available;
   }
 
   .activeGo {
