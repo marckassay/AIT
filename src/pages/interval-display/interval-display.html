@@ -1,6 +1,4 @@
 <ion-content>
-  <fab-container (onAction)="onAction($event)">
-  </fab-container>
   <!-- this div is here to force it's content (ion-grid) to be fixed inside it.  Otherwise
   Ionic will attach it to ion-scroll div. Probably has to do with the way its being sized. -->
   <div ion-fixed>
@@ -74,3 +72,6 @@
     </ion-grid>
   </div>
 </ion-content>
+
+<fab-container (onAction)="onAction($event)"></fab-container>
+

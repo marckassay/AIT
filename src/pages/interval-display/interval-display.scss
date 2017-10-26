@@ -14,7 +14,7 @@ page-interval-display {
   // removing its margin-top the framework adds to the HTML *element*
   ion-content > div.fixed-content[style^="margin-top"] {
       margin-top: 0px !important;
-
+     // width: ;
       [ion-fixed] {
         z-index: inherit;
       }

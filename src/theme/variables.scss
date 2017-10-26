@@ -51,8 +51,8 @@ $app-theme-light: (
   weakest:#ffffff
 );
 
-$colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-dark);
-//$colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-light);
+//$colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-dark);
+$colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-light);
 $background-color: color($colors, strongest);
 
 $side-background: color($colors, weak);

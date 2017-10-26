@@ -31,8 +31,8 @@
   </div>
   <div class="countdown">{{countdownLabel}} (countdown)</div>
 
-  <!-- activerest -->
   <div *ngIf="data">
+    <!-- activerest -->
     <ion-item>
       <ion-range [(ngModel)]="data.activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
         <ion-label range-left>rest/active</ion-label>
