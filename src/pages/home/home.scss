@@ -1,17 +1,15 @@
 page-home {
-  .content-md {
+  .content-ios, .content-md, .content-wp {
     background-color: $side-background;
   }
 
   ion-header {
     position: relative;
+  }
 
-    .toolbar-background-md {
-      background-color: $side-toolbar-background;
-    }
-
-    .toolbar-title-md {
-      color: appColor( light );
+  ion-content {
+    ion-icon {
+      font-size: 10.2em;
     }
   }
 
@@ -51,23 +49,5 @@ page-home {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-  }
-
-  .button-md {
-    background-color: $sidemenu-ui-background-fill;
-  }
-}
-
-page-home > ion-content {
-  .item-md {
-    background-color: inherit;
-  }
-
-  ion-icon {
-    font-size: 10.2em;
-  }
-
-  .material-icons {
-    font-size: 10.2em;
   }
 }

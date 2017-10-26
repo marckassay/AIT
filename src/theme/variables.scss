@@ -21,9 +21,8 @@ $app-direction: ltr;
 // to match your app's branding. Ionic uses a Sass map of
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
-//$default_colors: ( primary : #488aff, secondary : #32db64, go : #00b04f, stop : #bf0000, getready : #ffd800, light : #f4f4f4, dark : #101010, );
 
-$colors-500: (
+$app-accent-colors500: (
   primary: (
     base: #03a9f4,
     contrast: #EEEEEE
@@ -35,27 +34,61 @@ $colors-500: (
   go : #4caf50,
   stop : #f44336,
   getready : #ffeb3b,
-  light : #EEEEEE,
-  black-25 : #444444,
-  black-12 : #222222,
-  black-custom: #111111,
-  background: #000000
+  light : #EEEEEE
+);
+// https://material.io/guidelines/style/color.html#color-themes
+$app-theme-dark: (
+  strongest : #000000,
+  strong : #212121,
+  weak: #303030,
+  weakest: #424242
 );
 
-$colors: $colors-500;
+$app-theme-light: (
+  strongest :#e0e0e0,
+  strong :#f5f5f5,
+  weak:#fafafa,
+  weakest:#ffffff
+);
 
-$background-color: color($colors,background);
-//$toolbar-background: darken(color($colors,primary), 45%);
-$side-toolbar-background: color($colors, black-custom);//darken(grayscale( color($colors,primary) ), 40%);
-$side-background: color($colors, black-12);//darken(grayscale( color($colors,primary) ), 33%);
+$colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-dark);
+//$colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-light);
+$background-color: color($colors, strongest);
+
+$side-background: color($colors, weak);
+$side-toolbar-background: color($colors, strong);
+$sidemenu-ui-background-fill: color($colors, weakest);
+
+$button-ios-background-color: $sidemenu-ui-background-fill;
+$button-md-background-color: $sidemenu-ui-background-fill;
+$button-wp-background-color: $sidemenu-ui-background-fill;
+
 $home-icon-fill: color($colors, primary);
-$home-icon-fill-light: lighten($home-icon-fill, 30%); // used on home page for the (rest) interval icon.
-$sidemenu-ui-background-fill: transparentize($home-icon-fill, .9);
+// used on home page for the (rest) interval icon; to differeniate the two types.
+$home-icon-fill-light: lighten($home-icon-fill, 30%);
 
 $display-disabled: transparentize(lighten(color($colors, go), 10%), .8);
 $toggle-md-handle-background-color-off: color($colors, light) !default;
 
-$font-size-base: 10px;
+$toolbar-background: $side-toolbar-background;
+$toolbar-io-background: $toolbar-background;
+$toolbar-md-background: $toolbar-background;
+$toolbar-wp-background: $toolbar-background;
+
+$toolbar-title-color: color-contrast($colors, $toolbar-background);
+$toolbar-io-title-text-color:	$toolbar-title-color;
+$toolbar-md-title-text-color:	$toolbar-title-color;
+$toolbar-wp-title-text-color:	$toolbar-title-color;
+
+// ion-item
+$list-background-color: color($colors, weak);
+$font-size-base: 1.4rem;
+
+
+//$content-ios-outer-background: $side-background;
+//$content-md-outer-background: $side-background;
+//$content-wp-outer-background: $side-background;
+
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here

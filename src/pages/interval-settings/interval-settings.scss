@@ -9,40 +9,25 @@ $font-size-totaltime-landscape: 7vh;
 $font-size-countdown-portrait : 6vw;
 $font-size-countdown-landscape: 6vh;
 page-interval-settings {
-  .content-md {
+  .content-ios, .content-md, .content-wp {
     background-color: $side-background;
-  }
-  .item-md.item-block .item-inner {
-    border-bottom: 1px;
   }
   ion-label,
   ion-input {
     font-family: selawk;
-    @media screen and (orientation: portrait) {
-      font-size: $font-size-countdown-portrait;
-    }
-    @media screen and (orientation:landscape) {
-      font-size: $font-size-countdown-landscape;
-    }
     color: appColor( light);
   }
   ion-range {
     margin: 5px 0;
   }
-  ion-range,
-  ion-toggle {
-    background-color: $sidemenu-ui-background-fill;
-  }
 }
 
 page-interval-settings>ion-header {
   position: relative;
-  .toolbar-background-md {
-    background-color: $side-toolbar-background;
-  }
 }
 
 page-interval-settings>ion-content {
+  //background-color: $side-background;
   div.fixed-content[style^="margin-top"],
   div.scroll-content[style^="margin-top"] {
     margin-top: 0px !important;
@@ -58,14 +43,6 @@ page-interval-settings>ion-content {
     ion-grid {
       width: 50% !important;
     }
-  }
-  ion-icon {
-    color: appColor( light);
-    width: 24px;
-    height: 24px;
-  }
-  .item-md {
-    background-color: inherit;
   }
   .go-color {
     color: appColor( go);
