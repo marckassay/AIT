@@ -64,21 +64,27 @@ $button-md-background-color: $sidemenu-ui-background-fill;
 $button-wp-background-color: $sidemenu-ui-background-fill;
 
 $home-icon-fill: color($colors, primary);
+
 // used on home page for the (rest) interval icon; to differeniate the two types.
 $home-icon-fill-light: lighten($home-icon-fill, 30%);
 
+// when the countdown is attached to the beginning of a sequence, dim the display.
 $display-disabled: transparentize(lighten(color($colors, go), 10%), .8);
-$toggle-md-handle-background-color-off: color($colors, light) !default;
+
+$toggle-handle-background-color-off: color($colors, light) !default;
+$toggle-ios-handle-background-color-off: $toggle-handle-background-color-off;
+$toggle-md-handle-background-color-off: $toggle-handle-background-color-off;
+$toggle-wp-handle-background-color-off: $toggle-handle-background-color-off;
 
 $toolbar-background: $side-toolbar-background;
 $toolbar-io-background: $toolbar-background;
 $toolbar-md-background: $toolbar-background;
 $toolbar-wp-background: $toolbar-background;
 
-$toolbar-title-color: color-contrast($colors, $toolbar-background);
-$toolbar-io-title-text-color:	$toolbar-title-color;
-$toolbar-md-title-text-color:	$toolbar-title-color;
-$toolbar-wp-title-text-color:	$toolbar-title-color;
+$toolbar-title-text-color: color-contrast($colors, $toolbar-background);
+$toolbar-io-title-text-color:	$toolbar-title-text-color;
+$toolbar-md-title-text-color:	$toolbar-title-text-color;
+$toolbar-wp-title-text-color:	$toolbar-title-text-color;
 
 // ion-item
 $list-background-color: color($colors, weak);

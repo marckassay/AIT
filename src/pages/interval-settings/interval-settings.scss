@@ -15,7 +15,7 @@ page-interval-settings {
   ion-label,
   ion-input {
     font-family: selawk;
-    color: appColor( light);
+    color: $toolbar-title-text-color;
   }
   ion-range {
     margin: 5px 0;
@@ -99,6 +99,6 @@ page-interval-settings>ion-content {
       font-size: $font-size-countdown-landscape;
     }
     margin-left: 20px;
-    color: appColor( light);
+    color: $toolbar-title-text-color;
   }
 }
