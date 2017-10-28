@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>AiT Settings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ng-container *ngIf="data">
+    <ion-item>
+      <ion-toggle [(ngModel)]="data.vibrate"></ion-toggle>
+      <ion-label>vibrate</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-toggle [(ngModel)]="data.sound"></ion-toggle>
+      <ion-label>sound</ion-label>
+    </ion-item>
+
+    <ion-list radio-group [(ngModel)]="data.lighttheme">
+      <ion-list-header>
+        General Theme
+      </ion-list-header>
+      <ion-item>
+        <ion-label>light theme</ion-label>
+        <ion-radio checked={{data.lighttheme}} value="true"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>dark theme</ion-label>
+        <ion-radio checked={{!data.lighttheme}} value="false"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+</ion-content>

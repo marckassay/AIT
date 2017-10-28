@@ -6,6 +6,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { Storage } from './core/Storage';
 import { HomeEmission, HomeAction } from '../pages/home/home';
+import { AppSettingsPage } from '../pages/app-settings/app-settings';
 
 @Component({
   templateUrl: 'app.html'
@@ -64,6 +65,17 @@ export class AppComponent implements AfterViewInit {
       case HomeAction.IntervalTimer:
         this.menuCtrl.toggle('left');
         break;
+
+      case HomeAction.Countdown:
+        break;
+
+      case HomeAction.Stopwatch:
+        break;
+
+      case HomeAction.Settings:
+        this.navCtrl.push(AppSettingsPage);
+        this.menuCtrl.toggle('left');
+        break;
     }
   }
 }
@@ -79,8 +91,15 @@ export interface Limits {
   upper: number;
 }
 
-export interface IntervalStorageData {
+export interface UUIDData {
   uuid: string;
+}
+export interface AppStorageData extends UUIDData {
+  vibrate: boolean;
+  sound: boolean;
+  lighttheme: boolean;
+}
+export interface IntervalStorageData extends UUIDData{
   name: string;
   activerest: Limits;
   activemaxlimit: number;

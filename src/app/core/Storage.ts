@@ -1,33 +1,40 @@
 import { NativeStorage } from '@ionic-native/native-storage';
 import { Injectable } from '@angular/core';
-import { IntervalStorageData } from '../app.component';
+import { IntervalStorageData, UUIDData } from '../app.component';
 
 @Injectable()
 export class Storage {
+  public static readonly APP_ID: string = "0";
 
   constructor(public nativeStorage: NativeStorage) {
 
   }
 
-  setItem(data: IntervalStorageData) {
+  setItem(data: UUIDData) {
     this.nativeStorage.setItem(data.uuid, data).then(
       () => console.log('Stored item!'),
       error => console.error('Error storing item', error)
     );
   }
 
-  getItem(uuid: string): Promise<IntervalStorageData> {
-    return (this.nativeStorage.getItem(uuid) as Promise<IntervalStorageData>).then((value) => {
+  getItem(uuid: string): Promise<UUIDData> {
+    return (this.nativeStorage.getItem(uuid) as Promise<UUIDData>).then((value) => {
       return value;
     });
   }
 }
 
 export class StorageMock {
-  _data;
+  _data_app;
+  _data_interval;
 
   constructor() {
-    this._data = {  uuid: "abc123",
+    this._data_app = {  uuid: "0",
+                        vibrate: true,
+                        sound: true,
+                        lighttheme: true};
+
+    this._data_interval = {  uuid: "abc123",
                     name: "Program #1",
                     activerest: {lower: 10, upper: 20},
                     activemaxlimit: 90,
@@ -40,11 +47,19 @@ export class StorageMock {
                     isCountdownInSeconds: true };
   }
 
-  setItem(data: IntervalStorageData) {
-    this._data = data;
+  setItem(data: UUIDData) {
+    if(data.uuid == Storage.APP_ID) {
+      this._data_app = data;
+    } else {
+      this._data_interval = data;
+    }
   }
 
-  getItem(uuid: string): Promise<IntervalStorageData> {
-    return Promise.resolve<IntervalStorageData>(this._data);
+  getItem(uuid: string): Promise<UUIDData> {
+    if(uuid == Storage.APP_ID) {
+      return Promise.resolve(this._data_app);
+    } else {
+      return Promise.resolve(this._data_interval);
+    }
   }
 }

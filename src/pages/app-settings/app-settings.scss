@@ -1,0 +1,11 @@
+page-app-settings {
+  ion-label,
+  ion-input {
+    font-family: selawk;
+    color: $toolbar-title-text-color;
+  }
+
+  .item-ios, .item-md, .item-wp {
+    background-color: transparent !important;
+    }
+}

@@ -8,7 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Insomnia } from '@ionic-native/insomnia';
 
 import { AppComponent } from './app.component'
-import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage, AppSettingsPage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { Storage, StorageMock } from './core/Storage';
 import { NativeStorage } from '@ionic-native/native-storage';
@@ -20,6 +20,7 @@ import { HomePage } from '../pages/home/home';
     IntervalDisplayPage,
     IntervalSettingsPage,
     HomePage,
+    AppSettingsPage,
     FabContainerComponent
   ],
   imports: [
@@ -33,7 +34,8 @@ import { HomePage } from '../pages/home/home';
     AppComponent,
     IntervalDisplayPage,
     IntervalSettingsPage,
-    HomePage
+    HomePage,
+    AppSettingsPage
   ],
   providers: [
     StatusBar,

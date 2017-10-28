@@ -18,6 +18,8 @@ export interface HomeEmission
   encapsulation: ViewEncapsulation.None
 })
 export class HomePage {
+  public actions = HomeAction;
+
   @Output()
   onAction = new EventEmitter<HomeEmission>();
 
@@ -28,7 +30,7 @@ export class HomePage {
     console.log('ionViewDidLoad HomePage');
   }
 
-  onIntervalTimer() {
-    this.onAction.emit({action:HomeAction.IntervalTimer});
+  actionRequest(action:HomeAction) {
+    this.onAction.emit({action: action});
   }
 }

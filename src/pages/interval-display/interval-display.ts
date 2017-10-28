@@ -69,7 +69,9 @@ export class IntervalDisplayPage {
   }
 
   ionViewDidEnter () {
-    console.log("i-d: ionViewDidEnter")
+    console.log("i-d: ionViewDidEnter");
+    this.menuCtrl.enable(true, 'left');
+    this.menuCtrl.enable(true, 'right');
   }
   ionViewWillLeave () {
     console.log("i-d: ionViewWillLeave")
@@ -86,7 +88,7 @@ export class IntervalDisplayPage {
     }
 
     this.storage.getItem(uuid).then((value) => {
-      this.data = value;
+      this.data = <IntervalStorageData>value;
       this.initializeDisplay();
     }).catch((reject) => {
       console.log("interval-display preinitializeDisplay error")
