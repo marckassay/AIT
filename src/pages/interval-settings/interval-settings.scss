@@ -13,10 +13,15 @@ page-interval-settings {
   .content-ios, .content-md, .content-wp {
     background-color: $side-background;
   }
-  ion-label,
+  ion-label {
+    font-family: selawk;
+    color: $toolbar-title-text-color;
+  }
   ion-input {
     font-family: selawk;
     color: $toolbar-title-text-color;
+    // matching size the same as ion-title, which is in the left side-menu.
+    font-size: $toolbar-md-title-font-size;
   }
   ion-range {
     margin: 5px 0;
@@ -28,11 +33,6 @@ page-interval-settings>ion-header {
 }
 
 page-interval-settings>ion-content {
-  //background-color: $side-background;
-  div.fixed-content[style^="margin-top"],
-  div.scroll-content[style^="margin-top"] {
-    margin-top: 0px !important;
-  }
   .div-grid {
     display: -ms-flexbox;
     display: -webkit-flex;
