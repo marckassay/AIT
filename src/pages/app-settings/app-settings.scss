@@ -1,4 +1,9 @@
+
 page-app-settings {
+  .content-ios, .content-md, .content-wp {
+    background-color: $side-background;
+  }
+
   ion-label,
   ion-input {
     font-family: selawk;
