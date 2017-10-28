@@ -28,8 +28,8 @@ export class IntervalSettingsPage {
 
   initialize(uuid: string): void {
     this.storage.getItem(uuid).then((value) => {
-      this.data = value;
-      this.name = value.name;
+      this.data = <IntervalStorageData>value;
+      this.name = this.data.name;
     });
   }
 

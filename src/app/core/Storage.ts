@@ -25,6 +25,7 @@ export class Storage {
 }
 
 export class StorageMock {
+  public static readonly APP_ID: string = "0";
   _data_app;
   _data_interval;
 

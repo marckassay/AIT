@@ -13,6 +13,7 @@ import { FabContainerComponent } from './components/fabcontainer.component/fabco
 import { Storage, StorageMock } from './core/Storage';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { HomePage } from '../pages/home/home';
+import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { HomePage } from '../pages/home/home';
     StatusBar,
     SplashScreen,
     ScreenOrientation,
+    ThemeSettingsProvider,
     { provide: Storage, useClass: StorageMock },
     NativeStorage,
     Insomnia,

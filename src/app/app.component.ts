@@ -7,6 +7,7 @@ import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { Storage } from './core/Storage';
 import { HomeEmission, HomeAction } from '../pages/home/home';
 import { AppSettingsPage } from '../pages/app-settings/app-settings';
+import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 
 @Component({
   templateUrl: 'app.html'
@@ -17,6 +18,8 @@ export class AppComponent implements AfterViewInit {
 
   rootPage: any;
 
+  combinedTheme: string;
+
   @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })
   rightMenuInnerHTML: ViewContainerRef;
 
@@ -24,6 +27,7 @@ export class AppComponent implements AfterViewInit {
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     screenOrientation: ScreenOrientation,
+    private settings: ThemeSettingsProvider,
     public menuCtrl: MenuController,
     public storage: Storage,
     public componentFactoryResolver: ComponentFactoryResolver) {
@@ -38,6 +42,13 @@ export class AppComponent implements AfterViewInit {
 
     platform.backButton.subscribe((x) => {
       console.log("Device's back-button clicked!")
+    });
+
+    this.settings.combinedTheme.subscribe( (val) => {
+      console.log("------------")
+      console.log(val)
+      this.combinedTheme = val
+      console.log("------------")
     });
   }
 

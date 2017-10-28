@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { Storage } from '../../app/core/Storage';
 import { IntervalStorageData } from '../../app/app.component';
 import { CountdownState, ICountdownEmission } from '../../app/core/CountdownTimer';
+import { Menu } from 'ionic-angular/components/app/menu-interface';
 
 @IonicPage()
 @Component({
