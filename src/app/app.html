@@ -2,8 +2,8 @@
   <page-home (onAction)="onHomeAction($event)"></page-home>
 </ion-menu>
 
-<ion-menu side="right" [content]="navCtrl">
-  <ng-template #rightMenuInnerHTML></ng-template>
+<ion-menu side="right" [content]="navCtrl" [class]="combinedTheme">
+  <ng-template #rightMenuInnerHTML ></ng-template>
 </ion-menu>
 <!--
 This creates the Nav instance: navCtrl

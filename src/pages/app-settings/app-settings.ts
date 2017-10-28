@@ -33,9 +33,9 @@ export class AppSettingsPage {
 
   toggleLightTheme(value: boolean) {
     if (value === true) {
-      this.settings.setCombinedTheme('app-theme-light');
+      this.settings.setCombinedTheme('theme-light');
     } else {
-      this.settings.setCombinedTheme('app-theme-dark');
+      this.settings.setCombinedTheme('theme-dark');
     }
 
     this._data.lighttheme = value;

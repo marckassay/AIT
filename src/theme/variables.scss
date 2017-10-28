@@ -36,6 +36,7 @@ $app-accent-colors500: (
   getready : #ffeb3b,
   light : #EEEEEE
 );
+
 // https://material.io/guidelines/style/color.html#color-themes
 $app-theme-dark: (
   strongest : #000000,
@@ -51,7 +52,39 @@ $app-theme-light: (
   weakest:#ffffff
 );
 
-//$colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-dark);
+.theme-dark {
+  $colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-dark);
+  $background-color: color($colors, strongest);
+
+  $side-background: color($colors, weak);
+  $side-toolbar-background: color($colors, strong);
+  $toolbar-background: $side-toolbar-background;
+  $toolbar-io-background: $toolbar-background;
+  $toolbar-md-background: $toolbar-background;
+  $toolbar-wp-background: $toolbar-background;
+
+  $toolbar-title-text-color: color-contrast($colors, $toolbar-background);
+  $toolbar-io-title-text-color:	$toolbar-title-text-color;
+  $toolbar-md-title-text-color:	$toolbar-title-text-color;
+  $toolbar-wp-title-text-color:	$toolbar-title-text-color;
+
+  ion-content {
+    background-color: $background-color;
+    color: $background-color;
+  }
+  // TODO:  why doesnt this work and the above (ion-content) does?
+  ion-menu {
+    page-interval-settings {
+      ion-label {
+        color: $toolbar-title-text-color;
+      }
+      [content-md] {
+        background-color: $side-background;
+      }
+    }
+  }
+}
+
 $colors: map-merge($map1: $app-accent-colors500, $map2: $app-theme-light);
 $background-color: color($colors, strongest);
 

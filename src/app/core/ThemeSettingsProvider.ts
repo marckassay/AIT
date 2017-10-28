@@ -7,7 +7,7 @@ export class ThemeSettingsProvider {
     private theme: BehaviorSubject<string>;
 
     constructor() {
-        this.theme = new BehaviorSubject('app-theme-light');
+        this.theme = new BehaviorSubject('theme-light');
     }
 
     setCombinedTheme(val) {

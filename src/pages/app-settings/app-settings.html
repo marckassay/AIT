@@ -26,7 +26,7 @@
       </ion-item>
       <ion-item>
         <ion-label>dark theme</ion-label>
-        <ion-radio (ionSelect)="toggleLightTheme(false)"></ion-radio>
+        <ion-radio checked={{!data.lighttheme}} (ionSelect)="toggleLightTheme(false)"></ion-radio>
       </ion-item>
     </ion-list>
   </ng-container>
