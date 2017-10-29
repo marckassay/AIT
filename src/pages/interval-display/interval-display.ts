@@ -65,6 +65,8 @@ export class IntervalDisplayPage {
   }
 
   ionViewDidLoad() {
+    console.log("i-d: ionViewDidLoad")
+
     this.preinitializeDisplay();
   }
 

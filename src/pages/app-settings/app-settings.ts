@@ -35,7 +35,7 @@ export class AppSettingsPage {
 
   ionViewWillLeave()
   {
-    console.log("sdgkjnsdkjhgh")
+    this.storage.setItem(this.data);
   }
 
   toggleLightTheme(value: boolean) {
