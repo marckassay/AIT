@@ -4,15 +4,20 @@ import { IntervalStorageData, UUIDData } from '../app.component';
 
 @Injectable()
 export class Storage {
-  public static readonly APP_ID: string = "0";
+  public static readonly APP_ID: string = "00000000-0000-0000-0000-000000000001";
+  public static readonly INITIAL_INTERVAL_ID: string = "b0368478-f958-345d-354e-2ecd48578342";
 
   constructor(public nativeStorage: NativeStorage) {
 
   }
 
   setItem(data: UUIDData) {
-    this.nativeStorage.setItem(data.uuid, data).then(
-      () => console.log('Stored item!'),
+
+    this.nativeStorage.setItem(data.uuid, data).then(() => {
+      if(data.uuid != Storage.APP_ID) {
+        this.setLastItem(data.uuid);
+      }
+    },
       error => console.error('Error storing item', error)
     );
   }
@@ -22,10 +27,30 @@ export class Storage {
       return value;
     });
   }
+
+  private setLastItem(uuid: string): void {
+    this.getItem(Storage.APP_ID).then((value) => {
+      if(value.current_uuid != uuid) {
+        value.current_uuid = uuid;
+        this.setItem(value);
+      }
+    });
+  }
+
+  getLastItem(): Promise<UUIDData> {
+    return this.getItem(Storage.APP_ID).then(
+      (value) => {
+        return this.getItem(value.current_uuid);
+      },
+      (reason) => {
+        return reason;
+      }
+    );
+  }
 }
 
 export class StorageMock {
-  public static readonly APP_ID: string = "0";
+  public static readonly APP_ID: string = Storage.APP_ID;
   _data_app;
   _data_interval;
 
@@ -35,7 +60,7 @@ export class StorageMock {
                         sound: true,
                         lighttheme: true};
 
-    this._data_interval = {  uuid: "abc123",
+    this._data_interval = {  uuid: Storage.INITIAL_INTERVAL_ID,
                     name: "Program #1",
                     activerest: {lower: 10, upper: 20},
                     activemaxlimit: 90,
@@ -62,5 +87,12 @@ export class StorageMock {
     } else {
       return Promise.resolve(this._data_interval);
     }
+  }
+
+  private setLastItem(uuid: string): void {
+  }
+
+  getLastItem(): Promise<UUIDData> {
+    return Promise.resolve(this._data_interval);
   }
 }

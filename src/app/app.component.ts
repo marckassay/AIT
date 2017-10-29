@@ -33,41 +33,27 @@ export class AppComponent implements AfterViewInit {
               public componentFactoryResolver: ComponentFactoryResolver) {
 
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
       screenOrientation.unlock();
     });
 
     platform.backButton.subscribe((x) => {
-      console.log("Device's back-button clicked!")
+      console.log("Device's back-button clicked!");
     });
 
     this.settings.combinedTheme.subscribe( (val) => {
-      console.log("------------")
-      console.log(val)
-      this.combinedTheme = val
-      console.log("------------")
+      this.combinedTheme = val;
     });
   }
 
   ngAfterViewInit() {
-    this.setAndLoadRootWithData();
-    this.rightSideMenuComponent(IntervalSettingsPage, "abc123");
-  }
+    this.storage.getLastItem().then((value) => {
+      this.navCtrl.setRoot(IntervalDisplayPage, value.uuid);
 
-  rightSideMenuComponent(component: any, uuid: string) {
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(component);
-    let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
-    componentInstance.instance.initialize(uuid);
-  }
-
-  setAndLoadRootWithData() {
-    this.storage.getItem("abc123").then((value) => {
-      this.navCtrl.setRoot(IntervalDisplayPage, value);
-    }).catch((r) => {
-      console.log("app.component failed to get record")
+      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(IntervalSettingsPage);
+      let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
+      componentInstance.instance.initialize(value.uuid);
     });
   }
 
@@ -91,6 +77,17 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
+export interface UUIDData {
+  uuid: string;
+  current_uuid: string;
+}
+
+export interface AppStorageData extends UUIDData {
+  vibrate: boolean;
+  sound: boolean;
+  lighttheme: boolean;
+}
+
 export interface CountdownWarnings {
   fivesecond: boolean;
   tensecond: boolean;
@@ -102,15 +99,7 @@ export interface Limits {
   upper: number;
 }
 
-export interface UUIDData {
-  uuid: string;
-}
-export interface AppStorageData extends UUIDData {
-  vibrate: boolean;
-  sound: boolean;
-  lighttheme: boolean;
-}
-export interface IntervalStorageData extends UUIDData{
+export interface IntervalStorageData extends UUIDData {
   name: string;
   activerest: Limits;
   activemaxlimit: number;

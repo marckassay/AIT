@@ -45,7 +45,7 @@ import { AITSignal } from './core/AITSignal';
     SplashScreen,
     ScreenOrientation,
     ThemeSettingsProvider,
-    { provide: Storage, useClass: StorageMock },
+    Storage,
     NativeStorage,
     Vibration,
     Insomnia,
