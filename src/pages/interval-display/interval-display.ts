@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
-import { AITSoundboard } from '../../app/core/AITSoundboard';
+import { AITSound } from '../../app/core/AITSound';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { Storage } from '../../app/core/Storage';
 import { IntervalStorageData } from '../../app/app.component';
 import { CountdownState, ICountdownEmission } from '../../app/core/CountdownTimer';
 import { Menu } from 'ionic-angular/components/app/menu-interface';
+import { AITSignal } from '../../app/core/AITSignal';
 
 @IonicPage()
 @Component({
@@ -58,7 +59,8 @@ export class IntervalDisplayPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public menuCtrl: MenuController,
-              public storage: Storage) {}
+              public storage: Storage,
+              public signal: AITSignal) {}
 
   ionViewWillEnter() {
     console.log("i-d: ionViewWillEnter")
@@ -120,9 +122,9 @@ export class IntervalDisplayPage {
       // play sound each second for getReady states
       if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant) ||
           ((e.state & IntervalState.ActiveWarning) == IntervalState.ActiveWarning) ) {
-        AITSoundboard.ShortBeep();
+        this.signal.single();
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
-        AITSoundboard.TripleBeep();
+        this.signal.double();
       }
 
       // TODO: this is indicitive to poor design.  UI is expecting a specific type but
@@ -141,7 +143,7 @@ export class IntervalDisplayPage {
     }, (err) => {
 
     }, () => {
-      AITSoundboard.CompleteSound();
+      this.signal.triple();
       this._state = IntervalState.Completed;
       this.remainingTime = this.timer.totalTimeISO;
     });

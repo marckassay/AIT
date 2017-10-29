@@ -12,8 +12,10 @@ import { IntervalDisplayPage, IntervalSettingsPage, AppSettingsPage } from '../p
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { Storage, StorageMock } from './core/Storage';
 import { NativeStorage } from '@ionic-native/native-storage';
+import { Vibration } from '@ionic-native/vibration';
 import { HomePage } from '../pages/home/home';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
+import { AITSignal } from './core/AITSignal';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
     ThemeSettingsProvider,
     { provide: Storage, useClass: StorageMock },
     NativeStorage,
+    Vibration,
     Insomnia,
+    AITSignal,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
