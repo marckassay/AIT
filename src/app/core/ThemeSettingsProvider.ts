@@ -10,8 +10,8 @@ export class ThemeSettingsProvider {
         this.theme = new BehaviorSubject('theme-light');
     }
 
-    setCombinedTheme(val) {
-      this.theme.next(val);
+    setCombinedTheme(value: string) {
+      this.theme.next(value);
     }
 
     get combinedTheme() {
