@@ -38,7 +38,7 @@ export class AppComponent implements AfterViewInit {
       screenOrientation.unlock();
     });
 
-    platform.backButton.subscribe((x) => {
+    platform.backButton.subscribe(() => {
       console.log("Device's back-button clicked!");
     });
 

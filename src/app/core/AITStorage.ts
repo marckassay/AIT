@@ -7,20 +7,20 @@ export class AITStorage {
   public static readonly APP_ID: string = "00000000-0000-0000-0000-000000000001";
   public static readonly INITIAL_INTERVAL_ID: string = "b0368478-f958-345d-354e-2ecd48578342";
 
-  constructor(public nativeStorage: Storage) {
-    nativeStorage.get(AITStorage.APP_ID).then((value) => {
+  constructor(public storage: Storage) {
+    storage.get(AITStorage.APP_ID).then((value) => {
       console.log("^^^"+value+"^^^");
       if(!value){
         let data_app = {  uuid: AITStorage.APP_ID,
-                            vibrate: true,
-                            sound: true,
-                            lighttheme: true};
+                          vibrate: true,
+                          sound: true,
+                          lighttheme: true};
 
-        nativeStorage.set(AITStorage.APP_ID, data_app);
+        storage.set(AITStorage.APP_ID, data_app);
       }
     });
 
-    nativeStorage.get(AITStorage.INITIAL_INTERVAL_ID).then((value) => {
+    storage.get(AITStorage.INITIAL_INTERVAL_ID).then((value) => {
       console.log("^#^"+value+"^#^");
       if(!value){
         let data_interval = {  uuid: AITStorage.INITIAL_INTERVAL_ID,
@@ -34,13 +34,13 @@ export class AITStorage {
                                 getready: 3,
                                 warnings: {fivesecond: false, tensecond: true, fifthteensecond: false},
                                 isCountdownInSeconds: true };
-        nativeStorage.set(AITStorage.INITIAL_INTERVAL_ID, data_interval);
+        storage.set(AITStorage.INITIAL_INTERVAL_ID, data_interval);
       }
     });
   }
 
   setItem(data: UUIDData) {
-    this.nativeStorage.set(data.uuid, data).then(() => {
+    this.storage.set(data.uuid, data).then(() => {
       if(data.uuid != AITStorage.APP_ID) {
         this.setLastItem(data.uuid);
       }
@@ -50,7 +50,7 @@ export class AITStorage {
   }
 
   getItem(uuid: string): Promise<UUIDData> {
-    return (this.nativeStorage.get(uuid) as Promise<UUIDData>).then((value) => {
+    return (this.storage.get(uuid) as Promise<UUIDData>).then((value) => {
       return value;
     });
   }
@@ -78,8 +78,8 @@ export class AITStorage {
 
 export class StorageMock {
   public static readonly APP_ID: string = AITStorage.APP_ID;
-  _data_app;
-  _data_interval;
+  _data_app: any;
+  _data_interval: any;
 
   constructor() {
     this._data_app = {  uuid: "0",

@@ -2,7 +2,8 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "declaration": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
