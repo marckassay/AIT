@@ -81,7 +81,7 @@ export class IntervalDisplayPage {
   }
 
   preinitializeDisplay(): void {
-    const uuid = (<IntervalStorageData>this.navParams.data).uuid;
+    const uuid = this.navParams.data;
     this.menu.reset();
     if((<Subscription>this.subscription) && !this.subscription.closed) {
       this.subscription.unsubscribe();

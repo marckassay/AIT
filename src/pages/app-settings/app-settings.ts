@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { AppStorageData } from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
 import { ThemeSettingsProvider } from '../../app/core/ThemeSettingsProvider';
+import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 
 
 @IonicPage()
@@ -11,6 +12,8 @@ import { ThemeSettingsProvider } from '../../app/core/ThemeSettingsProvider';
   templateUrl: 'app-settings.html',
 })
 export class AppSettingsPage {
+  @ViewChild("Navbar")
+  nav: Navbar;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -23,12 +26,16 @@ export class AppSettingsPage {
   }
 
   ionViewWillEnter() {
-    console.log("app-settings - ionViewWillEnter")
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = <AppStorageData>value;
     }).catch((reject) => {
-      console.log("app-settings storage error")
+      console.log("app-settings storage error");
     });
+  }
+
+  ionViewWillLeave()
+  {
+    console.log("sdgkjnsdkjhgh")
   }
 
   toggleLightTheme(value: boolean) {

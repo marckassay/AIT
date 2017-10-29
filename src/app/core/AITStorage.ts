@@ -8,20 +8,18 @@ export class AITStorage {
   public static readonly INITIAL_INTERVAL_ID: string = "b0368478-f958-345d-354e-2ecd48578342";
 
   constructor(public storage: Storage) {
-    storage.get(AITStorage.APP_ID).then((value) => {
-      console.log("^^^"+value+"^^^");
+    storage.get(AITStorage.APP_ID).then((value: any) => {
       if(!value){
         let data_app = {  uuid: AITStorage.APP_ID,
+                          current_uuid: AITStorage.INITIAL_INTERVAL_ID,
                           vibrate: true,
                           sound: true,
                           lighttheme: true};
-
         storage.set(AITStorage.APP_ID, data_app);
       }
     });
 
-    storage.get(AITStorage.INITIAL_INTERVAL_ID).then((value) => {
-      console.log("^#^"+value+"^#^");
+    storage.get(AITStorage.INITIAL_INTERVAL_ID).then((value: any) => {
       if(!value){
         let data_interval = {  uuid: AITStorage.INITIAL_INTERVAL_ID,
                                 name: "Program #1",
@@ -45,11 +43,12 @@ export class AITStorage {
         this.setLastItem(data.uuid);
       }
     },
-      error => console.error('Error storing item', error)
+      (error: any) => console.error('Error storing item', error)
     );
   }
 
   getItem(uuid: string): Promise<UUIDData> {
+    console.log("----->>>"+uuid);
     return (this.storage.get(uuid) as Promise<UUIDData>).then((value) => {
       return value;
     });
