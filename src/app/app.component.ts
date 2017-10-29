@@ -24,13 +24,13 @@ export class AppComponent implements AfterViewInit {
   rightMenuInnerHTML: ViewContainerRef;
 
   constructor(platform: Platform,
-    statusBar: StatusBar,
-    splashScreen: SplashScreen,
-    screenOrientation: ScreenOrientation,
-    private settings: ThemeSettingsProvider,
-    public menuCtrl: MenuController,
-    public storage: Storage,
-    public componentFactoryResolver: ComponentFactoryResolver) {
+              statusBar: StatusBar,
+              splashScreen: SplashScreen,
+              screenOrientation: ScreenOrientation,
+              private settings: ThemeSettingsProvider,
+              public menuCtrl: MenuController,
+              public storage: Storage,
+              public componentFactoryResolver: ComponentFactoryResolver) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

@@ -8,7 +8,7 @@ export class AITVibrate {
    }
 
   public singleVibrate() {
-    this.vibration.vibrate(1000);
+    this.vibration.vibrate(500);
   }
 
   public doubleVibrate() {
@@ -16,6 +16,6 @@ export class AITVibrate {
   }
 
   public tripleVibrate() {
-    this.vibration.vibrate([1000,1000,1000]);
+    this.vibration.vibrate([1000,500,1000]);
   }
 }

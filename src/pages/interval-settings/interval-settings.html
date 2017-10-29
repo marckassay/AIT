@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-input [(ngModel)]="name" type="text" placeholder="Name: "></ion-input>
+    <ion-input *ngIf="data" [(ngModel)]="data.name" type="text" placeholder="Name: "></ion-input>
   </ion-toolbar>
 </ion-header>
 

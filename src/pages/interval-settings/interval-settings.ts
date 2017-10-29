@@ -29,7 +29,6 @@ export class IntervalSettingsPage {
   initialize(uuid: string): void {
     this.storage.getItem(uuid).then((value) => {
       this.data = <IntervalStorageData>value;
-      this.name = this.data.name;
     });
   }
 
@@ -56,16 +55,5 @@ export class IntervalSettingsPage {
   }
   set data(value: IntervalStorageData) {
     this._data = value;
-  }
-
-  // this is here to bind data to-and-from view.
-  // perhaps a better way; works for now
-  _name: string;
-  get name(): string {
-    return this._name;
-  }
-  set name(value: string) {
-    this.data.name = value;
-    this._name = value;
   }
 }

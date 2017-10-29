@@ -1,13 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
-import { AITSound } from '../../app/core/AITSound';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
 import { Subscription } from 'rxjs';
 import { Storage } from '../../app/core/Storage';
 import { IntervalStorageData } from '../../app/app.component';
-import { CountdownState, ICountdownEmission } from '../../app/core/CountdownTimer';
-import { Menu } from 'ionic-angular/components/app/menu-interface';
 import { AITSignal } from '../../app/core/AITSignal';
 
 @IonicPage()
@@ -127,8 +124,8 @@ export class IntervalDisplayPage {
         this.signal.double();
       }
 
-      // TODO: this is indicitive to poor design.  UI is expecting a specific type but
-      // we are subscribe with rxjs for two types.
+      // TODO: this is indicitive to poor code design.  UI is expecting a specific
+      // type but we are subscribe with rxjs for two types.
       console.log(e.state)
       if(e.currentInterval !== undefined) {
         this.currentInterval = (e as IIntervalEmission).currentInterval;
@@ -139,7 +136,6 @@ export class IntervalDisplayPage {
         this._state = IntervalState.Countdown;
         this.remainingTime = e.remainingTime;
       }
-
     }, (err) => {
 
     }, () => {
