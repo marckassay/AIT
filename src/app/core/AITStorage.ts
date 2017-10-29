@@ -1,6 +1,6 @@
 import { NativeStorage } from '@ionic-native/native-storage';
 import { Injectable } from '@angular/core';
-import { IntervalStorageData, UUIDData } from '../app.component';
+import { UUIDData } from '../app.component';
 
 @Injectable()
 export class AITStorage {
@@ -8,11 +8,38 @@ export class AITStorage {
   public static readonly INITIAL_INTERVAL_ID: string = "b0368478-f958-345d-354e-2ecd48578342";
 
   constructor(public nativeStorage: NativeStorage) {
+    nativeStorage.getItem(AITStorage.APP_ID).then((value) => {
+      console.log("^^^"+value+"^^^");
+      if(!value){
+        let data_app = {  uuid: AITStorage.APP_ID,
+                            vibrate: true,
+                            sound: true,
+                            lighttheme: true};
 
+        nativeStorage.setItem(AITStorage.APP_ID, data_app);
+      }
+    });
+
+    nativeStorage.getItem(AITStorage.INITIAL_INTERVAL_ID).then((value) => {
+      console.log("^#^"+value+"^#^");
+      if(!value){
+        let data_interval = {  uuid: AITStorage.INITIAL_INTERVAL_ID,
+                                name: "Program #1",
+                                activerest: {lower: 10, upper: 50},
+                                activemaxlimit: 90,
+                                intervals: 12,
+                                intervalmaxlimit: 20,
+                                countdown: 10,
+                                countdownmaxlimit: 60,
+                                getready: 3,
+                                warnings: {fivesecond: false, tensecond: true, fifthteensecond: false},
+                                isCountdownInSeconds: true };
+        nativeStorage.setItem(AITStorage.INITIAL_INTERVAL_ID, data_interval);
+      }
+    });
   }
 
   setItem(data: UUIDData) {
-
     this.nativeStorage.setItem(data.uuid, data).then(() => {
       if(data.uuid != AITStorage.APP_ID) {
         this.setLastItem(data.uuid);
