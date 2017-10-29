@@ -11,7 +11,7 @@ import { AppComponent } from './app.component'
 import { IntervalDisplayPage, IntervalSettingsPage, AppSettingsPage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { AITStorage, StorageMock } from './core/AITStorage';
-import { NativeStorage } from '@ionic-native/native-storage';
+import { IonicStorageModule } from '@ionic/storage';
 import { Vibration } from '@ionic-native/vibration';
 import { HomePage } from '../pages/home/home';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
@@ -28,6 +28,7 @@ import { AITSignal } from './core/AITSignal';
   ],
   imports: [
     BrowserModule,
+    IonicStorageModule.forRoot(),
     IonicModule.forRoot(AppComponent, {
       menuType: 'reveal'
     })
@@ -45,7 +46,7 @@ import { AITSignal } from './core/AITSignal';
     SplashScreen,
     ScreenOrientation,
     ThemeSettingsProvider,
-    NativeStorage,
+    IonicStorageModule,
     AITStorage,
     //{provide: AITStorage, useClass: StorageMock},
     Vibration,
