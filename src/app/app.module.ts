@@ -10,7 +10,7 @@ import { Insomnia } from '@ionic-native/insomnia';
 import { AppComponent } from './app.component'
 import { IntervalDisplayPage, IntervalSettingsPage, AppSettingsPage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
-import { Storage, StorageMock } from './core/Storage';
+import { AITStorage, StorageMock } from './core/AITStorage';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { Vibration } from '@ionic-native/vibration';
 import { HomePage } from '../pages/home/home';
@@ -45,8 +45,8 @@ import { AITSignal } from './core/AITSignal';
     SplashScreen,
     ScreenOrientation,
     ThemeSettingsProvider,
-    Storage,
     NativeStorage,
+    {provide: AITStorage, useClass: StorageMock},
     Vibration,
     Insomnia,
     AITSignal,

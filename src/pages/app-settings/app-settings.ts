@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { AppStorageData } from '../../app/app.component';
-import { Storage } from '../../app/core/Storage';
+import { AITStorage } from '../../app/core/AITStorage';
 import { ThemeSettingsProvider } from '../../app/core/ThemeSettingsProvider';
 
 
@@ -14,7 +14,7 @@ export class AppSettingsPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              public storage:Storage,
+              public storage:AITStorage,
               public settings: ThemeSettingsProvider,
               public menuCtrl: MenuController) {
 
@@ -24,7 +24,7 @@ export class AppSettingsPage {
 
   ionViewWillEnter() {
     console.log("app-settings - ionViewWillEnter")
-    this.storage.getItem(Storage.APP_ID).then((value) => {
+    this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = <AppStorageData>value;
     }).catch((reject) => {
       console.log("app-settings storage error")

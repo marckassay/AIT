@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angul
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
 import { Subscription } from 'rxjs';
-import { Storage } from '../../app/core/Storage';
+import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
 import { AITSignal } from '../../app/core/AITSignal';
 
@@ -56,7 +56,7 @@ export class IntervalDisplayPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public menuCtrl: MenuController,
-              public storage: Storage,
+              public AITStorage: AITStorage,
               public signal: AITSignal) {}
 
   ionViewWillEnter() {
@@ -87,7 +87,7 @@ export class IntervalDisplayPage {
       this.subscription.unsubscribe();
     }
 
-    this.storage.getItem(uuid).then((value) => {
+    this.AITStorage.getItem(uuid).then((value) => {
       this.data = <IntervalStorageData>value;
       this.initializeDisplay();
     }).catch((reject) => {

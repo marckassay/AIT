@@ -4,7 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
-import { Storage } from './core/Storage';
+import { AITStorage } from './core/AITStorage';
 import { HomeEmission, HomeAction } from '../pages/home/home';
 import { AppSettingsPage } from '../pages/app-settings/app-settings';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
@@ -29,7 +29,7 @@ export class AppComponent implements AfterViewInit {
               screenOrientation: ScreenOrientation,
               private settings: ThemeSettingsProvider,
               public menuCtrl: MenuController,
-              public storage: Storage,
+              public storage: AITStorage,
               public componentFactoryResolver: ComponentFactoryResolver) {
 
     platform.ready().then(() => {

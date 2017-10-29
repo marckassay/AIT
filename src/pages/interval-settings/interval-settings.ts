@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import * as app from '../../app/app.component';
-import { Storage } from '../../app/core/Storage';
+import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
 
 @IonicPage()
@@ -11,7 +11,7 @@ import { IntervalStorageData } from '../../app/app.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class IntervalSettingsPage {
-  constructor(public storage: Storage) { }
+  constructor(public storage: AITStorage) { }
 
   ionViewWillEnter() {
     console.log("ionViewWillEnter")

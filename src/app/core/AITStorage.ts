@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IntervalStorageData, UUIDData } from '../app.component';
 
 @Injectable()
-export class Storage {
+export class AITStorage {
   public static readonly APP_ID: string = "00000000-0000-0000-0000-000000000001";
   public static readonly INITIAL_INTERVAL_ID: string = "b0368478-f958-345d-354e-2ecd48578342";
 
@@ -14,7 +14,7 @@ export class Storage {
   setItem(data: UUIDData) {
 
     this.nativeStorage.setItem(data.uuid, data).then(() => {
-      if(data.uuid != Storage.APP_ID) {
+      if(data.uuid != AITStorage.APP_ID) {
         this.setLastItem(data.uuid);
       }
     },
@@ -29,7 +29,7 @@ export class Storage {
   }
 
   private setLastItem(uuid: string): void {
-    this.getItem(Storage.APP_ID).then((value) => {
+    this.getItem(AITStorage.APP_ID).then((value) => {
       if(value.current_uuid != uuid) {
         value.current_uuid = uuid;
         this.setItem(value);
@@ -38,7 +38,7 @@ export class Storage {
   }
 
   getLastItem(): Promise<UUIDData> {
-    return this.getItem(Storage.APP_ID).then(
+    return this.getItem(AITStorage.APP_ID).then(
       (value) => {
         return this.getItem(value.current_uuid);
       },
@@ -50,7 +50,7 @@ export class Storage {
 }
 
 export class StorageMock {
-  public static readonly APP_ID: string = Storage.APP_ID;
+  public static readonly APP_ID: string = AITStorage.APP_ID;
   _data_app;
   _data_interval;
 
@@ -60,7 +60,7 @@ export class StorageMock {
                         sound: true,
                         lighttheme: true};
 
-    this._data_interval = {  uuid: Storage.INITIAL_INTERVAL_ID,
+    this._data_interval = {  uuid: AITStorage.INITIAL_INTERVAL_ID,
                     name: "Program #1",
                     activerest: {lower: 10, upper: 20},
                     activemaxlimit: 90,
@@ -74,7 +74,7 @@ export class StorageMock {
   }
 
   setItem(data: UUIDData) {
-    if(data.uuid == Storage.APP_ID) {
+    if(data.uuid == AITStorage.APP_ID) {
       this._data_app = data;
     } else {
       this._data_interval = data;
@@ -82,7 +82,7 @@ export class StorageMock {
   }
 
   getItem(uuid: string): Promise<UUIDData> {
-    if(uuid == Storage.APP_ID) {
+    if(uuid == AITStorage.APP_ID) {
       return Promise.resolve(this._data_app);
     } else {
       return Promise.resolve(this._data_interval);
