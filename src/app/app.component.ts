@@ -8,6 +8,7 @@ import { AITStorage } from './core/AITStorage';
 import { HomeEmission, HomeAction } from '../pages/home/home';
 import { AppSettingsPage } from '../pages/app-settings/app-settings';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   templateUrl: 'app.html'
@@ -42,17 +43,27 @@ export class AppComponent {
       console.log("Device's back-button clicked!");
     });
 
-    storage.checkAppStartupData().then(() => {
-      storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
+    this.checkAppStartupData(3);
+  }
 
-        const lasttheme = (value.lighttheme)?'theme-light':'theme-dark';
-        settings.setCombinedTheme(lasttheme);
+  checkAppStartupData(attempts: number) {
+    console.log("checkAppStartupData call, attempt number: "+attempts);
+    this.storage.checkAppStartupData().then(() => {
+      this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 
-        this.settings.combinedTheme.subscribe( (value: string) => {
-          this.combinedTheme = value;
-        });
+        if(value) {
+          const lasttheme = (value.lighttheme)?'theme-light':'theme-dark';
+          this.settings.setCombinedTheme(lasttheme);
 
-        this.afterStartupData(value.current_uuid);
+          this.settings.combinedTheme.subscribe( (value: string) => {
+            this.combinedTheme = value;
+          });
+
+          this.afterStartupData(value.current_uuid);
+        } else {
+          // sometimes or alltimes it fails on initial load with no db.
+          Observable.timer(500).subscribe(()=>{this.checkAppStartupData(--attempts)})
+        }
       });
     });
   }

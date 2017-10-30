@@ -11,7 +11,9 @@ export class AITStorage {
   }
 
   public checkAppStartupData(): Promise<void> {
+
     return this.storage.ready().then((value: LocalForage) => {
+
         this.storage.get(AITStorage.APP_ID).then((value: UUIDData) => {
         if(!value){
           let data_app = {  uuid: AITStorage.APP_ID,
