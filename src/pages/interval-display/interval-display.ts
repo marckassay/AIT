@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
@@ -16,6 +16,8 @@ export class IntervalDisplayPage {
   @ViewChild(FabContainerComponent)
   private menu: FabContainerComponent;
 
+  current_uuid: string;
+
   timer: AnotherIntervalTimer;
   emitted: IIntervalEmission;
   subscription: Subscription;
@@ -30,6 +32,7 @@ export class IntervalDisplayPage {
     return this._data;
   }
 
+  @Input('data')
   set data(value: IntervalStorageData) {
     this._data = value;
   }
@@ -57,16 +60,22 @@ export class IntervalDisplayPage {
               public navParams: NavParams,
               public menuCtrl: MenuController,
               public AITStorage: AITStorage,
-              public signal: AITSignal) {}
+              public signal: AITSignal,
+              public ngDectector: ChangeDetectorRef) {
+
+    menuCtrl.get('right').ionClose.subscribe(() => {
+      console.log("i-d: ionClose");
+      this.preinitializeDisplay();
+    });
+  }
 
   ionViewWillEnter() {
-    console.log("i-d: ionViewWillEnter")
+    console.log("i-d: ionViewWillEnter");
     //this.preinitializeDisplay();
   }
 
   ionViewDidLoad() {
-    console.log("i-d: ionViewDidLoad")
-
+    console.log("i-d: ionViewDidLoad");
     //this.preinitializeDisplay();
   }
 
@@ -84,15 +93,15 @@ export class IntervalDisplayPage {
   }
 
   preinitializeDisplay(): void {
-    const uuid = this.navParams.data;
+    const uuid = (this.navParams.data)?this.navParams.data:this.current_uuid;
+    console.log(uuid);
     if(uuid) {
       this.menu.reset();
       if((<Subscription>this.subscription) && !this.subscription.closed) {
         this.subscription.unsubscribe();
       }
-
-      this.AITStorage.getItem(uuid).then((value) => {
-        this.data = <IntervalStorageData>value;
+      this.AITStorage.getItem(uuid).then((value: any) => {
+        this.data = (value as IntervalStorageData);
         this.initializeDisplay();
       }).catch((reject) => {
         console.log("interval-display preinitializeDisplay error")
@@ -103,8 +112,6 @@ export class IntervalDisplayPage {
   initializeDisplay() {
     this._state = IntervalState.Loaded;
     this.remainingIntervalTime = this.data.activerest.lower;
-    this.currentInterval = this.data.intervals;
-
     this.instantiateTimer();
   }
 
@@ -117,6 +124,9 @@ export class IntervalDisplayPage {
                                           this.data.warnings);
     this.subscribeTimer();
     this.remainingTime = this.timer.totalTimeISO;
+
+    // this is need to refresh the view when being revisited from changed in interval-settings
+    this.ngDectector.detectChanges();
   }
 
   subscribeTimer(): void {
@@ -128,7 +138,6 @@ export class IntervalDisplayPage {
       } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
         this.signal.double();
       }
-
       // TODO: this is indicitive to poor code design.  UI is expecting a specific
       // type but we are subscribe with rxjs for two types.
       console.log(e.state)
