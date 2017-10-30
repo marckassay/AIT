@@ -40,7 +40,7 @@ export class AITStorage {
   setItem(data: UUIDData) {
     this.storage.set(data.uuid, data).then(() => {
       if(data.uuid != AITStorage.APP_ID) {
-        this.setLastItem(data.uuid);
+        this.setCurrentUUID(data.uuid);
       }
     },
       (error: any) => console.error('Error storing item', error)
@@ -48,13 +48,12 @@ export class AITStorage {
   }
 
   getItem(uuid: string): Promise<UUIDData> {
-    console.log("----->>>"+uuid);
     return (this.storage.get(uuid) as Promise<UUIDData>).then((value) => {
       return value;
     });
   }
 
-  private setLastItem(uuid: string): void {
+  private setCurrentUUID(uuid: string): void {
     this.getItem(AITStorage.APP_ID).then((value) => {
       if(value.current_uuid != uuid) {
         value.current_uuid = uuid;
@@ -63,7 +62,7 @@ export class AITStorage {
     });
   }
 
-  getLastItem(): Promise<UUIDData> {
+  getCurrentUUID(): Promise<UUIDData> {
     return this.getItem(AITStorage.APP_ID).then(
       (value) => {
         return this.getItem(value.current_uuid);
@@ -115,10 +114,10 @@ export class StorageMock {
     }
   }
 
-  private setLastItem(uuid: string): void {
+  private setCurrentUUID(uuid: string): void {
   }
 
-  getLastItem(): Promise<UUIDData> {
+  getCurrentUUID(): Promise<UUIDData> {
     return Promise.resolve(this._data_interval);
   }
 }

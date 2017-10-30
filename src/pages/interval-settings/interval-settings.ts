@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { IonicPage, MenuController } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
@@ -11,11 +11,7 @@ import { IntervalStorageData } from '../../app/app.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class IntervalSettingsPage {
-  constructor(public storage: AITStorage,
-              public menuController:MenuController) {
-    menuController.get("right").ionClose.subscribe(()=>{
-      this.storage.setItem(this.data);
-    });
+  constructor(public storage: AITStorage) {
   }
 
   initialize(uuid: string): void {
@@ -39,6 +35,10 @@ export class IntervalSettingsPage {
     } else {
       return ":0";
     }
+  }
+
+  dataChanged(property:string):void {
+    this.storage.setItem(this.data);
   }
 
   _data: IntervalStorageData;

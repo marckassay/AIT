@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-input *ngIf="data" [(ngModel)]="data.name" type="text" placeholder="Name: "></ion-input>
+    <ion-input (ionBlur)="dataChanged('name')" *ngIf="data" [(ngModel)]="data.name" type="text" placeholder="Name: "></ion-input>
   </ion-toolbar>
 </ion-header>
 
@@ -34,43 +34,43 @@
   <div *ngIf="data">
     <!-- activerest -->
     <ion-item>
-      <ion-range [(ngModel)]="data.activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
+      <ion-range (ionChange)="dataChanged('activerest')" debounce="800" [(ngModel)]="data.activerest" min="5" max="70" step="5" snaps="true" pin="true" dualKnobs="true">
         <ion-label range-left>rest/active</ion-label>
       </ion-range>
     </ion-item>
 
     <!-- interval -->
     <ion-item>
-      <ion-range [(ngModel)]="data.intervals" min="1" [max]="data.intervalmaxlimit" step="1" snaps="true" pin="true">
+      <ion-range (ionChange)="dataChanged('intervals')" debounce="800" [(ngModel)]="data.intervals" min="1" [max]="data.intervalmaxlimit" step="1" snaps="true" pin="true">
         <ion-label range-left>intervals</ion-label>
       </ion-range>
     </ion-item>
 
     <!-- countdown -->
     <ion-item>
-      <ion-range [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit" step="5" snaps="true" pin="true">
+      <ion-range (ionChange)="dataChanged('countdown')" debounce="800" [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit" step="5" snaps="true" pin="true">
         <ion-label range-left>countdown</ion-label>
       </ion-range>
     </ion-item>
 
     <!-- warnings -->
     <ion-item>
-      <ion-toggle [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
+      <ion-toggle (ionChange)="dataChanged('fivesecond')" [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
       <ion-label>5 second warning</ion-label>
     </ion-item>
 
     <ion-item>
-      <ion-toggle [(ngModel)]="data.warnings.tensecond"></ion-toggle>
+      <ion-toggle (ionChange)="dataChanged('tensecond')" [(ngModel)]="data.warnings.tensecond"></ion-toggle>
       <ion-label>10 second warning</ion-label>
     </ion-item>
 
     <ion-item>
-      <ion-toggle [(ngModel)]="data.warnings.fifthteensecond"></ion-toggle>
+      <ion-toggle (ionChange)="dataChanged('fifthteensecond')" [(ngModel)]="data.warnings.fifthteensecond"></ion-toggle>
       <ion-label>15 second warning</ion-label>
     </ion-item>
 
 
-    <button ion-item  (click)="closeMenu()">Close Menu</button>
+    <button ion-item (click)="closeMenu()">Close Menu</button>
 
   </div>
 </ion-content>

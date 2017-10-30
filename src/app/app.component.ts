@@ -42,13 +42,20 @@ export class AppComponent implements AfterViewInit {
       console.log("Device's back-button clicked!");
     });
 
-    this.settings.combinedTheme.subscribe( (val) => {
-      this.combinedTheme = val;
+    storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
+      const lasttheme = (value.lighttheme)?'theme-light':'theme-dark';
+      settings.setCombinedTheme(lasttheme);
+
+      this.settings.combinedTheme.subscribe( (value: string) => {
+        this.combinedTheme = value;
+      });
     });
   }
 
   ngAfterViewInit() {
-    this.storage.getLastItem().then((value) => {
+    this.storage.getCurrentUUID().then((value) => {
+      // TODO: will need to not have page hard-coded when CountdownPage
+      // or StopwatchPage is implemented.
       this.navCtrl.setRoot(IntervalDisplayPage, value.uuid);
 
       const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(IntervalSettingsPage);
