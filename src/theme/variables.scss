@@ -73,6 +73,8 @@ $app-theme-light: (
     color: $background-color;
   }
   // TODO:  why doesnt this work and the above (ion-content) does?
+  // WARN:  check to make sure the ion-menu right instance has
+  //        '[class]="combinedTheme"' attached to it.
   ion-menu {
     page-interval-settings {
       ion-label {
