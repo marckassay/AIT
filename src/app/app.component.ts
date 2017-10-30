@@ -12,7 +12,7 @@ import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 @Component({
   templateUrl: 'app.html'
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   @ViewChild(Nav)
   navCtrl: Nav;
 
@@ -27,7 +27,7 @@ export class AppComponent implements AfterViewInit {
               statusBar: StatusBar,
               splashScreen: SplashScreen,
               screenOrientation: ScreenOrientation,
-              private settings: ThemeSettingsProvider,
+              public settings: ThemeSettingsProvider,
               public menuCtrl: MenuController,
               public storage: AITStorage,
               public componentFactoryResolver: ComponentFactoryResolver) {
@@ -42,26 +42,29 @@ export class AppComponent implements AfterViewInit {
       console.log("Device's back-button clicked!");
     });
 
-    storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
-      const lasttheme = (value.lighttheme)?'theme-light':'theme-dark';
-      settings.setCombinedTheme(lasttheme);
+    storage.checkAppStartupData().then(() => {
+      storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 
-      this.settings.combinedTheme.subscribe( (value: string) => {
-        this.combinedTheme = value;
+        const lasttheme = (value.lighttheme)?'theme-light':'theme-dark';
+        settings.setCombinedTheme(lasttheme);
+
+        this.settings.combinedTheme.subscribe( (value: string) => {
+          this.combinedTheme = value;
+        });
+
+        this.afterStartupData(value.current_uuid);
       });
     });
   }
 
-  ngAfterViewInit() {
-    this.storage.getCurrentUUID().then((value) => {
-      // TODO: will need to not have page hard-coded when CountdownPage
-      // or StopwatchPage is implemented.
-      this.navCtrl.setRoot(IntervalDisplayPage, value.uuid);
+  afterStartupData(current_uuid: string) {
+    // TODO: will need to not have page hard-coded when CountdownPage
+    // or StopwatchPage is implemented.
+    this.navCtrl.setRoot(IntervalDisplayPage, current_uuid);
 
-      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(IntervalSettingsPage);
-      let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
-      componentInstance.instance.initialize(value.uuid);
-    });
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(IntervalSettingsPage);
+    let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
+    componentInstance.instance.initialize(current_uuid);
   }
 
   onHomeAction(emission: HomeEmission) {

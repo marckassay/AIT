@@ -61,19 +61,20 @@ export class IntervalDisplayPage {
 
   ionViewWillEnter() {
     console.log("i-d: ionViewWillEnter")
-    this.preinitializeDisplay();
+    //this.preinitializeDisplay();
   }
 
   ionViewDidLoad() {
     console.log("i-d: ionViewDidLoad")
 
-    this.preinitializeDisplay();
+    //this.preinitializeDisplay();
   }
 
   ionViewDidEnter () {
     console.log("i-d: ionViewDidEnter");
     this.menuCtrl.enable(true, 'left');
     this.menuCtrl.enable(true, 'right');
+    this.preinitializeDisplay();
   }
   ionViewWillLeave () {
     console.log("i-d: ionViewWillLeave")
@@ -84,17 +85,19 @@ export class IntervalDisplayPage {
 
   preinitializeDisplay(): void {
     const uuid = this.navParams.data;
-    this.menu.reset();
-    if((<Subscription>this.subscription) && !this.subscription.closed) {
-      this.subscription.unsubscribe();
-    }
+    if(uuid) {
+      this.menu.reset();
+      if((<Subscription>this.subscription) && !this.subscription.closed) {
+        this.subscription.unsubscribe();
+      }
 
-    this.AITStorage.getItem(uuid).then((value) => {
-      this.data = <IntervalStorageData>value;
-      this.initializeDisplay();
-    }).catch((reject) => {
-      console.log("interval-display preinitializeDisplay error")
-    });
+      this.AITStorage.getItem(uuid).then((value) => {
+        this.data = <IntervalStorageData>value;
+        this.initializeDisplay();
+      }).catch((reject) => {
+        console.log("interval-display preinitializeDisplay error")
+      });
+    }
   }
 
   initializeDisplay() {

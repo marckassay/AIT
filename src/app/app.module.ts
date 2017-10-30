@@ -10,7 +10,7 @@ import { Insomnia } from '@ionic-native/insomnia';
 import { AppComponent } from './app.component'
 import { IntervalDisplayPage, IntervalSettingsPage, AppSettingsPage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
-import { AITStorage, StorageMock } from './core/AITStorage';
+import { AITStorage } from './core/AITStorage';
 import { IonicStorageModule } from '@ionic/storage';
 import { Vibration } from '@ionic-native/vibration';
 import { HomePage } from '../pages/home/home';
