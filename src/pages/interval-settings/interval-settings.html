@@ -1,10 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-input (ionBlur)="dataChanged('name')" *ngIf="data" [(ngModel)]="data.name" type="text" placeholder="Name: "></ion-input>
+    <ion-input *ngIf="data" (ionBlur)="dataChanged('name')" [(ngModel)]="data.name" type="text"></ion-input>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding *ngIf="data">
+<ion-content *ngIf="data" padding>
   <div class="mini-display">
     <div class="div-grid">
       <ion-grid>
@@ -37,7 +37,7 @@
       <ion-item-divider>Interval Timer Settings</ion-item-divider>
       <!-- activerest -->
       <ion-item>
-        <ion-range (ionChange)="dataChanged('activerest')" debounce="800" [(ngModel)]="data.activerest" min="5" max="70" step="5"
+        <ion-range (ionChange)="dataChanged('activerest')" debounce="500" [(ngModel)]="data.activerest" min="5" max="70" step="5"
           snaps="true" pin="true" dualKnobs="true">
           <ion-label range-left>rest/active</ion-label>
         </ion-range>
@@ -45,7 +45,7 @@
 
       <!-- interval -->
       <ion-item>
-        <ion-range (ionChange)="dataChanged('intervals')" debounce="800" [(ngModel)]="data.intervals" min="1" [max]="data.intervalmaxlimit"
+        <ion-range (ionChange)="dataChanged('intervals')" debounce="500" [(ngModel)]="data.intervals" min="1" [max]="data.intervalmaxlimit"
           step="1" snaps="true" pin="true">
           <ion-label range-left>intervals</ion-label>
         </ion-range>
@@ -53,7 +53,7 @@
 
       <!-- countdown -->
       <ion-item>
-        <ion-range (ionChange)="dataChanged('countdown')" debounce="800" [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit"
+        <ion-range (ionChange)="dataChanged('countdown')" debounce="500" [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit"
           step="5" snaps="true" pin="true">
           <ion-label range-left>countdown</ion-label>
         </ion-range>
@@ -64,9 +64,9 @@
     <ion-item-group>
       <ion-item-divider>
         Active Countdown Warnings
-        <button *ngIf="appSoundsDisabled || appVibratorDisabled" ion-button item-end clear class="pause" color="information"
+        <button *ngIf="appSoundsDisabled || appVibratorDisabled" ion-button item-end clear
                 (click)="inform()" >
-          <ion-icon class="material-icons">warning</ion-icon>
+          <ion-icon class="material-icons" color="information">warning</ion-icon>
         </button>
       </ion-item-divider>
       <ion-item>

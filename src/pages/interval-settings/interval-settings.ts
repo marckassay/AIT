@@ -36,6 +36,10 @@ export class IntervalSettingsPage {
         this.ngDectector.detectChanges();
       });
     });
+
+    this.menuCtrl.get('right').ionClose.subscribe(() => {
+      this.storage.setItem(this.data);
+    });
   }
 
   get totaltime(): string {
@@ -56,7 +60,7 @@ export class IntervalSettingsPage {
   }
 
   dataChanged(property:string):void {
-    this.storage.setItem(this.data);
+    this.ngDectector.detectChanges();
   }
 
   inform(): void {
@@ -74,7 +78,7 @@ export class IntervalSettingsPage {
     }
 
     let toast = this.toastCtrl.create({
-      message: "AiT's "+smesg+". Go to 'AiT Settings' page and adjust accordingly.",
+      message: "AiT's "+smesg+". Go to 'AiT Settings' page and adjust accordingly if needed.",
       duration: 5000,
       dismissOnPageChange: true,
       position: 'top'

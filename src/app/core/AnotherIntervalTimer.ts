@@ -109,8 +109,11 @@ export class AnotherIntervalTimer {
       this.state -= IntervalState.Warning;
     }
 
+    if(remainingTime == 0) {
+      this.state = IntervalState.Completed;
+    }
     // is it time to enter into Rest...
-    if(remainingTime % this.intervalTime == 0) {
+    else if(remainingTime % this.intervalTime == 0) {
       this.currentInterval--;
       this.state = IntervalState.RestStart;
       this.remainingIntervalTime = this.restTime;

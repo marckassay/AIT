@@ -32,9 +32,12 @@ export class AITSound {
   };
 
   completeBeep() {
-    this.sound_1.play();
-    setInterval(() => {
-      this.tripleBeep();
-    },2500);
+    let interval = 0;
+    let intervalId = setInterval(() => {
+      this.sound_1.stop();
+      this.sound_1.rate(1);
+      this.sound_1.play();
+      (interval === 50)? clearInterval(intervalId):interval++;
+    },150);
   };
 }

@@ -63,7 +63,7 @@ export class IntervalDisplayPage {
               public signal: AITSignal,
               public ngDectector: ChangeDetectorRef) {
 
-    menuCtrl.get('right').ionClose.subscribe(() => {
+    menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
       console.log("i-d: ionClose");
       this.preinitializeDisplay();
     });
@@ -130,33 +130,40 @@ export class IntervalDisplayPage {
   }
 
   subscribeTimer(): void {
-    this.subscription = this.timer.publication.subscribe((e: any) => {
-      // play sound each second for getReady states
-      if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant) ||
-          ((e.state & IntervalState.ActiveWarning) == IntervalState.ActiveWarning) ) {
-        this.signal.single();
-      } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
-        this.signal.double();
-      }
-      // TODO: this is indicitive to poor code design.  UI is expecting a specific
-      // type but we are subscribe with rxjs for two types.
-      console.log(e.state)
-      if(e.currentInterval !== undefined) {
-        this.currentInterval = (e as IIntervalEmission).currentInterval;
-        this._state = (e as IIntervalEmission).state;
-        this.remainingIntervalTime = (e as IIntervalEmission).remainingIntervalTime;
-        this.remainingTime = e.remainingTime;
-      } else {
-        this._state = IntervalState.Countdown;
-        this.remainingTime = e.remainingTime;
-      }
-    }, (err) => {
+    this.subscription = this.timer.publication.subscribe(
+      (e: any) => {
+        // play sound each second for getReady states
+        if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant) ||
+            ((e.state & IntervalState.ActiveWarning) == IntervalState.ActiveWarning) ) {
+          this.signal.single();
+        } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
+          this.signal.double();
+        } else if (e.state == IntervalState.Completed) {
+          this.signal.triple();
+        }
 
-    }, () => {
-      this.signal.triple();
-      this._state = IntervalState.Completed;
-      this.remainingTime = this.timer.totalTimeISO;
-    });
+        console.log(e.state);
+
+        // TODO: this is indicitive to poor code design.  UI is expecting a specific
+        // type but we are subscribe with rxjs for two types.
+        if(e.currentInterval !== undefined) {
+          this.currentInterval = (e as IIntervalEmission).currentInterval;
+          this._state = (e as IIntervalEmission).state;
+          this.remainingIntervalTime = (e as IIntervalEmission).remainingIntervalTime;
+          this.remainingTime = e.remainingTime;
+        } else {
+          this._state = IntervalState.Countdown;
+          this.remainingTime = e.remainingTime;
+        }
+      }, (error) => {
+        console.log(error);
+        this._state = IntervalState.Error;
+      }, () => {
+        // TODO: this never gets hit.  AnotherIntervalTimer is not emitting Completed.
+        this.signal.triple();
+        this._state = IntervalState.Completed;
+        this.remainingTime = this.timer.totalTimeISO;
+      });
   }
 
   onAction(emission: FabEmission) {
