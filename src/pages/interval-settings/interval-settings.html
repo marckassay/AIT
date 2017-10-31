@@ -4,23 +4,23 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding *ngIf="data">
   <div class="mini-display">
     <div class="div-grid">
       <ion-grid>
         <ion-row justify-content-start nowrap>
           <ion-col align-self-baseline>
-            <div class="active">{{data?.activerest.upper}}</div>
+            <div class="active">{{data.activerest.upper}}</div>
           </ion-col>
           <ion-col align-self-baseline>
-            <div class="rest">\/{{data?.activerest.lower}}</div>
+            <div class="rest">\/{{data.activerest.lower}}</div>
           </ion-col>
           <ion-col col-10 col-auto></ion-col>
         </ion-row>
         <ion-row justify-content-end nowrap>
           <ion-col col-11 col-auto></ion-col>
           <ion-col align-self-baseline>
-            <div class="interval">1\/{{data?.intervals}}</div>
+            <div class="interval">1\/{{data.intervals}}</div>
           </ion-col>
         </ion-row>
         <ion-row justify-content-start>
@@ -64,7 +64,8 @@
     <ion-item-group>
       <ion-item-divider>
         Active Countdown Warnings
-        <button ion-button item-end (click)="inform()" class="pause" color="information" clear>
+        <button *ngIf="appSoundsDisabled || appVibratorDisabled" ion-button item-end clear class="pause" color="information"
+                (click)="inform()" >
           <ion-icon class="material-icons">warning</ion-icon>
         </button>
       </ion-item-divider>

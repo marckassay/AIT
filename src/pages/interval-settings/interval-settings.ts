@@ -1,23 +1,40 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { IonicPage, ToastController } from 'ionic-angular';
+import { Component, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { IonicPage, ToastController, MenuController } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
-import { IntervalStorageData } from '../../app/app.component';
+import { IntervalStorageData, AppStorageData } from '../../app/app.component';
 
 @IonicPage()
 @Component({
   selector: 'page-interval-settings',
   templateUrl: 'interval-settings.html',
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class IntervalSettingsPage {
+
+  appSoundsDisabled: boolean;
+  appVibratorDisabled: boolean;
+
   constructor(public storage: AITStorage,
-              public toastCtrl: ToastController) {
-  }
+              public menuCtrl: MenuController,
+              public toastCtrl: ToastController,
+              public ngDectector: ChangeDetectorRef) { }
 
   initialize(uuid: string): void {
-    this.storage.getItem(uuid).then((value) => {
-      this.data = <IntervalStorageData>value;
+    this.menuCtrl.get('right').ionOpen.subscribe(() => {
+      this.storage.getItem(uuid).then((value) => {
+        this.data = (value as IntervalStorageData);
+
+        // need this to refresh the view.
+        this.ngDectector.detectChanges();
+      });
+      this.storage.getItem(AITStorage.APP_ID).then((value) => {
+        this.appSoundsDisabled = !(value as AppStorageData).sound;
+        this.appVibratorDisabled = !(value as AppStorageData).vibrate;
+
+        // need this to refresh the view.
+        this.ngDectector.detectChanges();
+      });
     });
   }
 
@@ -43,9 +60,22 @@ export class IntervalSettingsPage {
   }
 
   inform(): void {
+    let bmesg = (this.appSoundsDisabled)?1:0;
+    bmesg += (this.appVibratorDisabled)?2:0;
+    bmesg += (bmesg == 3)?4:0;
+
+    let smesg: string;
+    if(bmesg == 1) {
+      smesg = 'sound is muted';
+    } else if (bmesg == 2) {
+      smesg = 'vibrate is turned-off';
+    } else {
+      smesg = 'sound is muted and vibrate is turned-off';
+    }
+
     let toast = this.toastCtrl.create({
-      message: "AiT sounds are currently turned-off.  Go to 'AiT Settings' page and adjust accordingly.",
-      duration: 3000,
+      message: "AiT's "+smesg+". Go to 'AiT Settings' page and adjust accordingly.",
+      duration: 5000,
       dismissOnPageChange: true,
       position: 'top'
     });
