@@ -75,8 +75,8 @@ export class AnotherIntervalTimer {
     // always advance the timelinePosition to by-pass the first rest segment of the first
     // interval.  Because the CountdownTimer will give us the audibles and visuals. we
     // dont want to get-ready for the start of a rest period...
-    this.timelinePosition = (this.restTime * this.precision)-1;
-    this.state = IntervalState.RestStopWarning;
+    this.timelinePosition = (this.restTime * this.precision);
+    this.state = IntervalState.ActiveStart;
     this.remainingIntervalTime = 1;
     this.currentInterval = this.intervals -1;
 
