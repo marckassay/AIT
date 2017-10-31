@@ -16,18 +16,27 @@
       <ion-label>sound</ion-label>
     </ion-item>
 
-    <ion-list radio-group >
-      <ion-list-header>
-        General Theme
-      </ion-list-header>
-      <ion-item>
-        <ion-label>light theme</ion-label>
-        <ion-radio checked={{data.lighttheme}} (ionSelect)="toggleLightTheme(true)"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>dark theme</ion-label>
-        <ion-radio checked={{!data.lighttheme}} (ionSelect)="toggleLightTheme(false)"></ion-radio>
-      </ion-item>
+    <ion-list radio-group>
+      <ion-item-group>
+        <ion-item-divider>Base Theme</ion-item-divider>
+        <ion-item>
+          <ion-label>light theme</ion-label>
+          <ion-radio checked={{data.lighttheme}} (ionSelect)="toggleLightTheme(true)"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>dark theme</ion-label>
+          <ion-radio checked={{!data.lighttheme}} (ionSelect)="toggleLightTheme(false)"></ion-radio>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+    <ion-list radio-group>
+      <ion-item-group>
+        <ion-item-divider>Accent Theme</ion-item-divider>
+        <ion-item>
+          <ion-label>Material Design 500 - RGB</ion-label>
+          <ion-radio checked="true" (ionSelect)="toggleAccentTheme('md-500-rgb')"></ion-radio>
+        </ion-item>
+      </ion-item-group>
     </ion-list>
   </ng-container>
 </ion-content>

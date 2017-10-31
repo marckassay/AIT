@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, ToastController } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
@@ -11,7 +11,8 @@ import { IntervalStorageData } from '../../app/app.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class IntervalSettingsPage {
-  constructor(public storage: AITStorage) {
+  constructor(public storage: AITStorage,
+              public toastCtrl: ToastController) {
   }
 
   initialize(uuid: string): void {
@@ -39,6 +40,16 @@ export class IntervalSettingsPage {
 
   dataChanged(property:string):void {
     this.storage.setItem(this.data);
+  }
+
+  inform(): void {
+    let toast = this.toastCtrl.create({
+      message: "AiT sounds are currently turned-off.  Go to 'AiT Settings' page and adjust accordingly.",
+      duration: 3000,
+      dismissOnPageChange: true,
+      position: 'top'
+    });
+    toast.present();
   }
 
   _data: IntervalStorageData;

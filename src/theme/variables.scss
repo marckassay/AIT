@@ -25,31 +25,33 @@ $app-direction: ltr;
 $app-accent-colors500: (
   primary: (
     base: #03a9f4,
-    contrast: #EEEEEE
+    contrast: #eeeeee
   ),
   secondary: (
     base: #67daff,
-    contrast: #EEEEEE
+    contrast: #eeeeee
   ),
-  go : #4caf50,
-  stop : #f44336,
-  getready : #ffeb3b,
-  light : #EEEEEE
+  go: #4caf50,
+  stop: #f44336,
+  getready: #ffeb3b,
+  light: #eeeeee
 );
 
 // https://material.io/guidelines/style/color.html#color-themes
 $app-theme-dark: (
-  strongest : #000000,
-  strong : #212121,
+  strongest: #000000,
+  strong: #212121,
   weak: #303030,
-  weakest: #424242
-);
+  weakest: #424242,
+  information: #ffc107 // Amber - 500
+  );
 
 $app-theme-light: (
-  strongest :#e0e0e0,
-  strong :#f5f5f5,
-  weak:#fafafa,
-  weakest:#ffffff
+  strongest: #e0e0e0,
+  strong: #f5f5f5,
+  weak: #fafafa,
+  weakest: #ffffff,
+  information : #ffc107 // Amber - 500
 );
 
 .theme-dark {
@@ -125,10 +127,15 @@ $toolbar-wp-title-text-color:	$toolbar-title-text-color;
 $list-background-color: color($colors, weak);
 $font-size-base: 1.4rem;
 
-$list-header-font-size: 1.6rem;
+$list-header-font-size: 1.8rem;
 $list-ios-header-font-size: $list-header-font-size;
 $list-md-header-font-size: $list-header-font-size;
 $list-wp-header-font-size: $list-header-font-size;
+
+$item-divider-background-color: color($colors, strong);
+$item-ios-divider-background: $item-divider-background-color;
+$item-md-divider-background: $item-divider-background-color;
+$item-wp-divider-background: $item-divider-background-color;
 
 //$grid-max-widths:	( sm: 540px, md: 720px, lg: 960px, xl: 1140px )
 

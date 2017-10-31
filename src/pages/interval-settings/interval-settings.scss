@@ -29,6 +29,16 @@ page-interval-settings {
 }
 
 page-interval-settings>ion-content {
+  .mini-display {
+    margin-bottom: 10px;
+  }
+
+  .scroll-content {
+    top: 50px;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+
   .div-grid {
     display: -ms-flexbox;
     display: -webkit-flex;

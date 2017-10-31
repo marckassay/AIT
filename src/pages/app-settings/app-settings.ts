@@ -48,6 +48,17 @@ export class AppSettingsPage {
     this._data.lighttheme = value;
   }
 
+  toggleAccentTheme(value: string) {
+    switch (value) {
+      case 'md-500-rgb':
+
+        break;
+
+      default:
+        break;
+    }
+  }
+
   _data: AppStorageData;
   get data(): AppStorageData {
     return this._data;
