@@ -9,4 +9,9 @@ page-app-settings {
     font-family: selawk;
     color: $toolbar-title-text-color;
   }
+
+  .ait-brand {
+    font-family: 'sourcecodeprosb';
+    color: appColor(contrast);
+  }
 }

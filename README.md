@@ -1,26 +1,25 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+![Welcome webpage](resources/github/Ait180x180.png)
 
-## How to use this template
+Another interval timer (AiT) that targets portable devices for your timing needs.  This application has been intended for interval workouts, where there are active and inactive segments.
 
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
+Features in this application are:
+* Adjustable parameters for segments and amount of countdown time before starting interval timer.
+* Enable/disable 5, 10 and 15 second warnings to indicate active segment is ending.
+* Light or dark background for main display.
 
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
+Planned features:
+* Application base themes (Light and Dark) and accent themes (eg: 'RGB and sometimes Y')
+* Countdown timer.
+* Stopwatch that laps on a tap.
+* Revamp timer with seqences.  For instance, 10 sec countdown, followed by 12 minute workout and 10 minute timer.
+* Fullscreen mode when timer is running.
 
-### With the Ionic CLI:
+![Welcome webpage](resources/github/andriod-left-to-right.png)
+## About
+This is an Ionic 3.8 project that is intended to target Android and iOS devices.  Ionic leverages Angular, Cordova, RxJS, Sass, TypeScript and Webpack, to name a few.  This was my first project using Ionic.
 
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
+I plan to have this available on Google Play and Apple iTunes in the next few weeks (e.t.a. 11/30/2017)
 
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
-```
 
-Then, to run it, cd into `myBlank` and run:
-
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
-```
-
-Substitute ios for android if not on a Mac.
-
+## Feedback
+Let me know if this is helpful!  Use the Issues section for questions, bugs or requests.
