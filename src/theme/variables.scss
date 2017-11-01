@@ -43,7 +43,8 @@ $app-theme-dark: (
   strong: #212121,
   weak: #303030,
   weakest: #424242,
-  information: #ffc107 // Amber - 500
+  information: #ffc107, // Amber - 500
+  contrast: #f5f5f5
   );
 
 $app-theme-light: (
@@ -51,7 +52,8 @@ $app-theme-light: (
   strong: #f5f5f5,
   weak: #fafafa,
   weakest: #ffffff,
-  information : #ffc107 // Amber - 500
+  information : #ffc107, // Amber - 500
+  contrast: #212121
 );
 
 .theme-dark {

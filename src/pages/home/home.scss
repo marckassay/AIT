@@ -3,6 +3,16 @@ page-home {
     background-color: $side-background;
   }
 
+  .toolbar-title {
+    margin: 6px;
+    padding: 0 6px;
+    font-size: 3rem;
+    font-family: 'sourcecodeprosb';
+    width: fit-content;
+    color: appColor(strong);
+    background-color: appColor(contrast);
+  }
+
   ion-header {
     position: relative;
   }
