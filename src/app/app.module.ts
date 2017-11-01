@@ -8,28 +8,32 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Insomnia } from '@ionic-native/insomnia';
 
 import { AppComponent } from './app.component'
-import { IntervalDisplayPage, IntervalSettingsPage, AppSettingsPage } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage, AppSettingsPage, HomePage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { AITStorage } from './core/AITStorage';
 import { IonicStorageModule } from '@ionic/storage';
 import { Vibration } from '@ionic-native/vibration';
-import { HomePage } from '../pages/home/home';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { AITSignal } from './core/AITSignal';
+import { AppSettingsPageModule } from '../pages/app-settings/app-settings.module';
+import { HomePageModule } from '../pages/home/home.module';
+import { IntervalDisplayPageModule } from '../pages/interval-display/interval-display.module';
+import { IntervalSettingsPageModule } from '../pages/interval-settings/interval-settings.module';
+import { FabContainerComponentModule } from './components/fabcontainer.component/fabcontainer.component.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    IntervalDisplayPage,
-    IntervalSettingsPage,
-    HomePage,
-    AppSettingsPage,
-    FabContainerComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
+    HomePageModule,
+    AppSettingsPageModule,
+    IntervalDisplayPageModule,
+    FabContainerComponentModule,
+    IntervalSettingsPageModule,
     IonicStorageModule.forRoot({
-      name: '__mydb',
+      name: '__aitdb',
          driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
     IonicModule.forRoot(AppComponent, {
@@ -41,6 +45,7 @@ import { AITSignal } from './core/AITSignal';
     AppComponent,
     IntervalDisplayPage,
     IntervalSettingsPage,
+    FabContainerComponent,
     HomePage,
     AppSettingsPage
   ],

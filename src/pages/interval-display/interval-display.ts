@@ -64,37 +64,19 @@ export class IntervalDisplayPage {
               public ngDectector: ChangeDetectorRef) {
 
     menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
-      console.log("i-d: ionClose");
       this.preinitializeDisplay();
     });
   }
 
-  ionViewWillEnter() {
-    console.log("i-d: ionViewWillEnter");
-    //this.preinitializeDisplay();
-  }
-
-  ionViewDidLoad() {
-    console.log("i-d: ionViewDidLoad");
-    //this.preinitializeDisplay();
-  }
-
   ionViewDidEnter () {
-    console.log("i-d: ionViewDidEnter");
     this.menuCtrl.enable(true, 'left');
     this.menuCtrl.enable(true, 'right');
     this.preinitializeDisplay();
   }
-  ionViewWillLeave () {
-    console.log("i-d: ionViewWillLeave")
-  }
-  ionViewDidLeave () {
-    console.log("i-d: ionViewDidLeave")
-  }
 
   preinitializeDisplay(): void {
     const uuid = (this.navParams.data)?this.navParams.data:this.current_uuid;
-    console.log(uuid);
+
     if(uuid) {
       this.menu.reset();
       if((<Subscription>this.subscription) && !this.subscription.closed) {
@@ -104,7 +86,7 @@ export class IntervalDisplayPage {
         this.data = (value as IntervalStorageData);
         this.initializeDisplay();
       }).catch((reject) => {
-        console.log("interval-display preinitializeDisplay error")
+        //console.log("interval-display preinitializeDisplay error")
       });
     }
   }
@@ -142,7 +124,7 @@ export class IntervalDisplayPage {
           this.signal.triple();
         }
 
-        console.log(e.state);
+        //console.log(e.state);
 
         // TODO: this is indicitive to poor code design.  UI is expecting a specific
         // type but we are subscribe with rxjs for two types.
@@ -156,7 +138,7 @@ export class IntervalDisplayPage {
           this.remainingTime = e.remainingTime;
         }
       }, (error) => {
-        console.log(error);
+        //console.log(error);
         this._state = IntervalState.Error;
       }, () => {
         // TODO: this never gets hit.  AnotherIntervalTimer is not emitting Completed.

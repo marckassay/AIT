@@ -38,16 +38,16 @@ export class AppComponent {
       splashScreen.hide();
       screenOrientation.unlock();
     });
-
+    /*
     platform.backButton.subscribe(() => {
       console.log("Device's back-button clicked!");
     });
-
+    */
     this.checkAppStartupData(3);
   }
 
   checkAppStartupData(attempts: number) {
-    console.log("checkAppStartupData call, attempt number: "+attempts);
+    //console.log("checkAppStartupData call, attempt number: "+attempts);
     this.storage.checkAppStartupData().then(() => {
       this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 

@@ -29,7 +29,7 @@ export class AppSettingsPage {
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = <AppStorageData>value;
     }).catch((reject) => {
-      console.log("app-settings storage error");
+      //console.log("app-settings storage error");
     });
   }
 
