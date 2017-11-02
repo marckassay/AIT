@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
 import { AITSignal } from '../../app/core/AITSignal';
+import { Insomnia } from '@ionic-native/insomnia';
 
 @IonicPage()
 @Component({
@@ -61,7 +62,8 @@ export class IntervalDisplayPage {
               public menuCtrl: MenuController,
               public AITStorage: AITStorage,
               public signal: AITSignal,
-              public ngDectector: ChangeDetectorRef) {
+              public ngDectector: ChangeDetectorRef,
+              public insomnia: Insomnia) {
 
     menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
       this.preinitializeDisplay();
@@ -134,6 +136,7 @@ export class IntervalDisplayPage {
           this.remainingIntervalTime = (e as IIntervalEmission).remainingIntervalTime;
           this.remainingTime = e.remainingTime;
         } else {
+          this.insomnia.allowSleepAgain();
           this._state = IntervalState.Countdown;
           this.remainingTime = e.remainingTime;
         }
@@ -153,18 +156,24 @@ export class IntervalDisplayPage {
     {
       case FabAction.Home:
         this.timer.pause();
+        this.insomnia.allowSleepAgain();
         this.menuCtrl.open("left");
         break;
       case FabAction.Start:
         this.timer.play();
+        this.insomnia.keepAwake();
         break;
-      case FabAction.Pause:
+        case FabAction.Pause:
         this.timer.pause();
+        this.insomnia.allowSleepAgain();
         break;
       case FabAction.Reset:
         this.preinitializeDisplay();
+        this.insomnia.allowSleepAgain();
         break;
       case FabAction.Program:
+        this.timer.pause();
+        this.insomnia.allowSleepAgain();
         this.menuCtrl.open("right");
         break;
     }
