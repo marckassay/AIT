@@ -11,7 +11,7 @@ Planned features:
 * Application base themes (Light and Dark) and accent themes (eg: 'RGB and sometimes Y')
 * Countdown timer.
 * Stopwatch that laps on a tap.
-* Revamp timer with seqences.  For instance, 10 sec countdown, followed by 12 minute workout and 10 minute timer.
+* Revamp timer with seqences.  For instance, 10 sec countdown, followed by 12 minute interval session, followed by 10 minute timer.
 * Fullscreen mode when timer is running.
 
 ![Android screenshots](resources/github/android-left-to-right.png)

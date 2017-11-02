@@ -9,6 +9,7 @@ import { HomeEmission, HomeAction } from '../pages/home/home';
 import { AppSettingsPage } from '../pages/app-settings/app-settings';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
+import { Insomnia } from '@ionic-native/insomnia';
 
 @Component({
   templateUrl: 'app.html'
@@ -28,6 +29,7 @@ export class AppComponent {
               statusBar: StatusBar,
               splashScreen: SplashScreen,
               screenOrientation: ScreenOrientation,
+              private insomnia: Insomnia,
               public settings: ThemeSettingsProvider,
               public menuCtrl: MenuController,
               public storage: AITStorage,
@@ -37,6 +39,7 @@ export class AppComponent {
       statusBar.styleDefault();
       splashScreen.hide();
       screenOrientation.unlock();
+      insomnia.keepAwake();
     });
     /*
     platform.backButton.subscribe(() => {

@@ -27,3 +27,7 @@ html {
  @function appColor($name) {
   @return color($colors, $name);
  }
+
+ ion-nav {
+  box-shadow: rgba(0, 0, 0, 0.2) 0em 0em 3px 3px;
+ }
