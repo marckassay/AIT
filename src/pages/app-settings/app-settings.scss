@@ -1,5 +1,4 @@
-
-page-app-settings {
+%theme-mix {
   .content-ios, .content-md, .content-wp {
     background-color: $side-background;
   }
@@ -14,4 +13,14 @@ page-app-settings {
     font-family: 'sourcecodeprosb';
     color: appColor(contrast);
   }
+}
+
+.theme-light page-app-settings{
+  @include theme-merger($accent-theme-RGBandY, $base-theme-light);
+  @extend %theme-mix;
+
+}
+.theme-dark page-app-settings{
+  @include theme-merger($accent-theme-RGBandY, $base-theme-dark);
+  @extend %theme-mix;
 }

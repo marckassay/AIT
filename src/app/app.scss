@@ -28,6 +28,8 @@ html {
   @return color($colors, $name);
  }
 
+ // This is to create drop shadow from the main-display on the side menus
+ // that get revealed from underneath.
  ion-nav {
   box-shadow: rgba(0, 0, 0, 0.2) 0em 0em 3px 3px;
  }

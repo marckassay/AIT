@@ -1,0 +1,12 @@
+@import 'accent-theme-RGBandY';
+@import 'custom.variables';
+
+// https://material.io/guidelines/style/color.html#color-themes
+$base-theme-dark: (
+  strongest: #000000,
+  strong: #212121,
+  weak: #303030,
+  weakest: #424242,
+  information: #ffc107, // Amber - 500
+  contrast: #f5f5f5
+);

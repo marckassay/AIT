@@ -1,0 +1,79 @@
+$accent-theme-RGBandY: (
+  primary: (
+    base: #03a9f4,
+    contrast: #eeeeee
+  ),
+  secondary: (
+    base: #67daff,
+    contrast: #eeeeee
+  ),
+  go: #4caf50,
+  stop: #f44336,
+  getready: #ffc107,
+  light: #eeeeee
+);
+
+// https://material.io/guidelines/style/color.html#color-themes
+$base-theme-light: (
+  strongest: #e0e0e0,
+  strong: #f5f5f5,
+  weak: #fafafa,
+  weakest: #ffffff,
+  information : #ffc107, // Amber - 500
+  contrast: #212121
+);
+
+
+  $colors: map-merge($map1: $accent-theme-RGBandY, $map2: $base-theme-light);
+  $background-color: color($colors, strongest);
+
+  $side-background: color($colors, weak);
+  $side-toolbar-background: color($colors, strong);
+  $sidemenu-ui-background-fill: color($colors, weakest);
+
+  $button-ios-background-color: $sidemenu-ui-background-fill;
+  $button-md-background-color: $sidemenu-ui-background-fill;
+  $button-wp-background-color: $sidemenu-ui-background-fill;
+
+  $home-icon-fill: color($colors, primary);
+
+  // used on home page for the (rest) interval icon; to differeniate the two types.
+  $home-icon-fill-light: lighten($home-icon-fill, 30%);
+
+  // when the countdown is attached to the beginning of a sequence, dim the display.
+  $display-disabled: transparentize(lighten(color($colors, go), 10%), .8);
+
+  $toggle-handle-background-color-off: color($colors, light) !default;
+  $toggle-ios-handle-background-color-off: $toggle-handle-background-color-off;
+  $toggle-md-handle-background-color-off: $toggle-handle-background-color-off;
+  $toggle-wp-handle-background-color-off: $toggle-handle-background-color-off;
+
+  $toolbar-background: $side-toolbar-background;
+  $toolbar-io-background: $toolbar-background;
+  $toolbar-md-background: $toolbar-background;
+  $toolbar-wp-background: $toolbar-background;
+
+  $toolbar-title-text-color: color-contrast($colors, $toolbar-background);
+  $toolbar-io-title-text-color:	$toolbar-title-text-color;
+  $toolbar-md-title-text-color:	$toolbar-title-text-color;
+  $toolbar-wp-title-text-color:	$toolbar-title-text-color;
+
+  // ion-item
+  $list-background-color: color($colors, weak);
+  $font-size-base: 1.4rem;
+
+  $list-header-font-size: 1.8rem;
+  $list-ios-header-font-size: $list-header-font-size;
+  $list-md-header-font-size: $list-header-font-size;
+  $list-wp-header-font-size: $list-header-font-size;
+
+  $item-divider-background-color: color($colors, strong);
+  $item-ios-divider-background: $item-divider-background-color;
+  $item-md-divider-background: $item-divider-background-color;
+  $item-wp-divider-background: $item-divider-background-color;
+
+
+
+.theme-test {
+  background-color: #c23939;
+}
