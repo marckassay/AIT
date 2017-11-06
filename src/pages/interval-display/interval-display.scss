@@ -1,0 +1,154 @@
+$font-size-go-portrait:         60vw;
+$font-size-go-landscape:        50vh;
+$font-size-stop-portrait:       15vw;
+$font-size-stop-landscape:      10vh;
+$font-size-interval-portrait:   25vw;
+$font-size-interval-landscape:  25vh;
+$font-size-time-portrait:       25vw;
+$font-size-time-landscape:      25vh;
+
+@mixin theme-apply-map ($map) {
+  ion-grid {
+    width: 100%;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    height: 100%;
+    height: -moz-available;
+    height: -webkit-fill-available;
+  }
+
+  .activeGo {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
+    color: map-get($map, go);
+  }
+
+  .activeLoaded {
+    @extend .activeGo;
+    color: map-get($map, getready);
+  }
+
+  .activeStop {
+    @extend .activeGo;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+    color: map-get($map, go);
+  }
+
+  .activeCompleted {
+    @extend .activeGo;
+    color: map-get($map, primary);
+  }
+
+  .activeGetReady {
+    @extend .activeStop;
+    color: map-get($map, getready);
+  }
+
+  .activeCountdown {
+    @extend .activeGo;
+    color: map-get($map, display-disabled);
+  }
+
+  .restGo {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
+    color: map-get($map, stop);
+  }
+
+  .restStop {
+    @extend .restGo;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+  }
+
+  .restLoaded {
+    @extend .restStop;
+    color: map-get($map, getready);
+  }
+
+  .restGetReady {
+    @extend .restStop;
+    color: map-get($map, getready);
+  }
+
+  .restCompleted {
+    @extend .restStop;
+    color: map-get($map, primary);
+  }
+
+  .restCountdown {
+    @extend .restStop;
+    color: map-get($map, display-disabled);
+  }
+
+  #intervalColPortrait {
+    @media screen and (orientation:portrait) { display: inherit; }
+    @media screen and (orientation:landscape) { display: none; }
+  }
+  #intervalColLandscape {
+    @media screen and (orientation:portrait) { display: none; }
+    @media screen and (orientation:landscape) { display: inherit; }
+  }
+
+  .intervalGo {
+    font-family: selawk;
+    @media screen and (orientation:portrait) { font-size: $font-size-interval-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-interval-landscape; }
+    color: map-get($map, go);
+  }
+
+  .intervalGetReady, .intervalLoaded{
+    @extend .intervalGo;
+    color: map-get($map, getready);
+  }
+
+  .intervalStop {
+    @extend .intervalGo;
+    color: map-get($map, stop);
+  }
+
+  .intervalCountdown {
+    @extend .intervalGo;
+    color: map-get($map, display-disabled);
+  }
+
+  .intervalCompleted {
+    @extend .intervalGo;
+    color: map-get($map, primary);
+  }
+
+  .timeGo {
+    font-family: selawk;
+    @media screen and (orientation:portrait) { font-size: $font-size-time-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-time-landscape; }
+    color: map-get($map, go);
+  }
+
+  .timeGetReady, .timeLoaded, .timeCountdown{
+    @extend .timeGo;
+    color: map-get($map, getready);
+  }
+
+  .timeStop {
+    @extend .timeGo;
+    color: map-get($map, stop);
+  }
+
+  .timeCompleted {
+    @extend .timeGo;
+    color: map-get($map, primary);
+  }
+}
+
+.theme-light page-interval-display {
+  $map: theme-get-map($accent-theme-RGBandY, $base-theme-light);
+  @include theme-apply-map($map);
+}
+
+.theme-dark page-interval-display {
+  $map: theme-get-map($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-apply-map($map);
+}
