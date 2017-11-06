@@ -27,7 +27,12 @@ $app-direction: ltr;
 @import "accent-theme-RGBandY";
 @import "custom.variables";
 
-//@import "theme-test";
+// Ait overides Ionic variables...
+$font-size-base: 1.4rem;
+$list-header-font-size: 1.8rem;
+$list-ios-header-font-size: $list-header-font-size;
+$list-md-header-font-size: $list-header-font-size;
+$list-wp-header-font-size: $list-header-font-size;
 
 // App iOS Variables
 // --------------------------------------------------

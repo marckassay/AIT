@@ -1,26 +1,26 @@
-%theme-mix {
+@mixin theme-mix ($theme-map) {
   .content-ios, .content-md, .content-wp {
-    background-color: $side-background;
+    background-color: map-get($theme-map, side-background);
   }
 
   ion-label,
   ion-input {
     font-family: selawk;
-    color: $toolbar-title-text-color;
+    color: map-get($theme-map, toolbar-title-text-color);
   }
 
   .ait-brand {
     font-family: 'sourcecodeprosb';
-    color: appColor(contrast);
+    color: map-get($theme-map, contrast)
   }
 }
 
-.theme-light page-app-settings{
-  @include theme-merger($accent-theme-RGBandY, $base-theme-light);
-  @extend %theme-mix;
-
+.theme-light page-app-settings {
+  $theme-map: theme-merger($accent-theme-RGBandY, $base-theme-light);
+  @include theme-mix($theme-map);
 }
-.theme-dark page-app-settings{
-  @include theme-merger($accent-theme-RGBandY, $base-theme-dark);
-  @extend %theme-mix;
+
+.theme-dark page-app-settings {
+  $theme-map: theme-merger($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-mix($theme-map);
 }
