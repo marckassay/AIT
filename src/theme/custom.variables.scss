@@ -65,7 +65,7 @@
   @return null;
 }
 
-@function theme-merger($accent, $base) {
+@function theme-get-map($accent, $base) {
   $colors: map-merge($accent, $base);
 
   $primary: color($colors, primary);
@@ -77,6 +77,10 @@
   $go: color($colors, go);
 
   @return (
+    strongest: $strongest,
+    strong: $strong,
+    weak: $weak,
+    weakest: $weakest,
     background-color: $strongest,
     side-background: $weak,
     side-toolbar-background: $strong,
