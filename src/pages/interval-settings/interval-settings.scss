@@ -1,111 +1,112 @@
-$font-size-active-portrait : 10vw;
-$font-size-active-landscape : 10vh;
-$font-size-rest-portrait : 7vw;
-$font-size-rest-landscape : 7vh;
-$font-size-interval-portrait : 7vw;
-$font-size-interval-landscape : 7vh;
-$font-size-totaltime-portrait : 7vw;
-$font-size-totaltime-landscape: 7vh;
-$font-size-countdown-portrait : 6vw;
-$font-size-countdown-landscape: 6vh;
-
 @mixin theme-apply-map ($map) {
+  $font-size-active-portrait : 10vw;
+  $font-size-active-landscape : 10vh;
+  $font-size-rest-portrait : 7vw;
+  $font-size-rest-landscape : 7vh;
+  $font-size-interval-portrait : 7vw;
+  $font-size-interval-landscape : 7vh;
+  $font-size-totaltime-portrait : 7vw;
+  $font-size-totaltime-landscape: 7vh;
+  $font-size-countdown-portrait : 6vw;
+  $font-size-countdown-landscape: 6vh;
+
   .content-ios, .content-md, .content-wp {
     background-color: map-get($map,side-background);
   }
+
   ion-label {
     font-family: selawk;
     color: map-get($map,toolbar-title-text-color);
   }
+
   ion-input {
     font-family: selawk;
     color: map-get($map,toolbar-title-text-color);
     // matching size the same as ion-title, which is in the left side-menu.
     font-size: $toolbar-md-title-font-size;
   }
+
   ion-range {
     margin: 5px 0;
   }
 
-  page-interval-settings>ion-content {
-    .mini-display {
-      margin-bottom: 10px;
-    }
+  .mini-display {
+    margin-bottom: 10px;
+  }
 
-    .scroll-content {
-      padding-left: 1px !important;
-      padding-right: 1px !important;
-    }
+  .scroll-content {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
 
-    .div-grid {
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      -ms-flex-align: center;
-      -webkit-align-items: center;
-      -webkit-box-align: center;
-      align-items: center;
-      ion-grid {
-        width: 50% !important;
-      }
+  .div-grid {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
+    ion-grid {
+      width: 50% !important;
     }
-    .go-color {
-      color: map-get($map, go);
+  }
+  .go-color {
+    color: map-get($map, go);
+  }
+  .stop-color {
+    color: map-get($map, stop);
+  }
+  .active {
+    font-family: selawksb;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-active-portrait;
     }
-    .stop-color {
-      color: map-get($map, stop);
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-active-landscape;
     }
-    .active {
-      font-family: selawksb;
-      @media screen and (orientation: portrait) {
-        font-size: $font-size-active-portrait;
-      }
-      @media screen and (orientation:landscape) {
-        font-size: $font-size-active-landscape;
-      }
-      color: map-get($map, go);
+    color: map-get($map, go);
+  }
+  .rest {
+    font-family: selawksb;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-rest-portrait;
     }
-    .rest {
-      font-family: selawksb;
-      @media screen and (orientation: portrait) {
-        font-size: $font-size-rest-portrait;
-      }
-      @media screen and (orientation:landscape) {
-        font-size: $font-size-rest-landscape;
-      }
-      color: map-get($map, stop);
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-rest-landscape;
     }
-    .interval {
-      font-family: selawk;
-      @media screen and (orientation: portrait) {
-        font-size: $font-size-interval-portrait;
-      }
-      @media screen and (orientation:landscape) {
-        font-size: $font-size-interval-landscape;
-      }
-      color: map-get($map, go);
+    color: map-get($map, stop);
+  }
+  .interval {
+    font-family: selawk;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-interval-portrait;
     }
-    .totaltime {
-      font-family: selawk;
-      @media screen and (orientation: portrait) {
-        font-size: $font-size-totaltime-portrait;
-      }
-      @media screen and (orientation:landscape) {
-        font-size: $font-size-totaltime-landscape;
-      }
-      color: map-get($map, go);
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-interval-landscape;
     }
-    .countdown {
-      font-family: selawk;
-      @media screen and (orientation: portrait) {
-        font-size: $font-size-countdown-portrait;
-      }
-      @media screen and (orientation:landscape) {
-        font-size: $font-size-countdown-landscape;
-      }
-      margin-left: 20px;
-      color: map-get($map, toolbar-title-text-color);
+    color: map-get($map, go);
+  }
+  .totaltime {
+    font-family: selawk;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-totaltime-portrait;
     }
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-totaltime-landscape;
+    }
+    color: map-get($map, go);
+  }
+  .countdown {
+    font-family: selawk;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-countdown-portrait;
+    }
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-countdown-landscape;
+    }
+    margin-left: 20px;
+    color: map-get($map, toolbar-title-text-color);
   }
 }
 

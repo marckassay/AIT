@@ -10,27 +10,27 @@
       <ion-grid>
         <ion-row justify-content-start nowrap>
           <ion-col align-self-baseline>
-            <div class="active">{{data.activerest.upper}}</div>
+            <div><span class="active">{{data.activerest.upper}}</span></div>
           </ion-col>
           <ion-col align-self-baseline>
-            <div class="rest">/{{data.activerest.lower}}</div>
+            <div><span class="rest">/{{data.activerest.lower}}</span></div>
           </ion-col>
           <ion-col col-10 col-auto></ion-col>
         </ion-row>
         <ion-row justify-content-end nowrap>
           <ion-col col-11 col-auto></ion-col>
           <ion-col align-self-baseline>
-            <div class="interval">1/{{data.intervals}}</div>
+            <div><span class="interval">1/{{data.intervals}}</span></div>
           </ion-col>
         </ion-row>
         <ion-row justify-content-start>
           <ion-col>
-            <div class="totaltime">{{totaltime}}</div>
+            <div><span class="totaltime">{{totaltime}}</span></div>
           </ion-col>
         </ion-row>
       </ion-grid>
     </div>
-    <div class="countdown">{{countdownLabel}} secs (countdown to start)</div>
+    <div><span class="countdown">{{countdownLabel}} secs (countdown to start)</span></div>
   </div>
   <div *ngIf="data">
     <ion-item-group>

@@ -2,14 +2,24 @@
   $colors: map-merge($accent, $base);
 
   $primary: color($colors, primary);
+  $secondary: color($colors, secondary);
+  $go: color($colors, go);
+  $stop: color($colors, stop);
+  $getready: color($colors, getready);
   $light: color($colors, light);
+
   $strongest: color($colors, strongest);
   $strong: color($colors, strong);
   $weak: color($colors, weak);
   $weakest: color($colors, weakest);
-  $go: color($colors, go);
 
   @return (
+    primary: $primary,
+    secondary: $secondary,
+    go: $go,
+    stop: $stop,
+    getready: $getready,
+    light: $light,
     strongest: $strongest,
     strong: $strong,
     weak: $weak,
