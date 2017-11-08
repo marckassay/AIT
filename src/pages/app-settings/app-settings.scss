@@ -3,7 +3,7 @@
     background-color: map-get($map, side-background);
   }
 
-  .toolbar-title {
+  ion-navbar > button, .toolbar-title {
     color: map-get($map, toolbar-title-text-color);
   }
 
