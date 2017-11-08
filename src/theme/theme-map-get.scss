@@ -32,9 +32,9 @@
     button-wp-background-color: $weakest,
     home-icon-fill: $primary,
     // used on home page for the (rest) interval icon, to differeniate the two types.
-    home-icon-fill-light: lighten($primary, 30%),
+    home-icon-fill-light: $secondary,
     // when the countdown is attached to the beginning of a sequence, dim the display.
-    display-disabled: transparentize(lighten($go, 10%), .8),
+    display-disabled: transparentize(lighten($getready, 10%), .8),
     toggle-ios-handle-background-color-off: $light,
     toggle-md-handle-background-color-off: $light,
     toggle-wp-handle-background-color-off: $light,

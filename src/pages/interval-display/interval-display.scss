@@ -15,7 +15,7 @@ $font-size-time-landscape:      25vh;
     height: 100%;
     height: -moz-available;
     height: -webkit-fill-available;
-    background-color: map-get($map, strong);
+    background-color: map-get($map, strongest);
   }
 
   .activeGo {
