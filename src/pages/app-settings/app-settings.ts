@@ -41,18 +41,14 @@ export class AppSettingsPage {
     this.storage.setItem(this.data);
   }
 
-  toggleLightTheme(value: boolean) {
-    if (value === true) {
-      this.settings.base = BaseTheme.Light;
-    } else {
-      this.settings.base = BaseTheme.Dark;
-    }
-
-    this._data.lighttheme = value;
+  toggleBaseTheme(value: BaseTheme) {
+    this.settings.base = value;
+    this._data.base = value;
   }
 
   toggleAccentTheme(value: AccentTheme) {
     this.settings.accent = value;
+    this._data.accent = value;
   }
 
   _data: AppStorageData;

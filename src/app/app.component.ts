@@ -7,7 +7,7 @@ import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { AITStorage } from './core/AITStorage';
 import { HomeEmission, HomeAction } from '../pages/home/home';
 import { AppSettingsPage } from '../pages/app-settings/app-settings';
-import { ThemeSettingsProvider, BaseTheme } from './core/ThemeSettingsProvider';
+import { ThemeSettingsProvider, BaseTheme, AccentTheme } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -52,7 +52,8 @@ export class AppComponent {
       this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 
         if(value) {
-          this.settings.base = (value.lighttheme)? BaseTheme.Light:BaseTheme.Dark;
+          this.settings.base = <BaseTheme>value.base;
+          this.settings.accent = <AccentTheme>value.accent;
 
           this.settings.combinedTheme.subscribe( (value: string) => {
             this.combinedTheme = value;
@@ -106,6 +107,8 @@ export interface AppStorageData extends UUIDData {
   vibrate: boolean;
   sound: boolean;
   lighttheme: boolean;
+  base: number;
+  accent: number;
 }
 
 export interface CountdownWarnings {

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/Rx';
 
 export enum AccentTheme {
-  Monokai,
-  RGBandY
+  RGBandY,
+  Monokai
 }
 
 export enum BaseTheme {
@@ -19,7 +19,7 @@ export class ThemeSettingsProvider {
 
   constructor() {
     this._accent = AccentTheme.RGBandY;
-    this._base = BaseTheme.Light;
+    this._base = BaseTheme.Dark;
 
     this.setCombinedTheme();
   }

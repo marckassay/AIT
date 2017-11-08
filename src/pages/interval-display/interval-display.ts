@@ -124,6 +124,7 @@ export class IntervalDisplayPage {
           this.signal.double();
         } else if (e.state == IntervalState.Completed) {
           this.signal.triple();
+          this.insomnia.allowSleepAgain();
         }
 
         //console.log(e.state);
@@ -136,7 +137,6 @@ export class IntervalDisplayPage {
           this.remainingIntervalTime = (e as IIntervalEmission).remainingIntervalTime;
           this.remainingTime = e.remainingTime;
         } else {
-          this.insomnia.allowSleepAgain();
           this._state = IntervalState.Countdown;
           this.remainingTime = e.remainingTime;
         }
@@ -145,9 +145,9 @@ export class IntervalDisplayPage {
         this._state = IntervalState.Error;
       }, () => {
         // TODO: this never gets hit.  AnotherIntervalTimer is not emitting Completed.
-        this.signal.triple();
-        this._state = IntervalState.Completed;
-        this.remainingTime = this.timer.totalTimeISO;
+        //this.signal.triple();
+        //this._state = IntervalState.Completed;
+        //this.remainingTime = this.timer.totalTimeISO;
       });
   }
 
@@ -163,7 +163,7 @@ export class IntervalDisplayPage {
         this.timer.play();
         this.insomnia.keepAwake();
         break;
-        case FabAction.Pause:
+      case FabAction.Pause:
         this.timer.pause();
         this.insomnia.allowSleepAgain();
         break;

@@ -20,12 +20,12 @@
       <ion-item-group>
         <ion-item-divider>BASE THEME</ion-item-divider>
         <ion-item>
-          <ion-label>light theme</ion-label>
-          <ion-radio checked={{data.lighttheme}} (ionSelect)="toggleLightTheme(true)"></ion-radio>
+          <ion-label>dark theme</ion-label>
+          <ion-radio checked="{{data.base == 0}}" (ionSelect)="toggleBaseTheme(BaseTheme.Dark)"></ion-radio>
         </ion-item>
         <ion-item>
-          <ion-label>dark theme</ion-label>
-          <ion-radio checked={{!data.lighttheme}} (ionSelect)="toggleLightTheme(false)"></ion-radio>
+          <ion-label>light theme</ion-label>
+          <ion-radio checked="{{data.base == 1}}" (ionSelect)="toggleBaseTheme(BaseTheme.Light)"></ion-radio>
         </ion-item>
       </ion-item-group>
     </ion-list>
@@ -34,11 +34,11 @@
         <ion-item-divider>ACCENT THEME</ion-item-divider>
         <ion-item>
           <ion-label>RGB and sometimes Y</ion-label>
-          <ion-radio checked="true" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
+          <ion-radio checked="{{data.accent == 0}}" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
         </ion-item>
         <ion-item>
-          <ion-label>Monokai</ion-label>
-          <ion-radio (ionSelect)="toggleAccentTheme(AccentTheme.Monokai)"></ion-radio>
+          <ion-label>monokai</ion-label>
+          <ion-radio checked="{{data.accent == 1}}" (ionSelect)="toggleAccentTheme(AccentTheme.Monokai)"></ion-radio>
         </ion-item>
       </ion-item-group>
     </ion-list>
