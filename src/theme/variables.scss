@@ -22,10 +22,11 @@ $app-direction: ltr;
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
-@import "merged-theme-light";
-@import "merged-theme-dark";
+@import "base-theme-light";
+@import "base-theme-dark";
 @import "accent-theme-RGBandY";
-@import "custom.variables";
+//@import "accent-theme-Monokai";
+@import "theme-map-get";
 
 // Ait overides Ionic variables...
 $font-size-base: 1.4rem;

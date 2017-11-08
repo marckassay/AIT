@@ -7,7 +7,7 @@ $font-size-interval-landscape:  25vh;
 $font-size-time-portrait:       25vw;
 $font-size-time-landscape:      25vh;
 
-@mixin theme-apply-map ($map) {
+@mixin theme-map-apply ($map) {
   ion-grid {
     width: 100%;
     width: -moz-available;
@@ -15,6 +15,8 @@ $font-size-time-landscape:      25vh;
     height: 100%;
     height: -moz-available;
     height: -webkit-fill-available;
+    background-color: map-get($map, strong);
+
   }
 
   .activeGo {
@@ -144,11 +146,11 @@ $font-size-time-landscape:      25vh;
 }
 
 .theme-light page-interval-display {
-  $map: theme-get-map($accent-theme-RGBandY, $base-theme-light);
-  @include theme-apply-map($map);
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
+  @include theme-map-apply($map);
 }
 
 .theme-dark page-interval-display {
-  $map: theme-get-map($accent-theme-RGBandY, $base-theme-dark);
-  @include theme-apply-map($map);
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
 }

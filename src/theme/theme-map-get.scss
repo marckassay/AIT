@@ -1,4 +1,4 @@
-@function theme-get-map($accent, $base) {
+@function theme-map-get($accent, $base) {
   $colors: map-merge($accent, $base);
 
   $primary: color($colors, primary);
@@ -41,9 +41,7 @@
     toolbar-io-background: $strong,
     toolbar-md-background: $strong,
     toolbar-wp-background: $strong,
-    toolbar-io-title-text-color: color-contrast($colors, $strong),
-    toolbar-md-title-text-color: color-contrast($colors, $strong),
-    toolbar-wp-title-text-color: color-contrast($colors, $strong),
+    toolbar-title-text-color: color-contrast($colors, $strong),
     // ion-item
     list-background-color: $weak,
     item-ios-divider-background: $strong,

@@ -24,12 +24,24 @@ html {
   src: url('#{$font-path}/SourceCodePro-Semibold.ttf') format('truetype');
  }
 
- @function appColor($name) {
-  @return color($colors, $name);
- }
-
  // This is to create drop shadow from the main-display on the side menus
  // that get revealed from underneath.
  ion-nav {
   box-shadow: rgba(0, 0, 0, 0.2) 0em 0em 3px 3px;
  }
+
+@mixin theme-map-apply ($map) {
+  .toolbar-background-ios, .toolbar-background-md, .toolbar-background-wp {
+    background-color: map-get($map, strong);
+  }
+}
+
+.theme-light {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
+}

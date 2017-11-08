@@ -1,4 +1,4 @@
-@mixin theme-apply-map ($map) {
+@mixin theme-map-apply ($map) {
   .content-ios, .content-md, .content-wp {
     background-color: map-get($map, side-background);
   }
@@ -9,7 +9,7 @@
     font-size: 3rem;
     font-family: 'sourcecodeprosb';
     width: fit-content;
-    color: map-get($map, strong);
+    color: map-get($map, toolbar-title-text-color);
     background-color: map-get($map, contrast);
   }
 
@@ -21,6 +21,10 @@
     ion-icon {
       font-size: 10.2em;
     }
+  }
+
+  button {
+    background-color: map-get($map, weakest);
   }
 
   .icon-interval-timer {
@@ -63,11 +67,11 @@
 }
 
 .theme-light page-home {
-  $map: theme-get-map($accent-theme-RGBandY, $base-theme-light);
-  @include theme-apply-map($map);
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
+  @include theme-map-apply($map);
 }
 
 .theme-dark page-home {
-  $map: theme-get-map($accent-theme-RGBandY, $base-theme-dark);
-  @include theme-apply-map($map);
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
 }
