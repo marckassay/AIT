@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { AppStorageData } from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
-import { ThemeSettingsProvider } from '../../app/core/ThemeSettingsProvider';
+import { ThemeSettingsProvider, BaseTheme, AccentTheme } from '../../app/core/ThemeSettingsProvider';
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 
 
@@ -14,6 +14,9 @@ import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 export class AppSettingsPage {
   @ViewChild("Navbar")
   nav: Navbar;
+
+  BaseTheme = BaseTheme;
+  AccentTheme = AccentTheme;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -40,23 +43,16 @@ export class AppSettingsPage {
 
   toggleLightTheme(value: boolean) {
     if (value === true) {
-      this.settings.setCombinedTheme('theme-light');
+      this.settings.base = BaseTheme.Light;
     } else {
-      this.settings.setCombinedTheme('theme-dark');
+      this.settings.base = BaseTheme.Dark;
     }
 
     this._data.lighttheme = value;
   }
 
-  toggleAccentTheme(value: string) {
-    switch (value) {
-      case 'md-500-rgb':
-
-        break;
-
-      default:
-        break;
-    }
+  toggleAccentTheme(value: AccentTheme) {
+    this.settings.accent = value;
   }
 
   _data: AppStorageData;

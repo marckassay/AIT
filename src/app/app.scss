@@ -36,12 +36,23 @@ html {
   }
 }
 
-.theme-light {
+.theme-light-rgbandy {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
   @include theme-map-apply($map);
 }
 
-.theme-dark {
+.theme-dark-rgbandy {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+
+
+.theme-light-monokai {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-monokai {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
   @include theme-map-apply($map);
 }

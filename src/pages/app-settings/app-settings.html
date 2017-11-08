@@ -34,7 +34,11 @@
         <ion-item-divider>ACCENT THEME</ion-item-divider>
         <ion-item>
           <ion-label>RGB and sometimes Y</ion-label>
-          <ion-radio checked="true" (ionSelect)="toggleAccentTheme('md-500-rgb')"></ion-radio>
+          <ion-radio checked="true" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Monokai</ion-label>
+          <ion-radio (ionSelect)="toggleAccentTheme(AccentTheme.Monokai)"></ion-radio>
         </ion-item>
       </ion-item-group>
     </ion-list>

@@ -16,7 +16,6 @@ $font-size-time-landscape:      25vh;
     height: -moz-available;
     height: -webkit-fill-available;
     background-color: map-get($map, strong);
-
   }
 
   .activeGo {
@@ -145,12 +144,24 @@ $font-size-time-landscape:      25vh;
   }
 }
 
-.theme-light page-interval-display {
+.theme-light-rgbandy page-interval-display {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
   @include theme-map-apply($map);
 }
 
-.theme-dark page-interval-display {
+.theme-dark-rgbandy page-interval-display {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
   @include theme-map-apply($map);
 }
+
+
+.theme-light-monokai page-interval-display {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-monokai page-interval-display {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+

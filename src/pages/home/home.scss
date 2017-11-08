@@ -66,12 +66,23 @@
   }
 }
 
-.theme-light page-home {
+.theme-light-rgbandy page-home {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
   @include theme-map-apply($map);
 }
 
-.theme-dark page-home {
+.theme-dark-rgbandy page-home {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+
+
+.theme-light-monokai page-home {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-monokai page-home {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
   @include theme-map-apply($map);
 }

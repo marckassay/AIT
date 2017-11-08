@@ -7,7 +7,7 @@ import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { AITStorage } from './core/AITStorage';
 import { HomeEmission, HomeAction } from '../pages/home/home';
 import { AppSettingsPage } from '../pages/app-settings/app-settings';
-import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
+import { ThemeSettingsProvider, BaseTheme } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -52,8 +52,7 @@ export class AppComponent {
       this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 
         if(value) {
-          const lasttheme = (value.lighttheme)?'theme-light':'theme-dark';
-          this.settings.setCombinedTheme(lasttheme);
+          this.settings.base = (value.lighttheme)? BaseTheme.Light:BaseTheme.Dark;
 
           this.settings.combinedTheme.subscribe( (value: string) => {
             this.combinedTheme = value;

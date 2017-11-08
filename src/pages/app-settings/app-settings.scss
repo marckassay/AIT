@@ -23,12 +23,24 @@
   }
 }
 
-.theme-light page-app-settings {
+.theme-light-rgbandy page-app-settings {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
   @include theme-map-apply($map);
 }
 
-.theme-dark page-app-settings {
+.theme-dark-rgbandy page-app-settings {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
   @include theme-map-apply($map);
 }
+
+
+.theme-light-monokai page-app-settings {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-monokai page-app-settings {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+
