@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Interval Settings</ion-title>
+    <ion-title>SETTINGS</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -34,7 +34,7 @@
   </div>
   <div *ngIf="data">
     <ion-item-group>
-      <ion-item-divider>INTERVAL TIMER SETTINGS</ion-item-divider>
+      <ion-item-divider>PROGRAM SETTINGS</ion-item-divider>
       <!-- activerest -->
       <ion-item>
         <ion-range (ionChange)="dataChanged('activerest')" debounce="500" [(ngModel)]="data.activerest" min="5" max="70" step="5"

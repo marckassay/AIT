@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title><span class="ait-brand">AiT</span> - settings</ion-title>
+    <ion-title><span class="ait-brand">AiT</span> SETTINGS</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -33,12 +33,12 @@
       <ion-item-group>
         <ion-item-divider>ACCENT THEME</ion-item-divider>
         <ion-item>
-          <ion-label>RGB and sometimes Y</ion-label>
-          <ion-radio checked="{{data.accent == 0}}" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
-        </ion-item>
-        <ion-item>
           <ion-label>monokai</ion-label>
           <ion-radio checked="{{data.accent == 1}}" (ionSelect)="toggleAccentTheme(AccentTheme.Monokai)"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>RGB and sometimes Y</ion-label>
+          <ion-radio checked="{{data.accent == 0}}" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
         </ion-item>
       </ion-item-group>
     </ion-list>

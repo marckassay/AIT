@@ -1,7 +1,7 @@
 @mixin theme-map-apply ($map) {
   .ait-brand {
-    font-family: 'sourcecodeprosb';
-    color: map-get($map, contrast)
+    margin: 0px;
+    padding: 0 0px;
   }
 }
 

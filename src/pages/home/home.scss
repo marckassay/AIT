@@ -1,14 +1,4 @@
 @mixin theme-map-apply ($map) {
-  .toolbar-title {
-    margin: 6px;
-    padding: 0 6px;
-    font-size: 3rem;
-    font-family: 'sourcecodeprosb';
-    width: fit-content;
-    color: map-get($map, text-color);
-    background-color: map-get($map, contrast);
-  }
-
   ion-header {
     position: relative;
   }

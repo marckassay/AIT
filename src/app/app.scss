@@ -31,6 +31,15 @@ html {
  }
 
 @mixin theme-map-apply ($map) {
+  .ait-brand {
+    margin: 6px;
+    padding: 0 6px;
+    font-size: 3rem;
+    font-family: 'sourcecodeprosb';
+    width: fit-content;
+    color: map-get($map, text-color);
+    background-color: map-get($map, contrast);
+  }
   .content-ios, .content-md, .content-wp {
     background-color: map-get($map, side-background);
   }
