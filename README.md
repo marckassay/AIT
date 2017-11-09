@@ -17,6 +17,7 @@ Planned features:
 <p align="center">
   <img src="resources/github/dark-monokai.png" alt="Android screenshots"/>
 </p>
+
 ## About
 This is an Ionic 3.8 project that is intended to target Android and iOS devices.  Ionic leverages Angular, Cordova, RxJS, Sass, TypeScript and Webpack, to name a few.  This was my first project using Ionic.
 
