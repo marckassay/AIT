@@ -1,4 +1,5 @@
 <ion-content *ngIf="data">
+  <div ion-fixed>
     <ion-grid>
       <ion-row align-items-baseline nowrap justify-content-start>
         <ion-col align-self-baseline align-self-stretch>
@@ -68,7 +69,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+  </div>
 </ion-content>
 
 <fab-container (onAction)="onAction($event)"></fab-container>
-
