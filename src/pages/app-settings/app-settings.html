@@ -34,11 +34,11 @@
         <ion-item-divider>ACCENT THEME</ion-item-divider>
         <ion-item>
           <ion-label>monokai</ion-label>
-          <ion-radio checked="{{data.accent == 1}}" (ionSelect)="toggleAccentTheme(AccentTheme.Monokai)"></ion-radio>
+          <ion-radio checked="{{data.accent == 0}}" (ionSelect)="toggleAccentTheme(AccentTheme.Monokai)"></ion-radio>
         </ion-item>
         <ion-item>
           <ion-label>RGB and sometimes Y</ion-label>
-          <ion-radio checked="{{data.accent == 0}}" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
+          <ion-radio checked="{{data.accent == 1}}" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
         </ion-item>
       </ion-item-group>
     </ion-list>

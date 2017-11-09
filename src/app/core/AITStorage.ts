@@ -20,7 +20,6 @@ export class AITStorage {
                             current_uuid: AITStorage.INITIAL_INTERVAL_ID,
                             vibrate: true,
                             sound: true,
-                            lighttheme: true,
                             base: 0,
                             accent: 0
                           };
