@@ -30,37 +30,37 @@ html {
   box-shadow: rgba(0, 0, 0, 0.2) 0em 0em 3px 3px;
  }
 
-
 @mixin theme-map-apply ($map) {
-  .toolbar-background-ios, .toolbar-background-md, .toolbar-background-wp {
-    background-color: map-get($map, strong);
-  }
-
   .fab-md {
     color: map-get($map, strongest);
     background-color: map-get($map, primary);
   }
-  .radio-inner {
-    background: map-get($map, primary) !important;
-
+  .item-divider {
+    border-bottom: 1px solid map-get($map, text-color);
   }
   .radio-checked {
     border-color: map-get($map, primary) !important;
   }
-
-  .range-bar,
+  .radio-inner,
   .range-pin::before,
   .range-pin,
-  .range-knob {
+  .range-knob,
+  .range-tick,
+  .range .range-bar-active,
+  .toggle-checked .toggle-inner {
     background: map-get($map, primary) !important;
   }
-
-  .toggle-md.toggle-checked .toggle-icon {
+  .toggle-checked .toggle-icon {
     background: map-get($map, secondary) !important;
   }
-
-  .toggle-md.toggle-checked .toggle-inner {
-    background: map-get($map, primary) !important;
+  .toggle-icon,
+  .toggle-inner {
+    background-color: map-get($map, toggle-deactive);
+  }
+  .toolbar-background-ios,
+  .toolbar-background-md,
+  .toolbar-background-wp {
+    background-color: map-get($map, strong);
   }
 }
 

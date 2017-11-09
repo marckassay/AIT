@@ -53,10 +53,10 @@ $base-theme-light: (
   $toolbar-md-background: $toolbar-background;
   $toolbar-wp-background: $toolbar-background;
 
-  $toolbar-title-text-color: color-contrast($colors, $toolbar-background);
-  $toolbar-io-title-text-color:	$toolbar-title-text-color;
-  $toolbar-md-title-text-color:	$toolbar-title-text-color;
-  $toolbar-wp-title-text-color:	$toolbar-title-text-color;
+  $text-color: color-contrast($colors, $toolbar-background);
+  $toolbar-io-title-text-color:	$text-color;
+  $toolbar-md-title-text-color:	$text-color;
+  $toolbar-wp-title-text-color:	$text-color;
 
   // ion-item
   $list-background-color: color($colors, weak);

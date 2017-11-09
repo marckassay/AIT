@@ -16,12 +16,12 @@
 
   ion-label {
     font-family: selawk;
-    color: map-get($map,toolbar-title-text-color);
+    color: map-get($map,text-color);
   }
 
   ion-input {
     font-family: selawk;
-    color: map-get($map,toolbar-title-text-color);
+    color: map-get($map,text-color);
     // matching size the same as ion-title, which is in the left side-menu.
     font-size: $toolbar-md-title-font-size;
   }
@@ -29,9 +29,14 @@
   ion-item {
     background-color: map-get($map, weak);
   }
-
+  ion-icon {
+    color: map-get($map, information);
+  }
   ion-range {
     margin: 5px 0;
+  }
+  .item-inner {
+    border-bottom: 1px solid map-get($map, weakest) !important;
   }
 
   .mini-display {
@@ -110,7 +115,7 @@
       font-size: $font-size-countdown-landscape;
     }
     margin-left: 20px;
-    color: map-get($map, toolbar-title-text-color);
+    color: map-get($map, text-color);
   }
 }
 

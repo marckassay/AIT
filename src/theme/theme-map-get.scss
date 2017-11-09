@@ -1,5 +1,6 @@
 @function theme-map-get($accent, $base) {
   $colors: map-merge($accent, $base);
+  $base-name: map-get($base, name);
 
   $primary: color($colors, primary);
   $secondary: color($colors, secondary);
@@ -12,6 +13,9 @@
   $strong: color($colors, strong);
   $weak: color($colors, weak);
   $weakest: color($colors, weakest);
+  $information: color($colors, information);
+
+  $text-color: if($base-name == 'base-theme-dark', lighten($weakest, 40%), darken($weakest, 50%));
 
   @return (
     primary: $primary,
@@ -24,28 +28,13 @@
     strong: $strong,
     weak: $weak,
     weakest: $weakest,
-    background-color: $strongest,
+    information: $information,
+
+    // when the countdown is attached to the beginning of a sequence, dim the display.
+    display-disabled: transparentize( lighten($getready, 10%), .8),
+    text-color: $text-color,
+    toggle-deactive: if($base-name == 'base-theme-dark', darken($text-color, 25%), lighten($text-color, 25%)),
     side-background: $weak,
     side-toolbar-background: $strong,
-    button-ios-background-color: $weakest,
-    button-md-background-color: $weakest,
-    button-wp-background-color: $weakest,
-    home-icon-fill: $primary,
-    // used on home page for the (rest) interval icon, to differeniate the two types.
-    home-icon-fill-light: $secondary,
-    // when the countdown is attached to the beginning of a sequence, dim the display.
-    display-disabled: transparentize(lighten($getready, 10%), .8),
-    toggle-ios-handle-background-color-off: $light,
-    toggle-md-handle-background-color-off: $light,
-    toggle-wp-handle-background-color-off: $light,
-    toolbar-io-background: $strong,
-    toolbar-md-background: $strong,
-    toolbar-wp-background: $strong,
-    toolbar-title-text-color: color-contrast($colors, $strong),
-    // ion-item
-    list-background-color: $weak,
-    item-ios-divider-background: $strong,
-    item-md-divider-background: $strong,
-    item-wp-divider-background: $strong
   );
 }
