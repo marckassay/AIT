@@ -1,8 +1,4 @@
 @mixin theme-map-apply ($map) {
-  .content-ios, .content-md, .content-wp {
-    background-color: map-get($map, side-background);
-  }
-
   .toolbar-title {
     margin: 6px;
     padding: 0 6px;

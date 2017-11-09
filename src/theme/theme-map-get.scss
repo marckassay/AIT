@@ -36,5 +36,6 @@
     toggle-deactive: if($base-name == 'base-theme-dark', darken($text-color, 25%), lighten($text-color, 25%)),
     side-background: $weak,
     side-toolbar-background: $strong,
+    display-background-color: if($base-name == 'base-theme-dark', $strongest, #fff)
   );
 }

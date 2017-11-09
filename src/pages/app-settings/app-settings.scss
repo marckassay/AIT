@@ -1,29 +1,7 @@
 @mixin theme-map-apply ($map) {
-  .content-ios, .content-md, .content-wp {
-    background-color: map-get($map, side-background);
-  }
-
-  ion-navbar > button, .toolbar-title {
-    color: map-get($map, text-color);
-  }
-  ion-item-divider,
-  ion-item {
-    background-color: map-get($map, weak);
-  }
-  ion-label,
-  ion-input {
-    font-family: selawk;
-    color: map-get($map, text-color);
-  }
-   .item-radio-checked ion-label {
-    color: map-get($map, primary);
-  }
   .ait-brand {
     font-family: 'sourcecodeprosb';
     color: map-get($map, contrast)
-  }
-  .item-inner {
-    border-bottom: 1px solid map-get($map, weakest) !important;
   }
 }
 
