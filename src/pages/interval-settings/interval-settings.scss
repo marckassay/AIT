@@ -81,16 +81,20 @@
     }
     color: map-get($map, go);
   }
-  .countdown {
+
+  .countdowninfo {
     font-family: selawk;
+    color: map-get($map, text-color);
+  }
+  .countdown {
+    @extend .countdowninfo;
+    margin-left: 20px;
     @media screen and (orientation: portrait) {
       font-size: $font-size-countdown-portrait;
     }
     @media screen and (orientation:landscape) {
       font-size: $font-size-countdown-landscape;
     }
-    margin-left: 20px;
-    color: map-get($map, text-color);
   }
 }
 

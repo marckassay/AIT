@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-input *ngIf="data" (ionBlur)="dataChanged('name')" [(ngModel)]="data.name" type="text"></ion-input>
+    <ion-title>Interval Settings</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -30,7 +30,7 @@
         </ion-row>
       </ion-grid>
     </div>
-    <div><span class="countdown">{{countdownLabel}} secs (countdown to start)</span></div>
+    <div><span class="countdown">{{countdownLabel}}</span><span class="countdowninfo"> secs (countdown to start)</span></div>
   </div>
   <div *ngIf="data">
     <ion-item-group>
