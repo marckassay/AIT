@@ -1,20 +1,19 @@
 ![AiT](resources/github/Ait180x180.png)
 
-Another interval timer (AiT) that targets portable devices for your timing needs.  This application has been intended for interval workouts, where there are active and inactive segments.
+Another interval timer (AiT) that targets mobile devices for your timing needs.  This application has been intended for interval workouts, where there are active and inactive segments.
 
 Features in this application are:
-* Adjustable parameters for segments and amount of countdown time before starting interval timer.
-* Enable/disable 5, 10 and 15 second warnings to indicate active segment is ending.
-* Light or dark background for main display.
+* Adjustable countdown timer before starting interval timer.
+* Enable/disable 5, 10 and 15 second warnings to indicate active segment is approaching it's end.
+* Changeable themes; 'light' or 'dark' base themes along with 'monokai' and 'RGB and sometimes Y' accent themes.
 
 Planned features:
-* Application base themes (Light and Dark) and accent themes (eg: 'RGB and sometimes Y')
 * Countdown timer.
 * Stopwatch that laps on a tap.
-* Revamp timer with seqences.  For instance, 10 sec countdown, followed by 12 minute interval session, followed by 10 minute timer.
+* Revamp timer with sequences.  For instance, 10 sec countdown, followed by 12 minute interval session, followed by 10 minute timer.
 * Fullscreen mode when timer is running.
 
-![Android screenshots](resources/github/android-left-to-right.png)
+![Android screenshots](resources/github/dark-monokai.png)
 ## About
 This is an Ionic 3.8 project that is intended to target Android and iOS devices.  Ionic leverages Angular, Cordova, RxJS, Sass, TypeScript and Webpack, to name a few.  This was my first project using Ionic.
 
