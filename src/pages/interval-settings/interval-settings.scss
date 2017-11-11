@@ -15,9 +15,21 @@
   }
 
   .mini-display {
+    // eventhough ngDectector.detectChanges(); is being used, it seems to not
+    // being detecting view change when needed.  So add margin-top to prevent
+    // content from being underneath header.
+    margin-top: 46px;
     margin-bottom: 10px;
   }
 
+  // give use some finger room for swiping without interacting with controls...
+  .controls {
+    padding-right: 5px;
+    border-right-width: 20px;
+    border-right-color: map-get($map, finger-pad-color);
+    border-right-style: solid;
+    margin-right: 5px
+  }
   .scroll-content {
     padding-left: 1px !important;
     padding-right: 1px !important;

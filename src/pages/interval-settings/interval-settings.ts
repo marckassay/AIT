@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectorRef, OnInit } from '@angular/core';
 import { IonicPage, ToastController, MenuController } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
@@ -10,8 +10,8 @@ import { IntervalStorageData, AppStorageData } from '../../app/app.component';
   templateUrl: 'interval-settings.html',
   encapsulation: ViewEncapsulation.None
 })
-export class IntervalSettingsPage {
-
+export class IntervalSettingsPage implements OnInit {
+uuid: string;
   appSoundsDisabled: boolean;
   appVibratorDisabled: boolean;
 
@@ -21,13 +21,9 @@ export class IntervalSettingsPage {
               public ngDectector: ChangeDetectorRef) { }
 
   initialize(uuid: string): void {
+    this.uuid = uuid;
     this.menuCtrl.get('right').ionOpen.subscribe(() => {
-      this.storage.getItem(uuid).then((value) => {
-        this.data = (value as IntervalStorageData);
-
-        // need this to refresh the view.
-        this.ngDectector.detectChanges();
-      });
+      this.loadTimerData(uuid);
       this.storage.getItem(AITStorage.APP_ID).then((value) => {
         this.appSoundsDisabled = !(value as AppStorageData).sound;
         this.appVibratorDisabled = !(value as AppStorageData).vibrate;
@@ -42,6 +38,21 @@ export class IntervalSettingsPage {
     });
   }
 
+  ngOnInit() {
+   // load data now, to prevent white flash when initially opened...
+   this.loadTimerData(this.uuid);
+  }
+
+  loadTimerData(uuid: string): void {
+    this.storage.getItem(uuid).then((value) => {
+      this.data = (value as IntervalStorageData);
+
+      // need this to refresh the view.
+     // this.ngDectector.detectChanges();
+      this.ngDectector.detach();
+      this.ngDectector.detectChanges();
+    });
+  }
   get totaltime(): string {
     if (this.data) {
       const totaltimeInSeconds = (this.data.activerest.upper + this.data.activerest.lower) * this.data.intervals;

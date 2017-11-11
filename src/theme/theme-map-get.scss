@@ -13,6 +13,7 @@
   $strong: color($colors, strong);
   $weak: color($colors, weak);
   $weakest: color($colors, weakest);
+  $contrast: color($colors, contrast);
   $information: color($colors, information);
 
   $text-color: if($base-name == 'base-theme-dark', lighten($weakest, 40%), darken($weakest, 50%));
@@ -29,6 +30,7 @@
     weak: $weak,
     weakest: $weakest,
     information: $information,
+    contrast: $contrast,
 
     // when the countdown is attached to the beginning of a sequence, dim the display.
     display-disabled: transparentize( lighten($getready, 10%), .8),
@@ -36,6 +38,7 @@
     toggle-deactive: if($base-name == 'base-theme-dark', darken($text-color, 25%), lighten($text-color, 25%)),
     side-background: $weak,
     side-toolbar-background: $strong,
+    finger-pad-color: darken($weak, 2%),
     display-background-color: if($base-name == 'base-theme-dark', $strongest, #fff)
   );
 }
