@@ -3,6 +3,7 @@ import { IonicPage, ToastController, MenuController } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData, AppStorageData } from '../../app/app.component';
+import { Observable } from 'rxjs/Observable';
 
 @IonicPage()
 @Component({
@@ -32,10 +33,6 @@ uuid: string;
         this.ngDectector.detectChanges();
       });
     });
-
-    this.menuCtrl.get('right').ionClose.subscribe(() => {
-      this.storage.setItem(this.data);
-    });
   }
 
   ngOnInit() {
@@ -48,8 +45,6 @@ uuid: string;
       this.data = (value as IntervalStorageData);
 
       // need this to refresh the view.
-     // this.ngDectector.detectChanges();
-      this.ngDectector.detach();
       this.ngDectector.detectChanges();
     });
   }
@@ -72,6 +67,8 @@ uuid: string;
 
   dataChanged(property:string):void {
     this.ngDectector.detectChanges();
+
+    this.storage.setItem(this.data);
   }
 
   inform(): void {
