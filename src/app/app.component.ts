@@ -91,8 +91,9 @@ export class AppComponent {
         break;
 
       case HomeAction.Settings:
-        this.navCtrl.push(AppSettingsPage);
-        this.menuCtrl.toggle('left');
+        this.menuCtrl.toggle('left').then((value) => {
+          this.navCtrl.push(AppSettingsPage);
+        });
         break;
     }
   }
