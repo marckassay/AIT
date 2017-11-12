@@ -47,7 +47,7 @@ export class IntervalDisplayPage {
   public states = IntervalState;
   _state: IntervalState;
   // if _state contains irrevlant bits to the view, "reduce" by removing those bits
-  get viewState (): IntervalState {
+  get viewState(): IntervalState {
     let _state_temp = this._state;
     // strip away Start and/or Instant states if needed...
     if (_state_temp & IntervalState.Start) {
@@ -64,36 +64,45 @@ export class IntervalDisplayPage {
   }
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public menuCtrl: MenuController,
-              public storage: AITStorage,
-              public signal: AITSignal,
-              public ngDectector: ChangeDetectorRef,
-              public splashScreen: SplashScreen,
-              public insomnia: Insomnia) {
+    public navParams: NavParams,
+    public menuCtrl: MenuController,
+    public storage: AITStorage,
+    public signal: AITSignal,
+    public ngDectector: ChangeDetectorRef,
+    public splashScreen: SplashScreen,
+    public insomnia: Insomnia) {
+
+    // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
+    // called since sidemenus are just menus, not pages.
+    menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
+      this.ionViewDidEnterInterior();
+    });
   }
 
   ionViewDidLoad() {
-    this.setNotRunningFeatures();
-    this.getIntervalStorageData();
+    this.ionViewDidEnterInterior();
     this.immediatelyPostViewDidLoad = true;
   }
 
-  ionViewDidEnter () {
-    if(!this.immediatelyPostViewDidLoad) {
-      this.setNotRunningFeatures();
-      this.getIntervalStorageData();
+  ionViewDidEnter() {
+    if (!this.immediatelyPostViewDidLoad) {
+      this.ionViewDidEnterInterior();
     } else {
       this.immediatelyPostViewDidLoad = false;
     }
   }
 
-  getIntervalStorageData(): void {
-    const uuid = (this.navParams.data)?this.navParams.data:this.current_uuid;
+  ionViewDidEnterInterior() {
+    this.setNotRunningFeatures();
+    this.getIntervalStorageData();
+  }
 
-    if(uuid) {
+  getIntervalStorageData(): void {
+    const uuid = (this.navParams.data) ? this.navParams.data : this.current_uuid;
+
+    if (uuid) {
       this.menu.reset();
-      if((<Subscription>this.subscription) && !this.subscription.closed) {
+      if ((<Subscription>this.subscription) && !this.subscription.closed) {
         this.subscription.unsubscribe();
       }
       this.storage.getItem(uuid).then((value: any) => {
@@ -116,11 +125,11 @@ export class IntervalDisplayPage {
     this._state = IntervalState.Loaded;
     this.remainingIntervalTime = this.data.activerest.lower;
     this.timer = new AnotherIntervalTimer(this.data.activerest.upper,
-                                          this.data.activerest.lower,
-                                          this.data.intervals,
-                                          this.data.getready,
-                                          this.data.countdown,
-                                          this.data.warnings);
+      this.data.activerest.lower,
+      this.data.intervals,
+      this.data.getready,
+      this.data.countdown,
+      this.data.warnings);
     this.subscribeTimer();
     this.remainingTime = this.timer.totalTimeISO;
 
@@ -133,7 +142,7 @@ export class IntervalDisplayPage {
       (e: any) => {
         // play sound each second for getReady states
         if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant) ||
-            ((e.state & IntervalState.ActiveWarning) == IntervalState.ActiveWarning) ) {
+          ((e.state & IntervalState.ActiveWarning) == IntervalState.ActiveWarning)) {
           this.signal.single();
         } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
           this.signal.double();
@@ -146,7 +155,7 @@ export class IntervalDisplayPage {
 
         // TODO: this is indicitive to poor code design.  UI is expecting a specific
         // type but we are subscribe with rxjs for two types.
-        if(e.currentInterval !== undefined) {
+        if (e.currentInterval !== undefined) {
           this.currentInterval = (e as IIntervalEmission).currentInterval;
           this._state = (e as IIntervalEmission).state;
           this.remainingIntervalTime = (e as IIntervalEmission).remainingIntervalTime;
@@ -179,8 +188,7 @@ export class IntervalDisplayPage {
   }
 
   onAction(emission: FabEmission) {
-    switch (emission.action)
-    {
+    switch (emission.action) {
       case FabAction.Home:
         this.timer.pause();
         this.setNotRunningFeatures();

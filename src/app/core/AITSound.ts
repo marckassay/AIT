@@ -28,7 +28,7 @@ export class AITSound {
         this.sound_1.play();
       }
       (interval === 2)? clearInterval(intervalId):interval++;
-    },150);
+    },250);
   };
 
   completeBeep() {
