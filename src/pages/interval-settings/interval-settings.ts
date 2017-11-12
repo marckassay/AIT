@@ -3,7 +3,6 @@ import { IonicPage, ToastController, MenuController } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData, AppStorageData } from '../../app/app.component';
-import { Observable } from 'rxjs/Observable';
 
 @IonicPage()
 @Component({

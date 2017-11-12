@@ -55,6 +55,12 @@ html {
   .radio-checked {
     border-color: map-get($map, primary) !important;
   }
+
+  .range-pin::before,
+  .range-pin {
+    color: map-get($map, strong);
+  }
+
   .radio-inner,
   .range-pin::before,
   .range-pin,

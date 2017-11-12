@@ -4,6 +4,7 @@ import { AppStorageData } from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
 import { ThemeSettingsProvider, BaseTheme, AccentTheme } from '../../app/core/ThemeSettingsProvider';
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
+import { AITSignal } from '../../app/core/AITSignal';
 
 
 @IonicPage()
@@ -21,6 +22,7 @@ export class AppSettingsPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public storage:AITStorage,
+              public signal: AITSignal,
               public settings: ThemeSettingsProvider,
               public menuCtrl: MenuController) {
 
@@ -39,6 +41,7 @@ export class AppSettingsPage {
   ionViewWillLeave()
   {
     this.storage.setItem(this.data);
+    this.signal.data = this.data;
   }
 
   toggleBaseTheme(value: BaseTheme) {

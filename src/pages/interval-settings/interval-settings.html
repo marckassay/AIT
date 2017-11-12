@@ -63,7 +63,7 @@
     <!-- warnings -->
     <ion-item-group>
       <ion-item-divider>
-        ACTIVE COUNTDOWN WARNINGS
+        ACTIVE <span *ngIf="!appSoundsDisabled && !appVibratorDisabled">COUNTDOWN</span> WARNINGS
         <button *ngIf="appSoundsDisabled || appVibratorDisabled" ion-button item-end clear
                 (click)="inform()" >
           <ion-icon class="material-icons" color="information">warning</ion-icon>

@@ -26,8 +26,8 @@ export class AppComponent {
 
   constructor(platform: Platform,
               statusBar: StatusBar,
-              splashScreen: SplashScreen,
               screenOrientation: ScreenOrientation,
+              public splashScreen: SplashScreen,
               public settings: ThemeSettingsProvider,
               public menuCtrl: MenuController,
               public storage: AITStorage,
@@ -35,7 +35,6 @@ export class AppComponent {
 
     platform.ready().then(() => {
       statusBar.styleDefault();
-      splashScreen.hide();
       screenOrientation.unlock();
     });
     /*
@@ -47,7 +46,7 @@ export class AppComponent {
   }
 
   checkAppStartupData(attempts: number) {
-    //console.log("checkAppStartupData call, attempt number: "+attempts);
+    console.log("checkAppStartupData call, attempt number: "+attempts);
     this.storage.checkAppStartupData().then(() => {
       this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 

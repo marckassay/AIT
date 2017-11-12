@@ -7,6 +7,7 @@ import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
 import { AITSignal } from '../../app/core/AITSignal';
 import { Insomnia } from '@ionic-native/insomnia';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 @IonicPage()
 @Component({
@@ -28,6 +29,11 @@ export class IntervalDisplayPage {
   currentInterval: number;
 
   _data: IntervalStorageData;
+
+  // used in ionViewDidLoad to load data for the initial loading.  after
+  // ionViewDidLoad is called, ionViewDidEnter is then called; hence, we
+  // dont want to run the same data twice.
+  immediatelyPostViewDidLoad: boolean;
 
   get data(): IntervalStorageData {
     return this._data;
@@ -60,23 +66,29 @@ export class IntervalDisplayPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public menuCtrl: MenuController,
-              public AITStorage: AITStorage,
+              public storage: AITStorage,
               public signal: AITSignal,
               public ngDectector: ChangeDetectorRef,
+              public splashScreen: SplashScreen,
               public insomnia: Insomnia) {
+  }
 
-    menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
-      this.preinitializeDisplay();
-    });
+  ionViewDidLoad() {
+    this.setNotRunningFeatures();
+    this.getIntervalStorageData();
+    this.immediatelyPostViewDidLoad = true;
   }
 
   ionViewDidEnter () {
-    this.menuCtrl.enable(true, 'left');
-    this.menuCtrl.enable(true, 'right');
-    this.preinitializeDisplay();
+    if(!this.immediatelyPostViewDidLoad) {
+      this.setNotRunningFeatures();
+      this.getIntervalStorageData();
+    } else {
+      this.immediatelyPostViewDidLoad = false;
+    }
   }
 
-  preinitializeDisplay(): void {
+  getIntervalStorageData(): void {
     const uuid = (this.navParams.data)?this.navParams.data:this.current_uuid;
 
     if(uuid) {
@@ -84,22 +96,25 @@ export class IntervalDisplayPage {
       if((<Subscription>this.subscription) && !this.subscription.closed) {
         this.subscription.unsubscribe();
       }
-      this.AITStorage.getItem(uuid).then((value: any) => {
+      this.storage.getItem(uuid).then((value: any) => {
         this.data = (value as IntervalStorageData);
-        this.initializeDisplay();
+        this.instantiateTimer();
+
+        // TOOD: can't seem to hide startup flash of white other then
+        // to do the following:
+        setTimeout(() => {
+          this.splashScreen.hide();
+        }, 500);
+
       }).catch((reject) => {
         //console.log("interval-display preinitializeDisplay error")
       });
     }
   }
 
-  initializeDisplay() {
+  instantiateTimer() {
     this._state = IntervalState.Loaded;
     this.remainingIntervalTime = this.data.activerest.lower;
-    this.instantiateTimer();
-  }
-
-  instantiateTimer() {
     this.timer = new AnotherIntervalTimer(this.data.activerest.upper,
                                           this.data.activerest.lower,
                                           this.data.intervals,
@@ -151,29 +166,41 @@ export class IntervalDisplayPage {
       });
   }
 
+  setRunningFeatures() {
+    this.menuCtrl.enable(false, 'left');
+    this.menuCtrl.enable(false, 'right');
+    this.insomnia.keepAwake();
+  }
+
+  setNotRunningFeatures() {
+    this.menuCtrl.enable(true, 'left');
+    this.menuCtrl.enable(true, 'right');
+    this.insomnia.allowSleepAgain();
+  }
+
   onAction(emission: FabEmission) {
     switch (emission.action)
     {
       case FabAction.Home:
         this.timer.pause();
-        this.insomnia.allowSleepAgain();
+        this.setNotRunningFeatures();
         this.menuCtrl.open("left");
         break;
       case FabAction.Start:
         this.timer.play();
-        this.insomnia.keepAwake();
+        this.setRunningFeatures();
         break;
       case FabAction.Pause:
         this.timer.pause();
-        this.insomnia.allowSleepAgain();
+        this.setNotRunningFeatures();
         break;
       case FabAction.Reset:
-        this.preinitializeDisplay();
-        this.insomnia.allowSleepAgain();
+        this.instantiateTimer();
+        this.setNotRunningFeatures();
         break;
       case FabAction.Program:
         this.timer.pause();
-        this.insomnia.allowSleepAgain();
+        this.setNotRunningFeatures();
         this.menuCtrl.open("right");
         break;
     }
