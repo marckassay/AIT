@@ -1,4 +1,7 @@
 @mixin theme-map-apply ($map) {
+  ion-icon {
+    color: map-get($map, primary);
+  }
   .ait-brand {
     margin: 0px;
     padding: 0 0px;

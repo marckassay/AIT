@@ -61,4 +61,8 @@ export class AppSettingsPage {
   set data(value: AppStorageData) {
     this._data = value;
   }
+
+  navBack() {
+    this.navCtrl.pop();
+  }
 }

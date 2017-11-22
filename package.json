@@ -1,9 +1,9 @@
 {
     "name": "AiT",
     "version": "0.0.1",
-    "author": "Ionic Framework",
-    "homepage": "http://ionicframework.com/",
-    "private": true,
+    "author": "Marc Kassay",
+    "homepage": "https://github.com/marckassay/AIT",
+    "private": false,
     "scripts": {
         "clean": "ionic-app-scripts clean",
         "build": "ionic-app-scripts build",
