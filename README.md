@@ -21,7 +21,10 @@ Planned features:
 ## About
 This is an Ionic 3.8 project that is intended to target Android and iOS devices.  Ionic leverages Angular, Cordova, RxJS, Sass, TypeScript and Webpack, to name a few.  This was my first project using Ionic.
 
-I plan to have this available on Google Play and Apple iTunes in the next few weeks (e.t.a. 11/30/2017)
+Currently on Google Play, this app is available in beta status.  Please contribute with feedback:
+https://play.google.com/apps/testing/github.marckassay.ait
+
+I'm unsure when or if I will have this on Apple iTunes.
 
 
 ## Feedback
