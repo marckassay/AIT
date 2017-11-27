@@ -6,7 +6,6 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { AITStorage } from './core/AITStorage';
 import { HomeEmission, HomeAction } from '../pages/home/home';
-import { AppSettingsPage } from '../pages/app-settings/app-settings';
 import { ThemeSettingsProvider, BaseTheme, AccentTheme } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 
@@ -46,7 +45,7 @@ export class AppComponent {
   }
 
   checkAppStartupData(attempts: number) {
-    console.log("checkAppStartupData call, attempt number: "+attempts);
+    //console.log("checkAppStartupData call, attempt number: "+attempts);
     this.storage.checkAppStartupData().then(() => {
       this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 
@@ -91,7 +90,7 @@ export class AppComponent {
 
       case HomeAction.Settings:
         this.menuCtrl.toggle('left').then((value) => {
-          this.navCtrl.push(AppSettingsPage);
+          this.navCtrl.push('AppSettingsPage');
         });
         break;
     }

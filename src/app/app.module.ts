@@ -8,14 +8,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Insomnia } from '@ionic-native/insomnia';
 
 import { AppComponent } from './app.component'
-import { IntervalDisplayPage, IntervalSettingsPage, AppSettingsPage, HomePage } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage, HomePage } from '../pages/pages';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { AITStorage } from './core/AITStorage';
 import { IonicStorageModule } from '@ionic/storage';
 import { Vibration } from '@ionic-native/vibration';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { AITSignal } from './core/AITSignal';
-import { AppSettingsPageModule } from '../pages/app-settings/app-settings.module';
 import { HomePageModule } from '../pages/home/home.module';
 import { IntervalDisplayPageModule } from '../pages/interval-display/interval-display.module';
 import { IntervalSettingsPageModule } from '../pages/interval-settings/interval-settings.module';
@@ -28,7 +27,6 @@ import { FabContainerComponentModule } from './components/fabcontainer.component
   imports: [
     BrowserModule,
     HomePageModule,
-    AppSettingsPageModule,
     IntervalDisplayPageModule,
     FabContainerComponentModule,
     IntervalSettingsPageModule,
@@ -46,8 +44,7 @@ import { FabContainerComponentModule } from './components/fabcontainer.component
     IntervalDisplayPage,
     IntervalSettingsPage,
     FabContainerComponent,
-    HomePage,
-    AppSettingsPage
+    HomePage
   ],
   providers: [
     StatusBar,

@@ -31,7 +31,7 @@ export class AITStorage {
         }
       })
     }, (error: any) => {
-      console.error('Error with readiness', error)
+      //console.error('Error with readiness', error)
     });
   }
 
@@ -60,7 +60,7 @@ export class AITStorage {
         this.setCurrentUUID(data.uuid);
       }
     }, (error: any) => {
-      console.error('Error storing item', error)
+      //console.error('Error storing item', error)
     });
   }
 
@@ -68,7 +68,7 @@ export class AITStorage {
     return this.storage.get(uuid).then((value: any) => {
       return value;
     }, (error: any) => {
-      console.error('Error retrieving item', error)
+      //console.error('Error retrieving item', error)
     });
   }
 
@@ -79,7 +79,7 @@ export class AITStorage {
         this.setItem(value);
       }
     }, (error: any) => {
-      console.error('Error storing item', error)
+      //console.error('Error storing item', error)
     });
   }
 
