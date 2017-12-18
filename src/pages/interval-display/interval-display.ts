@@ -1,13 +1,39 @@
 import { Component, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
-import { AnotherIntervalTimer, IIntervalEmission, IntervalState } from '../../app/core/AnotherIntervalTimer';
 import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
-import { Subscription } from 'rxjs';
+import { Subscription, Observer } from 'rxjs';
 import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
 import { AITSignal } from '../../app/core/AITSignal';
 import { Insomnia } from '@ionic-native/insomnia';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { IntervalSeq, SeqStates } from './interval-sots';
+import { TimeEmission } from 'sots';
+import { PartialObserver } from 'rxjs/Observer';
+import * as _ from "lodash";
+import * as moment from 'moment';
+
+export enum IntervalState {
+  Loaded = 1,
+  GetReady = 2,
+  Active = 4,
+  Rest = 8,
+  Completed = 16,
+  Error = 32,
+  Start = 64,
+  Instant = 128,
+  Warning = 256,
+  Countdown = 512,
+
+  ActiveStart = Active + Start + Instant,
+  ActiveStopWarning = Active + GetReady,
+  ActiveStopWarningOnTheSecond = ActiveStopWarning + Instant,
+  ActiveWarning = Active + Warning,
+
+  RestStart = Rest + Start + Instant,
+  RestStopWarning = Rest + GetReady,
+  RestStopWarningOnTheSecond = RestStopWarning + Instant,
+}
 
 @IonicPage()
 @Component({
@@ -19,17 +45,12 @@ export class IntervalDisplayPage {
   private menu: FabContainerComponent;
 
   current_uuid: string;
-
-  timer: AnotherIntervalTimer;
-  emitted: IIntervalEmission;
   subscription: Subscription;
-
+  seq: IntervalSeq;
   remainingTime: string;
   remainingIntervalTime: number;
   currentInterval: number;
-
   _data: IntervalStorageData;
-
   // used in ionViewDidLoad to load data for the initial loading.  after
   // ionViewDidLoad is called, ionViewDidEnter is then called; hence, we
   // dont want to run the same data twice.
@@ -44,24 +65,8 @@ export class IntervalDisplayPage {
     this._data = value;
   }
 
-  public states = IntervalState;
-  _state: IntervalState;
-  // if _state contains irrevlant bits to the view, "reduce" by removing those bits
-  get viewState(): IntervalState {
-    let _state_temp = this._state;
-    // strip away Start and/or Instant states if needed...
-    if (_state_temp & IntervalState.Start) {
-      _state_temp -= IntervalState.Start;
-    }
-    if (_state_temp & IntervalState.Instant) {
-      _state_temp -= IntervalState.Instant;
-    }
-    if (_state_temp & IntervalState.Warning) {
-      _state_temp -= IntervalState.Warning;
-    }
-
-    return _state_temp;
-  }
+  public states = SeqStates;
+  viewState: SeqStates;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -80,6 +85,8 @@ export class IntervalDisplayPage {
   }
 
   ionViewDidLoad() {
+    this.seq = new IntervalSeq();
+
     this.ionViewDidEnterInterior();
     this.immediatelyPostViewDidLoad = true;
   }
@@ -122,57 +129,65 @@ export class IntervalDisplayPage {
   }
 
   instantiateTimer() {
-    this._state = IntervalState.Loaded;
+    this.viewState = SeqStates.Loaded;
     this.remainingIntervalTime = this.data.activerest.lower;
-    this.timer = new AnotherIntervalTimer(this.data.activerest.upper,
-      this.data.activerest.lower,
+
+    this.seq.build(this.data.countdown,
       this.data.intervals,
-      this.data.getready,
-      this.data.countdown,
+      this.data.activerest.lower,
+      this.data.activerest.upper,
       this.data.warnings);
+
     this.subscribeTimer();
-    this.remainingTime = this.timer.totalTimeISO;
+    this.remainingTime = this.seq.calculateRemainingTime();
+
+    // this is need to refresh the view when being revisited from changed in interval-settings
+    this.ngDectector.detectChanges();
+  }
+
+  reset() {
+    this.viewState = SeqStates.Loaded;
+    this.remainingIntervalTime = this.data.activerest.lower;
+
+    this.seq.sequencer.reset();
+    this.remainingTime = this.seq.calculateRemainingTime();
 
     // this is need to refresh the view when being revisited from changed in interval-settings
     this.ngDectector.detectChanges();
   }
 
   subscribeTimer(): void {
-    this.subscription = this.timer.publication.subscribe(
-      (e: any) => {
-        // play sound each second for getReady states
-        if ((e.state & (IntervalState.Start + IntervalState.Instant)) == (IntervalState.Start + IntervalState.Instant) ||
-          ((e.state & IntervalState.ActiveWarning) == IntervalState.ActiveWarning)) {
-          this.signal.single();
-        } else if ((e.state & (IntervalState.GetReady + IntervalState.Instant)) == (IntervalState.GetReady + IntervalState.Instant)) {
-          this.signal.double();
-        } else if (e.state == IntervalState.Completed) {
-          this.signal.triple();
-          this.insomnia.allowSleepAgain();
+    let observer: PartialObserver<TimeEmission> = {
+      next: (value: TimeEmission): void => {
+        this.remainingTime = this.seq.calculateRemainingTime(value);
+        this.remainingIntervalTime = Math.ceil(value.time);
+
+        if (value.interval) {
+          this.currentInterval = value.interval.current;
         }
 
-        //console.log(e.state);
+        if (value.state) {
+          let valueNoAudiable = (value.state.valueOf() as SeqStates);
+          valueNoAudiable &= (~SeqStates.SingleBeep & ~SeqStates.DoubleBeep);
+          this.viewState = valueNoAudiable;
 
-        // TODO: this is indicitive to poor code design.  UI is expecting a specific
-        // type but we are subscribe with rxjs for two types.
-        if (e.currentInterval !== undefined) {
-          this.currentInterval = (e as IIntervalEmission).currentInterval;
-          this._state = (e as IIntervalEmission).state;
-          this.remainingIntervalTime = (e as IIntervalEmission).remainingIntervalTime;
-          this.remainingTime = e.remainingTime;
-        } else {
-          this._state = IntervalState.Countdown;
-          this.remainingTime = e.remainingTime;
+          // take care of all instant states...
+          if (value.state.valueOf(SeqStates.SingleBeep)) {
+            this.signal.single();
+          } else if (value.state.valueOf(SeqStates.DoubleBeep)) {
+            this.signal.double();
+          }
         }
-      }, (error) => {
-        //console.log(error);
-        this._state = IntervalState.Error;
-      }, () => {
-        // TODO: this never gets hit.  AnotherIntervalTimer is not emitting Completed.
-        //this.signal.triple();
-        //this._state = IntervalState.Completed;
-        //this.remainingTime = this.timer.totalTimeISO;
-      });
+      },
+      error: (error: any): void => {
+        this.viewState = SeqStates.Error;
+      },
+      complete: (): void => {
+        this.viewState = SeqStates.Completed;
+      }
+    };
+
+    this.seq.subscribe(observer);
   }
 
   setRunningFeatures() {
@@ -190,24 +205,24 @@ export class IntervalDisplayPage {
   onAction(emission: FabEmission) {
     switch (emission.action) {
       case FabAction.Home:
-        this.timer.pause();
+        this.seq.sequencer.pause();
         this.setNotRunningFeatures();
         this.menuCtrl.open("left");
         break;
       case FabAction.Start:
-        this.timer.play();
+        this.seq.sequencer.start();
         this.setRunningFeatures();
         break;
       case FabAction.Pause:
-        this.timer.pause();
+        this.seq.sequencer.pause();
         this.setNotRunningFeatures();
         break;
       case FabAction.Reset:
-        this.instantiateTimer();
+        this.reset();
         this.setNotRunningFeatures();
         break;
       case FabAction.Program:
-        this.timer.pause();
+        this.seq.sequencer.pause();
         this.setNotRunningFeatures();
         this.menuCtrl.open("right");
         break;
