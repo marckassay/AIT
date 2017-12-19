@@ -3,7 +3,7 @@ import { MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage, TimerDisplayPage, } from '../pages/pages';
 import { AITStorage } from './core/AITStorage';
 import { HomeAction, HomeEmission } from '../pages/home/home';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
@@ -48,8 +48,8 @@ export class AppComponent {
       this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 
         if (value) {
-          this.settings.base = <BaseTheme>value.base;
-          this.settings.accent = <AccentTheme>value.accent;
+          this.settings.base = value.base as BaseTheme;
+          this.settings.accent = value.accent as AccentTheme;
 
           this.settings.combinedTheme.subscribe((value: string) => {
             this.combinedTheme = value;
@@ -58,7 +58,9 @@ export class AppComponent {
           this.afterStartupData(value.current_uuid);
         } else {
           // sometimes or alltimes it fails on initial load with no db.
-          Observable.timer(500).subscribe(() => { this.checkAppStartupData(--attempts); });
+          Observable.timer(500).subscribe(() => {
+            this.checkAppStartupData(--attempts);
+          });
         }
       });
     });
@@ -80,7 +82,11 @@ export class AppComponent {
         this.menuCtrl.toggle('left');
         break;
 
-      case HomeAction.Countdown:
+      case HomeAction.Timer:
+        this.navCtrl.setRoot(TimerDisplayPage);
+        // const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(IntervalSettingsPage);
+        // let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
+        // componentInstance.instance.initialize(current_uuid);
         break;
 
       case HomeAction.Stopwatch:

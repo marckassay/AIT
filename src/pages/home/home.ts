@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, ViewEncapsulation } from '@angular/cor
 
 export enum HomeAction {
   IntervalTimer,
-  Countdown,
+  Timer,
   Stopwatch,
   Settings
 }
