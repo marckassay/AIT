@@ -25,7 +25,10 @@ export enum FabState {
   templateUrl: 'fabcontainer.component.html'
 })
 export class FabContainerComponent {
-  @Output() onAction = new EventEmitter<FabEmission>();
+  @Output()
+  onAction = new EventEmitter<FabEmission>();
+
+  public states = FabState;
 
   _viewState: FabState;
   get viewState(): FabState {
@@ -35,7 +38,6 @@ export class FabContainerComponent {
     this._viewState = value;
   }
 
-  public states = FabState;
   public actions = FabAction;
 
   constructor() {
@@ -45,7 +47,7 @@ export class FabContainerComponent {
   actionRequest(action: FabAction, fabMenu: FabContainer) {
     if (action === FabAction.Start) {
       this.viewState = FabState.Pause;
-    } else if (action === FabAction.Pause) {
+    } else if ((action === FabAction.Pause) || (action === FabAction.Reset)) {
       this.viewState = FabState.Start;
     }
 

@@ -28,12 +28,11 @@ export class AppSettingsPage {
 
     this.menuCtrl.enable(false, 'left');
     this.menuCtrl.enable(false, 'right');
-
   }
 
   ionViewWillEnter() {
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
-      this.data = <AppStorageData>value;
+      this.data = value as AppStorageData;
     }).catch(() => {
       // console.log("app-settings storage error");
     });

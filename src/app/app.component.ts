@@ -16,8 +16,6 @@ export class AppComponent {
   @ViewChild(Nav)
   navCtrl: Nav;
 
-  rootPage: any;
-
   combinedTheme: string;
 
   @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })

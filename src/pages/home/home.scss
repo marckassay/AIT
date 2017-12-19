@@ -62,7 +62,6 @@
   @include theme-map-apply($map);
 }
 
-
 .theme-light-monokai page-home {
   $map: theme-map-get($accent-theme-monokai, $base-theme-light);
   @include theme-map-apply($map);

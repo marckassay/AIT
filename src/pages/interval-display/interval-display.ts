@@ -16,33 +16,29 @@ import { PartialObserver } from 'rxjs/Observer';
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage {
+  @Input('data')
+  _data: IntervalStorageData;
+  get data(): IntervalStorageData {
+    return this._data;
+  }
+  set data(value: IntervalStorageData) {
+    this._data = value;
+  }
+
   @ViewChild(FabContainerComponent)
   private menu: FabContainerComponent;
+
+  // this type assignment to variable is for angular view.
+  public states = SeqStates;
+  viewState: SeqStates;
+
   remainingSeqTime: string;
   remainingIntervalTime: number;
   currentInterval: number;
 
   private observer: PartialObserver<TimeEmission>;
-  private current_uuid: string;
+  private currentUUID: string;
   private sots: IntervalSeq;
-
-  _data: IntervalStorageData;
-  // used in ionViewDidLoad to load data for the initial loading.  after
-  // ionViewDidLoad is called, ionViewDidEnter is then called; hence, we
-  // dont want to run the same data twice.
-  immediatelyPostViewDidLoad: boolean;
-
-  get data(): IntervalStorageData {
-    return this._data;
-  }
-
-  @Input('data')
-  set data(value: IntervalStorageData) {
-    this._data = value;
-  }
-
-  public states = SeqStates;
-  viewState: SeqStates;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -65,13 +61,17 @@ export class IntervalDisplayPage {
     this.reloadViewAndTimer();
   }
 
+  ionViewDidEnter() {
+    this.setViewInRunningMode(false);
+  }
+
   reloadViewAndTimer() {
     this.setViewInRunningMode(false);
     this.retrieveDataAndBuildTimer();
   }
 
   retrieveDataAndBuildTimer(): void {
-    const uuid = (this.navParams.data) ? this.navParams.data : this.current_uuid;
+    const uuid = (this.navParams.data) ? this.navParams.data : this.currentUUID;
 
     if (uuid) {
       this.menu.reset();
