@@ -67,10 +67,6 @@ export class IntervalSeq {
       );
   }
 
-  subscribe(observer: PartialObserver<TimeEmission>): Subscription {
-    return this.sequencer.subscribe(observer);
-  }
-
   constructActiveSingleBeepTimes(warnings: CountdownWarnings): string {
     let times: string;
     times = (warnings.fifthteensecond) ? '15,' : '';
@@ -90,6 +86,7 @@ export class IntervalSeq {
 
   calculateRemainingTime(value?: TimeEmission): string {
     let totalTimeRemaining: number;
+
     if (value && value.interval) {
       const remainingintervals: number = value.interval.total - value.interval.current;
       totalTimeRemaining = value.time + (this.intervalDuration * remainingintervals);

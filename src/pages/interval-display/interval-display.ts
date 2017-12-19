@@ -10,30 +10,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { IntervalSeq, SeqStates } from './interval-sots';
 import { TimeEmission } from 'sots';
 import { PartialObserver } from 'rxjs/Observer';
-import * as _ from "lodash";
-import * as moment from 'moment';
-
-export enum IntervalState {
-  Loaded = 1,
-  GetReady = 2,
-  Active = 4,
-  Rest = 8,
-  Completed = 16,
-  Error = 32,
-  Start = 64,
-  Instant = 128,
-  Warning = 256,
-  Countdown = 512,
-
-  ActiveStart = Active + Start + Instant,
-  ActiveStopWarning = Active + GetReady,
-  ActiveStopWarningOnTheSecond = ActiveStopWarning + Instant,
-  ActiveWarning = Active + Warning,
-
-  RestStart = Rest + Start + Instant,
-  RestStopWarning = Rest + GetReady,
-  RestStopWarningOnTheSecond = RestStopWarning + Instant,
-}
 
 @IonicPage()
 @Component({
@@ -43,11 +19,10 @@ export enum IntervalState {
 export class IntervalDisplayPage {
   @ViewChild(FabContainerComponent)
   private menu: FabContainerComponent;
-
+  private observer: PartialObserver<TimeEmission>;
   current_uuid: string;
-  subscription: Subscription;
-  seq: IntervalSeq;
-  remainingTime: string;
+  sots: IntervalSeq;
+  remainingSeqTime: string;
   remainingIntervalTime: number;
   currentInterval: number;
   _data: IntervalStorageData;
@@ -77,44 +52,32 @@ export class IntervalDisplayPage {
     public splashScreen: SplashScreen,
     public insomnia: Insomnia) {
 
-    // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
-    // called since sidemenus are just menus, not pages.
-    menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
-      this.ionViewDidEnterInterior();
-    });
   }
 
   ionViewDidLoad() {
-    this.seq = new IntervalSeq();
+    // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
+    // called since sidemenus are just menus, not pages.
+    this.menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
+      this.reloadViewAndTimer();
+    });
 
-    this.ionViewDidEnterInterior();
-    this.immediatelyPostViewDidLoad = true;
+    this.reloadViewAndTimer();
   }
 
-  ionViewDidEnter() {
-    if (!this.immediatelyPostViewDidLoad) {
-      this.ionViewDidEnterInterior();
-    } else {
-      this.immediatelyPostViewDidLoad = false;
-    }
+  reloadViewAndTimer() {
+    this.setViewInRunningMode(false);
+    this.retrieveDataAndBuildTimer();
   }
 
-  ionViewDidEnterInterior() {
-    this.setNotRunningFeatures();
-    this.getIntervalStorageData();
-  }
-
-  getIntervalStorageData(): void {
+  retrieveDataAndBuildTimer(): void {
     const uuid = (this.navParams.data) ? this.navParams.data : this.current_uuid;
 
     if (uuid) {
       this.menu.reset();
-      if ((<Subscription>this.subscription) && !this.subscription.closed) {
-        this.subscription.unsubscribe();
-      }
+
       this.storage.getItem(uuid).then((value: any) => {
         this.data = (value as IntervalStorageData);
-        this.instantiateTimer();
+        this.buildAndSubscribeTimer();
 
         // TOOD: can't seem to hide startup flash of white other then
         // to do the following:
@@ -128,50 +91,37 @@ export class IntervalDisplayPage {
     }
   }
 
-  instantiateTimer() {
+  buildAndSubscribeTimer() {
     this.viewState = SeqStates.Loaded;
-    this.remainingIntervalTime = this.data.activerest.lower;
 
-    this.seq.build(this.data.countdown,
+    this.sots = new IntervalSeq();
+    this.sots.build(this.data.countdown,
       this.data.intervals,
       this.data.activerest.lower,
       this.data.activerest.upper,
       this.data.warnings);
 
     this.subscribeTimer();
-    this.remainingTime = this.seq.calculateRemainingTime();
-
-    // this is need to refresh the view when being revisited from changed in interval-settings
-    this.ngDectector.detectChanges();
-  }
-
-  reset() {
-    this.viewState = SeqStates.Loaded;
-    this.remainingIntervalTime = this.data.activerest.lower;
-
-    this.seq.sequencer.reset();
-    this.remainingTime = this.seq.calculateRemainingTime();
-
-    // this is need to refresh the view when being revisited from changed in interval-settings
-    this.ngDectector.detectChanges();
+    this.setRemainingSeqAndIntervalTimes();
   }
 
   subscribeTimer(): void {
-    let observer: PartialObserver<TimeEmission> = {
+    this.observer = {
       next: (value: TimeEmission): void => {
-        this.remainingTime = this.seq.calculateRemainingTime(value);
-        this.remainingIntervalTime = Math.ceil(value.time);
+        this.setRemainingSeqAndIntervalTimes(value);
 
         if (value.interval) {
           this.currentInterval = value.interval.current;
         }
 
         if (value.state) {
+          // if we dont negate the audiable states the display will "blink"
+          // for a millisecond.
           let valueNoAudiable = (value.state.valueOf() as SeqStates);
           valueNoAudiable &= (~SeqStates.SingleBeep & ~SeqStates.DoubleBeep);
           this.viewState = valueNoAudiable;
 
-          // take care of all instant states...
+          // ...now take care of audiable states...
           if (value.state.valueOf(SeqStates.SingleBeep)) {
             this.signal.single();
           } else if (value.state.valueOf(SeqStates.DoubleBeep)) {
@@ -184,47 +134,61 @@ export class IntervalDisplayPage {
       },
       complete: (): void => {
         this.viewState = SeqStates.Completed;
+        this.signal.triple();
+        this.setRemainingSeqAndIntervalTimes();
       }
     };
 
-    this.seq.subscribe(observer);
+    this.sots.sequencer.subscribe(this.observer);
+
+    // this is need to refresh the view when being revisited from changed in interval-settings
+    this.ngDectector.detectChanges();
   }
 
-  setRunningFeatures() {
-    this.menuCtrl.enable(false, 'left');
-    this.menuCtrl.enable(false, 'right');
-    this.insomnia.keepAwake();
+  resetViewAndTimer() {
+    this.viewState = SeqStates.Loaded;
+
+    this.sots.sequencer.reset();
+    this.setRemainingSeqAndIntervalTimes();
+
+    // this is need to refresh the view when being revisited from changed in interval-settings
+    this.ngDectector.detectChanges();
   }
 
-  setNotRunningFeatures() {
-    this.menuCtrl.enable(true, 'left');
-    this.menuCtrl.enable(true, 'right');
-    this.insomnia.allowSleepAgain();
+  setRemainingSeqAndIntervalTimes(value?: TimeEmission): void {
+    this.remainingSeqTime = this.sots.calculateRemainingTime(value);
+    this.remainingIntervalTime = (value) ? Math.ceil(value.time) : this.data.activerest.lower;
+  }
+
+  setViewInRunningMode(value: boolean) {
+    this.menuCtrl.enable(!value, 'left');
+    this.menuCtrl.enable(!value, 'right');
+    (value) ? this.insomnia.keepAwake() : this.insomnia.allowSleepAgain();
   }
 
   onAction(emission: FabEmission) {
     switch (emission.action) {
       case FabAction.Home:
-        this.seq.sequencer.pause();
-        this.setNotRunningFeatures();
+        this.sots.sequencer.pause();
+        this.setViewInRunningMode(false);
         this.menuCtrl.open("left");
         break;
-      case FabAction.Start:
-        this.seq.sequencer.start();
-        this.setRunningFeatures();
-        break;
-      case FabAction.Pause:
-        this.seq.sequencer.pause();
-        this.setNotRunningFeatures();
+      case FabAction.Program:
+        this.sots.sequencer.pause();
+        this.setViewInRunningMode(false);
+        this.menuCtrl.open("right");
         break;
       case FabAction.Reset:
-        this.reset();
-        this.setNotRunningFeatures();
+        this.resetViewAndTimer();
+        this.setViewInRunningMode(false);
         break;
-      case FabAction.Program:
-        this.seq.sequencer.pause();
-        this.setNotRunningFeatures();
-        this.menuCtrl.open("right");
+      case FabAction.Start:
+        this.sots.sequencer.start();
+        this.setViewInRunningMode(true);
+        break;
+      case FabAction.Pause:
+        this.sots.sequencer.pause();
+        this.setViewInRunningMode(false);
         break;
     }
     emission.container.close();
