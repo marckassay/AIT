@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
 import { AppStorageData } from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
-import { ThemeSettingsProvider, BaseTheme, AccentTheme } from '../../app/core/ThemeSettingsProvider';
+import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../../app/core/ThemeSettingsProvider';
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 import { AITSignal } from '../../app/core/AITSignal';
 
@@ -13,18 +13,18 @@ import { AITSignal } from '../../app/core/AITSignal';
   templateUrl: 'app-settings.html',
 })
 export class AppSettingsPage {
-  @ViewChild("Navbar")
+  @ViewChild('Navbar')
   nav: Navbar;
 
   BaseTheme = BaseTheme;
   AccentTheme = AccentTheme;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public storage:AITStorage,
-              public signal: AITSignal,
-              public settings: ThemeSettingsProvider,
-              public menuCtrl: MenuController) {
+    public navParams: NavParams,
+    public storage: AITStorage,
+    public signal: AITSignal,
+    public settings: ThemeSettingsProvider,
+    public menuCtrl: MenuController) {
 
     this.menuCtrl.enable(false, 'left');
     this.menuCtrl.enable(false, 'right');
@@ -34,13 +34,12 @@ export class AppSettingsPage {
   ionViewWillEnter() {
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = <AppStorageData>value;
-    }).catch((reject) => {
-      //console.log("app-settings storage error");
+    }).catch(() => {
+      // console.log("app-settings storage error");
     });
   }
 
-  ionViewWillLeave()
-  {
+  ionViewWillLeave() {
     this.storage.setItem(this.data);
     this.signal.data = this.data;
   }

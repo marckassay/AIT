@@ -1,10 +1,6 @@
-import { Sequencer, CountdownSegment, CountupSegment, TimeEmission, add } from 'sots';
-import { Subscription } from 'rxjs/Subscription';
+import { CountdownSegment, Sequencer, TimeEmission, add } from 'sots';
 import { CountdownWarnings } from '../../app/app.component';
-import { PartialObserver } from 'rxjs/Observer';
-import * as _ from "lodash";
 import * as moment from 'moment';
-
 
 export enum SeqStates {
   SingleBeep = 2,
@@ -41,7 +37,7 @@ export class IntervalSeq {
         states: [
           { state: SeqStates.CountdownWarning, timeLessThanOrEqualTo: countdown.toString() },
           { state: SeqStates.DoubleBeep, timeAt: countdown.toString() },
-          { state: SeqStates.SingleBeep, timeAt: "2,1" }
+          { state: SeqStates.SingleBeep, timeAt: '2,1' }
         ]
       })
       .group(intervals,
@@ -50,16 +46,16 @@ export class IntervalSeq {
         omitFirst: true,
         states: [
           { state: SeqStates.Rest, timeLessThanOrEqualTo: rest.toString() },
-          { state: SeqStates.Warning, timeLessThanOrEqualTo: "3" },
+          { state: SeqStates.Warning, timeLessThanOrEqualTo: '3' },
           { state: SeqStates.DoubleBeep, timeAt: rest.toString() },
-          { state: SeqStates.SingleBeep, timeAt: "2,1" }
+          { state: SeqStates.SingleBeep, timeAt: '2,1' }
         ]
       }),
       add(CountdownSegment, {
         duration: this.secToMilli(active),
         states: [
           { state: SeqStates.Active, timeLessThanOrEqualTo: active.toString() },
-          { state: SeqStates.Warning, timeLessThanOrEqualTo: "3" },
+          { state: SeqStates.Warning, timeLessThanOrEqualTo: '3' },
           { state: SeqStates.DoubleBeep, timeAt: active.toString() },
           { state: SeqStates.SingleBeep, timeAt: this.constructActiveSingleBeepTimes(warnings) }
         ]

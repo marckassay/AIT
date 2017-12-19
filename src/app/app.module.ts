@@ -7,13 +7,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Insomnia } from '@ionic-native/insomnia';
 
-import { AppComponent } from './app.component'
-import { IntervalDisplayPage, IntervalSettingsPage, HomePage } from '../pages/pages';
+import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
+import { AppComponent } from './app.component';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { AITStorage } from './core/AITStorage';
 import { IonicStorageModule } from '@ionic/storage';
 import { Vibration } from '@ionic-native/vibration';
-import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
+import { HomePage, IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { AITSignal } from './core/AITSignal';
 import { HomePageModule } from '../pages/home/home.module';
 import { IntervalDisplayPageModule } from '../pages/interval-display/interval-display.module';
@@ -32,7 +32,7 @@ import { FabContainerComponentModule } from './components/fabcontainer.component
     IntervalSettingsPageModule,
     IonicStorageModule.forRoot({
       name: '__aitdb',
-         driverOrder: ['indexeddb', 'sqlite', 'websql']
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
     IonicModule.forRoot(AppComponent, {
       menuType: 'reveal'
@@ -56,7 +56,7 @@ import { FabContainerComponentModule } from './components/fabcontainer.component
     Vibration,
     Insomnia,
     AITSignal,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+export class AppModule { }

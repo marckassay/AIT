@@ -1,8 +1,8 @@
-import { Component, ViewEncapsulation, ChangeDetectorRef, OnInit } from '@angular/core';
-import { IonicPage, ToastController, MenuController } from 'ionic-angular';
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { IonicPage, MenuController, ToastController } from 'ionic-angular';
 import * as app from '../../app/app.component';
 import { AITStorage } from '../../app/core/AITStorage';
-import { IntervalStorageData, AppStorageData } from '../../app/app.component';
+import { AppStorageData, IntervalStorageData } from '../../app/app.component';
 
 @IonicPage()
 @Component({
@@ -11,14 +11,14 @@ import { IntervalStorageData, AppStorageData } from '../../app/app.component';
   encapsulation: ViewEncapsulation.None
 })
 export class IntervalSettingsPage implements OnInit {
-uuid: string;
+  uuid: string;
   appSoundsDisabled: boolean;
   appVibratorDisabled: boolean;
 
   constructor(public storage: AITStorage,
-              public menuCtrl: MenuController,
-              public toastCtrl: ToastController,
-              public ngDectector: ChangeDetectorRef) { }
+    public menuCtrl: MenuController,
+    public toastCtrl: ToastController,
+    public ngDectector: ChangeDetectorRef) { }
 
   initialize(uuid: string): void {
     this.uuid = uuid;
@@ -35,8 +35,8 @@ uuid: string;
   }
 
   ngOnInit() {
-   // load data now, to prevent white flash when initially opened...
-   this.loadTimerData(this.uuid);
+    // load data now, to prevent white flash when initially opened...
+    this.loadTimerData(this.uuid);
   }
 
   loadTimerData(uuid: string): void {
@@ -52,40 +52,41 @@ uuid: string;
       const totaltimeInSeconds = (this.data.activerest.upper + this.data.activerest.lower) * this.data.intervals;
       return app.getRemainingTimeISO(totaltimeInSeconds * app.millisecond);
     } else {
-      return "00:00.0";
+      return '00:00.0';
     }
   }
 
   get countdownLabel(): string {
     if (this.data) {
-      return ":" + this.data.countdown;
+      return ':' + this.data.countdown;
     } else {
-      return ":0";
+      return ':0';
     }
   }
 
-  dataChanged(property:string):void {
+  dataChanged(property?: string): void {
+    property!;
     this.ngDectector.detectChanges();
 
     this.storage.setItem(this.data);
   }
 
   inform(): void {
-    let bmesg = (this.appSoundsDisabled)?1:0;
-    bmesg += (this.appVibratorDisabled)?2:0;
-    bmesg += (bmesg == 3)?4:0;
+    let bmesg = (this.appSoundsDisabled) ? 1 : 0;
+    bmesg += (this.appVibratorDisabled) ? 2 : 0;
+    bmesg += (bmesg === 3) ? 4 : 0;
 
     let smesg: string;
-    if(bmesg == 1) {
+    if (bmesg === 1) {
       smesg = 'sound is muted';
-    } else if (bmesg == 2) {
+    } else if (bmesg === 2) {
       smesg = 'vibrate is turned-off';
     } else {
       smesg = 'sound is muted and vibrate is turned-off';
     }
 
     let toast = this.toastCtrl.create({
-      message: "AiT's "+smesg+". Go to 'AiT Settings' page and adjust accordingly if needed.",
+      message: 'AiT\'s ' + smesg + '. Go to \'AiT Settings\' page and adjust accordingly if needed.',
       duration: 5000,
       dismissOnPageChange: true,
       position: 'top'

@@ -12,7 +12,7 @@ export class AITSignal {
   data: AppStorageData;
 
   constructor(public vibration: Vibration,
-              public storage: AITStorage) {
+    public storage: AITStorage) {
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = <AppStorageData>value;
     });
@@ -21,17 +21,17 @@ export class AITSignal {
   }
 
   single() {
-    if(this.data.sound) { this.sound.singleBeep() };
-    if(this.data.vibrate) { this.vibrate.singleVibrate() };
+    if (this.data.sound) { this.sound.singleBeep(); }
+    if (this.data.vibrate) { this.vibrate.singleVibrate(); }
   }
 
   double() {
-    if(this.data.sound) { this.sound.tripleBeep() };
-    if(this.data.vibrate) { this.vibrate.doubleVibrate() };
+    if (this.data.sound) { this.sound.tripleBeep(); }
+    if (this.data.vibrate) { this.vibrate.doubleVibrate(); }
   }
 
   triple() {
-    if(this.data.sound) { this.sound.completeBeep() };
-    if(this.data.vibrate) { this.vibrate.tripleVibrate() };
+    if (this.data.sound) { this.sound.completeBeep(); }
+    if (this.data.vibrate) { this.vibrate.tripleVibrate(); }
   }
 }

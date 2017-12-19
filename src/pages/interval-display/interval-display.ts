@@ -1,10 +1,9 @@
-import { Component, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
-import { FabAction, FabEmission, FabContainerComponent } from '../../app/components/fabcontainer.component/fabcontainer.component'
-import { Subscription, Observer } from 'rxjs';
+import { AITSignal } from '../../app/core/AITSignal';
+import { ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
+import { FabAction, FabContainerComponent, FabEmission } from '../../app/components/fabcontainer.component/fabcontainer.component';
 import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
-import { AITSignal } from '../../app/core/AITSignal';
+import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
 import { Insomnia } from '@ionic-native/insomnia';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IntervalSeq, SeqStates } from './interval-sots';
@@ -19,12 +18,14 @@ import { PartialObserver } from 'rxjs/Observer';
 export class IntervalDisplayPage {
   @ViewChild(FabContainerComponent)
   private menu: FabContainerComponent;
-  private observer: PartialObserver<TimeEmission>;
-  current_uuid: string;
-  sots: IntervalSeq;
   remainingSeqTime: string;
   remainingIntervalTime: number;
   currentInterval: number;
+
+  private observer: PartialObserver<TimeEmission>;
+  private current_uuid: string;
+  private sots: IntervalSeq;
+
   _data: IntervalStorageData;
   // used in ionViewDidLoad to load data for the initial loading.  after
   // ionViewDidLoad is called, ionViewDidEnter is then called; hence, we
@@ -85,8 +86,8 @@ export class IntervalDisplayPage {
           this.splashScreen.hide();
         }, 500);
 
-      }).catch((reject) => {
-        //console.log("interval-display preinitializeDisplay error")
+      }).catch(() => {
+        // console.log("interval-display preinitializeDisplay error")
       });
     }
   }
@@ -131,6 +132,7 @@ export class IntervalDisplayPage {
       },
       error: (error: any): void => {
         this.viewState = SeqStates.Error;
+        error!;
       },
       complete: (): void => {
         this.viewState = SeqStates.Completed;
@@ -171,12 +173,12 @@ export class IntervalDisplayPage {
       case FabAction.Home:
         this.sots.sequencer.pause();
         this.setViewInRunningMode(false);
-        this.menuCtrl.open("left");
+        this.menuCtrl.open('left');
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
         this.setViewInRunningMode(false);
-        this.menuCtrl.open("right");
+        this.menuCtrl.open('right');
         break;
       case FabAction.Reset:
         this.resetViewAndTimer();

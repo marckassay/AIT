@@ -1,5 +1,5 @@
 {
-  "name": "AiT",
+  "name": "ait",
   "version": "0.0.1",
   "author": "Marc Kassay",
   "homepage": "https://github.com/marckassay/AIT",
@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.0.1",
+    "tslint-ionic-rules": "0.0.11",
     "typescript": "^2.5.3"
   },
   "description": "An Ionic project",

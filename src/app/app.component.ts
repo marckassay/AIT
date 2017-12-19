@@ -1,12 +1,12 @@
-import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
-import { Platform, MenuController, Nav } from 'ionic-angular';
+import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
+import { MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { IntervalDisplayPage, IntervalSettingsPage } from '../pages/pages';
 import { AITStorage } from './core/AITStorage';
-import { HomeEmission, HomeAction } from '../pages/home/home';
-import { ThemeSettingsProvider, BaseTheme, AccentTheme } from './core/ThemeSettingsProvider';
+import { HomeAction, HomeEmission } from '../pages/home/home';
+import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -24,13 +24,13 @@ export class AppComponent {
   rightMenuInnerHTML: ViewContainerRef;
 
   constructor(platform: Platform,
-              statusBar: StatusBar,
-              screenOrientation: ScreenOrientation,
-              public splashScreen: SplashScreen,
-              public settings: ThemeSettingsProvider,
-              public menuCtrl: MenuController,
-              public storage: AITStorage,
-              public componentFactoryResolver: ComponentFactoryResolver) {
+    statusBar: StatusBar,
+    screenOrientation: ScreenOrientation,
+    public splashScreen: SplashScreen,
+    public settings: ThemeSettingsProvider,
+    public menuCtrl: MenuController,
+    public storage: AITStorage,
+    public componentFactoryResolver: ComponentFactoryResolver) {
 
     platform.ready().then(() => {
       statusBar.styleDefault();
@@ -45,22 +45,22 @@ export class AppComponent {
   }
 
   checkAppStartupData(attempts: number) {
-    //console.log("checkAppStartupData call, attempt number: "+attempts);
+    // console.log("checkAppStartupData call, attempt number: "+attempts);
     this.storage.checkAppStartupData().then(() => {
       this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 
-        if(value) {
+        if (value) {
           this.settings.base = <BaseTheme>value.base;
           this.settings.accent = <AccentTheme>value.accent;
 
-          this.settings.combinedTheme.subscribe( (value: string) => {
+          this.settings.combinedTheme.subscribe((value: string) => {
             this.combinedTheme = value;
           });
 
           this.afterStartupData(value.current_uuid);
         } else {
           // sometimes or alltimes it fails on initial load with no db.
-          Observable.timer(500).subscribe(()=>{this.checkAppStartupData(--attempts)})
+          Observable.timer(500).subscribe(() => { this.checkAppStartupData(--attempts); });
         }
       });
     });
@@ -89,7 +89,7 @@ export class AppComponent {
         break;
 
       case HomeAction.Settings:
-        this.menuCtrl.toggle('left').then((value) => {
+        this.menuCtrl.toggle('left').then(() => {
           this.navCtrl.push('AppSettingsPage');
         });
         break;

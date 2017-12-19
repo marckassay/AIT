@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
 
 export enum HomeAction {
   IntervalTimer,
@@ -7,8 +7,7 @@ export enum HomeAction {
   Settings
 }
 
-export interface HomeEmission
-{
+export interface HomeEmission {
   action: HomeAction;
 }
 
@@ -29,7 +28,7 @@ export class HomePage {
   ionViewDidLoad() {
   }
 
-  actionRequest(action:HomeAction) {
-    this.onAction.emit({action: action});
+  actionRequest(action: HomeAction) {
+    this.onAction.emit({ action: action });
   }
 }

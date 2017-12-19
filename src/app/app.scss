@@ -129,7 +129,7 @@ html {
     font-family: selawk;
     color: map-get($map,text-color);
     // matching size the same as ion-title, which is in the left side-menu.
-    font-size: $toolbar-md-title-font-size;
+    // font-size: $toolbar-md-title-font-size;
   }
   ion-item-divider,
   ion-item {

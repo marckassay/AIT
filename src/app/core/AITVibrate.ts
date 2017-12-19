@@ -5,17 +5,17 @@ export class AITVibrate {
 
   constructor(vibration: Vibration) {
     this.vibration = vibration;
-   }
+  }
 
   public singleVibrate() {
     this.vibration.vibrate(500);
   }
 
   public doubleVibrate() {
-    this.vibration.vibrate([500,500,500]);
+    this.vibration.vibrate([500, 500, 500]);
   }
 
   public tripleVibrate() {
-    this.vibration.vibrate([1000,500,1000]);
+    this.vibration.vibrate([1000, 500, 1000]);
   }
 }

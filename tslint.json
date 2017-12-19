@@ -1,4 +1,5 @@
 {
+  "extends": "tslint-ionic-rules",
   "rules": {
     "no-duplicate-variable": true,
     "no-unused-variable": [

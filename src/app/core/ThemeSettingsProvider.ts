@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 export enum AccentTheme {
   Monokai,
@@ -24,33 +25,33 @@ export class ThemeSettingsProvider {
     this.setCombinedTheme();
   }
 
-  set accent(value:AccentTheme) {
+  set accent(value: AccentTheme) {
     this._accent = value;
 
-    if(this.theme) {
+    if (this.theme) {
       this.setCombinedTheme();
     }
   }
 
-  set base(value:BaseTheme) {
+  set base(value: BaseTheme) {
     this._base = value;
 
-    if(this.theme) {
+    if (this.theme) {
       this.setCombinedTheme();
     }
   }
 
   private setCombinedTheme() {
-    const combined: string = "theme-"+BaseTheme[this._base]+"-"+AccentTheme[this._accent];
+    const combined: string = 'theme-' + BaseTheme[this._base] + '-' + AccentTheme[this._accent];
 
-    if(!this.theme) {
+    if (!this.theme) {
       this.theme = new BehaviorSubject(combined.toLowerCase());
     } else {
       this.theme.next(combined.toLowerCase());
     }
   }
 
-  get combinedTheme() {
+  get combinedTheme(): Observable<string> {
     return this.theme.asObservable();
   }
 }
