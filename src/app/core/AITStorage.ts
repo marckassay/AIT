@@ -6,6 +6,7 @@ import { UUIDData } from '../app.component';
 export class AITStorage {
   public static readonly APP_ID: string = '00000000-0000-0000-0000-000000000001';
   public static readonly INITIAL_INTERVAL_ID: string = '00000000-0000-0000-0000-000000000002';
+  public static readonly INITIAL_TIMER_ID: string = '00000000-0000-0000-0000-000000000003';
 
   constructor(public storage: Storage) {
   }

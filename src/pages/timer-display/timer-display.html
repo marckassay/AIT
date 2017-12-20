@@ -1,12 +1,21 @@
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>timer-display</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
+<ion-content>
+  <div>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-auto>
+          <div>
+            <div class="timeCountdown">12:30</div>
+            <!--
+            <div *ngSwitchCase="states.Loaded" class="timeLoaded">{{remainingSeqTime}}</div>
+            <div *ngSwitchCase="states.Warning" class="timeGo">{{remainingSeqTime}}</div>
+            <div *ngSwitchCase="states.Completed" class="timeCompleted">{{remainingSeqTime}}</div>
+            <div *ngSwitchCase="states.Error" class="timeStop">:?</div>
+            -->
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
+
+<fab-container (onAction)="onAction($event)"></fab-container>

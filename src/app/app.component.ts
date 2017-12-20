@@ -3,7 +3,7 @@ import { MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { IntervalDisplayPage, IntervalSettingsPage, TimerDisplayPage, } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage, TimerDisplayPage, TimerSettingsPage, } from '../pages/pages';
 import { AITStorage } from './core/AITStorage';
 import { HomeAction, HomeEmission } from '../pages/home/home';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
@@ -55,7 +55,7 @@ export class AppComponent {
             this.combinedTheme = value;
           });
 
-          this.afterStartupData(value.current_uuid);
+          this.setRootAndCreatePage(value.current_uuid);
         } else {
           // sometimes or alltimes it fails on initial load with no db.
           Observable.timer(500).subscribe(() => {
@@ -66,27 +66,44 @@ export class AppComponent {
     });
   }
 
-  afterStartupData(current_uuid: string) {
-    // TODO: will need to not have page hard-coded when CountdownPage
-    // or StopwatchPage is implemented.
-    this.navCtrl.setRoot(IntervalDisplayPage, current_uuid);
+  setRootAndCreatePage(current_uuid: string) {
+    let displayPage: any;
+    let settingsPage: any;
 
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(IntervalSettingsPage);
+    if (current_uuid === AITStorage.INITIAL_INTERVAL_ID) {
+      displayPage = IntervalDisplayPage;
+      settingsPage = IntervalSettingsPage;
+    } else if (current_uuid === AITStorage.INITIAL_TIMER_ID) {
+      displayPage = TimerDisplayPage;
+      settingsPage = TimerSettingsPage;
+    }
+
+    this.navCtrl.setRoot(displayPage, current_uuid);
+
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(settingsPage);
+    this.rightMenuInnerHTML.clear();
     let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
     componentInstance.instance.initialize(current_uuid);
   }
 
   onHomeAction(emission: HomeEmission) {
+    const currentPage = this.navCtrl.getActive().component;
+
     switch (emission.action) {
       case HomeAction.IntervalTimer:
+        if (currentPage !== IntervalDisplayPage) {
+          this.setRootAndCreatePage(AITStorage.INITIAL_INTERVAL_ID);
+        }
         this.menuCtrl.toggle('left');
+
         break;
 
       case HomeAction.Timer:
-        this.navCtrl.setRoot(TimerDisplayPage);
-        // const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(IntervalSettingsPage);
-        // let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
-        // componentInstance.instance.initialize(current_uuid);
+        if (currentPage !== TimerDisplayPage) {
+          this.setRootAndCreatePage(AITStorage.INITIAL_TIMER_ID);
+        }
+        this.menuCtrl.toggle('left');
+
         break;
 
       case HomeAction.Stopwatch:
