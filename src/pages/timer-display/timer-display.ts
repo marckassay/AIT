@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FabAction, FabContainerComponent, FabEmission } from '../../app/components/fabcontainer.component/fabcontainer.component';
 import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
-import { AITTimerPage } from '../AITTimerPage';
 import { AITStorage } from '../../app/core/AITStorage';
 import { AITSignal } from '../../app/core/AITSignal';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -12,7 +11,7 @@ import { Insomnia } from '@ionic-native/insomnia';
   selector: 'page-timer-display',
   templateUrl: 'timer-display.html',
 })
-export class TimerDisplayPage implements AITTimerPage {
+export class TimerDisplayPage {
   @ViewChild(FabContainerComponent)
   private menu: FabContainerComponent;
 
