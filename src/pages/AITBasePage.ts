@@ -6,7 +6,7 @@ import { ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITSignal } from '../app/core/AITSignal';
 import { UUIDData } from '../app/app.component';
-import { SotsForAit } from './SotsForAit';
+import { SequenceStates, SotsForAit } from './SotsForAit';
 
 
 export class AITBasePage {
@@ -18,12 +18,17 @@ export class AITBasePage {
     this._data = value;
   }
 
+  // this type assignment to variable is for angular view
+  // can access enum values.
+  protected states = SequenceStates;
+  protected viewState: SequenceStates;
+
   @ViewChild(FabContainerComponent)
   protected menu: FabContainerComponent;
 
-  protected currentUUID: string;
+  protected remainingSeqTime: string;
+  private currentUUID: string;
   protected sots: SotsForAit;
-  protected viewState: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -86,15 +91,20 @@ export class AITBasePage {
   }
 
   protected aitBuildTimer(): void {
-    throw new Error('Method hasnt been overriden.  This method needs to call: sots.build( ... )');
+    this.remainingSeqTime = this.sots.getTime();
   }
 
   protected aitSubscribeTimer(): void {
-    throw new Error('Method hasnt been overriden.  This method needs to call: sots.subscribe({ ... })');
+    // this is need to refresh the view when being revisited from changed in interval-settings
+    this.ngDectector.detectChanges();
   }
 
-  protected aitResetView(): void {
-    throw new Error('Method not implemented.');
+  private aitResetView() {
+    this.viewState = SequenceStates.Loaded;
+    this.remainingSeqTime = this.sots.getTime();
+
+    // this is need to refresh the view when being revisited from changed in interval-settings
+    this.ngDectector.detectChanges();
   }
 
   private aitResetTimer(): void {
@@ -107,7 +117,7 @@ export class AITBasePage {
     (value) ? this.insomnia.keepAwake() : this.insomnia.allowSleepAgain();
   }
 
-  onAction(emission: FabEmission) {
+  protected onAction(emission: FabEmission) {
     switch (emission.action) {
       case FabAction.Home:
         this.sots.sequencer.pause();

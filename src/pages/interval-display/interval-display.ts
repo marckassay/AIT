@@ -22,14 +22,10 @@ export class IntervalDisplayPage extends AITBasePage {
   set data(value: IntervalStorageData) {
     this._data = value;
   }
-  // this type assignment to variable is for angular view.
-  public states = SequenceStates;
-  viewState: SequenceStates;
 
-  remainingSeqTime: string;
   remainingIntervalTime: number;
   currentInterval: number;
-  // private currentUUID: string;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public menuCtrl: MenuController,
@@ -48,14 +44,6 @@ export class IntervalDisplayPage extends AITBasePage {
       insomnia);
   }
 
-  ionViewDidLoad() {
-    super.ionViewDidLoad();
-  }
-
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
-  }
-
   aitBuildTimer() {
     this.viewState = SequenceStates.Loaded;
 
@@ -65,7 +53,7 @@ export class IntervalDisplayPage extends AITBasePage {
       this.data.activerest.upper,
       this.data.warnings);
 
-    this.remainingSeqTime = this.sots.getTime();
+    super.aitBuildTimer();
   }
 
   aitSubscribeTimer(): void {
@@ -104,15 +92,6 @@ export class IntervalDisplayPage extends AITBasePage {
       }
     });
 
-    // this is need to refresh the view when being revisited from changed in interval-settings
-    this.ngDectector.detectChanges();
-  }
-
-  aitResetView() {
-    this.viewState = SequenceStates.Loaded;
-    this.remainingSeqTime = this.sots.getTime();
-
-    // this is need to refresh the view when being revisited from changed in interval-settings
-    this.ngDectector.detectChanges();
+    super.aitSubscribeTimer();
   }
 }
