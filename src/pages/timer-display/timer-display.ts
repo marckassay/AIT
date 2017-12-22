@@ -1,19 +1,27 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { FabAction, FabContainerComponent, FabEmission } from '../../app/components/fabcontainer.component/fabcontainer.component';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../../app/core/AITStorage';
 import { AITSignal } from '../../app/core/AITSignal';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Insomnia } from '@ionic-native/insomnia';
+import { AITBasePage } from '../AITBasePage';
+import { SequenceStates } from '../SotsForAit';
+import { TimeEmission } from 'sots';
+import { TimerStorageData } from '../../app/app.component';
 
 @IonicPage()
 @Component({
   selector: 'page-timer-display',
   templateUrl: 'timer-display.html',
 })
-export class TimerDisplayPage {
-  @ViewChild(FabContainerComponent)
-  private menu: FabContainerComponent;
+export class TimerDisplayPage extends AITBasePage {
+  @Input('data')
+  get data(): TimerStorageData {
+    return this._uuidData as TimerStorageData;
+  }
+  set data(value: TimerStorageData) {
+    this._uuidData = value;
+  }
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -23,60 +31,54 @@ export class TimerDisplayPage {
     public ngDectector: ChangeDetectorRef,
     public splashScreen: SplashScreen,
     public insomnia: Insomnia) {
-
+    super(navCtrl,
+      navParams,
+      menuCtrl,
+      storage,
+      signal,
+      ngDectector,
+      splashScreen,
+      insomnia);
   }
 
-  ionViewDidLoad() {
+  aitBuildTimer() {
+    this.sots.build(this.data.countdown,
+      this.data.time);
 
+    super.aitBuildTimer();
   }
 
-  ionViewDidEnter() {
-  }
-
-  aitLoadView(): void {
-    throw new Error('Method not implemented.');
-  }
-  aitLoadTimer(): void {
-    throw new Error('Method not implemented.');
-  }
-  aitLoadData(): void {
-    throw new Error('Method not implemented.');
-  }
-  aitBuildTimer(): void {
-    throw new Error('Method not implemented.');
-  }
   aitSubscribeTimer(): void {
-    throw new Error('Method not implemented.');
-  }
-  aitResetView(): void {
-    throw new Error('Method not implemented.');
-  }
-  aitResetTimer(): void {
-    throw new Error('Method not implemented.');
-  }
-  aitSetViewRunningMode(value: boolean): void {
-    value!;
-    throw new Error('Method not implemented.');
-  }
+    this.sots.subscribe({
+      next: (value: TimeEmission): void => {
+        this.grandTime = this.sots.getGrandTime(value);
 
-  onAction(emission: FabEmission) {
-    switch (emission.action) {
-      case FabAction.Home:
-        this.menu!;
-        break;
-      case FabAction.Program:
+        if (value.state) {
+          // if we dont negate the audiable states the display will "blink"
+          // for a millisecond.
+          let valueNoAudiable = (value.state.valueOf() as SequenceStates);
+          valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
+          this.viewState = valueNoAudiable;
 
-        break;
-      case FabAction.Reset:
+          // ...now take care of audiable states...
+          if (value.state.valueOf(SequenceStates.SingleBeep)) {
+            this.signal.single();
+          } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
+            this.signal.double();
+          }
+        }
+      },
+      error: (error: any): void => {
+        this.viewState = SequenceStates.Error;
+        error!;
+      },
+      complete: (): void => {
+        this.viewState = SequenceStates.Completed;
+        this.signal.triple();
+        this.grandTime = this.sots.getGrandTime();
+      }
+    });
 
-        break;
-      case FabAction.Start:
-
-        break;
-      case FabAction.Pause:
-
-        break;
-    }
-    emission.container.close();
+    super.aitSubscribeTimer();
   }
 }

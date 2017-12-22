@@ -1,50 +1,47 @@
-
+$font-size-grandtime-portrait:       60vw;
+$font-size-grandtime-landscape:      50vh;
 
 @mixin theme-map-apply ($map) {
-  /*
-  $font-size-time-portrait:         60vw;
-$font-size-time-landscape:        50vh;
-    .timeGo {
+  .activeGo {
     font-family: selawk;
-    @media screen and (orientation:portrait) { font-size: $font-size-time-portrait; }
-    @media screen and (orientation:landscape) { font-size: $font-size-time-landscape; }
+    @media screen and (orientation:portrait) { font-size: $font-size-grandtime-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-grandtime-landscape; }
     color: map-get($map, go);
   }
 
-  .timeGetReady, .timeLoaded, .timeCountdown{
-    @extend .timeGo;
+  .timeLoaded, .timeCountdown, .activeGetReady{
+    @extend .activeGo;
     color: map-get($map, getready);
   }
 
   .timeStop {
-    @extend .timeGo;
+    @extend .activeGo;
     color: map-get($map, stop);
   }
 
   .timeCompleted {
-    @extend .timeGo;
+    @extend .activeGo;
     color: map-get($map, primary);
   }
-  */
 }
 
-.theme-light-rgbandy page-interval-display {
+.theme-light-rgbandy page-timer-display {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
   @include theme-map-apply($map);
 }
 
-.theme-dark-rgbandy page-interval-display {
+.theme-dark-rgbandy page-timer-display {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
   @include theme-map-apply($map);
 }
 
 
-.theme-light-monokai page-interval-display {
+.theme-light-monokai page-timer-display {
   $map: theme-map-get($accent-theme-monokai, $base-theme-light);
   @include theme-map-apply($map);
 }
 
-.theme-dark-monokai page-interval-display {
+.theme-dark-monokai page-timer-display {
   $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
   @include theme-map-apply($map);
 }

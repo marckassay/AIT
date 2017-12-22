@@ -22,12 +22,6 @@ export class HomePage {
   @Output()
   onAction = new EventEmitter<HomeEmission>();
 
-  constructor() {
-  }
-
-  ionViewDidLoad() {
-  }
-
   actionRequest(action: HomeAction) {
     this.onAction.emit({ action: action });
   }

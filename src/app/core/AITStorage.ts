@@ -25,11 +25,13 @@ export class AITStorage {
             base: 0,
             accent: 0
           };
+
           this.storage.set(AITStorage.APP_ID, data_app).then(() => {
             this.checkIntervalStartupData();
+            this.checkTimerStartupData();
           });
         } else {
-          this.checkIntervalStartupData();
+
         }
       });
     }, () => {
@@ -49,11 +51,24 @@ export class AITStorage {
           intervalmaxlimit: 20,
           countdown: 10,
           countdownmaxlimit: 60,
-          getready: 3,
           warnings: { fivesecond: false, tensecond: true, fifthteensecond: false },
-          isCountdownInSeconds: true
         };
         this.storage.set(AITStorage.INITIAL_INTERVAL_ID, data_interval);
+      }
+    });
+  }
+
+  private checkTimerStartupData(): void {
+    this.storage.get(AITStorage.INITIAL_TIMER_ID).then((value: any) => {
+      if (!value) {
+        let data_interval = {
+          uuid: AITStorage.INITIAL_TIMER_ID,
+          name: 'Program #2',
+          countdown: 10,
+          countdownmaxlimit: 60,
+          time: 900
+        };
+        this.storage.set(AITStorage.INITIAL_TIMER_ID, data_interval);
       }
     });
   }
@@ -76,7 +91,7 @@ export class AITStorage {
     });
   }
 
-  private setCurrentUUID(uuid: string): void {
+  setCurrentUUID(uuid: string): void {
     this.getItem(AITStorage.APP_ID).then((value) => {
       if (value.current_uuid !== uuid) {
         value.current_uuid = uuid;

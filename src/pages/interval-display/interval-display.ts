@@ -17,10 +17,10 @@ import { AITBasePage } from '../AITBasePage';
 export class IntervalDisplayPage extends AITBasePage {
   @Input('data')
   get data(): IntervalStorageData {
-    return this._data as IntervalStorageData;
+    return this._uuidData as IntervalStorageData;
   }
   set data(value: IntervalStorageData) {
-    this._data = value;
+    this._uuidData = value;
   }
 
   remainingIntervalTime: number;
@@ -45,8 +45,6 @@ export class IntervalDisplayPage extends AITBasePage {
   }
 
   aitBuildTimer() {
-    this.viewState = SequenceStates.Loaded;
-
     this.sots.build(this.data.countdown,
       this.data.intervals,
       this.data.activerest.lower,
@@ -59,7 +57,7 @@ export class IntervalDisplayPage extends AITBasePage {
   aitSubscribeTimer(): void {
     this.sots.subscribe({
       next: (value: TimeEmission): void => {
-        this.remainingSeqTime = this.sots.getTime(value);
+        this.grandTime = this.sots.getGrandTime(value);
 
         if (value.interval) {
           this.currentInterval = value.interval.current;
@@ -88,7 +86,7 @@ export class IntervalDisplayPage extends AITBasePage {
       complete: (): void => {
         this.viewState = SequenceStates.Completed;
         this.signal.triple();
-        this.remainingSeqTime = this.sots.getTime();
+        this.grandTime = this.sots.getGrandTime();
       }
     });
 

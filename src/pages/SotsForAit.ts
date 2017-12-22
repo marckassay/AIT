@@ -29,6 +29,7 @@ export class SotsForAit implements ISotsForAit {
   sequencer: Sequencer;
   intervals: number;
   intervalDuration: number;
+  timerDuration: number;
 
   constructor() {
     this.sequencer = new Sequencer({ period: 100, compareAsBitwise: true });
@@ -38,6 +39,7 @@ export class SotsForAit implements ISotsForAit {
   build(countdown: number, intervals: number, rest: number, active: number, warnings: CountdownWarnings): void;
   build(countdown: number, timeOrIntervals: number, rest?: number, active?: number, warnings?: CountdownWarnings): void {
     if (warnings === undefined) {
+      this.timerDuration = timeOrIntervals;
       this.sequencer
         .add(CountdownSegment, {
           duration: this.secToMilli(countdown),
@@ -50,8 +52,8 @@ export class SotsForAit implements ISotsForAit {
         .add(CountdownSegment, {
           duration: this.secToMilli(timeOrIntervals),
           states: [
-            { state: SequenceStates.CountdownWarning, timeLessThanOrEqualTo: '60' },
-            { state: SequenceStates.DoubleBeep, timeAt: '60' },
+            { state: SequenceStates.Active, timeLessThanOrEqualTo: timeOrIntervals.toString() },
+            { state: SequenceStates.DoubleBeep, timeAt: timeOrIntervals.toString() },
             { state: SequenceStates.SingleBeep, timeAt: '2,1' }
           ]
         });
@@ -113,16 +115,20 @@ export class SotsForAit implements ISotsForAit {
     return seconds * 1000;
   }
 
-  getTime(value?: TimeEmission): string {
+  getGrandTime(value?: TimeEmission): string {
     let totalTimeRemaining: number;
 
     if (value && value.interval) {
       const remainingintervals: number = value.interval.total - value.interval.current;
       totalTimeRemaining = value.time + (this.intervalDuration * remainingintervals);
+      // if this is defined and the above isnt, we are in running mode for non-intervals or countdown
     } else if (value) {
       totalTimeRemaining = value.time;
-    } else {
+      // if intervalDuration is defined, then we are in interval-display
+    } else if (this.intervalDuration) {
       totalTimeRemaining = this.intervalDuration * this.intervals;
+    } else {
+      totalTimeRemaining = this.timerDuration;
     }
 
     return moment(totalTimeRemaining * 1000).format('mm:ss.S');

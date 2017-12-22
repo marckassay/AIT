@@ -10,12 +10,12 @@ import { SequenceStates, SotsForAit } from './SotsForAit';
 
 
 export class AITBasePage {
-  _data: UUIDData;
-  get data(): UUIDData {
-    return this._data;
+  public _uuidData: UUIDData;
+  get uuidData(): UUIDData {
+    return this._uuidData;
   }
-  set data(value: UUIDData) {
-    this._data = value;
+  set uuidData(value: UUIDData) {
+    this._uuidData = value;
   }
 
   // this type assignment to variable is for angular view
@@ -26,7 +26,7 @@ export class AITBasePage {
   @ViewChild(FabContainerComponent)
   protected menu: FabContainerComponent;
 
-  protected remainingSeqTime: string;
+  protected grandTime: string;
   private currentUUID: string;
   protected sots: SotsForAit;
 
@@ -73,7 +73,7 @@ export class AITBasePage {
       this.menu.reset();
 
       this.storage.getItem(uuid).then((value: any) => {
-        this.data = (value as UUIDData);
+        this.uuidData = (value as UUIDData);
         this.sots = new SotsForAit();
         this.aitBuildTimer();
         this.aitSubscribeTimer();
@@ -91,7 +91,8 @@ export class AITBasePage {
   }
 
   protected aitBuildTimer(): void {
-    this.remainingSeqTime = this.sots.getTime();
+    this.viewState = SequenceStates.Loaded;
+    this.grandTime = this.sots.getGrandTime();
   }
 
   protected aitSubscribeTimer(): void {
@@ -101,7 +102,7 @@ export class AITBasePage {
 
   private aitResetView() {
     this.viewState = SequenceStates.Loaded;
-    this.remainingSeqTime = this.sots.getTime();
+    this.grandTime = this.sots.getGrandTime();
 
     // this is need to refresh the view when being revisited from changed in interval-settings
     this.ngDectector.detectChanges();

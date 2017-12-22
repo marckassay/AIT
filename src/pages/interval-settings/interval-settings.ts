@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { IonicPage, MenuController, ToastController } from 'ionic-angular';
-import * as app from '../../app/app.component';
+import * as moment from 'moment';
 import { AITStorage } from '../../app/core/AITStorage';
 import { AppStorageData, IntervalStorageData } from '../../app/app.component';
 
@@ -50,7 +50,7 @@ export class IntervalSettingsPage implements OnInit {
   get totaltime(): string {
     if (this.data) {
       const totaltimeInSeconds = (this.data.activerest.upper + this.data.activerest.lower) * this.data.intervals;
-      return app.getRemainingTimeISO(totaltimeInSeconds * app.millisecond);
+      return moment(totaltimeInSeconds * 1000).format('mm:ss.S');
     } else {
       return '00:00.0';
     }

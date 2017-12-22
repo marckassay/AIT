@@ -45,6 +45,7 @@ export class AppComponent {
   checkAppStartupData(attempts: number) {
     // console.log("checkAppStartupData call, attempt number: "+attempts);
     this.storage.checkAppStartupData().then(() => {
+
       this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
 
         if (value) {
@@ -84,6 +85,8 @@ export class AppComponent {
     this.rightMenuInnerHTML.clear();
     let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
     componentInstance.instance.initialize(current_uuid);
+
+    this.storage.setCurrentUUID(current_uuid);
   }
 
   onHomeAction(emission: HomeEmission) {
@@ -153,26 +156,16 @@ export interface IntervalStorageData extends UUIDData {
   countdown: number;
   countdownmaxlimit: number;
 
-  isCountdownInSeconds: boolean;
-
-  getready: number;
-
   warnings: CountdownWarnings;
 }
 
-export interface ITimelinePosition {
-  /**
-   * Used to indicate where in the Observable sequence it is currently at.
-   */
-  timelinePosition: number;
+export interface StopwatchStorageData extends UUIDData {
+  name: string;
+
+  countdown: number;
+  countdownmaxlimit: number;
 }
 
-export const millisecond: number = 1000;
-/**
- * Returns this partial time segment, for an example:
- *  01:02.3
- * The example above is can be said, "1 minute, 2 point 3/10ths of a second"
- */
-export function getRemainingTimeISO(remainingmilliseconds: number): string {
-  return new Date(remainingmilliseconds).toISOString().substr(14, 7);
+export interface TimerStorageData extends StopwatchStorageData {
+  time: number;
 }
