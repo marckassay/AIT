@@ -6,38 +6,7 @@
 
 <ion-content *ngIf="data" padding>
   <div class="mini-display">
-    <div class="div-grid">
-      <ion-grid>
-        <ion-row justify-content-start nowrap>
-          <ion-col align-self-baseline>
-            <div>
-              <span class="active">{{data.activerest.upper}}</span>
-            </div>
-          </ion-col>
-          <ion-col align-self-baseline>
-            <div>
-              <span class="rest">/{{data.activerest.lower}}</span>
-            </div>
-          </ion-col>
-          <ion-col col-10 col-auto></ion-col>
-        </ion-row>
-        <ion-row justify-content-end nowrap>
-          <ion-col col-11 col-auto></ion-col>
-          <ion-col align-self-baseline>
-            <div>
-              <span class="interval">1/{{data.intervals}}</span>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row justify-content-start>
-          <ion-col>
-            <div>
-              <span class="totaltime">{{totaltime}}</span>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
+    <p class="totaltime">{{formattedGrandTime}}</p>
     <div>
       <span class="countdown">{{countdownLabel}}</span>
       <span class="countdowninfo"> secs (countdown to start)</span>
@@ -46,19 +15,19 @@
   <div class="controls" *ngIf="data">
     <ion-item-group>
       <ion-item-divider>PROGRAM SETTINGS</ion-item-divider>
-      <!-- activerest -->
+      <!-- minutes -->
       <ion-item>
-        <ion-range (ionChange)="dataChanged('activerest')" debounce="500" [(ngModel)]="data.activerest" min="5" max="70" step="5"
-          snaps="true" pin="true" dualKnobs="true">
-          <ion-label range-left>rest/active</ion-label>
+        <ion-range (ionChange)="dataChanged('minutes')" debounce="500" [(ngModel)]="grandTime.minutes" min="1" max="60" step="1"
+          snaps="true" pin="true">
+          <ion-label range-left>minutes</ion-label>
         </ion-range>
       </ion-item>
 
-      <!-- interval -->
+      <!-- seconds -->
       <ion-item>
-        <ion-range (ionChange)="dataChanged('intervals')" debounce="500" [(ngModel)]="data.intervals" min="1" [max]="data.intervalmaxlimit"
-          step="1" snaps="true" pin="true">
-          <ion-label range-left>intervals</ion-label>
+        <ion-range (ionChange)="dataChanged('seconds')" debounce="500" [(ngModel)]="grandTime.seconds" min="0" max="60" step="5"
+          snaps="true" pin="true">
+          <ion-label range-left>seconds</ion-label>
         </ion-range>
       </ion-item>
 

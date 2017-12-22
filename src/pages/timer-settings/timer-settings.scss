@@ -1,3 +1,135 @@
-page-timer-settings {
+@mixin theme-map-apply ($map) {
+  $font-size-active-portrait : 10vw;
+  $font-size-active-landscape : 10vh;
+  $font-size-rest-portrait : 7vw;
+  $font-size-rest-landscape : 7vh;
+  $font-size-interval-portrait : 7vw;
+  $font-size-interval-landscape : 7vh;
+  $font-size-totaltime-portrait : 7vw;
+  $font-size-totaltime-landscape: 7vh;
+  $font-size-countdown-portrait : 6vw;
+  $font-size-countdown-landscape: 6vh;
 
+  ion-icon {
+    color: map-get($map, information);
+  }
+
+  .mini-display {
+    // eventhough ngDectector.detectChanges(); is being used, it seems to not
+    // being detecting view change when needed.  So add margin-top to prevent
+    // content from being underneath header.
+    margin-top: 46px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  // give use some finger room for swiping without interacting with controls...
+  .controls {
+    padding-right: 5px;
+    border-right-width: 20px;
+    border-right-color: map-get($map, finger-pad-color);
+    border-right-style: solid;
+    margin-right: 5px
+  }
+  .scroll-content {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+
+/*   .div-grid {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
+    ion-grid {
+      width: 40% !important;
+    }
+  } */
+  .go-color {
+    color: map-get($map, go);
+  }
+  .stop-color {
+    color: map-get($map, stop);
+  }
+  .active {
+    font-family: selawksb;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-active-portrait;
+    }
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-active-landscape;
+    }
+    color: map-get($map, go);
+  }
+  .rest {
+    font-family: selawksb;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-rest-portrait;
+    }
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-rest-landscape;
+    }
+    color: map-get($map, stop);
+  }
+  .interval {
+    font-family: selawk;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-interval-portrait;
+    }
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-interval-landscape;
+    }
+    color: map-get($map, go);
+  }
+  .totaltime {
+    font-family: selawk;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-totaltime-portrait;
+    }
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-totaltime-landscape;
+    }
+    color: map-get($map, go);
+  }
+
+  .countdowninfo {
+    font-family: selawk;
+    color: map-get($map, text-color);
+  }
+  .countdown {
+    @extend .countdowninfo;
+    margin-left: 20px;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-countdown-portrait;
+    }
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-countdown-landscape;
+    }
+  }
 }
+
+
+.theme-light-rgbandy page-timer-settings {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-rgbandy page-timer-settings {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+
+
+.theme-light-monokai page-timer-settings {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-monokai page-timer-settings {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+

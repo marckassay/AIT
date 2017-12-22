@@ -12,7 +12,6 @@ import { AITBaseSettingsPage } from '../AITBaseSettingsPage';
   encapsulation: ViewEncapsulation.None
 })
 export class IntervalSettingsPage extends AITBaseSettingsPage {
-  _data: IntervalStorageData;
   get data(): IntervalStorageData {
     return this._uuidData as IntervalStorageData;
   }

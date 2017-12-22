@@ -66,7 +66,8 @@ export class AITStorage {
           name: 'Program #2',
           countdown: 10,
           countdownmaxlimit: 60,
-          time: 900
+          time: 900,
+          warnings: { fivesecond: false, tensecond: true, fifthteensecond: false }
         };
         this.storage.set(AITStorage.INITIAL_TIMER_ID, data_interval);
       }

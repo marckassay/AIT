@@ -16,7 +16,6 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
   templateUrl: 'timer-display.html',
 })
 export class TimerDisplayPage extends AITBasePage {
-
   @Input('data')
   get data(): TimerStorageData {
     return this._uuidData as TimerStorageData;

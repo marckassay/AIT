@@ -9,5 +9,8 @@ import { TimerSettingsPage } from './timer-settings';
   imports: [
     IonicPageModule.forChild(TimerSettingsPage),
   ],
+  exports: [
+    TimerSettingsPage
+  ]
 })
 export class TimerSettingsPageModule { }

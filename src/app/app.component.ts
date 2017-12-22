@@ -46,11 +46,11 @@ export class AppComponent {
     // console.log("checkAppStartupData call, attempt number: "+attempts);
     this.storage.checkAppStartupData().then(() => {
 
-      this.storage.getItem(AITStorage.APP_ID).then((value: AppStorageData) => {
+      this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
 
         if (value) {
-          this.settings.base = value.base as BaseTheme;
-          this.settings.accent = value.accent as AccentTheme;
+          this.settings.base = (value as AppStorageData).base as BaseTheme;
+          this.settings.accent = (value as AppStorageData).accent as AccentTheme;
 
           this.settings.combinedTheme.subscribe((value: string) => {
             this.combinedTheme = value;
@@ -168,4 +168,5 @@ export interface StopwatchStorageData extends UUIDData {
 
 export interface TimerStorageData extends StopwatchStorageData {
   time: number;
+  warnings: CountdownWarnings;
 }
