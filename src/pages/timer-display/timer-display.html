@@ -4,11 +4,21 @@
       <ion-row>
         <ion-col col-auto>
           <div [ngSwitch]="viewState" text-right>
-            <div *ngSwitchCase="states.Loaded" class="timeLoaded">{{grandTime}}</div>
-            <div *ngSwitchCase="states.CountdownWarning" class="timeCountdown">{{grandTime}}</div>
-            <div *ngSwitchCase="states.Active" class="activeGo">{{grandTime}}</div>
-            <div *ngSwitchCase="states.ActiveWarning" class="activeGetReady">{{grandTime}}</div>
-            <div *ngSwitchCase="states.Completed" class="timeCompleted">{{grandTime}}</div>
+            <div *ngSwitchCase="states.Loaded" class="timeLoaded">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="states.CountdownWarning" class="timeCountdown">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="states.Active" class="activeGo">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="states.ActiveWarning" class="activeGetReady">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="states.Completed" class="timeCompleted">
+              <p>{{formattedGrandTime}}</p>
+            </div>
             <div *ngSwitchCase="states.Error" class="timeStop">:?</div>
           </div>
         </ion-col>

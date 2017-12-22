@@ -1,7 +1,13 @@
-$font-size-grandtime-portrait:       60vw;
-$font-size-grandtime-landscape:      50vh;
+$font-size-grandtime-portrait:       52vw;
+$font-size-grandtime-landscape:      52vh;
 
 @mixin theme-map-apply ($map) {
+
+  p {
+    margin: 0px;
+    line-height: $font-size-grandtime-portrait;
+  }
+
   .activeGo {
     font-family: selawk;
     @media screen and (orientation:portrait) { font-size: $font-size-grandtime-portrait; }

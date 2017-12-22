@@ -8,6 +8,7 @@ import { AITBasePage } from '../AITBasePage';
 import { SequenceStates } from '../SotsForAit';
 import { TimeEmission } from 'sots';
 import { TimerStorageData } from '../../app/app.component';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 @IonicPage()
 @Component({
@@ -15,12 +16,24 @@ import { TimerStorageData } from '../../app/app.component';
   templateUrl: 'timer-display.html',
 })
 export class TimerDisplayPage extends AITBasePage {
+
   @Input('data')
   get data(): TimerStorageData {
     return this._uuidData as TimerStorageData;
   }
   set data(value: TimerStorageData) {
     this._uuidData = value;
+  }
+  _formattedGrandTime: string;
+  get formattedGrandTime(): string {
+    if (this.screenOrientation.type === this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY) {
+      return this.grandTime.replace(':', ':\r\n').replace('.', '.\r\n');
+    } else {
+      return this.grandTime;
+    }
+  }
+  set formattedGrandTime(value: string) {
+    this._formattedGrandTime = value;
   }
 
   constructor(public navCtrl: NavController,
@@ -30,7 +43,9 @@ export class TimerDisplayPage extends AITBasePage {
     public signal: AITSignal,
     public ngDectector: ChangeDetectorRef,
     public splashScreen: SplashScreen,
-    public insomnia: Insomnia) {
+    public insomnia: Insomnia,
+    public screenOrientation: ScreenOrientation
+  ) {
     super(navCtrl,
       navParams,
       menuCtrl,
@@ -38,7 +53,15 @@ export class TimerDisplayPage extends AITBasePage {
       signal,
       ngDectector,
       splashScreen,
-      insomnia);
+      insomnia,
+      screenOrientation);
+
+    this.screenOrientation.onChange().subscribe(
+      () => {
+        // this is need to refresh the view when being revisited from changed in interval-settings
+        this.ngDectector.detectChanges();
+      }
+    );
   }
 
   aitBuildTimer() {

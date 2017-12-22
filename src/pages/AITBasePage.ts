@@ -7,6 +7,7 @@ import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITSignal } from '../app/core/AITSignal';
 import { UUIDData } from '../app/app.component';
 import { SequenceStates, SotsForAit } from './SotsForAit';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 
 export class AITBasePage {
@@ -37,7 +38,8 @@ export class AITBasePage {
     public signal: AITSignal,
     public ngDectector: ChangeDetectorRef,
     public splashScreen: SplashScreen,
-    public insomnia: Insomnia) {
+    public insomnia: Insomnia,
+    public screenOrientation: ScreenOrientation) {
   }
 
   ionViewDidLoad() {
