@@ -8,6 +8,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { SequenceStates } from '../SotsForAit';
 import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 @IonicPage()
 @Component({
@@ -33,7 +34,8 @@ export class IntervalDisplayPage extends AITBasePage {
     public signal: AITSignal,
     public ngDectector: ChangeDetectorRef,
     public splashScreen: SplashScreen,
-    public insomnia: Insomnia) {
+    public insomnia: Insomnia,
+    public screenOrientation: ScreenOrientation) {
     super(navCtrl,
       navParams,
       menuCtrl,
@@ -41,7 +43,8 @@ export class IntervalDisplayPage extends AITBasePage {
       signal,
       ngDectector,
       splashScreen,
-      insomnia);
+      insomnia,
+      screenOrientation);
   }
 
   aitBuildTimer() {
