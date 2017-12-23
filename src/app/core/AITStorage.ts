@@ -7,6 +7,7 @@ export class AITStorage {
   public static readonly APP_ID: string = '00000000-0000-0000-0000-000000000001';
   public static readonly INITIAL_INTERVAL_ID: string = '00000000-0000-0000-0000-000000000002';
   public static readonly INITIAL_TIMER_ID: string = '00000000-0000-0000-0000-000000000003';
+  public static readonly INITIAL_STOPWATCH_ID: string = '00000000-0000-0000-0000-000000000004';
 
   constructor(public storage: Storage) {
   }
@@ -29,6 +30,7 @@ export class AITStorage {
           this.storage.set(AITStorage.APP_ID, data_app).then(() => {
             this.checkIntervalStartupData();
             this.checkTimerStartupData();
+            this.checkStopwatchStartupData();
           });
         } else {
 
@@ -70,6 +72,20 @@ export class AITStorage {
           warnings: { fivesecond: false, tensecond: true, fifthteensecond: false }
         };
         this.storage.set(AITStorage.INITIAL_TIMER_ID, data_interval);
+      }
+    });
+  }
+
+  private checkStopwatchStartupData(): void {
+    this.storage.get(AITStorage.INITIAL_STOPWATCH_ID).then((value: any) => {
+      if (!value) {
+        let data_interval = {
+          uuid: AITStorage.INITIAL_STOPWATCH_ID,
+          name: 'Program #3',
+          countdown: 10,
+          countdownmaxlimit: 60
+        };
+        this.storage.set(AITStorage.INITIAL_STOPWATCH_ID, data_interval);
       }
     });
   }

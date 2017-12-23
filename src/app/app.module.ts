@@ -21,6 +21,8 @@ import { IntervalSettingsPageModule } from '../pages/interval-settings/interval-
 import { FabContainerComponentModule } from './components/fabcontainer.component/fabcontainer.component.module';
 import { TimerDisplayPageModule } from '../pages/timer-display/timer-display.module';
 import { TimerSettingsPageModule } from '../pages/timer-settings/timer-settings.module';
+import { StopwatchDisplayPage } from '../pages/stopwatch-display/stopwatch-display';
+import { StopwatchDisplayPageModule } from '../pages/stopwatch-display/stopwatch-display.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { TimerSettingsPageModule } from '../pages/timer-settings/timer-settings.
     IntervalSettingsPageModule,
     TimerDisplayPageModule,
     TimerSettingsPageModule,
+    StopwatchDisplayPageModule,
     FabContainerComponentModule,
     IonicStorageModule.forRoot({
       name: '__aitdb',
@@ -49,6 +52,7 @@ import { TimerSettingsPageModule } from '../pages/timer-settings/timer-settings.
     IntervalSettingsPage,
     TimerDisplayPage,
     TimerSettingsPage,
+    StopwatchDisplayPage,
     FabContainerComponent,
     HomePage
   ],

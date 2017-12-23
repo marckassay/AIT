@@ -1,0 +1,53 @@
+$font-size-grandtime-portrait:       52vw;
+$font-size-grandtime-landscape:      52vh;
+
+@mixin theme-map-apply ($map) {
+
+  p {
+    margin: 0px;
+    line-height: $font-size-grandtime-portrait;
+  }
+
+  .activeGo {
+    font-family: selawk;
+    @media screen and (orientation:portrait) { font-size: $font-size-grandtime-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-grandtime-landscape; }
+    color: map-get($map, go);
+  }
+
+  .timeLoaded, .timeCountdown, .activeGetReady{
+    @extend .activeGo;
+    color: map-get($map, getready);
+  }
+
+  .timeStop {
+    @extend .activeGo;
+    color: map-get($map, stop);
+  }
+
+  .timeCompleted {
+    @extend .activeGo;
+    color: map-get($map, primary);
+  }
+}
+
+.theme-light-rgbandy page-stopwatch-display {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-rgbandy page-stopwatch-display {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+
+
+.theme-light-monokai page-stopwatch-display {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-monokai page-stopwatch-display {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
+  @include theme-map-apply($map);
+}

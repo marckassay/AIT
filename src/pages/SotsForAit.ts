@@ -1,4 +1,4 @@
-import { CountdownSegment, Sequencer, TimeEmission, add } from 'sots';
+import { CountdownSegment, CountupSegment, Sequencer, TimeEmission, add } from 'sots';
 import { CountdownWarnings } from '../app/app.component';
 import * as moment from 'moment';
 import { PartialObserver } from 'rxjs/Observer';
@@ -21,6 +21,8 @@ export enum SequenceStates {
 
 export interface ISotsForAit {
   sequencer: Sequencer;
+
+  build(countdown: number): void;
   build(countdown: number, time: number): void;
   build(countdown: number, intervals: number, rest: number, active: number, warnings: CountdownWarnings): void;
 }
@@ -35,29 +37,12 @@ export class SotsForAit implements ISotsForAit {
     this.sequencer = new Sequencer({ period: 100, compareAsBitwise: true });
   }
 
+  build(countdown: number): void;
   build(countdown: number, time: number): void;
   build(countdown: number, intervals: number, rest: number, active: number, warnings: CountdownWarnings): void;
-  build(countdown: number, timeOrIntervals: number, rest?: number, active?: number, warnings?: CountdownWarnings): void {
-    if (warnings === undefined) {
-      this.timerDuration = timeOrIntervals;
-      this.sequencer
-        .add(CountdownSegment, {
-          duration: this.secToMilli(countdown),
-          states: [
-            { state: SequenceStates.CountdownWarning, timeLessThanOrEqualTo: countdown.toString() },
-            { state: SequenceStates.DoubleBeep, timeAt: countdown.toString() },
-            { state: SequenceStates.SingleBeep, timeAt: '2,1' }
-          ]
-        })
-        .add(CountdownSegment, {
-          duration: this.secToMilli(timeOrIntervals),
-          states: [
-            { state: SequenceStates.Active, timeLessThanOrEqualTo: timeOrIntervals.toString() },
-            { state: SequenceStates.DoubleBeep, timeAt: timeOrIntervals.toString() },
-            { state: SequenceStates.SingleBeep, timeAt: '2,1' }
-          ]
-        });
-    } else if (warnings !== undefined) {
+  build(countdown: number, timeOrIntervals?: number, rest?: number, active?: number, warnings?: CountdownWarnings): void {
+    // if so, called by interval-display...
+    if (rest !== undefined && active !== undefined) {
       this.intervals = timeOrIntervals!;
       this.intervalDuration = rest! + active!;
 
@@ -87,10 +72,48 @@ export class SotsForAit implements ISotsForAit {
             { state: SequenceStates.Active, timeLessThanOrEqualTo: active!.toString() },
             { state: SequenceStates.Warning, timeLessThanOrEqualTo: '3' },
             { state: SequenceStates.DoubleBeep, timeAt: active!.toString() },
-            { state: SequenceStates.SingleBeep, timeAt: this.constructActiveSingleBeepTimes(warnings) }
+            { state: SequenceStates.SingleBeep, timeAt: this.constructActiveSingleBeepTimes(warnings!) }
           ]
         })
         );
+      // else if, this is called by timer-display
+    } else if (timeOrIntervals !== undefined) {
+      this.timerDuration = timeOrIntervals;
+      this.sequencer
+        .add(CountdownSegment, {
+          duration: this.secToMilli(countdown),
+          states: [
+            { state: SequenceStates.CountdownWarning, timeLessThanOrEqualTo: countdown.toString() },
+            { state: SequenceStates.DoubleBeep, timeAt: countdown.toString() },
+            { state: SequenceStates.SingleBeep, timeAt: '2,1' }
+          ]
+        })
+        .add(CountdownSegment, {
+          duration: this.secToMilli(timeOrIntervals),
+          states: [
+            { state: SequenceStates.Active, timeLessThanOrEqualTo: timeOrIntervals.toString() },
+            { state: SequenceStates.DoubleBeep, timeAt: timeOrIntervals.toString() },
+            { state: SequenceStates.SingleBeep, timeAt: '2,1' }
+          ]
+        });
+      // else, this is called by stopwatch-display
+    } else {
+      this.sequencer
+        .add(CountdownSegment, {
+          duration: this.secToMilli(countdown),
+          states: [
+            { state: SequenceStates.CountdownWarning, timeLessThanOrEqualTo: countdown.toString() },
+            { state: SequenceStates.DoubleBeep, timeAt: countdown.toString() },
+            { state: SequenceStates.SingleBeep, timeAt: '2,1' }
+          ]
+        })
+        .add(CountupSegment, {
+          duration: this.secToMilli(3600),
+          states: [
+            { state: SequenceStates.Active, timeGreaterThanOrEqualTo: '0' },
+            { state: SequenceStates.DoubleBeep, timeAt: '0' }
+          ]
+        });
     }
   }
 
@@ -127,8 +150,10 @@ export class SotsForAit implements ISotsForAit {
       // if intervalDuration is defined, then we are in interval-display
     } else if (this.intervalDuration) {
       totalTimeRemaining = this.intervalDuration * this.intervals;
-    } else {
+    } else if (this.timerDuration) {
       totalTimeRemaining = this.timerDuration;
+    } else {
+      return '00:00.0';
     }
 
     return moment(totalTimeRemaining * 1000).format('mm:ss.S');

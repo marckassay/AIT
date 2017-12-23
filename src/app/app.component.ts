@@ -8,6 +8,7 @@ import { AITStorage } from './core/AITStorage';
 import { HomeAction, HomeEmission } from '../pages/home/home';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
+import { StopwatchDisplayPage } from '../pages/stopwatch-display/stopwatch-display';
 
 @Component({
   templateUrl: 'app.html'
@@ -77,15 +78,18 @@ export class AppComponent {
     } else if (current_uuid === AITStorage.INITIAL_TIMER_ID) {
       displayPage = TimerDisplayPage;
       settingsPage = TimerSettingsPage;
+    } else if (current_uuid === AITStorage.INITIAL_STOPWATCH_ID) {
+      displayPage = StopwatchDisplayPage;
+      settingsPage = undefined; // TimerSettingsPage;
     }
 
     this.navCtrl.setRoot(displayPage, current_uuid);
-
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(settingsPage);
-    this.rightMenuInnerHTML.clear();
-    let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
-    componentInstance.instance.initialize(current_uuid);
-
+    if (settingsPage) {
+      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(settingsPage);
+      this.rightMenuInnerHTML.clear();
+      let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
+      componentInstance.instance.initialize(current_uuid);
+    }
     this.storage.setCurrentUUID(current_uuid);
   }
 
@@ -110,8 +114,12 @@ export class AppComponent {
         break;
 
       case HomeAction.Stopwatch:
-        break;
+        if (currentPage !== StopwatchDisplayPage) {
+          this.setRootAndCreatePage(AITStorage.INITIAL_STOPWATCH_ID);
+        }
+        this.menuCtrl.toggle('left');
 
+        break;
       case HomeAction.Settings:
         this.menuCtrl.toggle('left').then(() => {
           this.navCtrl.push('AppSettingsPage');
