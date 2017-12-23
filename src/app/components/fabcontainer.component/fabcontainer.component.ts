@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FabContainer } from 'ionic-angular';
 
 export interface FabEmission {
@@ -27,6 +27,9 @@ export enum FabState {
 export class FabContainerComponent {
   @Output()
   onAction = new EventEmitter<FabEmission>();
+
+  @Input()
+  settingsDisabled: boolean;
 
   public states = FabState;
 
@@ -58,5 +61,9 @@ export class FabContainerComponent {
 
   reset(): void {
     this.viewState = FabState.Start;
+  }
+
+  disableSettingsButton(): void {
+    this.settingsDisabled = true;
   }
 }

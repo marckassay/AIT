@@ -55,7 +55,6 @@ export class StopwatchDisplayPage extends AITBasePage {
       splashScreen,
       insomnia,
       screenOrientation);
-
     this.screenOrientation.onChange().subscribe(
       () => {
         // this is need to refresh the view when being revisited from changed in interval-settings
@@ -68,6 +67,8 @@ export class StopwatchDisplayPage extends AITBasePage {
     this.sots.build(this.data.countdown);
 
     super.aitBuildTimer();
+
+    this.menu.disableSettingsButton();
   }
 
   aitSubscribeTimer(): void {

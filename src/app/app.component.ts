@@ -80,7 +80,7 @@ export class AppComponent {
       settingsPage = TimerSettingsPage;
     } else if (current_uuid === AITStorage.INITIAL_STOPWATCH_ID) {
       displayPage = StopwatchDisplayPage;
-      settingsPage = undefined; // TimerSettingsPage;
+      settingsPage = undefined;
     }
 
     this.navCtrl.setRoot(displayPage, current_uuid);
@@ -89,6 +89,9 @@ export class AppComponent {
       this.rightMenuInnerHTML.clear();
       let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
       componentInstance.instance.initialize(current_uuid);
+      this.menuCtrl.swipeEnable(true, 'right');
+    } else {
+      this.menuCtrl.swipeEnable(false, 'right');
     }
     this.storage.setCurrentUUID(current_uuid);
   }
