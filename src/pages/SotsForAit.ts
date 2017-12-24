@@ -108,7 +108,7 @@ export class SotsForAit implements ISotsForAit {
           ]
         })
         .add(CountupSegment, {
-          duration: this.secToMilli(3600),
+          duration: this.secToMilli(Number.MAX_SAFE_INTEGER),
           states: [
             { state: SequenceStates.Active, timeGreaterThanOrEqualTo: '0' },
             { state: SequenceStates.DoubleBeep, timeAt: '0' }
