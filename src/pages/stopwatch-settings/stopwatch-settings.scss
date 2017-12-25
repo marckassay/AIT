@@ -1,0 +1,54 @@
+@mixin theme-map-apply ($map) {
+  $font-size-countdown-portrait : 6vw;
+  $font-size-countdown-landscape: 6vh;
+
+  ion-icon {
+    color: map-get($map, information);
+  }
+
+  .mini-display {
+    // eventhough ngDectector.detectChanges(); is being used, it seems to not
+    // being detecting view change when needed.  So add margin-top to prevent
+    // content from being underneath header.
+    margin-top: 56px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .countdowninfo {
+    font-family: selawk;
+    color: map-get($map, text-color);
+  }
+  .countdown {
+    @extend .countdowninfo;
+    margin-left: 20px;
+    @media screen and (orientation: portrait) {
+      font-size: $font-size-countdown-portrait;
+    }
+    @media screen and (orientation:landscape) {
+      font-size: $font-size-countdown-landscape;
+    }
+  }
+}
+
+
+.theme-light-rgbandy page-stopwatch-settings {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-rgbandy page-stopwatch-settings {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+
+
+.theme-light-monokai page-stopwatch-settings {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-monokai page-stopwatch-settings {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+

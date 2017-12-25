@@ -83,7 +83,8 @@ export class AITStorage {
           uuid: AITStorage.INITIAL_STOPWATCH_ID,
           name: 'Program #3',
           countdown: 10,
-          countdownmaxlimit: 60
+          countdownmaxlimit: 60,
+          warnings: { fivesecond: false, tensecond: true, fifthteensecond: false }
         };
         this.storage.set(AITStorage.INITIAL_STOPWATCH_ID, data_interval);
       }

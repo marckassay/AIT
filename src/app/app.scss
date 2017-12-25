@@ -28,7 +28,8 @@ html {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+  // common ligatures
+  // -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
 
@@ -105,41 +106,26 @@ html {
   .toolbar-background-wp {
     background-color: map-get($map, strong);
   }
-
+  .item-radio-checked ion-label {
+    color: map-get($map, primary);
+  }
+    .item-inner {
+    border-bottom: 1px solid map-get($map, weakest) !important;
+  }
   ion-navbar > button, .toolbar-title {
     color: map-get($map, text-color);
-  }
-  ion-item-divider,
-  ion-item {
-    background-color: map-get($map, weak);
   }
   ion-label,
   ion-input {
     font-family: selawk;
     color: map-get($map, text-color);
   }
-   .item-radio-checked ion-label {
-    color: map-get($map, primary);
-  }
-  ion-label {
-    font-family: selawk;
-    color: map-get($map,text-color);
-  }
-  ion-input {
-    font-family: selawk;
-    color: map-get($map,text-color);
-    // matching size the same as ion-title, which is in the left side-menu.
-    // font-size: $toolbar-md-title-font-size;
+  ion-range {
+    margin: 5px 0;
   }
   ion-item-divider,
   ion-item {
     background-color: map-get($map, weak);
-  }
-  ion-range {
-    margin: 5px 0;
-  }
-  .item-inner {
-    border-bottom: 1px solid map-get($map, weakest) !important;
   }
 }
 

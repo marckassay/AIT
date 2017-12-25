@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>SETTINGS</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="data" padding>
+  <div class="mini-display">
+    <p class="totaltime">{{formattedGrandTime}}</p>
+    <div>
+      <span class="countdown">{{countdownLabel}}</span>
+      <span class="countdowninfo"> secs (countdown to start)</span>
+    </div>
+  </div>
+  <div class="controls" *ngIf="data">
+    <ion-item-group>
+      <ion-item-divider>PROGRAM SETTINGS</ion-item-divider>
+      <!-- countdown -->
+      <ion-item>
+        <ion-range (ionChange)="dataChanged('countdown')" debounce="500" [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit"
+          step="5" snaps="true" pin="true">
+          <ion-label range-left>countdown</ion-label>
+        </ion-range>
+      </ion-item>
+    </ion-item-group>
+
+    <!-- warnings -->
+    <ion-item-group>
+      <ion-item-divider>
+        AUDIBLES
+        <button *ngIf="appSoundsDisabled || appVibratorDisabled" ion-button item-end clear (click)="inform()">
+          <ion-icon class="material-icons">warning</ion-icon>
+        </button>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>every 15 seconds</ion-label>
+        <ion-toggle (ionChange)="dataChanged('fivesecond')" [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label>every 30 seconds</ion-label>
+        <ion-toggle (ionChange)="dataChanged('tensecond')" [(ngModel)]="data.warnings.tensecond"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label>every minute</ion-label>
+        <ion-toggle (ionChange)="dataChanged('fifthteensecond')" [(ngModel)]="data.warnings.fifthteensecond"></ion-toggle>
+      </ion-item>
+    </ion-item-group>
+  </div>
+</ion-content>

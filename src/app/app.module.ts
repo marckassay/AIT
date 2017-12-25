@@ -7,15 +7,15 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Insomnia } from '@ionic-native/insomnia';
 
+import { HomePageModule } from '../pages/home/home.module';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
-import { AppComponent } from './app.component';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { AITStorage } from './core/AITStorage';
 import { IonicStorageModule } from '@ionic/storage';
 import { Vibration } from '@ionic-native/vibration';
-import { HomePage, IntervalDisplayPage, IntervalSettingsPage, TimerDisplayPage, TimerSettingsPage } from '../pages/pages';
+import { HomePage, IntervalDisplayPage, IntervalSettingsPage, StopwatchSettingsPage, TimerDisplayPage, TimerSettingsPage } from '../pages/pages';
 import { AITSignal } from './core/AITSignal';
-import { HomePageModule } from '../pages/home/home.module';
+import { AppComponent } from './app.component';
 import { IntervalDisplayPageModule } from '../pages/interval-display/interval-display.module';
 import { IntervalSettingsPageModule } from '../pages/interval-settings/interval-settings.module';
 import { FabContainerComponentModule } from './components/fabcontainer.component/fabcontainer.component.module';
@@ -23,6 +23,7 @@ import { TimerDisplayPageModule } from '../pages/timer-display/timer-display.mod
 import { TimerSettingsPageModule } from '../pages/timer-settings/timer-settings.module';
 import { StopwatchDisplayPage } from '../pages/stopwatch-display/stopwatch-display';
 import { StopwatchDisplayPageModule } from '../pages/stopwatch-display/stopwatch-display.module';
+import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwatch-settings.module';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { StopwatchDisplayPageModule } from '../pages/stopwatch-display/stopwatch
     TimerDisplayPageModule,
     TimerSettingsPageModule,
     StopwatchDisplayPageModule,
+    StopwatchSettingsPageModule,
     FabContainerComponentModule,
     IonicStorageModule.forRoot({
       name: '__aitdb',
@@ -53,6 +55,7 @@ import { StopwatchDisplayPageModule } from '../pages/stopwatch-display/stopwatch
     TimerDisplayPage,
     TimerSettingsPage,
     StopwatchDisplayPage,
+    StopwatchSettingsPage,
     FabContainerComponent,
     HomePage
   ],

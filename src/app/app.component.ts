@@ -1,9 +1,9 @@
+import { IntervalDisplayPage, IntervalSettingsPage, StopwatchSettingsPage, TimerDisplayPage, TimerSettingsPage, } from '../pages/pages';
 import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
-import { MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { IntervalDisplayPage, IntervalSettingsPage, TimerDisplayPage, TimerSettingsPage, } from '../pages/pages';
+import { MenuController, Nav, Platform } from 'ionic-angular';
 import { AITStorage } from './core/AITStorage';
 import { HomeAction, HomeEmission } from '../pages/home/home';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
@@ -80,19 +80,16 @@ export class AppComponent {
       settingsPage = TimerSettingsPage;
     } else if (current_uuid === AITStorage.INITIAL_STOPWATCH_ID) {
       displayPage = StopwatchDisplayPage;
-      settingsPage = undefined;
+      settingsPage = StopwatchSettingsPage;
     }
 
     this.navCtrl.setRoot(displayPage, current_uuid);
-    if (settingsPage) {
-      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(settingsPage);
-      this.rightMenuInnerHTML.clear();
-      let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
-      componentInstance.instance.initialize(current_uuid);
-      this.menuCtrl.swipeEnable(true, 'right');
-    } else {
-      this.menuCtrl.swipeEnable(false, 'right');
-    }
+
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(settingsPage);
+    this.rightMenuInnerHTML.clear();
+    let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
+    componentInstance.instance.initialize(current_uuid);
+
     this.storage.setCurrentUUID(current_uuid);
   }
 
@@ -175,6 +172,8 @@ export interface StopwatchStorageData extends UUIDData {
 
   countdown: number;
   countdownmaxlimit: number;
+
+  warnings: CountdownWarnings;
 }
 
 export interface TimerStorageData extends StopwatchStorageData {
