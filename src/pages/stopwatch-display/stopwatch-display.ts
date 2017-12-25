@@ -5,7 +5,7 @@ import { AITSignal } from '../../app/core/AITSignal';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Insomnia } from '@ionic-native/insomnia';
 import { AITBasePage } from '../AITBasePage';
-import { SequenceStates } from '../SotsForAit';
+import { SequenceStates } from '../../app/core/SotsForAit';
 import { TimeEmission } from 'sots';
 import { StopwatchStorageData } from '../../app/app.component';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';

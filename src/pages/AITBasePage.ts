@@ -6,7 +6,7 @@ import { ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITSignal } from '../app/core/AITSignal';
 import { UUIDData } from '../app/app.component';
-import { SequenceStates, SotsForAit } from './SotsForAit';
+import { SequenceStates, SotsForAit } from '../app/core/SotsForAit';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 

@@ -1,5 +1,5 @@
 import { CountdownSegment, CountupSegment, Sequencer, TimeEmission, add } from 'sots';
-import { CountdownWarnings } from '../app/app.component';
+import { CountdownWarnings } from '../app.component';
 import * as moment from 'moment';
 import { PartialObserver } from 'rxjs/Observer';
 

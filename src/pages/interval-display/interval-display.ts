@@ -5,7 +5,7 @@ import { IntervalStorageData } from '../../app/app.component';
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Insomnia } from '@ionic-native/insomnia';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { SequenceStates } from '../SotsForAit';
+import { SequenceStates } from '../../app/core/SotsForAit';
 import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
