@@ -65,6 +65,7 @@ export class TimerDisplayPage extends AITBasePage {
 
   aitBuildTimer() {
     this.sots.build(this.data.countdown,
+      this.data.warnings,
       this.data.time);
 
     super.aitBuildTimer();

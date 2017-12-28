@@ -49,10 +49,11 @@ export class IntervalDisplayPage extends AITBasePage {
 
   aitBuildTimer() {
     this.sots.build(this.data.countdown,
+      this.data.warnings,
       this.data.intervals,
       this.data.activerest.lower,
-      this.data.activerest.upper,
-      this.data.warnings);
+      this.data.activerest.upper
+    );
 
     super.aitBuildTimer();
   }

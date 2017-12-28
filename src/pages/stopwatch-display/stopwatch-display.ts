@@ -64,7 +64,7 @@ export class StopwatchDisplayPage extends AITBasePage {
   }
 
   aitBuildTimer() {
-    this.sots.build(this.data.countdown);
+    this.sots.build(this.data.countdown, this.data.warnings);
 
     super.aitBuildTimer();
 

@@ -22,9 +22,9 @@ export enum SequenceStates {
 export interface ISotsForAit {
   sequencer: Sequencer;
 
-  build(countdown: number): void;
-  build(countdown: number, time: number): void;
-  build(countdown: number, intervals: number, rest: number, active: number, warnings: CountdownWarnings): void;
+  build(countdown: number, warnings: CountdownWarnings): void;
+  build(countdown: number, warnings: CountdownWarnings, time: number): void;
+  build(countdown: number, warnings: CountdownWarnings, intervals: number, rest: number, active: number): void;
 }
 
 export class SotsForAit implements ISotsForAit {
@@ -37,10 +37,10 @@ export class SotsForAit implements ISotsForAit {
     this.sequencer = new Sequencer({ period: 100, compareAsBitwise: true });
   }
 
-  build(countdown: number): void;
-  build(countdown: number, time: number): void;
-  build(countdown: number, intervals: number, rest: number, active: number, warnings: CountdownWarnings): void;
-  build(countdown: number, timeOrIntervals?: number, rest?: number, active?: number, warnings?: CountdownWarnings): void {
+  build(countdown: number, warnings: CountdownWarnings): void;
+  build(countdown: number, warnings: CountdownWarnings, time: number): void;
+  build(countdown: number, warnings: CountdownWarnings, intervals: number, rest: number, active: number): void;
+  build(countdown: number, warnings: CountdownWarnings, timeOrIntervals?: number, rest?: number, active?: number): void {
     // if so, called by interval-display...
     if (rest !== undefined && active !== undefined) {
       this.intervals = timeOrIntervals!;
@@ -72,7 +72,7 @@ export class SotsForAit implements ISotsForAit {
             { state: SequenceStates.Active, timeLessThanOrEqualTo: active!.toString() },
             { state: SequenceStates.Warning, timeLessThanOrEqualTo: '3' },
             { state: SequenceStates.DoubleBeep, timeAt: active!.toString() },
-            { state: SequenceStates.SingleBeep, timeAt: this.constructActiveSingleBeepTimes(warnings!) }
+            { state: SequenceStates.SingleBeep, timeAt: this.constructIntervalSingleAudiblesTimes(warnings!) }
           ]
         })
         );
@@ -92,8 +92,8 @@ export class SotsForAit implements ISotsForAit {
           duration: this.secToMilli(timeOrIntervals),
           states: [
             { state: SequenceStates.Active, timeLessThanOrEqualTo: timeOrIntervals.toString() },
-            { state: SequenceStates.DoubleBeep, timeAt: timeOrIntervals.toString() },
-            { state: SequenceStates.SingleBeep, timeAt: '2,1' }
+            { state: SequenceStates.DoubleBeep, timeAt: this.constructModDoubleAudiblesTimes(warnings, timeOrIntervals.toString()) },
+            { state: SequenceStates.SingleBeep, timeAt: this.constructModSingleAudiblesTimes(warnings, '2,1') }
           ]
         });
       // else, this is called by stopwatch-display
@@ -111,7 +111,9 @@ export class SotsForAit implements ISotsForAit {
           duration: this.secToMilli(Number.MAX_SAFE_INTEGER),
           states: [
             { state: SequenceStates.Active, timeGreaterThanOrEqualTo: '0' },
-            { state: SequenceStates.DoubleBeep, timeAt: '0' }
+            { state: SequenceStates.DoubleBeep, timeAt: '0' }/*,
+            { state: SequenceStates.DoubleBeep, timeAt: this.constructModDoubleAudiblesTimes(warnings, '0') },
+            { state: SequenceStates.SingleBeep, timeAt: this.constructModSingleAudiblesTimes(warnings) } */
           ]
         });
     }
@@ -121,12 +123,39 @@ export class SotsForAit implements ISotsForAit {
     this.sequencer.subscribe(observer);
   }
 
-  constructActiveSingleBeepTimes(warnings: CountdownWarnings): string {
+  constructIntervalSingleAudiblesTimes(warnings: CountdownWarnings): string {
     let times: string;
     times = (warnings.fifthteensecond) ? '15,' : '';
     times += (warnings.tensecond) ? '10,' : '';
     times += (warnings.fivesecond) ? '5,' : '';
     times += '2,1';
+    return times;
+  }
+
+  constructModSingleAudiblesTimes(warnings: CountdownWarnings, append: string = ''): string {
+    let times: string = '';
+    if (append.length > 0) {
+      times = append + ',';
+    }
+    times += (warnings.fivesecond) ? 'mod15,' : '';
+    times += (warnings.tensecond) ? 'mod30,' : '';
+    if (times.endsWith(',')) {
+      times = times.slice(0, -1);
+    }
+
+    return times;
+  }
+
+  constructModDoubleAudiblesTimes(warnings: CountdownWarnings, append: string = ''): string {
+    let times: string = '';
+    if (append.length > 0) {
+      times = append + ',';
+    }
+    times += (warnings.fifthteensecond) ? 'mod60' : '';
+    if (times.endsWith(',')) {
+      times = times.slice(0, -1);
+    }
+
     return times;
   }
 
