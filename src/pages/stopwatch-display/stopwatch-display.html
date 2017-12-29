@@ -2,7 +2,7 @@
   <div>
     <ion-grid>
       <ion-row>
-        <ion-col col-auto>
+        <ion-col col-auto align-items-start>
           <div [ngSwitch]="viewState" text-right>
             <div *ngSwitchCase="states.Loaded" class="timeLoaded">
               <p>{{formattedGrandTime}}</p>

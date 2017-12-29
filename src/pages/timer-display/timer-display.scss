@@ -5,7 +5,8 @@ $font-size-grandtime-landscape:      52vh;
 
   p {
     margin: 0px;
-    line-height: $font-size-grandtime-portrait;
+    @media screen and (orientation:portrait) { line-height: $font-size-grandtime-portrait - 2; }
+    @media screen and (orientation:landscape) { line-height: $font-size-grandtime-landscape - 2; }
   }
 
   .activeGo {
