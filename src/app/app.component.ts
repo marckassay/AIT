@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { MenuController, Nav, Platform } from 'ionic-angular';
 import { AITStorage } from './core/AITStorage';
-import { HomeAction, HomeEmission } from '../pages/home/home';
+import { HomeAction, HomeEmission } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 import { StopwatchDisplayPage } from '../pages/stopwatch-display/stopwatch-display';

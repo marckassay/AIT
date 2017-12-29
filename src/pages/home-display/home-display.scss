@@ -3,12 +3,6 @@
     position: relative;
   }
 
-  ion-content {
-    ion-icon {
-      font-size: 10.2em;
-    }
-  }
-
   button {
     background-color: map-get($map, weakest);
   }
@@ -44,30 +38,30 @@
 
   .icon {
     font-size: 0;
-    width: 75px;
-    height: 75px;
-    background-size: cover;
+    width: 80px;
+    height: 120px;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: 50% 50%;
   }
 }
 
-.theme-light-rgbandy page-home {
+.theme-light-rgbandy page-home-display {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
   @include theme-map-apply($map);
 }
 
-.theme-dark-rgbandy page-home {
+.theme-dark-rgbandy page-home-display {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
   @include theme-map-apply($map);
 }
 
-.theme-light-monokai page-home {
+.theme-light-monokai page-home-display {
   $map: theme-map-get($accent-theme-monokai, $base-theme-light);
   @include theme-map-apply($map);
 }
 
-.theme-dark-monokai page-home {
+.theme-dark-monokai page-home-display {
   $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
   @include theme-map-apply($map);
 }

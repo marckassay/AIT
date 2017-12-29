@@ -12,11 +12,11 @@ export interface HomeEmission {
 }
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html',
+  selector: 'page-home-display',
+  templateUrl: 'home-display.html',
   encapsulation: ViewEncapsulation.None
 })
-export class HomePage {
+export class HomeDisplayPage {
   public actions = HomeAction;
 
   @Output()

@@ -7,13 +7,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Insomnia } from '@ionic-native/insomnia';
 
-import { HomePageModule } from '../pages/home/home.module';
+import { HomeDisplayPageModule } from '../pages/home-display/home-display.module';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
 import { AITStorage } from './core/AITStorage';
 import { IonicStorageModule } from '@ionic/storage';
 import { Vibration } from '@ionic-native/vibration';
-import { HomePage, IntervalDisplayPage, IntervalSettingsPage, StopwatchSettingsPage, TimerDisplayPage, TimerSettingsPage } from '../pages/pages';
+import { HomeDisplayPage, IntervalDisplayPage, IntervalSettingsPage, StopwatchSettingsPage, TimerDisplayPage, TimerSettingsPage } from '../pages/pages';
 import { AITSignal } from './core/AITSignal';
 import { AppComponent } from './app.component';
 import { IntervalDisplayPageModule } from '../pages/interval-display/interval-display.module';
@@ -31,7 +31,7 @@ import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwat
   ],
   imports: [
     BrowserModule,
-    HomePageModule,
+    HomeDisplayPageModule,
     IntervalDisplayPageModule,
     IntervalSettingsPageModule,
     TimerDisplayPageModule,
@@ -57,7 +57,7 @@ import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwat
     StopwatchDisplayPage,
     StopwatchSettingsPage,
     FabContainerComponent,
-    HomePage
+    HomeDisplayPage
   ],
   providers: [
     StatusBar,
