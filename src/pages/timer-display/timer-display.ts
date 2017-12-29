@@ -84,10 +84,10 @@ export class TimerDisplayPage extends AITBasePage {
           this.viewState = valueNoAudiable;
 
           // ...now take care of audiable states...
-          if (value.state.valueOf(SequenceStates.SingleBeep)) {
-            this.signal.single();
-          } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
+          if (value.state.valueOf(SequenceStates.DoubleBeep)) {
             this.signal.double();
+          } else if (value.state.valueOf(SequenceStates.SingleBeep)) {
+            this.signal.single();
           }
         }
       },

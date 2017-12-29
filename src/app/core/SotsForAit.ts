@@ -108,12 +108,11 @@ export class SotsForAit implements ISotsForAit {
           ]
         })
         .add(CountupSegment, {
-          duration: this.secToMilli(Number.MAX_SAFE_INTEGER),
+          duration: Number.MAX_SAFE_INTEGER,
           states: [
             { state: SequenceStates.Active, timeGreaterThanOrEqualTo: '0' },
-            { state: SequenceStates.DoubleBeep, timeAt: '0' }/*,
-            { state: SequenceStates.DoubleBeep, timeAt: this.constructModDoubleAudiblesTimes(warnings, '0') },
-            { state: SequenceStates.SingleBeep, timeAt: this.constructModSingleAudiblesTimes(warnings) } */
+            { state: SequenceStates.DoubleBeep, timeAt: this.constructModDoubleAudiblesTimes(warnings) },
+            { state: SequenceStates.SingleBeep, timeAt: this.constructModSingleAudiblesTimes(warnings) }
           ]
         });
     }

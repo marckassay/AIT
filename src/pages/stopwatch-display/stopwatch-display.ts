@@ -77,16 +77,16 @@ export class StopwatchDisplayPage extends AITBasePage {
         this.grandTime = this.sots.getGrandTime(value);
         if (value.state) {
           // if we dont negate the audiable states the display will "blink"
-          // for a millisecond.
+          // for a tenth of a second.
           let valueNoAudiable = (value.state.valueOf() as SequenceStates);
           valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
           this.viewState = valueNoAudiable;
 
           // ...now take care of audiable states...
-          if (value.state.valueOf(SequenceStates.SingleBeep)) {
-            this.signal.single();
-          } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
+          if (value.state.valueOf(SequenceStates.DoubleBeep)) {
             this.signal.double();
+          } else if (value.state.valueOf(SequenceStates.SingleBeep)) {
+            this.signal.single();
           }
         }
       },
