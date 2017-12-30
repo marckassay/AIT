@@ -32,7 +32,6 @@ export class FabContainerComponent {
   settingsDisabled: boolean;
 
   public states = FabState;
-
   _viewState: FabState;
   get viewState(): FabState {
     return this._viewState;

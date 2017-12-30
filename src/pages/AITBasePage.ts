@@ -7,8 +7,8 @@ import { AITStorage } from '../app/core/AITStorage';
 import { UUIDData } from '../app/app.component';
 import { SequenceStates, SotsForAit } from '../app/core/SotsForAit';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { ServiceLocator } from '../app/app.module';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -39,7 +39,7 @@ export class AITBasePage implements OnInit {
   protected splashScreen: SplashScreen;
 
   protected grandTime: string;
-  protected isFirstViewing: boolean;
+  private isFirstViewing: boolean;
   private currentUUID: string;
 
   constructor( @Optional() ngDectector: ChangeDetectorRef,
@@ -86,8 +86,7 @@ export class AITBasePage implements OnInit {
   }
 
   ionViewDidEnter() {
-    this.splashScreen.hide();
-    this.isFirstViewing = false;
+
   }
 
   private loadViewAndTimer = () => {
@@ -111,7 +110,6 @@ export class AITBasePage implements OnInit {
 
       this.storage.getItem(uuid).then((value: any) => {
         this.uuidData = (value as UUIDData);
-        this.sots = new SotsForAit();
         this.aitBuildTimer();
         this.aitSubscribeTimer();
       }).catch(() => {
@@ -128,6 +126,12 @@ export class AITBasePage implements OnInit {
   protected aitSubscribeTimer(): void {
     // this is need to refresh the view when being revisited from changed in interval-settings
     this.ngDectector.detectChanges();
+
+    // finally, end of view cycle...
+    if (this.isFirstViewing) {
+      this.splashScreen.hide();
+      this.isFirstViewing = false;
+    }
   }
 
   private aitResetView() {

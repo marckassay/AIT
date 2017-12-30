@@ -19,6 +19,8 @@ export class AppComponent {
 
   combinedTheme: string;
 
+  protected isFirstViewing: boolean;
+
   @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })
   rightMenuInnerHTML: ViewContainerRef;
 
@@ -35,6 +37,7 @@ export class AppComponent {
       this.statusBar.styleLightContent();
     });
 
+    this.isFirstViewing = true;
     this.checkAppStartupData(5);
   }
 
@@ -78,15 +81,20 @@ export class AppComponent {
       settingsPage = StopwatchSettingsPage;
     }
 
-    this.navCtrl.setRoot(displayPage, current_uuid).then(() => {
-      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-      this.rightMenuInnerHTML.clear();
+    this.navCtrl.setRoot(displayPage, current_uuid, { animate: true, animation: 'md-transition' }).then(() => {
+      if (!this.isFirstViewing) {
+        this.menuCtrl.toggle('left').then(() => {
+          const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
+          this.rightMenuInnerHTML.clear();
 
-      const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-      componentInstance.instance.uuid = current_uuid;
+          const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+          componentInstance.instance.uuid = current_uuid;
 
-      this.storage.setCurrentUUID(current_uuid);
-      this.menuCtrl.toggle('left');
+          this.storage.setCurrentUUID(current_uuid);
+        });
+      } else {
+        this.isFirstViewing = false;
+      }
     });
   }
 
@@ -98,21 +106,16 @@ export class AppComponent {
         if (currentPage !== IntervalDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_INTERVAL_ID);
         }
-
         break;
-
       case HomeAction.Timer:
         if (currentPage !== TimerDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_TIMER_ID);
         }
-
         break;
-
       case HomeAction.Stopwatch:
         if (currentPage !== StopwatchDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_STOPWATCH_ID);
         }
-
         break;
       case HomeAction.Settings:
         this.menuCtrl.toggle('left').then(() => {
