@@ -1,14 +1,14 @@
 import { IntervalDisplayPage, IntervalSettingsPage, StopwatchSettingsPage, TimerDisplayPage, TimerSettingsPage, } from '../pages/pages';
 import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { StatusBar } from '@ionic-native/status-bar';
 import { MenuController, Nav, Platform } from 'ionic-angular';
 import { AITStorage } from './core/AITStorage';
 import { HomeAction, HomeEmission } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 import { StopwatchDisplayPage } from '../pages/stopwatch-display/stopwatch-display';
+import { AITBaseSettingsPage } from '../pages/AITBaseSettingsPage';
 
 @Component({
   templateUrl: 'app.html'
@@ -22,24 +22,19 @@ export class AppComponent {
   @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })
   rightMenuInnerHTML: ViewContainerRef;
 
-  constructor(platform: Platform,
-    statusBar: StatusBar,
-    screenOrientation: ScreenOrientation,
-    public splashScreen: SplashScreen,
-    public settings: ThemeSettingsProvider,
-    public menuCtrl: MenuController,
-    public storage: AITStorage,
-    public componentFactoryResolver: ComponentFactoryResolver) {
+  constructor(private platform: Platform,
+    private statusBar: StatusBar,
+    private screenOrientation: ScreenOrientation,
+    private settings: ThemeSettingsProvider,
+    private menuCtrl: MenuController,
+    private storage: AITStorage,
+    private componentFactoryResolver: ComponentFactoryResolver) {
 
-    platform.ready().then(() => {
-      statusBar.styleDefault();
-      screenOrientation.unlock();
+    this.platform.ready().then(() => {
+      this.screenOrientation.unlock();
+      this.statusBar.styleLightContent();
     });
-    /*
-    platform.backButton.subscribe(() => {
-      console.log("Device's back-button clicked!");
-    });
-    */
+
     this.checkAppStartupData(5);
   }
 
@@ -83,14 +78,16 @@ export class AppComponent {
       settingsPage = StopwatchSettingsPage;
     }
 
-    this.navCtrl.setRoot(displayPage, current_uuid);
+    this.navCtrl.setRoot(displayPage, current_uuid).then(() => {
+      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
+      this.rightMenuInnerHTML.clear();
 
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(settingsPage);
-    this.rightMenuInnerHTML.clear();
-    let componentInstance: any = this.rightMenuInnerHTML.createComponent(resolvedComponent);
-    componentInstance.instance.initialize(current_uuid);
+      const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+      componentInstance.instance.uuid = current_uuid;
 
-    this.storage.setCurrentUUID(current_uuid);
+      this.storage.setCurrentUUID(current_uuid);
+      this.menuCtrl.toggle('left');
+    });
   }
 
   onHomeAction(emission: HomeEmission) {
@@ -101,7 +98,6 @@ export class AppComponent {
         if (currentPage !== IntervalDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_INTERVAL_ID);
         }
-        this.menuCtrl.toggle('left');
 
         break;
 
@@ -109,7 +105,6 @@ export class AppComponent {
         if (currentPage !== TimerDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_TIMER_ID);
         }
-        this.menuCtrl.toggle('left');
 
         break;
 
@@ -117,7 +112,6 @@ export class AppComponent {
         if (currentPage !== StopwatchDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_STOPWATCH_ID);
         }
-        this.menuCtrl.toggle('left');
 
         break;
       case HomeAction.Settings:

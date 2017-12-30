@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, Input, ViewEncapsulation } from '@angular/core';
-import { IonicPage, MenuController, ToastController } from 'ionic-angular';
-import { AITStorage } from '../../app/core/AITStorage';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 import { StopwatchStorageData } from '../../app/app.component';
 import { AITBaseSettingsPage } from '../AITBaseSettingsPage';
 
@@ -17,16 +16,6 @@ export class StopwatchSettingsPage extends AITBaseSettingsPage {
   }
   set data(value: StopwatchStorageData) {
     this._uuidData = value;
-  }
-
-  constructor(public storage: AITStorage,
-    public menuCtrl: MenuController,
-    public toastCtrl: ToastController,
-    public ngDectector: ChangeDetectorRef) {
-    super(storage,
-      menuCtrl,
-      toastCtrl,
-      ngDectector);
   }
 
   get countdownLabel(): string {

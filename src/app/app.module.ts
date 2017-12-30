@@ -1,10 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, Injector, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
 import { Insomnia } from '@ionic-native/insomnia';
 
 import { HomeDisplayPageModule } from '../pages/home-display/home-display.module';
@@ -24,6 +22,8 @@ import { TimerSettingsPageModule } from '../pages/timer-settings/timer-settings.
 import { StopwatchDisplayPage } from '../pages/stopwatch-display/stopwatch-display';
 import { StopwatchDisplayPageModule } from '../pages/stopwatch-display/stopwatch-display.module';
 import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwatch-settings.module';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 @NgModule({
   declarations: [
@@ -60,9 +60,9 @@ import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwat
     HomeDisplayPage
   ],
   providers: [
+    ScreenOrientation,
     StatusBar,
     SplashScreen,
-    ScreenOrientation,
     ThemeSettingsProvider,
     IonicStorageModule,
     AITStorage,
@@ -72,4 +72,15 @@ import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwat
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule { }
+
+export class AppModule {
+  constructor(private injector: Injector) {
+    ServiceLocator.injector = this.injector;
+  }
+}
+/**
+ * Pattern came from: stackoverflow.com/questions/33970645
+ */
+export class ServiceLocator {
+  static injector: Injector;
+}

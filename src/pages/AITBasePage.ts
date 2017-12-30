@@ -1,16 +1,19 @@
-import { AITStorage } from '../app/core/AITStorage';
 import { FabAction, FabContainerComponent, FabEmission } from '../app/components/fabcontainer.component/fabcontainer.component';
-import { Insomnia } from '@ionic-native/insomnia';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { ChangeDetectorRef, ViewChild } from '@angular/core';
-import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITSignal } from '../app/core/AITSignal';
+import { Insomnia } from '@ionic-native/insomnia';
+import { ChangeDetectorRef, OnInit, Optional, ViewChild } from '@angular/core';
+import { MenuController, NavController, NavParams } from 'ionic-angular';
+import { AITStorage } from '../app/core/AITStorage';
 import { UUIDData } from '../app/app.component';
 import { SequenceStates, SotsForAit } from '../app/core/SotsForAit';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { ServiceLocator } from '../app/app.module';
 
+export class AITBasePage implements OnInit {
+  @ViewChild(FabContainerComponent)
+  protected menu: FabContainerComponent;
 
-export class AITBasePage {
   public _uuidData: UUIDData;
   get uuidData(): UUIDData {
     return this._uuidData;
@@ -23,41 +26,73 @@ export class AITBasePage {
   // can access enum values.
   protected states = SequenceStates;
   protected viewState: SequenceStates;
-
-  @ViewChild(FabContainerComponent)
-  protected menu: FabContainerComponent;
-
-  protected grandTime: string;
-  private currentUUID: string;
   protected sots: SotsForAit;
 
-  constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    public menuCtrl: MenuController,
-    public storage: AITStorage,
-    public signal: AITSignal,
-    public ngDectector: ChangeDetectorRef,
-    public splashScreen: SplashScreen,
-    public insomnia: Insomnia,
-    public screenOrientation: ScreenOrientation) {
+  protected navCtrl: NavController;
+  protected navParams: NavParams;
+  protected menuCtrl: MenuController;
+  protected storage: AITStorage;
+  protected signal: AITSignal;
+  protected ngDectector: ChangeDetectorRef;
+  protected insomnia: Insomnia;
+  protected screenOrientation: ScreenOrientation;
+  protected splashScreen: SplashScreen;
+
+  protected grandTime: string;
+  protected isFirstViewing: boolean;
+  private currentUUID: string;
+
+  constructor( @Optional() ngDectector: ChangeDetectorRef,
+    @Optional() navParams: NavParams,
+    @Optional() navCtrl: NavController) {
+    this.ngDectector = ngDectector;
+    this.navParams = navParams;
+    this.navCtrl = navCtrl;
+
+    this.isFirstViewing = true;
+  }
+
+  ngOnInit(): void {
+    this.sots = new SotsForAit();
+    this.screenOrientation = ServiceLocator.injector.get(ScreenOrientation);
+    this.storage = ServiceLocator.injector.get(AITStorage);
+    this.menuCtrl = ServiceLocator.injector.get(MenuController);
+    this.signal = ServiceLocator.injector.get(AITSignal);
+    this.insomnia = ServiceLocator.injector.get(Insomnia);
+    this.splashScreen = ServiceLocator.injector.get(SplashScreen);
+
+    this.screenOrientation.onChange().subscribe(() => {
+      // this is need to refresh the view when being revisited from changed in interval-settings
+      this.ngDectector.detectChanges();
+    });
+
+    if (this.isFirstViewing) {
+      this.loadViewAndTimer();
+    }
   }
 
   ionViewDidLoad() {
-    const loadViewAndTimer = () => {
-      this.aitLoadView();
-      this.aitLoadTimer();
-    };
     // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
     // called since sidemenus are just menus, not pages.
     this.menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
-      loadViewAndTimer();
+      this.loadViewAndTimer();
     });
+  }
 
-    loadViewAndTimer();
+  ionViewWillEnter() {
+    if (this.isFirstViewing === false) {
+      this.loadViewAndTimer();
+    }
   }
 
   ionViewDidEnter() {
+    this.splashScreen.hide();
+    this.isFirstViewing = false;
+  }
+
+  private loadViewAndTimer = () => {
     this.aitLoadView();
+    this.aitLoadTimer();
   }
 
   private aitLoadView(): void {
@@ -79,13 +114,6 @@ export class AITBasePage {
         this.sots = new SotsForAit();
         this.aitBuildTimer();
         this.aitSubscribeTimer();
-
-        // TOOD: can't seem to hide startup flash of white other then
-        // to do the following:
-        setTimeout(() => {
-          this.splashScreen.hide();
-        }, 500);
-
       }).catch(() => {
         // console.log("interval-display preinitializeDisplay error")
       });

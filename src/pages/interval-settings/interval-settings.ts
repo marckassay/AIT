@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
-import { IonicPage, MenuController, ToastController } from 'ionic-angular';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 import * as moment from 'moment';
-import { AITStorage } from '../../app/core/AITStorage';
 import { IntervalStorageData } from '../../app/app.component';
 import { AITBaseSettingsPage } from '../AITBaseSettingsPage';
 
@@ -17,16 +16,6 @@ export class IntervalSettingsPage extends AITBaseSettingsPage {
   }
   set data(value: IntervalStorageData) {
     this._uuidData = value;
-  }
-
-  constructor(public storage: AITStorage,
-    public menuCtrl: MenuController,
-    public toastCtrl: ToastController,
-    public ngDectector: ChangeDetectorRef) {
-    super(storage,
-      menuCtrl,
-      toastCtrl,
-      ngDectector);
   }
 
   get totaltime(): string {

@@ -1,14 +1,9 @@
-import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
-import { AITSignal } from '../../app/core/AITSignal';
-import { AITStorage } from '../../app/core/AITStorage';
+import { IonicPage } from 'ionic-angular';
 import { IntervalStorageData } from '../../app/app.component';
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { Insomnia } from '@ionic-native/insomnia';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { Component, Input } from '@angular/core';
 import { SequenceStates } from '../../app/core/SotsForAit';
 import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 @IonicPage()
 @Component({
@@ -26,26 +21,6 @@ export class IntervalDisplayPage extends AITBasePage {
 
   remainingIntervalTime: number;
   currentInterval: number;
-
-  constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    public menuCtrl: MenuController,
-    public storage: AITStorage,
-    public signal: AITSignal,
-    public ngDectector: ChangeDetectorRef,
-    public splashScreen: SplashScreen,
-    public insomnia: Insomnia,
-    public screenOrientation: ScreenOrientation) {
-    super(navCtrl,
-      navParams,
-      menuCtrl,
-      storage,
-      signal,
-      ngDectector,
-      splashScreen,
-      insomnia,
-      screenOrientation);
-  }
 
   aitBuildTimer() {
     this.sots.build(this.data.countdown,

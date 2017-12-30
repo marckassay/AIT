@@ -1,9 +1,13 @@
-import { ChangeDetectorRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, OnInit, Optional } from '@angular/core';
 import { MenuController, ToastController } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
 import { AppStorageData, UUIDData } from '../app/app.component';
+import { ServiceLocator } from '../app/app.module';
 
 export class AITBaseSettingsPage implements OnInit {
+  // set by app.component when component is instantiated
+  public uuid: string;
+
   _uuidData: UUIDData;
   get uuidData(): UUIDData {
     return this._uuidData;
@@ -12,32 +16,48 @@ export class AITBaseSettingsPage implements OnInit {
     this._uuidData = value;
   }
 
+  protected storage: AITStorage;
+  protected menuCtrl: MenuController;
+  protected toastCtrl: ToastController;
+  protected ngDectector: ChangeDetectorRef;
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
-  private uuid: string;
+  protected isFirstViewing: boolean;
 
-  constructor(public storage: AITStorage,
-    public menuCtrl: MenuController,
-    public toastCtrl: ToastController,
-    public ngDectector: ChangeDetectorRef) {
+  constructor( @Optional() ngDectector: ChangeDetectorRef) {
+    this.ngDectector = ngDectector;
+
+    this.isFirstViewing = true;
   }
 
   ngOnInit() {
+    this.storage = ServiceLocator.injector.get(AITStorage);
+    this.menuCtrl = ServiceLocator.injector.get(MenuController);
+    this.toastCtrl = ServiceLocator.injector.get(ToastController);
     // load data now, to prevent white flash when initially opened...
-    this.loadTimerData();
+    this.loadViewData();
   }
 
-  // this gets called from app.component.ts...
-  initialize(uuid: string): void {
-    this.uuid = uuid;
+  ionViewWillEnter() {
+    if (this.isFirstViewing === false) {
+      this.loadViewData();
+    }
+    // need this to refresh the view.
+    this.ngDectector.detectChanges();
+  }
+
+  private loadViewData(): void {
+    this.storage.getItem(this.uuid).then((value: UUIDData) => {
+      this.uuidData = value;
+      this.loadAppData();
+    });
+  }
+
+  private loadAppData(): void {
     this.menuCtrl.get('right').ionOpen.subscribe(() => {
-      this.loadTimerData();
       this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
         this.appSoundsDisabled = !(value as AppStorageData).sound;
         this.appVibratorDisabled = !(value as AppStorageData).vibrate;
-
-        // need this to refresh the view.
-        this.ngDectector.detectChanges();
       });
     });
   }
@@ -69,15 +89,7 @@ export class AITBaseSettingsPage implements OnInit {
       dismissOnPageChange: true,
       position: 'top'
     });
+
     toast.present();
-  }
-
-  private loadTimerData(): void {
-    this.storage.getItem(this.uuid).then((value: UUIDData) => {
-      this.uuidData = value;
-
-      // need this to refresh the view.
-      this.ngDectector.detectChanges();
-    });
   }
 }

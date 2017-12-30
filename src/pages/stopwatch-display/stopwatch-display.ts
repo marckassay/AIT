@@ -1,14 +1,10 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
-import { AITStorage } from '../../app/core/AITStorage';
-import { AITSignal } from '../../app/core/AITSignal';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { Insomnia } from '@ionic-native/insomnia';
+import { Component, Input } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
+
 import { AITBasePage } from '../AITBasePage';
 import { SequenceStates } from '../../app/core/SotsForAit';
 import { TimeEmission } from 'sots';
 import { StopwatchStorageData } from '../../app/app.component';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 @IonicPage()
 @Component({
@@ -36,39 +32,10 @@ export class StopwatchDisplayPage extends AITBasePage {
     this._formattedGrandTime = value;
   }
 
-  constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    public menuCtrl: MenuController,
-    public storage: AITStorage,
-    public signal: AITSignal,
-    public ngDectector: ChangeDetectorRef,
-    public splashScreen: SplashScreen,
-    public insomnia: Insomnia,
-    public screenOrientation: ScreenOrientation
-  ) {
-    super(navCtrl,
-      navParams,
-      menuCtrl,
-      storage,
-      signal,
-      ngDectector,
-      splashScreen,
-      insomnia,
-      screenOrientation);
-    this.screenOrientation.onChange().subscribe(
-      () => {
-        // this is need to refresh the view when being revisited from changed in interval-settings
-        this.ngDectector.detectChanges();
-      }
-    );
-  }
-
   aitBuildTimer() {
     this.sots.build(this.data.countdown, this.data.warnings);
 
     super.aitBuildTimer();
-
-    this.menu.disableSettingsButton();
   }
 
   aitSubscribeTimer(): void {
