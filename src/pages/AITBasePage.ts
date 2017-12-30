@@ -74,7 +74,7 @@ export class AITBasePage implements OnInit {
   ionViewDidLoad() {
     // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
     // called since sidemenus are just menus, not pages.
-    this.menuCtrl.get('right').ionClose.debounceTime(250).subscribe(() => {
+    this.menuCtrl.get('right').ionClose.debounceTime(125).subscribe(() => {
       this.loadViewAndTimer();
     });
   }

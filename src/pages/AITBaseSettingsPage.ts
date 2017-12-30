@@ -34,7 +34,7 @@ export class AITBaseSettingsPage implements OnInit {
     this.storage = ServiceLocator.injector.get(AITStorage);
     this.menuCtrl = ServiceLocator.injector.get(MenuController);
     this.toastCtrl = ServiceLocator.injector.get(ToastController);
-    // load data now, to prevent white flash when initially opened...
+
     this.loadViewData();
   }
 

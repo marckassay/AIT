@@ -41,6 +41,9 @@ export class SotsForAit implements ISotsForAit {
   build(countdown: number, warnings: CountdownWarnings, time: number): void;
   build(countdown: number, warnings: CountdownWarnings, intervals: number, rest: number, active: number): void;
   build(countdown: number, warnings: CountdownWarnings, timeOrIntervals?: number, rest?: number, active?: number): void {
+    if (this.sequencer.subscription) {
+      this.sequencer.unsubscribe();
+    }
     // if so, called by interval-display...
     if (rest !== undefined && active !== undefined) {
       this.intervals = timeOrIntervals!;

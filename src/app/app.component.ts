@@ -105,16 +105,22 @@ export class AppComponent {
       case HomeAction.IntervalTimer:
         if (currentPage !== IntervalDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_INTERVAL_ID);
+        } else {
+          this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Timer:
         if (currentPage !== TimerDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_TIMER_ID);
+        } else {
+          this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Stopwatch:
         if (currentPage !== StopwatchDisplayPage) {
           this.setRootAndCreatePage(AITStorage.INITIAL_STOPWATCH_ID);
+        } else {
+          this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Settings:

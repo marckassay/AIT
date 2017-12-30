@@ -109,7 +109,7 @@ html {
   .item-radio-checked ion-label {
     color: map-get($map, primary);
   }
-    .item-inner {
+  .item-inner {
     border-bottom: 1px solid map-get($map, weakest) !important;
   }
   ion-navbar > button, .toolbar-title {
