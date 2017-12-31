@@ -81,7 +81,7 @@ export class AppComponent {
       settingsPage = StopwatchSettingsPage;
     }
 
-    this.navCtrl.setRoot(displayPage, uuid, { animate: true, animation: 'md-transition' }).then(() => {
+    this.navCtrl.setRoot(displayPage, uuid).then(() => {
       if (!this.isFirstViewing) {
         this.menuCtrl.toggle('left').then(() => {
           this.createComponentForRightMenu(settingsPage, uuid);

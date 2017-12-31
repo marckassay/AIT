@@ -121,7 +121,9 @@ export class AITBasePage implements OnInit {
   protected aitSubscribeTimer(): void {
     // finally, end of view cycle...
     if (this.isFirstViewing) {
-      this.splashScreen.hide();
+      setTimeout(() => {
+        this.splashScreen.hide();
+      }, 200);
       this.isFirstViewing = false;
     }
 

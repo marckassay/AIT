@@ -3,6 +3,10 @@ $font-size-grandtime-landscape:      52vh;
 
 @mixin theme-map-apply ($map) {
 
+  // this is needed to prevent white flash/blink
+  // when being transition away
+  background-color: map-get($map, display-background-color);
+
   ion-grid {
     width: 100%;
     width: -moz-available;
