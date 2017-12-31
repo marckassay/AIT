@@ -1,15 +1,20 @@
 ![AiT](resources/github/Ait180x180.png)
 
-Another interval timer (AiT) that targets mobile devices for your timing needs.  This application has been intended for interval workouts, where there are active and inactive segments.
+Another interval timer (AiT) that targets mobile devices for your timing needs.  This application has been intended for interval workouts, where there are active and inactive segments.  There is a timer and stopwatch mode too.
+
+<a href="https://play.google.com/store/apps/details?id=github.marckassay.ait" target="_blank">![Get it on Google Play](https://github.com/marckassay/AIT/tree/master/resources/android/google-play-badge.svg)</a>
 
 Features in this application are:
 * Adjustable countdown timer before starting interval timer.
-* Enable/disable 5, 10 and 15 second warnings to indicate active segment is approaching it's end.
+* Optional audibles when approaching an end of a segment or when repeat times occur (e.g. every minute).
 * Changeable themes; 'light' or 'dark' base themes along with 'monokai' and 'RGB and sometimes Y' accent themes.
 
 Possible future features:
-* Stopwatch that laps on a tap.
-* Fullscreen mode when timer is running.
+* iOS compilation
+* More themes and audibles
+* Stopwatch that laps on a tap
+* Fullscreen mode when timer is running
+* Compile for Android Wear and Apple Watch
 
 
 <p align="center">
@@ -19,11 +24,10 @@ Possible future features:
 ## About
 This is an Ionic 3.8 project that is intended to target Android and iOS devices.  Ionic leverages Angular, Cordova, RxJS, Sass, TypeScript and Webpack, to name a few.  This was my first project using Ionic.
 
-Currently on Google Play, this app is available in beta status.  Please contribute with feedback:
-https://play.google.com/apps/testing/github.marckassay.ait
-
-I'm unsure when or if I will have this on Apple iTunes.
-
+## Donations
+If you find this app is invaluable for yourself, please consider donating using any of the services below and please show your support for this app on Google Play.
+* <a href="http://a.co/caZWU1m" target="_blank">Marc's Amazon Wish List</a>
+* <a href="https://www.zellepay.com/" target="_blank">Zelle</a> - Can be used if your bank or credit union supports Zelle.  If so, use my email address as the contact: marckassay@gmail.com
 
 ## Feedback
-Let me know if this is helpful!  Use the Issues section for questions, bugs or requests.
+Use the Issues section for questions, bugs or requests.
