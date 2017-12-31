@@ -21,6 +21,7 @@
         "@angular/platform-browser": "^4.4.4",
         "@angular/platform-browser-dynamic": "^4.4.4",
         "@ionic-native/core": "^4.3.2",
+        "@ionic-native/in-app-browser": "^4.5.2",
         "@ionic-native/insomnia": "^4.3.2",
         "@ionic-native/screen-orientation": "^4.3.2",
         "@ionic-native/splash-screen": "^4.5.2",
@@ -35,6 +36,7 @@
         "cordova-android": "^6.3.0",
         "cordova-plugin-console": "^1.1.0",
         "cordova-plugin-device": "^1.1.6",
+        "cordova-plugin-inappbrowser": "^2.0.1",
         "cordova-plugin-insomnia": "^4.3.0",
         "cordova-plugin-screen-orientation": "^2.0.1",
         "cordova-plugin-splashscreen": "^4.1.0",
@@ -74,7 +76,8 @@
             "cordova-plugin-vibration": {},
             "cordova-sqlite-storage": {},
             "cordova-plugin-statusbar": {},
-            "cordova-plugin-splashscreen": {}
+            "cordova-plugin-splashscreen": {},
+            "cordova-plugin-inappbrowser": {}
         },
         "platforms": [
             "android"

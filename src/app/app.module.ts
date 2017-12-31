@@ -24,6 +24,7 @@ import { StopwatchDisplayPageModule } from '../pages/stopwatch-display/stopwatch
 import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwatch-settings.module';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ThemeSettingsProvider,
     IonicStorageModule,
     AITStorage,
+    InAppBrowser,
     Vibration,
     Insomnia,
     AITSignal,

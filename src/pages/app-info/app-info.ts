@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, MenuController, NavController } from 'ionic-angular';
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @IonicPage()
 @Component({
@@ -12,7 +13,8 @@ export class AppInfoPage {
   nav: Navbar;
 
   constructor(public navCtrl: NavController,
-    public menuCtrl: MenuController) {
+    public menuCtrl: MenuController,
+    private iab: InAppBrowser) {
   }
 
   ionViewWillEnter() {
@@ -21,7 +23,7 @@ export class AppInfoPage {
   }
 
   launchInfoSite() {
-
+    this.iab.create('https://github.com/marckassay/AIT/blob/master/README.md', '_system');
   }
 
   navBack() {
