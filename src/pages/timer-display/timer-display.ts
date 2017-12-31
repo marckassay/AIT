@@ -65,7 +65,8 @@ export class TimerDisplayPage extends AITBasePage {
       complete: (): void => {
         this.viewState = SequenceStates.Completed;
         this.signal.triple();
-        this.grandTime = this.sots.getGrandTime();
+        this.grandTime = this.sots.getGrandTime({ time: 0 });
+        this.aitSetViewInRunningMode(false);
       }
     });
 

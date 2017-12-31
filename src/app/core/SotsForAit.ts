@@ -30,8 +30,11 @@ export interface ISotsForAit {
 export class SotsForAit implements ISotsForAit {
   sequencer: Sequencer;
   intervals: number;
-  intervalDuration: number;
-  timerDuration: number;
+  rest: number;
+  active: number;
+  // this value if calculating minus countdown.  It DOES calculate
+  // the rest segment that is omitted via omitFirst
+  grandTotalTime: number;
 
   constructor() {
     this.sequencer = new Sequencer({ period: 100, compareAsBitwise: true });
@@ -41,13 +44,16 @@ export class SotsForAit implements ISotsForAit {
   build(countdown: number, warnings: CountdownWarnings, time: number): void;
   build(countdown: number, warnings: CountdownWarnings, intervals: number, rest: number, active: number): void;
   build(countdown: number, warnings: CountdownWarnings, timeOrIntervals?: number, rest?: number, active?: number): void {
+
     if (this.sequencer.subscription) {
       this.sequencer.unsubscribe();
     }
     // if so, called by interval-display...
     if (rest !== undefined && active !== undefined) {
       this.intervals = timeOrIntervals!;
-      this.intervalDuration = rest! + active!;
+      this.rest = rest;
+      this.active = active;
+      this.grandTotalTime = (rest + active) * timeOrIntervals!;
 
       this.sequencer
         .add(CountdownSegment, {
@@ -81,7 +87,7 @@ export class SotsForAit implements ISotsForAit {
         );
       // else if, this is called by timer-display
     } else if (timeOrIntervals !== undefined) {
-      this.timerDuration = timeOrIntervals;
+      this.grandTotalTime = timeOrIntervals;
       this.sequencer
         .add(CountdownSegment, {
           duration: this.secToMilli(countdown),
@@ -101,6 +107,7 @@ export class SotsForAit implements ISotsForAit {
         });
       // else, this is called by stopwatch-display
     } else {
+      this.grandTotalTime = 0;
       this.sequencer
         .add(CountdownSegment, {
           duration: this.secToMilli(countdown),
@@ -169,21 +176,25 @@ export class SotsForAit implements ISotsForAit {
     return seconds * 1000;
   }
 
-  getGrandTime(value?: TimeEmission): string {
+  getGrandTime(value: TimeEmission): string {
     let totalTimeRemaining: number;
 
-    if (value && value.interval) {
-      const remainingintervals: number = value.interval.total - value.interval.current;
-      totalTimeRemaining = value.time + (this.intervalDuration * remainingintervals);
-      // if this is defined and the above isnt, we are in running mode for non-intervals or countdown
-    } else if (value) {
+    if (value.interval) {
+      // *note: the first interval will not have a rest segment.
+      const remainingIntervals: number = value.interval.total - value.interval.current;
+      const remainingSecondsOfWholeIntervals: number = (this.rest + this.active) * remainingIntervals;
+      const remainingSecondsOfWholeIntervalsMinusFirstRest: number = remainingSecondsOfWholeIntervals;
+
+      if (value.state!.valueOf(SequenceStates.Rest)) {
+        totalTimeRemaining = remainingSecondsOfWholeIntervalsMinusFirstRest + this.active + value.time;
+      } else {
+        totalTimeRemaining = remainingSecondsOfWholeIntervalsMinusFirstRest + value.time;
+      }
+    } else if (value.time > 0) {
       totalTimeRemaining = value.time;
-      // if intervalDuration is defined, then we are in interval-display
-    } else if (this.intervalDuration) {
-      totalTimeRemaining = this.intervalDuration * this.intervals;
-    } else if (this.timerDuration) {
-      totalTimeRemaining = this.timerDuration;
-    } else {
+    } else if (value.time === -1) {
+      totalTimeRemaining = this.grandTotalTime;
+    } else { // else if (value.time === 0)
       return '00:00.0';
     }
 

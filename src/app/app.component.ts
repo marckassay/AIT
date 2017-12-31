@@ -66,36 +66,39 @@ export class AppComponent {
     });
   }
 
-  setRootAndCreatePage(current_uuid: string) {
+  setRootAndCreatePage(uuid: string) {
     let displayPage: any;
     let settingsPage: any;
 
-    if (current_uuid === AITStorage.INITIAL_INTERVAL_ID) {
+    if (uuid === AITStorage.INITIAL_INTERVAL_ID) {
       displayPage = IntervalDisplayPage;
       settingsPage = IntervalSettingsPage;
-    } else if (current_uuid === AITStorage.INITIAL_TIMER_ID) {
+    } else if (uuid === AITStorage.INITIAL_TIMER_ID) {
       displayPage = TimerDisplayPage;
       settingsPage = TimerSettingsPage;
-    } else if (current_uuid === AITStorage.INITIAL_STOPWATCH_ID) {
+    } else if (uuid === AITStorage.INITIAL_STOPWATCH_ID) {
       displayPage = StopwatchDisplayPage;
       settingsPage = StopwatchSettingsPage;
     }
 
-    this.navCtrl.setRoot(displayPage, current_uuid, { animate: true, animation: 'md-transition' }).then(() => {
+    this.navCtrl.setRoot(displayPage, uuid, { animate: true, animation: 'md-transition' }).then(() => {
       if (!this.isFirstViewing) {
         this.menuCtrl.toggle('left').then(() => {
-          const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-          this.rightMenuInnerHTML.clear();
-
-          const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-          componentInstance.instance.uuid = current_uuid;
-
-          this.storage.setCurrentUUID(current_uuid);
+          this.createComponentForRightMenu(settingsPage, uuid);
+          this.storage.setCurrentUUID(uuid);
         });
       } else {
         this.isFirstViewing = false;
+        this.createComponentForRightMenu(settingsPage, uuid);
       }
     });
+  }
+
+  private createComponentForRightMenu(settingsPage: any, uuid: string) {
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
+    this.rightMenuInnerHTML.clear();
+    const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+    componentInstance.instance.uuid = uuid;
   }
 
   onHomeAction(emission: HomeEmission) {

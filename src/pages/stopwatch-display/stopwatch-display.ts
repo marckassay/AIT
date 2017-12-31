@@ -63,6 +63,8 @@ export class StopwatchDisplayPage extends AITBasePage {
       }
     });
 
+    // this.grandTime = this.sots.getGrandTime({ time: -1 });
+
     super.aitSubscribeTimer();
   }
 }

@@ -7,10 +7,8 @@ Features in this application are:
 * Enable/disable 5, 10 and 15 second warnings to indicate active segment is approaching it's end.
 * Changeable themes; 'light' or 'dark' base themes along with 'monokai' and 'RGB and sometimes Y' accent themes.
 
-Planned features:
-* Countdown timer.
+Possible future features:
 * Stopwatch that laps on a tap.
-* Revamp timer with sequences.  For instance, 10 sec countdown, followed by 12 minute interval session, followed by 10 minute timer.
 * Fullscreen mode when timer is running.
 
 

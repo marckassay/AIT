@@ -6,13 +6,20 @@ import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../../app/core/Th
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 import { AITSignal } from '../../app/core/AITSignal';
 
-
 @IonicPage()
 @Component({
   selector: 'page-app-settings',
   templateUrl: 'app-settings.html',
 })
 export class AppSettingsPage {
+  _data: AppStorageData;
+  get data(): AppStorageData {
+    return this._data;
+  }
+  set data(value: AppStorageData) {
+    this._data = value;
+  }
+
   @ViewChild('Navbar')
   nav: Navbar;
 
@@ -25,12 +32,12 @@ export class AppSettingsPage {
     public signal: AITSignal,
     public settings: ThemeSettingsProvider,
     public menuCtrl: MenuController) {
-
-    this.menuCtrl.enable(false, 'left');
-    this.menuCtrl.enable(false, 'right');
   }
 
   ionViewWillEnter() {
+    this.menuCtrl.enable(false, 'left');
+    this.menuCtrl.enable(false, 'right');
+
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = value as AppStorageData;
     }).catch(() => {
@@ -39,8 +46,10 @@ export class AppSettingsPage {
   }
 
   ionViewWillLeave() {
-    this.storage.setItem(this.data);
-    this.signal.data = this.data;
+    if (this.data) {
+      this.storage.setItem(this.data);
+      this.signal.data = this.data;
+    }
   }
 
   toggleBaseTheme(value: BaseTheme) {
@@ -51,14 +60,6 @@ export class AppSettingsPage {
   toggleAccentTheme(value: AccentTheme) {
     this.settings.accent = value;
     this._data.accent = value;
-  }
-
-  _data: AppStorageData;
-  get data(): AppStorageData {
-    return this._data;
-  }
-  set data(value: AppStorageData) {
-    this._data = value;
   }
 
   navBack() {

@@ -40,7 +40,6 @@ export class AITBasePage implements OnInit {
 
   protected grandTime: string;
   private isFirstViewing: boolean;
-  private currentUUID: string;
 
   constructor( @Optional() ngDectector: ChangeDetectorRef,
     @Optional() navParams: NavParams,
@@ -53,7 +52,6 @@ export class AITBasePage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sots = new SotsForAit();
     this.screenOrientation = ServiceLocator.injector.get(ScreenOrientation);
     this.storage = ServiceLocator.injector.get(AITStorage);
     this.menuCtrl = ServiceLocator.injector.get(MenuController);
@@ -62,12 +60,12 @@ export class AITBasePage implements OnInit {
     this.splashScreen = ServiceLocator.injector.get(SplashScreen);
 
     this.screenOrientation.onChange().subscribe(() => {
-      // this is need to refresh the view when being revisited from changed in interval-settings
+      // this is need to refresh the view when being revisited from changed in settings
       this.ngDectector.detectChanges();
     });
 
     if (this.isFirstViewing) {
-      this.loadViewAndTimer();
+      this.setViewAndLoadData();
     }
   }
 
@@ -75,13 +73,13 @@ export class AITBasePage implements OnInit {
     // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
     // called since sidemenus are just menus, not pages.
     this.menuCtrl.get('right').ionClose.debounceTime(125).subscribe(() => {
-      this.loadViewAndTimer();
+      this.setViewAndLoadData();
     });
   }
 
   ionViewWillEnter() {
     if (this.isFirstViewing === false) {
-      this.loadViewAndTimer();
+      this.setViewAndLoadData();
     }
   }
 
@@ -89,29 +87,25 @@ export class AITBasePage implements OnInit {
 
   }
 
-  private loadViewAndTimer = () => {
-    this.aitLoadView();
-    this.aitLoadTimer();
-  }
-
-  private aitLoadView(): void {
-    this.aitSetViewRunningMode(false);
-  }
-
-  private aitLoadTimer(): void {
+  private setViewAndLoadData = () => {
+    this.aitSetViewInRunningMode(false);
     this.aitLoadData();
   }
 
   private aitLoadData(): void {
-    const uuid = (this.navParams.data) ? this.navParams.data : this.currentUUID;
+    const uuid = this.navParams.data;
 
     if (uuid) {
       this.menu.reset();
 
       this.storage.getItem(uuid).then((value: any) => {
         this.uuidData = (value as UUIDData);
+
+        // instaniate here allow easy "reloading".  Also this is outside
+        // of aitBuildTimer() for subclass can use it first
+        this.sots = new SotsForAit();
+
         this.aitBuildTimer();
-        this.aitSubscribeTimer();
       }).catch(() => {
         // console.log("interval-display preinitializeDisplay error")
       });
@@ -120,25 +114,26 @@ export class AITBasePage implements OnInit {
 
   protected aitBuildTimer(): void {
     this.viewState = SequenceStates.Loaded;
-    this.grandTime = this.sots.getGrandTime();
+    this.grandTime = this.sots.getGrandTime({ time: -1 });
+    this.aitSubscribeTimer();
   }
 
   protected aitSubscribeTimer(): void {
-    // this is need to refresh the view when being revisited from changed in interval-settings
-    this.ngDectector.detectChanges();
-
     // finally, end of view cycle...
     if (this.isFirstViewing) {
       this.splashScreen.hide();
       this.isFirstViewing = false;
     }
+
+    // this is need to refresh the view when being revisited from changed in settings
+    this.ngDectector.detectChanges();
   }
 
   private aitResetView() {
     this.viewState = SequenceStates.Loaded;
-    this.grandTime = this.sots.getGrandTime();
+    this.grandTime = this.sots.getGrandTime({ time: -1 });
 
-    // this is need to refresh the view when being revisited from changed in interval-settings
+    // this is need to refresh the view when being revisited from changed in settings
     this.ngDectector.detectChanges();
   }
 
@@ -146,7 +141,7 @@ export class AITBasePage implements OnInit {
     this.sots.sequencer.reset();
   }
 
-  private aitSetViewRunningMode(value: boolean) {
+  protected aitSetViewInRunningMode(value: boolean) {
     this.menuCtrl.enable(!value, 'left');
     this.menuCtrl.enable(!value, 'right');
     (value) ? this.insomnia.keepAwake() : this.insomnia.allowSleepAgain();
@@ -156,26 +151,26 @@ export class AITBasePage implements OnInit {
     switch (emission.action) {
       case FabAction.Home:
         this.sots.sequencer.pause();
-        this.aitSetViewRunningMode(false);
+        this.aitSetViewInRunningMode(false);
         this.menuCtrl.open('left');
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
-        this.aitSetViewRunningMode(false);
+        this.aitSetViewInRunningMode(false);
         this.menuCtrl.open('right');
         break;
       case FabAction.Reset:
         this.aitResetView();
         this.aitResetTimer();
-        this.aitSetViewRunningMode(false);
+        this.aitSetViewInRunningMode(false);
         break;
       case FabAction.Start:
         this.sots.sequencer.start();
-        this.aitSetViewRunningMode(true);
+        this.aitSetViewInRunningMode(true);
         break;
       case FabAction.Pause:
         this.sots.sequencer.pause();
-        this.aitSetViewRunningMode(false);
+        this.aitSetViewInRunningMode(false);
         break;
     }
     emission.container.close();
