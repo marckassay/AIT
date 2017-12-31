@@ -4,7 +4,8 @@ export enum HomeAction {
   IntervalTimer,
   Timer,
   Stopwatch,
-  Settings
+  Settings,
+  Info
 }
 
 export interface HomeEmission {

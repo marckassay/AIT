@@ -1,0 +1,32 @@
+<ion-header>
+  <div ion-navbar class="toolbar toolbar-md">
+    <button left back-button ion-button="bar-button" (click)="navBack()">
+      <ion-icon class="material-icons">arrow_back</ion-icon>
+    </button>
+    <ion-title>
+      <span class="ait-brand">AiT</span> INFO</ion-title>
+  </div>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      Please consider...
+    </ion-card-header>
+    <ion-card-content>
+      As being a developer, physically active and humanist, I wanted an app that suits all my timing needs when working out. This
+      app took tremendous amount of time and energy to develop. The outcome of this is a valuable tool for myself which I
+      wanted to share to all for free, ad-free too. If you find this app adds value to your life, please consider donating
+      by clicking on the button below for more information on how to and show your support for the app on Google Play. If
+      you are unable to donate, please continue to use it and show your support on Google Play. Thanks. - Marc Kassay
+    </ion-card-content>
+
+    <ion-row no-padding>
+      <ion-col text-center>
+        <button expand ion-button (click)="launchInfoSite()">
+          <div class="icon icon-info">Info</div>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+</ion-content>

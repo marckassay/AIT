@@ -1,4 +1,4 @@
-import { IntervalDisplayPage, IntervalSettingsPage, StopwatchSettingsPage, TimerDisplayPage, TimerSettingsPage, } from '../pages/pages';
+import { IntervalDisplayPage, IntervalSettingsPage, StopwatchDisplayPage, StopwatchSettingsPage, TimerDisplayPage, TimerSettingsPage } from '../pages/pages';
 import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -7,7 +7,6 @@ import { AITStorage } from './core/AITStorage';
 import { HomeAction, HomeEmission } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
-import { StopwatchDisplayPage } from '../pages/stopwatch-display/stopwatch-display';
 import { AITBaseSettingsPage } from '../pages/AITBaseSettingsPage';
 
 @Component({
@@ -129,6 +128,11 @@ export class AppComponent {
       case HomeAction.Settings:
         this.menuCtrl.toggle('left').then(() => {
           this.navCtrl.push('AppSettingsPage');
+        });
+        break;
+      case HomeAction.Info:
+        this.menuCtrl.toggle('left').then(() => {
+          this.navCtrl.push('AppInfoPage');
         });
         break;
     }
