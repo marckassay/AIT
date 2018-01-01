@@ -2,9 +2,7 @@
 
 Another interval timer (AiT) that targets mobile devices for your timing needs.  This application has been intended for interval workouts, where there are active and inactive segments.  There is a timer and stopwatch mode too.
 
-<a href="https://play.google.com/store/apps/details?id=github.marckassay.ait" target="_blank">
-<img src="https://github.com/marckassay/AIT/tree/master/resources/android/google-play-badge.png">
-</a>
+[![Google Play Badge]([https://github.com/marckassay/AIT/tree/master/resources/android/google-play-badge.png)](https://play.google.com/store/apps/details?id=github.marckassay.ait)
 
 Features in this application are:
 * Adjustable countdown timer before starting interval timer.
