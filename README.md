@@ -2,7 +2,7 @@
 
 Another interval timer (AiT) that targets mobile devices for your timing needs.  This application has been intended for interval workouts, where there are active and inactive segments.  There is a timer and stopwatch mode too.
 
-<a href="https://play.google.com/store/apps/details?id=github.marckassay.ait" target="_blank">![Get it on Google Play](https://github.com/marckassay/AIT/tree/master/resources/android/google-play-badge.svg)</a>
+<a href="https://play.google.com/store/apps/details?id=github.marckassay.ait" target="_blank">![Get it on Google Play](https://github.com/marckassay/AIT/tree/master/resources/android/google-play-badge.png)</a>
 
 Features in this application are:
 * Adjustable countdown timer before starting interval timer.
@@ -27,7 +27,7 @@ This is an Ionic 3.8 project that is intended to target Android and iOS devices.
 ## Donations
 If you find this app is invaluable for yourself, please consider donating using any of the services below and please show your support for this app on Google Play.
 * <a href="http://a.co/caZWU1m" target="_blank">Marc's Amazon Wish List</a>
-* <a href="https://www.zellepay.com/" target="_blank">Zelle</a> - Can be used if your bank or credit union supports Zelle.  If so, use my email address as the contact: marckassay@gmail.com
+* <a href="https://www.zellepay.com/" target="_blank">Zelle</a> - Can be used if your bank or credit union supports Zelle.  If so, use my email address as the contact, marckassay@gmail.com
 
 ## Feedback
 Use the Issues section for questions, bugs or requests.
