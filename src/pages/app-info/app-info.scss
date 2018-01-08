@@ -37,7 +37,7 @@
     }
 
     button {
-      background-color: transparentize(map-get($map, contrast), .12);
+      background-color: transparentize(map-get($map, contrast), .88);
     }
 
     .icon-info {
