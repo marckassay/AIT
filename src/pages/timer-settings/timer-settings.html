@@ -68,17 +68,17 @@
       </ion-item-divider>
       <ion-item>
         <ion-toggle (ionChange)="dataChanged('fivesecond')" [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
-        <ion-label>5 second warning</ion-label>
+        <ion-label>every 15 seconds</ion-label>
       </ion-item>
 
       <ion-item>
         <ion-toggle (ionChange)="dataChanged('tensecond')" [(ngModel)]="data.warnings.tensecond"></ion-toggle>
-        <ion-label>10 second warning</ion-label>
+        <ion-label>every 30 seconds</ion-label>
       </ion-item>
 
       <ion-item>
         <ion-toggle (ionChange)="dataChanged('fifthteensecond')" [(ngModel)]="data.warnings.fifthteensecond"></ion-toggle>
-        <ion-label>15 second warning</ion-label>
+        <ion-label>every minute</ion-label>
       </ion-item>
     </ion-item-group>
 
