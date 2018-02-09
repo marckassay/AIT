@@ -26,6 +26,7 @@ import { SequenceStates, SotsForAit } from '../app/core/SotsForAit';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { ServiceLocator } from '../app/app.module';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -164,6 +165,7 @@ export class AITBasePage implements OnInit {
     this.menuCtrl.enable(!value, 'left');
     this.menuCtrl.enable(!value, 'right');
     (value) ? this.insomnia.keepAwake() : this.insomnia.allowSleepAgain();
+    (value) ? StatusBar.hide() : StatusBar.show();
   }
 
   protected onAction(emission: FabEmission) {
