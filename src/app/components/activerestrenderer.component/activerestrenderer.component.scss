@@ -15,3 +15,100 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+$font-size-go-portrait:         60vw;
+$font-size-go-landscape:        50vh;
+$font-size-stop-portrait:       15vw;
+$font-size-stop-landscape:      10vh;
+
+@mixin theme-map-apply ($map) {
+  .active.go {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
+    color: map-get($map, go);
+  }
+
+  .active.loaded {
+    @extend .active.go;
+    color: map-get($map, getready);
+  }
+
+  .active.stop {
+    @extend .active.go;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+    color: map-get($map, go);
+  }
+
+  .active.completed {
+    @extend .active.go;
+    color: map-get($map, primary);
+  }
+
+  .active.getReady {
+    @extend .active.stop;
+    color: map-get($map, getready);
+  }
+
+  .active.countdown {
+    @extend .active.go;
+    color: map-get($map, display-disabled);
+  }
+
+
+
+
+  .rest.go {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
+    color: map-get($map, stop);
+  }
+
+  .rest.stop {
+    @extend .rest.go;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+  }
+
+  .rest.loaded {
+    @extend .rest.stop;
+    color: map-get($map, getready);
+  }
+
+  .rest.getReady {
+    @extend .rest.stop;
+    color: map-get($map, getready);
+  }
+
+  .rest.completed {
+    @extend .rest.stop;
+    color: map-get($map, primary);
+  }
+
+  .rest.countdown {
+    @extend .rest.stop;
+    color: map-get($map, display-disabled);
+  }
+}
+
+.theme-light-rgbandy activerest-renderer {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-rgbandy activerest-renderer {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include theme-map-apply($map);
+}
+
+
+.theme-light-monokai activerest-renderer {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include theme-map-apply($map);
+}
+
+.theme-dark-monokai activerest-renderer {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
+  @include theme-map-apply($map);
+}

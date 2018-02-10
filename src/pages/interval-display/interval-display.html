@@ -20,28 +20,7 @@
     <ion-grid>
       <ion-row align-items-baseline nowrap justify-content-start>
         <ion-col align-self-baseline align-self-stretch>
-          <div [ngSwitch]="viewState" text-right>
-            <div *ngSwitchCase="states.CountdownWarning" class="activeCountdown">{{data.activerest.upper}}</div>
-            <div *ngSwitchCase="states.Loaded" class="activeLoaded">{{data.activerest.upper}}</div>
-            <div *ngSwitchCase="states.Active" class="activeGo">{{remainingIntervalTime}}</div>
-            <div *ngSwitchCase="states.ActiveWarning" class="activeGo">{{remainingIntervalTime}}</div>
-            <div *ngSwitchCase="states.Rest" class="activeStop">{{data.activerest.upper}}/</div>
-            <div *ngSwitchCase="states.RestWarning" class="activeGetReady">{{data.activerest.upper}}/</div>
-            <div *ngSwitchCase="states.Completed" class="activeCompleted">{{data.activerest.upper}}</div>
-            <div *ngSwitchCase="states.Error" class="activeStop">:?</div>
-          </div>
-        </ion-col>
-        <ion-col align-self-baseline align-self-stretch>
-          <div [ngSwitch]="viewState" text-left>
-            <div *ngSwitchCase="states.CountdownWarning" class="restCountdown">/{{data.activerest.lower}}</div>
-            <div *ngSwitchCase="states.Loaded" class="restLoaded">/{{data.activerest.lower}}</div>
-            <div *ngSwitchCase="states.Active" class="restStop">/{{data.activerest.lower}}</div>
-            <div *ngSwitchCase="states.ActiveWarning" class="restGetReady">/{{data.activerest.lower}}</div>
-            <div *ngSwitchCase="states.Rest" class="restGo">{{remainingIntervalTime}}</div>
-            <div *ngSwitchCase="states.RestWarning" class="restGo">{{remainingIntervalTime}}</div>
-            <div *ngSwitchCase="states.Completed" class="restCompleted">/{{data.activerest.lower}}</div>
-            <div *ngSwitchCase="states.Error" class="restStop">):</div>
-          </div>
+          <activerest-renderer [state]="viewState" [remainingIntervalTime]="remainingIntervalTime" [limits]="data.activerest"></activerest-renderer>
         </ion-col>
         <ion-col col-auto></ion-col>
         <ion-col id="intervalColLandscape">

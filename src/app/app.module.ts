@@ -42,6 +42,7 @@ import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwat
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { ActiveRestRendererComponentModule } from './components/activerestrenderer.component/activerestrenderer.component.module';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     TimerSettingsPageModule,
     StopwatchDisplayPageModule,
     StopwatchSettingsPageModule,
+    ActiveRestRendererComponentModule,
     FabContainerComponentModule,
     IonicStorageModule.forRoot({
       name: '__aitdb',

@@ -15,3 +15,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import { NgModule } from '@angular/core';
+import { IonicPageModule } from 'ionic-angular';
+import { ActiveRestRendererComponent } from './activerestrenderer.component';
+
+@NgModule({
+  declarations: [
+    ActiveRestRendererComponent,
+  ],
+  imports: [
+    IonicPageModule.forChild(ActiveRestRendererComponent),
+  ],
+  exports: [
+    ActiveRestRendererComponent
+  ]
+})
+export class ActiveRestRendererComponentModule { }

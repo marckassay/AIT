@@ -17,10 +17,11 @@
 */
 import { IonicPage } from 'ionic-angular';
 import { IntervalStorageData } from '../../app/app.component';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { SequenceStates } from '../../app/core/SotsForAit';
 import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
+import { ActiveRestRendererComponent } from '../../app/components/activerestrenderer.component/activerestrenderer.component';
 
 @IonicPage()
 @Component({
@@ -28,6 +29,8 @@ import { AITBasePage } from '../AITBasePage';
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage extends AITBasePage {
+  @ViewChild(ActiveRestRendererComponent) activeRestRenderer: ActiveRestRendererComponent;
+
   @Input('data')
   get data(): IntervalStorageData {
     return this._uuidData as IntervalStorageData;

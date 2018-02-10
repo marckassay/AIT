@@ -15,3 +15,25 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import { Component, Input } from '@angular/core';
+import { Limits } from '../../app.component';
+import { SequenceStates } from '../../core/SotsForAit';
+
+@Component({
+  selector: 'activerest-renderer',
+  templateUrl: 'activerestrenderer.component.html'
+})
+export class ActiveRestRendererComponent {
+  // this type assignment to variable is for angular view
+  // can access enum values.
+  states = SequenceStates;
+
+  @Input()
+  state: SequenceStates;
+
+  @Input()
+  limits: Limits;
+
+  @Input()
+  remainingIntervalTime: number;
+}

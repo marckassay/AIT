@@ -15,3 +15,48 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
+<div [ngSwitch]="state">
+  <div *ngSwitchCase="states.CountdownWarning">
+    <p>
+      <span class="active countdown">{{limits.upper}}</span>
+      <span class="rest countdown">/{{limits.lower}}</span>
+    </p>
+  </div>
+  <div *ngSwitchCase="states.Loaded">
+    <p>
+      <span class="active loaded">{{limits.upper}}</span>
+      <span class="rest loaded">/{{limits.lower}}</span>
+    </p>
+  </div>
+  <div *ngSwitchCase="states.Active">
+    <p>
+      <span class="active go">{{remainingIntervalTime}}</span>
+      <span class="rest stop">/{{limits.lower}}</span>
+    </p>
+  </div>
+  <div *ngSwitchCase="states.ActiveWarning">
+    <p>
+      <span class="active go">{{remainingIntervalTime}}</span>
+      <span class="rest getReady">/{{limits.lower}}</span>
+    </p>
+  </div>
+  <div *ngSwitchCase="states.Rest">
+    <p>
+      <span class="active stop">{{limits.upper}}/</span>
+      <span class="rest go">{{remainingIntervalTime}}</span>
+    </p>
+  </div>
+  <div *ngSwitchCase="states.RestWarning">
+    <p>
+      <span class="active getReady">{{limits.upper}}/</span>
+      <span class="rest go">{{remainingIntervalTime}}</span>
+    </p>
+  </div>
+  <div *ngSwitchCase="states.Completed">
+    <p>
+      <span class="active completed">{{limits.upper}}</span>
+      <span class="rest completed">/{{limits.lower}}</span>
+    </p>
+  </div>
+  <div *ngSwitchCase="states.Error" class="error">):</div>
+</div>

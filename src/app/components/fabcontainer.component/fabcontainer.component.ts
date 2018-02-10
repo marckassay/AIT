@@ -38,7 +38,6 @@ export enum FabState {
 }
 
 @Component({
-  selector: 'fab-container',
   templateUrl: 'fabcontainer.component.html'
 })
 export class FabContainerComponent {
