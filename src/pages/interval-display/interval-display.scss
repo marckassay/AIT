@@ -30,6 +30,10 @@ $font-size-time-landscape:      25vh;
     height: 100%;
   }
 
+  div {
+    white-space: pre
+  }
+  
   // this is needed to prevent white flash/blink
   // when being transition away
   background-color: map-get($map, display-background-color);

@@ -36,7 +36,7 @@ export class IntervalDisplayPage extends AITBasePage {
     this._uuidData = value;
   }
 
-  remainingIntervalTime: number;
+  remainingIntervalTime: string;
   currentInterval: number;
 
   aitBuildTimer() {
@@ -55,15 +55,14 @@ export class IntervalDisplayPage extends AITBasePage {
       next: (value: TimeEmission): void => {
         this.grandTime = this.sots.getGrandTime(value);
 
-        if (value.interval) {
-          this.currentInterval = value.interval.current;
-          this.remainingIntervalTime = Math.ceil(value.time);
-        }
+        let sideToPad: 'left' | 'right' | '' = '';
 
         if (value.state) {
+          sideToPad = (value.state.valueOf(SequenceStates.Active)) ? 'left' : 'right';
           // if we dont negate the audiable states the display will "blink"
           // for a millisecond.
-          let valueNoAudiable = (value.state.valueOf() as SequenceStates);
+          let valueNoAudiable: number;
+          valueNoAudiable = (value.state.valueOf() as SequenceStates);
           valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
           this.viewState = valueNoAudiable;
 
@@ -73,6 +72,11 @@ export class IntervalDisplayPage extends AITBasePage {
           } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
             this.signal.double();
           }
+        }
+
+        if (value.interval) {
+          this.currentInterval = value.interval.current;
+          this.remainingIntervalTime = this.padSide(value.time, sideToPad);
         }
       },
       error: (error: any): void => {
@@ -88,5 +92,25 @@ export class IntervalDisplayPage extends AITBasePage {
     });
 
     super.aitSubscribeTimer();
+  }
+
+  // At the time for coding this padStart doesnt exist yet in polyfill with Ionic
+  // https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+  protected padSide(source: number, sideToPad: 'left' | 'right' | '') {
+    const length: number = 2;
+    const padString: string = ' ';
+
+    let sourceString = source.toString();
+    if (sideToPad !== '') {
+      while (sourceString.length < length) {
+        if (sideToPad === 'left') {
+          sourceString = padString + sourceString;
+        } else {
+          sourceString = padString + sourceString;
+        }
+      }
+    }
+    return sourceString;
   }
 }

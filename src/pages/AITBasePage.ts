@@ -55,6 +55,7 @@ export class AITBasePage implements OnInit {
   protected insomnia: Insomnia;
   protected screenOrientation: ScreenOrientation;
   protected splashScreen: SplashScreen;
+  protected statusBar: StatusBar;
 
   protected grandTime: string;
   private isFirstViewing: boolean;
@@ -76,6 +77,7 @@ export class AITBasePage implements OnInit {
     this.signal = ServiceLocator.injector.get(AITSignal);
     this.insomnia = ServiceLocator.injector.get(Insomnia);
     this.splashScreen = ServiceLocator.injector.get(SplashScreen);
+    this.statusBar = ServiceLocator.injector.get(StatusBar);
 
     this.screenOrientation.onChange().subscribe(() => {
       // this is need to refresh the view when being revisited from changed in settings
@@ -165,7 +167,9 @@ export class AITBasePage implements OnInit {
     this.menuCtrl.enable(!value, 'left');
     this.menuCtrl.enable(!value, 'right');
     (value) ? this.insomnia.keepAwake() : this.insomnia.allowSleepAgain();
-    (value) ? StatusBar.hide() : StatusBar.show();
+    setTimeout(() => {
+      (value) ? this.statusBar.hide() : this.statusBar.show();
+    }, 500);
   }
 
   protected onAction(emission: FabEmission) {
