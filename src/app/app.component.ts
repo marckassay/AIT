@@ -50,7 +50,7 @@ export class AppComponent {
 
     this.platform.ready().then(() => {
       this.screenOrientation.unlock();
-      console.log(this.statusBar.isVisible);
+      this.statusBar.styleLightContent();
     });
 
     this.isFirstViewing = true;
