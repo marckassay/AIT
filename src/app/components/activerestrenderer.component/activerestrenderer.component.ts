@@ -28,12 +28,23 @@ export class ActiveRestRendererComponent {
   // can access enum values.
   states = SequenceStates;
 
+  _state: SequenceStates;
   @Input()
-  state: SequenceStates;
+  get state(): SequenceStates {
+    return this._state;
+  }
+  set state(value: SequenceStates) {
+    this._state = value;
+  }
 
   @Input()
   limits: Limits;
 
-  @Input()
-  remainingIntervalTime: number;
+  _time: number;
+  get time(): number {
+    return this._time;
+  }
+  set time(value: number) {
+    this._time = value;
+  }
 }

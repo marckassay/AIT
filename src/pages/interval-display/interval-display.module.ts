@@ -19,12 +19,14 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { IntervalDisplayPage } from './interval-display';
 import { FabContainerComponentModule } from '../../app/components/fabcontainer.component/fabcontainer.component.module';
+import { ActiveRestRendererComponentModule } from '../../app/components/activerestrenderer.component/activerestrenderer.component.module';
 
 @NgModule({
   declarations: [
     IntervalDisplayPage
   ],
   imports: [
+    ActiveRestRendererComponentModule,
     FabContainerComponentModule,
     IonicPageModule.forChild([IntervalDisplayPage]),
   ],
@@ -32,4 +34,4 @@ import { FabContainerComponentModule } from '../../app/components/fabcontainer.c
     IntervalDisplayPage
   ]
 })
-export class IntervalDisplayPageModule {}
+export class IntervalDisplayPageModule { }

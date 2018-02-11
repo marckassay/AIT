@@ -30,26 +30,26 @@
   </div>
   <div *ngSwitchCase="states.Active">
     <p>
-      <span class="active go">{{remainingIntervalTime}}</span>
+      <span class="active go">{{time}}</span>
       <span class="rest stop">/{{limits.lower}}</span>
     </p>
   </div>
   <div *ngSwitchCase="states.ActiveWarning">
     <p>
-      <span class="active go">{{remainingIntervalTime}}</span>
+      <span class="active go">{{time}}</span>
       <span class="rest getReady">/{{limits.lower}}</span>
     </p>
   </div>
   <div *ngSwitchCase="states.Rest">
     <p>
       <span class="active stop">{{limits.upper}}/</span>
-      <span class="rest go">{{remainingIntervalTime}}</span>
+      <span class="rest go">{{time}}</span>
     </p>
   </div>
   <div *ngSwitchCase="states.RestWarning">
     <p>
       <span class="active getReady">{{limits.upper}}/</span>
-      <span class="rest go">{{remainingIntervalTime}}</span>
+      <span class="rest go">{{time}}</span>
     </p>
   </div>
   <div *ngSwitchCase="states.Completed">

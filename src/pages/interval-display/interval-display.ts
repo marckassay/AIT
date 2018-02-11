@@ -17,10 +17,11 @@
 */
 import { IonicPage } from 'ionic-angular';
 import { IntervalStorageData } from '../../app/app.component';
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SequenceStates } from '../../app/core/SotsForAit';
 import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
+import { ViewChild } from '@angular/core';
 import { ActiveRestRendererComponent } from '../../app/components/activerestrenderer.component/activerestrenderer.component';
 
 @IonicPage()
@@ -29,7 +30,8 @@ import { ActiveRestRendererComponent } from '../../app/components/activerestrend
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage extends AITBasePage {
-  @ViewChild(ActiveRestRendererComponent) activeRestRenderer: ActiveRestRendererComponent;
+  @ViewChild(ActiveRestRendererComponent)
+  private activeRestRenderer: ActiveRestRendererComponent;
 
   @Input('data')
   get data(): IntervalStorageData {
@@ -39,7 +41,15 @@ export class IntervalDisplayPage extends AITBasePage {
     this._uuidData = value;
   }
 
-  remainingIntervalTime: number;
+  protected _remainingIntervalTime: number;
+  @Input()
+  get remainingIntervalTime() {
+    return this._remainingIntervalTime;
+  }
+  set remainingIntervalTime(value: number) {
+    this._remainingIntervalTime = value;
+  }
+
   currentInterval: number;
 
   aitBuildTimer() {
@@ -60,7 +70,7 @@ export class IntervalDisplayPage extends AITBasePage {
 
         if (value.interval) {
           this.currentInterval = value.interval.current;
-          this.remainingIntervalTime = Math.ceil(value.time);
+          this.activeRestRenderer.time = Math.ceil(value.time);
         }
 
         if (value.state) {

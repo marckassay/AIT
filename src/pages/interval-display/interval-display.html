@@ -20,9 +20,8 @@
     <ion-grid>
       <ion-row align-items-baseline nowrap justify-content-start>
         <ion-col align-self-baseline align-self-stretch>
-          <activerest-renderer [state]="viewState" [remainingIntervalTime]="remainingIntervalTime" [limits]="data.activerest"></activerest-renderer>
+          <activerest-renderer [state]="viewState" [limits]="data.activerest"></activerest-renderer>
         </ion-col>
-        <ion-col col-auto></ion-col>
         <ion-col id="intervalColLandscape">
           <div [ngSwitch]="viewState">
             <div *ngSwitchCase="states.CountdownWarning" class="intervalCountdown">1/{{data.intervals}}</div>
