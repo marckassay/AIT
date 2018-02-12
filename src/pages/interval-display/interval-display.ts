@@ -72,13 +72,14 @@ export class IntervalDisplayPage extends AITBasePage {
           this.currentInterval = value.interval.current;
           this.activeRestRenderer.time = Math.ceil(value.time);
         }
-
+        console.log('time :: ' + value.time);
         if (value.state) {
           // if we dont negate the audiable states the display will "blink"
           // for a millisecond.
           let valueNoAudiable: number = (value.state.valueOf() as SequenceStates);
           valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
           this.viewState = valueNoAudiable;
+          // console.log(this.activeRestRenderer.time + ': ' + value.state + '<->' + valueNoAudiable);
 
           // ...now take care of audiable states...
           if (value.state.valueOf(SequenceStates.SingleBeep)) {

@@ -62,10 +62,7 @@ export class SotsForAit implements ISotsForAit {
   build(countdown: number, warnings: CountdownWarnings, intervals: number, rest: number, active: number): void;
   build(countdown: number, warnings: CountdownWarnings, timeOrIntervals?: number, rest?: number, active?: number): void {
 
-    if (this.sequencer.subscription) {
-      this.sequencer.unsubscribe();
-    }
-    // if so, called by interval-display...
+    // if this assertion is true, its has been called by interval-display...
     if (rest !== undefined && active !== undefined) {
       this.intervals = timeOrIntervals!;
       this.rest = rest;
@@ -146,7 +143,14 @@ export class SotsForAit implements ISotsForAit {
   }
 
   subscribe(observer: PartialObserver<TimeEmission>): void {
+    this.unsubscribe();
     this.sequencer.subscribe(observer);
+  }
+
+  unsubscribe(): void {
+    if (this.sequencer.subscription) {
+      this.sequencer.unsubscribe();
+    }
   }
 
   constructIntervalSingleAudiblesTimes(warnings: CountdownWarnings): string {

@@ -123,7 +123,9 @@ export class AITBasePage implements OnInit {
 
         // instaniate here allow easy "reloading".  Also this is outside
         // of aitBuildTimer() for subclass can use it first
-        this.sots = new SotsForAit();
+        if (!this.sots) {
+          this.sots = new SotsForAit();
+        }
 
         this.aitBuildTimer();
       }).catch(() => {
@@ -143,8 +145,8 @@ export class AITBasePage implements OnInit {
     if (this.isFirstViewing) {
       setTimeout(() => {
         this.splashScreen.hide();
+        this.isFirstViewing = false;
       }, 200);
-      this.isFirstViewing = false;
     }
 
     // this is need to refresh the view when being revisited from changed in settings
