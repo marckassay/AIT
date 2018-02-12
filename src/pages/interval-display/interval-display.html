@@ -19,10 +19,11 @@
   <div ion-fixed>
     <ion-grid>
       <ion-row align-items-baseline nowrap justify-content-start>
-        <ion-col align-self-baseline align-self-stretch>
+        <ion-col>
           <activerest-renderer [state]="viewState" [limits]="data.activerest"></activerest-renderer>
         </ion-col>
         <ion-col id="intervalColLandscape">
+          <!-- this div is adjusted by the parent ion-col by having the following in scss: justify-content: flex-end -->
           <div [ngSwitch]="viewState">
             <div *ngSwitchCase="states.CountdownWarning" class="intervalCountdown">1/{{data.intervals}}</div>
             <div *ngSwitchCase="states.Loaded" class="intervalLoaded">1/{{data.intervals}}</div>
@@ -50,7 +51,7 @@
         </ion-col>
       </ion-row>
       <ion-row align-items-baseline nowrap justify-content-start>
-        <ion-col col-auto>
+        <ion-col id="timeCol" align-self-stretch>
           <div [ngSwitch]="viewState">
             <div *ngSwitchCase="states.CountdownWarning" class="timeCountdown">{{grandTime}}</div>
             <div *ngSwitchCase="states.Loaded" class="timeLoaded">{{grandTime}}</div>
@@ -62,6 +63,7 @@
             <div *ngSwitchCase="states.Error" class="timeStop">:?</div>
           </div>
         </ion-col>
+        <ion-col></ion-col>
       </ion-row>
     </ion-grid>
   </div>

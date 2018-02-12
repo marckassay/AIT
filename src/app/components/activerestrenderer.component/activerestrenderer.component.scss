@@ -21,6 +21,9 @@ $font-size-stop-portrait:       15vw;
 $font-size-stop-landscape:      10vh;
 
 @mixin theme-map-apply ($map) {
+  p.left {text-align: left};
+  p.right {text-align: right};
+
   .active.go {
     font-family: selawksb;
     @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }

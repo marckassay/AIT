@@ -44,80 +44,15 @@ $font-size-time-landscape:      25vh;
     background-color: map-get($map, display-background-color);
   }
 
-  .activeGo {
-    font-family: selawksb;
-    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
-    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
-    color: map-get($map, go);
-  }
-
-  .activeLoaded {
-    @extend .activeGo;
-    color: map-get($map, getready);
-  }
-
-  .activeStop {
-    @extend .activeGo;
-    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
-    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
-    color: map-get($map, go);
-  }
-
-  .activeCompleted {
-    @extend .activeGo;
-    color: map-get($map, primary);
-  }
-
-  .activeGetReady {
-    @extend .activeStop;
-    color: map-get($map, getready);
-  }
-
-  .activeCountdown {
-    @extend .activeGo;
-    color: map-get($map, display-disabled);
-  }
-
-  .restGo {
-    font-family: selawksb;
-    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
-    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
-    color: map-get($map, stop);
-  }
-
-  .restStop {
-    @extend .restGo;
-    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
-    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
-  }
-
-  .restLoaded {
-    @extend .restStop;
-    color: map-get($map, getready);
-  }
-
-  .restGetReady {
-    @extend .restStop;
-    color: map-get($map, getready);
-  }
-
-  .restCompleted {
-    @extend .restStop;
-    color: map-get($map, primary);
-  }
-
-  .restCountdown {
-    @extend .restStop;
-    color: map-get($map, display-disabled);
-  }
-
   #intervalColPortrait {
     @media screen and (orientation:portrait) { display: inherit; }
     @media screen and (orientation:landscape) { display: none; }
+    justify-content: flex-end;
   }
   #intervalColLandscape {
     @media screen and (orientation:portrait) { display: none; }
     @media screen and (orientation:landscape) { display: inherit; }
+    justify-content: flex-end;
   }
 
   .intervalGo {
@@ -147,10 +82,19 @@ $font-size-time-landscape:      25vh;
     color: map-get($map, primary);
   }
 
+  #timeCol {
+    display: inherit;
+    justify-content: flex-end;
+  }
+
   .timeGo {
     font-family: selawk;
-    @media screen and (orientation:portrait) { font-size: $font-size-time-portrait; }
-    @media screen and (orientation:landscape) { font-size: $font-size-time-landscape; }
+    @media screen and (orientation:portrait) { 
+      font-size: $font-size-time-portrait; 
+    }
+    @media screen and (orientation:landscape) { 
+      font-size: $font-size-time-landscape;
+    }
     color: map-get($map, go);
   }
 
