@@ -121,11 +121,12 @@ export class AITBasePage implements OnInit {
       this.storage.getItem(uuid).then((value: any) => {
         this.uuidData = (value as UUIDData);
 
-        // instaniate here allow easy "reloading".  Also this is outside
-        // of aitBuildTimer() for subclass can use it first
-        if (!this.sots) {
-          this.sots = new SotsForAit();
+        // instaniate here allow easy "reloading".
+        if (this.sots !== undefined) {
+          this.sots.unsubscribe();
         }
+
+        this.sots = new SotsForAit();
 
         this.aitBuildTimer();
       }).catch(() => {
