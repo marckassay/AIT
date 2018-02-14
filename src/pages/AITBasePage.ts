@@ -22,11 +22,12 @@ import { ChangeDetectorRef, OnInit, Optional, ViewChild } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
 import { UUIDData } from '../app/app.component';
-import { SequenceStates, SotsForAit } from '../app/core/SotsForAit';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { ServiceLocator } from '../app/app.module';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { SotsForAit } from '../app/core/SotsForAit';
+import { SequenceStates } from '../app/core/SotsUtil';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -63,6 +64,8 @@ export class AITBasePage implements OnInit {
   constructor( @Optional() ngDectector: ChangeDetectorRef,
     @Optional() navParams: NavParams,
     @Optional() navCtrl: NavController) {
+
+    this.sots = new SotsForAit();
     this.ngDectector = ngDectector;
     this.navParams = navParams;
     this.navCtrl = navCtrl;
@@ -120,13 +123,6 @@ export class AITBasePage implements OnInit {
 
       this.storage.getItem(uuid).then((value: any) => {
         this.uuidData = (value as UUIDData);
-
-        // instaniate here allow easy "reloading".
-        if (this.sots !== undefined) {
-          this.sots.unsubscribe();
-        }
-
-        this.sots = new SotsForAit();
 
         this.aitBuildTimer();
       }).catch(() => {

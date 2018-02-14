@@ -17,7 +17,7 @@
 */
 import { Component, Input } from '@angular/core';
 import { Limits } from '../../app.component';
-import { SequenceStates } from '../../core/SotsForAit';
+import { SequenceStates } from '../../core/SotsUtil';
 
 @Component({
   selector: 'activerest-renderer',

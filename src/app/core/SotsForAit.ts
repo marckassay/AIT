@@ -17,32 +17,9 @@
 */
 import { CountdownSegment, CountupSegment, Sequencer, TimeEmission, add } from 'sots';
 import { CountdownWarnings } from '../app.component';
-import * as moment from 'moment';
 import { PartialObserver } from 'rxjs/Observer';
-
-export enum SequenceStates {
-  SingleBeep = 2,
-  DoubleBeep = 4,
-  Warning = 8,
-  Countdown = 16,
-  Rest = 32,
-  Active = 64,
-  Completed = 128,
-  Error = 256,
-  Loaded = 512,
-
-  CountdownWarning = SequenceStates.Countdown + SequenceStates.Warning,
-  RestWarning = SequenceStates.Rest + SequenceStates.Warning,
-  ActiveWarning = SequenceStates.Active + SequenceStates.Warning
-}
-
-export interface ISotsForAit {
-  sequencer: Sequencer;
-
-  build(countdown: number, warnings: CountdownWarnings): void;
-  build(countdown: number, warnings: CountdownWarnings, time: number): void;
-  build(countdown: number, warnings: CountdownWarnings, intervals: number, rest: number, active: number): void;
-}
+import { ISotsForAit, SequenceStates, SotsUtil } from './SotsUtil';
+import * as moment from 'moment';
 
 export class SotsForAit implements ISotsForAit {
   sequencer: Sequencer;
@@ -54,13 +31,16 @@ export class SotsForAit implements ISotsForAit {
   grandTotalTime: number;
 
   constructor() {
-    this.sequencer = new Sequencer({ period: 100, compareAsBitwise: true });
   }
 
   build(countdown: number, warnings: CountdownWarnings): void;
   build(countdown: number, warnings: CountdownWarnings, time: number): void;
   build(countdown: number, warnings: CountdownWarnings, intervals: number, rest: number, active: number): void;
   build(countdown: number, warnings: CountdownWarnings, timeOrIntervals?: number, rest?: number, active?: number): void {
+
+    // unsubscribe if there is an instance to do so.
+    this.unsubscribe();
+    this.sequencer = new Sequencer({ period: 100, compareAsBitwise: true });
 
     // if this assertion is true, its has been called by interval-display...
     if (rest !== undefined && active !== undefined) {
@@ -71,7 +51,7 @@ export class SotsForAit implements ISotsForAit {
 
       this.sequencer
         .add(CountdownSegment, {
-          duration: this.secToMilli(countdown),
+          duration: SotsUtil.secToMilli(countdown),
           states: [
             { state: SequenceStates.CountdownWarning, timeLessThanOrEqualTo: countdown.toString() },
             { state: SequenceStates.DoubleBeep, timeAt: countdown.toString() },
@@ -80,7 +60,7 @@ export class SotsForAit implements ISotsForAit {
         })
         .group(timeOrIntervals!,
         add(CountdownSegment, {
-          duration: this.secToMilli(rest!),
+          duration: SotsUtil.secToMilli(rest!),
           omitFirst: true,
           states: [
             { state: SequenceStates.Rest, timeLessThanOrEqualTo: rest!.toString() },
@@ -90,12 +70,12 @@ export class SotsForAit implements ISotsForAit {
           ]
         }),
         add(CountdownSegment, {
-          duration: this.secToMilli(active!),
+          duration: SotsUtil.secToMilli(active!),
           states: [
             { state: SequenceStates.Active, timeLessThanOrEqualTo: active!.toString() },
             { state: SequenceStates.Warning, timeLessThanOrEqualTo: '3' },
             { state: SequenceStates.DoubleBeep, timeAt: active!.toString() },
-            { state: SequenceStates.SingleBeep, timeAt: this.constructIntervalSingleAudiblesTimes(warnings!) }
+            { state: SequenceStates.SingleBeep, timeAt: SotsUtil.constructIntervalSingleAudiblesTimes(warnings!) }
           ]
         })
         );
@@ -104,7 +84,7 @@ export class SotsForAit implements ISotsForAit {
       this.grandTotalTime = timeOrIntervals;
       this.sequencer
         .add(CountdownSegment, {
-          duration: this.secToMilli(countdown),
+          duration: SotsUtil.secToMilli(countdown),
           states: [
             { state: SequenceStates.CountdownWarning, timeLessThanOrEqualTo: countdown.toString() },
             { state: SequenceStates.DoubleBeep, timeAt: countdown.toString() },
@@ -112,11 +92,11 @@ export class SotsForAit implements ISotsForAit {
           ]
         })
         .add(CountdownSegment, {
-          duration: this.secToMilli(timeOrIntervals),
+          duration: SotsUtil.secToMilli(timeOrIntervals),
           states: [
             { state: SequenceStates.Active, timeLessThanOrEqualTo: timeOrIntervals.toString() },
-            { state: SequenceStates.DoubleBeep, timeAt: this.constructModDoubleAudiblesTimes(warnings, timeOrIntervals.toString()) },
-            { state: SequenceStates.SingleBeep, timeAt: this.constructModSingleAudiblesTimes(warnings, '2,1') }
+            { state: SequenceStates.DoubleBeep, timeAt: SotsUtil.constructModDoubleAudiblesTimes(warnings, timeOrIntervals.toString()) },
+            { state: SequenceStates.SingleBeep, timeAt: SotsUtil.constructModSingleAudiblesTimes(warnings, '2,1') }
           ]
         });
       // else, this is called by stopwatch-display
@@ -124,7 +104,7 @@ export class SotsForAit implements ISotsForAit {
       this.grandTotalTime = 0;
       this.sequencer
         .add(CountdownSegment, {
-          duration: this.secToMilli(countdown),
+          duration: SotsUtil.secToMilli(countdown),
           states: [
             { state: SequenceStates.CountdownWarning, timeLessThanOrEqualTo: countdown.toString() },
             { state: SequenceStates.DoubleBeep, timeAt: countdown.toString() },
@@ -135,8 +115,8 @@ export class SotsForAit implements ISotsForAit {
           duration: Number.MAX_SAFE_INTEGER,
           states: [
             { state: SequenceStates.Active, timeGreaterThanOrEqualTo: '0' },
-            { state: SequenceStates.DoubleBeep, timeAt: this.constructModDoubleAudiblesTimes(warnings, '0') },
-            { state: SequenceStates.SingleBeep, timeAt: this.constructModSingleAudiblesTimes(warnings) }
+            { state: SequenceStates.DoubleBeep, timeAt: SotsUtil.constructModDoubleAudiblesTimes(warnings, '0') },
+            { state: SequenceStates.SingleBeep, timeAt: SotsUtil.constructModSingleAudiblesTimes(warnings) }
           ]
         });
     }
@@ -148,53 +128,9 @@ export class SotsForAit implements ISotsForAit {
   }
 
   unsubscribe(): void {
-    if (this.sequencer.subscription) {
+    if (this.sequencer && this.sequencer.subscription) {
       this.sequencer.unsubscribe();
     }
-  }
-
-  constructIntervalSingleAudiblesTimes(warnings: CountdownWarnings): string {
-    let times: string;
-    times = (warnings.fifthteensecond) ? '15,' : '';
-    times += (warnings.tensecond) ? '10,' : '';
-    times += (warnings.fivesecond) ? '5,' : '';
-    times += '2,1';
-    return times;
-  }
-
-  constructModSingleAudiblesTimes(warnings: CountdownWarnings, append: string = ''): string {
-    let times: string = '';
-    if (append.length > 0) {
-      times = append + ',';
-    }
-    times += (warnings.fivesecond) ? 'mod15,' : '';
-    times += (warnings.tensecond) ? 'mod30,' : '';
-    if (times.endsWith(',')) {
-      times = times.slice(0, -1);
-    }
-
-    return times;
-  }
-
-  constructModDoubleAudiblesTimes(warnings: CountdownWarnings, append: string = ''): string {
-    let times: string = '';
-    if (append.length > 0) {
-      times = append + ',';
-    }
-    times += (warnings.fifthteensecond) ? 'mod60' : '';
-    if (times.endsWith(',')) {
-      times = times.slice(0, -1);
-    }
-
-    return times;
-  }
-
-  milliToSec(milliseconds: number): string {
-    return (milliseconds / 1000).toString();
-  }
-
-  secToMilli(seconds: number): number {
-    return seconds * 1000;
   }
 
   getGrandTime(value: TimeEmission): string {

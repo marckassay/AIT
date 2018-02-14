@@ -18,7 +18,7 @@
 import { IonicPage } from 'ionic-angular';
 import { IntervalStorageData } from '../../app/app.component';
 import { Component, Input } from '@angular/core';
-import { SequenceStates } from '../../app/core/SotsForAit';
+import { SequenceStates } from '../../app/core/SotsUtil';
 import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
 import { ViewChild } from '@angular/core';
@@ -72,7 +72,7 @@ export class IntervalDisplayPage extends AITBasePage {
           this.currentInterval = value.interval.current;
           this.activeRestRenderer.time = Math.ceil(value.time);
         }
-        console.log('time :: ' + value.time);
+
         if (value.state) {
           // if we dont negate the audiable states the display will "blink"
           // for a millisecond.
@@ -88,6 +88,7 @@ export class IntervalDisplayPage extends AITBasePage {
             this.signal.double();
           }
         }
+        console.log('time :: ' + value.time + " :: " + value.state);
       },
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;

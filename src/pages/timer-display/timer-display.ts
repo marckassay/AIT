@@ -18,7 +18,7 @@
 import { Component, Input } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { AITBasePage } from '../AITBasePage';
-import { SequenceStates } from '../../app/core/SotsForAit';
+import { SequenceStates } from '../../app/core/SotsUtil';
 import { TimeEmission } from 'sots';
 import { TimerStorageData } from '../../app/app.component';
 
