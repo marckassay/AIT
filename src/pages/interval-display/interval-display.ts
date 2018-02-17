@@ -88,7 +88,6 @@ export class IntervalDisplayPage extends AITBasePage {
             this.signal.double();
           }
         }
-        console.log('time :: ' + value.time + " :: " + value.state);
       },
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;

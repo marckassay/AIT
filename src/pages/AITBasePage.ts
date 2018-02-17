@@ -93,6 +93,12 @@ export class AITBasePage implements OnInit {
   }
 
   ionViewDidLoad() {
+    this.menuCtrl.get('left').ionOpen.subscribe(() => {
+      this.sots.sequencer.unsubscribe();
+    });
+    this.menuCtrl.get('right').ionOpen.subscribe(() => {
+      this.sots.sequencer.unsubscribe();
+    });
     // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
     // called since sidemenus are just menus, not pages.
     this.menuCtrl.get('right').ionClose.debounceTime(125).subscribe(() => {
