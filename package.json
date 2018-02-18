@@ -57,7 +57,7 @@
         "object-keys": "^1.0.11",
         "rxjs": "^5.5.2",
         "sass-svg": "^1.1.0",
-        "sots": "git+https://github.com/marckassay/sots.git#2.7.0",
+        "sots": "git+https://github.com/marckassay/sots.git#2.8.x",
         "sw-toolbox": "3.6.0",
         "zone.js": "^0.8.18"
     },
