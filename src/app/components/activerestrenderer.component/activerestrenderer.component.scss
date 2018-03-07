@@ -20,7 +20,7 @@ $font-size-go-landscape:        50vh;
 $font-size-stop-portrait:       15vw;
 $font-size-stop-landscape:      10vh;
 
-@mixin theme-map-apply ($map) {
+@mixin activerest-renderer-theme-apply ($map) {
   p.left {text-align: left};
   p.right {text-align: right};
 
@@ -93,25 +93,4 @@ $font-size-stop-landscape:      10vh;
     @extend .rest.stop;
     color: map-get($map, display-disabled);
   }
-}
-
-.theme-light-rgbandy activerest-renderer {
-  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
-  @include theme-map-apply($map);
-}
-
-.theme-dark-rgbandy activerest-renderer {
-  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
-  @include theme-map-apply($map);
-}
-
-
-.theme-light-monokai activerest-renderer {
-  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
-  @include theme-map-apply($map);
-}
-
-.theme-dark-monokai activerest-renderer {
-  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
-  @include theme-map-apply($map);
 }

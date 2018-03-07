@@ -61,6 +61,10 @@
           <ion-label>RGB and sometimes Y</ion-label>
           <ion-radio checked="{{data.accent == 1}}" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
         </ion-item>
+        <ion-item>
+          <ion-label>Cool Grey</ion-label>
+          <ion-radio checked="{{data.accent == 2}}" (ionSelect)="toggleAccentTheme(AccentTheme.CoolGrey)"></ion-radio>
+        </ion-item>
       </ion-item-group>
     </ion-list>
   </ng-container>

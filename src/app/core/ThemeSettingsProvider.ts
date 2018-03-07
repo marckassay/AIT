@@ -21,7 +21,8 @@ import { Observable } from 'rxjs/Observable';
 
 export enum AccentTheme {
   Monokai,
-  RGBandY
+  RGBandY,
+  CoolGrey
 }
 
 export enum BaseTheme {

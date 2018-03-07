@@ -27,6 +27,8 @@
 @import "../pages/app-settings/app-settings.scss";
 @import "../pages/app-info/app-info.scss";
 @import "../pages/home-display/home-display.scss";
+@import "./components/activerestrenderer.component/activerestrenderer.component.scss";
+
 html {
   font-size: 62.5%;
   -webkit-text-size-adjust: none;
@@ -184,6 +186,9 @@ ion-nav {
   page-home-display {
     @include page-home-display-theme-apply($map);
   }
+  activerest-renderer {
+    @include activerest-renderer-theme-apply($map);
+  }
 }
 
 .theme-light-rgbandy {
@@ -203,5 +208,15 @@ ion-nav {
 
 .theme-dark-monokai {
   $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
+  @include grand-theme-map-apply($map);
+}
+
+.theme-light-coolgrey {
+  $map: theme-map-get($accent-theme-coolgrey, $base-theme-light);
+  @include grand-theme-map-apply($map);
+}
+
+.theme-dark-coolgrey {
+  $map: theme-map-get($accent-theme-coolgrey, $base-theme-dark);
   @include grand-theme-map-apply($map);
 }
