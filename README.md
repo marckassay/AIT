@@ -7,13 +7,12 @@ Another interval timer (AiT) that targets mobile devices for your timing needs. 
 Features in this application are:
 * Adjustable countdown timer before starting interval timer.
 * Optional audibles when approaching an end of a segment or when repeat times occur (e.g. every minute).
-* Changeable themes; 'light' or 'dark' base themes along with 'monokai' and 'RGB and sometimes Y' accent themes.
+* Changeable themes; 'light' or 'dark' base themes along with a few accent themes.
 
 Possible future features:
 * iOS compilation
 * More themes and audibles
 * Stopwatch that laps on a tap
-* Fullscreen mode when timer is running
 * Compile for Android Wear and Apple Watch
 
 
