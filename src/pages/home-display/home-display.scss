@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-@mixin theme-map-apply ($map) {
+@mixin page-home-display-theme-apply ($map) {
   ion-header {
     position: relative;
   }
@@ -67,24 +67,4 @@
     background-repeat: no-repeat;
     background-position: 50% 50%;
   }
-}
-
-.theme-light-rgbandy page-home-display {
-  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
-  @include theme-map-apply($map);
-}
-
-.theme-dark-rgbandy page-home-display {
-  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
-  @include theme-map-apply($map);
-}
-
-.theme-light-monokai page-home-display {
-  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
-  @include theme-map-apply($map);
-}
-
-.theme-dark-monokai page-home-display {
-  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
-  @include theme-map-apply($map);
 }

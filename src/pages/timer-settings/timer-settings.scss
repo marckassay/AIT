@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-@mixin theme-map-apply ($map) {
+@mixin page-timer-settings-theme-apply ($map) {
   $font-size-active-portrait : 10vw;
   $font-size-active-landscape : 10vh;
   $font-size-rest-portrait : 7vw;
@@ -126,26 +126,4 @@
       font-size: $font-size-countdown-landscape;
     }
   }
-}
-
-
-.theme-light-rgbandy page-timer-settings {
-  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
-  @include theme-map-apply($map);
-}
-
-.theme-dark-rgbandy page-timer-settings {
-  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
-  @include theme-map-apply($map);
-}
-
-
-.theme-light-monokai page-timer-settings {
-  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
-  @include theme-map-apply($map);
-}
-
-.theme-dark-monokai page-timer-settings {
-  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
-  @include theme-map-apply($map);
 }

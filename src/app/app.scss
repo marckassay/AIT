@@ -15,9 +15,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 // overriding build/main.css (line: ~4994) since this app
 // is sensitive to viewport sizes and needs specific font sizes
-
+@import "../pages/interval-display/interval-display.scss";
+@import "../pages/interval-settings/interval-settings.scss";
+@import "../pages/timer-display/timer-display.scss";
+@import "../pages/timer-settings/timer-settings.scss";
+@import "../pages/stopwatch-display/stopwatch-display.scss";
+@import "../pages/stopwatch-settings/stopwatch-settings.scss";
+@import "../pages/app-settings/app-settings.scss";
+@import "../pages/app-info/app-info.scss";
+@import "../pages/home-display/home-display.scss";
 html {
   font-size: 62.5%;
   -webkit-text-size-adjust: none;
@@ -25,7 +34,9 @@ html {
   -ms-text-size-adjust: none;
   font-size-adjust: none;
 }
+
 /* fallback */
+
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
@@ -44,8 +55,7 @@ html {
   display: inline-block;
   white-space: nowrap;
   word-wrap: normal;
-  direction: ltr;
-  // common ligatures
+  direction: ltr; // common ligatures
   // -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
@@ -53,23 +63,21 @@ html {
 @font-face {
   font-family: 'selawk';
   src: url('#{$font-path}/selawk.ttf') format('truetype');
- }
+}
 
 @font-face {
   font-family: 'selawksb';
   src: url('#{$font-path}/selawksb.ttf') format('truetype');
- }
+}
 
 @font-face {
   font-family: 'sourcecodeprosb';
   src: url('#{$font-path}/SourceCodePro-Semibold.ttf') format('truetype');
- }
-
- // This is to create drop shadow from the main-display on the side menus
- // that get revealed from underneath.
- ion-nav {
+} // This is to create drop shadow from the main-display on the side menus
+// that get revealed from underneath.
+ion-nav {
   box-shadow: rgba(0, 0, 0, 0.2) 0em 0em 3px 3px;
- }
+}
 
 @mixin theme-map-apply ($map) {
   .ait-brand {
@@ -80,7 +88,9 @@ html {
     width: fit-content;
     color: map-get($map, text-color);
   }
-  .content-ios, .content-md, .content-wp {
+  .content-ios,
+  .content-md,
+  .content-wp {
     background-color: map-get($map, side-background);
   }
   .fab-md {
@@ -96,12 +106,10 @@ html {
   .radio-checked {
     border-color: map-get($map, primary) !important;
   }
-
   .range-pin::before,
   .range-pin {
     color: map-get($map, strong);
   }
-
   .radio-inner,
   .range-pin::before,
   .range-pin,
@@ -129,7 +137,8 @@ html {
   .item-inner {
     border-bottom: 1px solid map-get($map, weakest) !important;
   }
-  ion-navbar > button, .toolbar-title {
+  ion-navbar>button,
+  .toolbar-title {
     color: map-get($map, text-color);
   }
   ion-label,
@@ -146,23 +155,53 @@ html {
   }
 }
 
+@mixin grand-theme-map-apply($map) {
+  @include theme-map-apply($map);
+  page-interval-display {
+    @include page-interval-display-theme-apply($map);
+  }
+  page-interval-settings {
+    @include page-interval-settings-theme-apply($map);
+  }
+  page-timer-display {
+    @include page-timer-display-theme-apply($map);
+  }
+  page-timer-settings {
+    @include page-timer-settings-theme-apply($map);
+  }
+  page-stopwatch-display {
+    @include page-stopwatch-display-theme-apply($map);
+  }
+  page-stopwatch-settings {
+    @include page-stopwatch-settings-theme-apply($map);
+  }
+  page-app-settings {
+    @include page-app-settings-theme-apply($map);
+  }
+  page-app-info {
+    @include page-app-info-theme-apply($map);
+  }
+  page-home-display {
+    @include page-home-display-theme-apply($map);
+  }
+}
+
 .theme-light-rgbandy {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
-  @include theme-map-apply($map);
+  @include grand-theme-map-apply($map);
 }
 
 .theme-dark-rgbandy {
   $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
-  @include theme-map-apply($map);
+  @include grand-theme-map-apply($map);
 }
-
 
 .theme-light-monokai {
   $map: theme-map-get($accent-theme-monokai, $base-theme-light);
-  @include theme-map-apply($map);
+  @include grand-theme-map-apply($map);
 }
 
 .theme-dark-monokai {
   $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
-  @include theme-map-apply($map);
+  @include grand-theme-map-apply($map);
 }

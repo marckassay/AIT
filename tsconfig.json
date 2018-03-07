@@ -17,7 +17,9 @@
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "strict": true,
+    // 'strictPropertyInitialization' 2.7+ only
+    // "strictPropertyInitialization": false,
+    "strict": false,
     // 'strictFunctionTypes' below is disabled to circumvent: https://github.com/ReactiveX/rxjs/issues/3031
     //"strictFunctionTypes": false,
     "sourceMap": true,

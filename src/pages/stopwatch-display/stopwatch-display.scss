@@ -18,7 +18,7 @@
 $font-size-grandtime-portrait:       52vw;
 $font-size-grandtime-landscape:      52vh;
 
-@mixin theme-map-apply ($map) {
+@mixin page-stopwatch-display-theme-apply ($map) {
 
   // this is needed to prevent white flash/blink
   // when being transition away
@@ -61,25 +61,4 @@ $font-size-grandtime-landscape:      52vh;
     @extend .activeGo;
     color: map-get($map, primary);
   }
-}
-
-.theme-light-rgbandy page-stopwatch-display {
-  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
-  @include theme-map-apply($map);
-}
-
-.theme-dark-rgbandy page-stopwatch-display {
-  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
-  @include theme-map-apply($map);
-}
-
-
-.theme-light-monokai page-stopwatch-display {
-  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
-  @include theme-map-apply($map);
-}
-
-.theme-dark-monokai page-stopwatch-display {
-  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
-  @include theme-map-apply($map);
 }
