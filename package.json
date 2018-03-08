@@ -4,7 +4,7 @@
   "author": "Marc Kassay",
   "license": "GPL-3.0+",
   "homepage": "https://github.com/marckassay/AIT",
-  "private": false,
+  "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
