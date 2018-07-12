@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="154" id="github.marckassay.ait" version="1.5.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="155" id="github.marckassay.ait" version="1.5.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AiT</name>
     <description>Another interval timer (AiT) that targets portable devices for your timing needs. This application has been intended for interval workouts, where there are active and inactive segments.</description>
     <author email="marckassay@gmail.com" href="https://github.com/marckassay/AIT">Marc Kassay</author>
