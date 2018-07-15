@@ -75,7 +75,8 @@ export class IntervalDisplayPage extends AITBasePage {
 
         if (value.state) {
           // if we dont negate the audiable states the display will "blink"
-          // for a millisecond.
+          // for a millisecond. so valueNoAudiable will be used to set viewState
+          // without any audiable state included.
           let valueNoAudiable: number = (value.state.valueOf() as SequenceStates);
           valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
           this.viewState = valueNoAudiable;
