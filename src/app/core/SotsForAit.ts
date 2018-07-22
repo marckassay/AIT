@@ -137,7 +137,7 @@ export class SotsForAit implements ISotsForAit {
     let totalTimeRemaining: number;
 
     if (value.interval) {
-      // *note: the first interval will not have a rest segment.
+      // * note: the first interval will not have a rest segment.
       const remainingIntervals: number = value.interval.total - value.interval.current;
       const remainingSecondsOfWholeIntervals: number = (this.rest + this.active) * remainingIntervals;
       const remainingSecondsOfWholeIntervalsMinusFirstRest: number = remainingSecondsOfWholeIntervals;
