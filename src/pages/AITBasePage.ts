@@ -82,6 +82,11 @@ export class AITBasePage implements OnInit {
     this.splashScreen = ServiceLocator.injector.get(SplashScreen);
     this.statusBar = ServiceLocator.injector.get(StatusBar);
 
+    // detaching here when timer has completed or paused, and the user re-enters the view, changed
+    // wouldn't change. So all subclass views need to manually check for changes. this is done by
+    // using 'this.ngDectector.detectChanges()' in the subscribe callbacks (next, complete, error)
+    this.ngDectector.detach();
+
     this.screenOrientation.onChange().subscribe(() => {
       // this is need to refresh the view when being revisited from changed in settings
       this.ngDectector.detectChanges();
@@ -98,6 +103,10 @@ export class AITBasePage implements OnInit {
     });
     this.menuCtrl.get('right').ionOpen.subscribe(() => {
       this.sots.unsubscribe();
+
+      // reset() call is needed here for when timer has completed or paused
+      // and then user enters into settings.
+      this.sots.sequencer.reset();
     });
     // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
     // called since sidemenus are just menus, not pages.
