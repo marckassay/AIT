@@ -59,6 +59,7 @@ export class StopwatchDisplayPage extends AITBasePage {
     this.sots.subscribe({
       next: (value: TimeEmission): void => {
         this.grandTime = this.sots.getGrandTime(value);
+
         if (value.state) {
           // if we dont negate the audiable states the display will "blink"
           // for a tenth of a second.
@@ -72,11 +73,15 @@ export class StopwatchDisplayPage extends AITBasePage {
           } else if (value.state.valueOf(SequenceStates.SingleBeep)) {
             this.signal.single();
           }
+
+          this.ngDectector.detectChanges();
         }
       },
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
         error!;
+
+        this.ngDectector.detectChanges();
       }
     });
 

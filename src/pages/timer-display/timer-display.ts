@@ -73,17 +73,23 @@ export class TimerDisplayPage extends AITBasePage {
           } else if (value.state.valueOf(SequenceStates.SingleBeep)) {
             this.signal.single();
           }
+
+          this.ngDectector.detectChanges();
         }
       },
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
         error!;
+
+        this.ngDectector.detectChanges();
       },
       complete: (): void => {
         this.viewState = SequenceStates.Completed;
         this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
         this.aitSetViewInRunningMode(false);
+
+        this.ngDectector.detectChanges();
       }
     });
 
