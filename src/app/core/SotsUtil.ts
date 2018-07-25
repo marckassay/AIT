@@ -29,7 +29,7 @@ export class SotsUtil {
 
   static constructIntervalSingleAudiblesTimes(warnings: CountdownWarnings): string {
     let times: string;
-    times = (warnings.fifthteensecond) ? '15,' : '';
+    times = (warnings.fifteensecond) ? '15,' : '';
     times += (warnings.tensecond) ? '10,' : '';
     times += (warnings.fivesecond) ? '5,' : '';
     times += '2,1';
@@ -55,7 +55,7 @@ export class SotsUtil {
     if (append.length > 0) {
       times = append + ',';
     }
-    times += (warnings.fifthteensecond) ? 'mod60' : '';
+    times += (warnings.fifteensecond) ? 'mod60' : '';
     if (times.endsWith(',')) {
       times = times.slice(0, -1);
     }

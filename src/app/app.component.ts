@@ -172,7 +172,7 @@ export interface AppStorageData extends UUIDData {
 export interface CountdownWarnings {
   fivesecond: boolean;
   tensecond: boolean;
-  fifthteensecond: boolean;
+  fifteensecond: boolean;
 }
 
 export interface Limits {
