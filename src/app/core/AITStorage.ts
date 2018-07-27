@@ -19,6 +19,22 @@ import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
 import { UUIDData } from '../app.component';
 
+interface IntervalDataShape extends UUIDData {
+  activerest: {lower: number, upper: number};
+  intervals: number;
+  countdown: number;
+  hasLastSettingChangedTime: boolean;
+}
+
+interface TimerDataShape extends UUIDData {
+  time: number;
+  hasLastSettingChangedTime: boolean;
+}
+
+/* interface StopwatchDataShape extends UUIDData {
+  hasLastSettingChangedTime: boolean;
+} */
+
 @Injectable()
 export class AITStorage {
   public static readonly APP_ID: string = '00000000-0000-0000-0000-000000000001';
@@ -70,6 +86,7 @@ export class AITStorage {
           intervalmaxlimit: 20,
           countdown: 10,
           countdownmaxlimit: 60,
+          hasLastSettingChangedTime: false,
           warnings: { fivesecond: false, tensecond: true, fifteensecond: false },
         };
         this.storage.set(AITStorage.INITIAL_INTERVAL_ID, data_interval);
@@ -86,6 +103,7 @@ export class AITStorage {
           countdown: 10,
           countdownmaxlimit: 60,
           time: 900,
+          hasLastSettingChangedTime: false,
           warnings: { fivesecond: false, tensecond: true, fifteensecond: true }
         };
         this.storage.set(AITStorage.INITIAL_TIMER_ID, data_interval);
@@ -101,6 +119,7 @@ export class AITStorage {
           name: 'Program #3',
           countdown: 10,
           countdownmaxlimit: 60,
+          hasLastSettingChangedTime: false,
           warnings: { fivesecond: false, tensecond: true, fifteensecond: true }
         };
         this.storage.set(AITStorage.INITIAL_STOPWATCH_ID, data_interval);
@@ -109,12 +128,29 @@ export class AITStorage {
   }
 
   setItem(data: UUIDData) {
-    this.storage.set(data.uuid, data).then(() => {
-      if (data.uuid !== AITStorage.APP_ID) {
-        this.setCurrentUUID(data.uuid);
+    // checking to see if data's timer info has chanaged. ignoring warnings key and any other fields
+    // if timer info has changed, set the 'hasLastSettingChangedTime' field to true.
+    this.getItem(data.uuid).then((value: IntervalDataShape | TimerDataShape) => {
+      if ((value as IntervalDataShape).activerest) {
+        if (((value as IntervalDataShape).activerest.lower !== (data as IntervalDataShape).activerest.lower) ||
+        ((value as IntervalDataShape).activerest.upper !== (data as IntervalDataShape).activerest.upper) ||
+        ((value as IntervalDataShape).intervals !== (data as IntervalDataShape).intervals) ||
+        ((value as IntervalDataShape).countdown !== (data as IntervalDataShape).countdown)) {
+          (data as IntervalDataShape).hasLastSettingChangedTime = true;
+        } else {
+          (data as IntervalDataShape).hasLastSettingChangedTime = false;
+        }
+      } else if ((value as TimerDataShape).time) {
+        (data as IntervalDataShape).hasLastSettingChangedTime = ((value as TimerDataShape).time !== (data as TimerDataShape).time);
       }
-    }, () => {
-      // console.error('Error storing item', error)
+
+      this.storage.set(data.uuid, data).then(() => {
+        if (data.uuid !== AITStorage.APP_ID) {
+          this.setCurrentUUID(data.uuid);
+        }
+      }, () => {
+        // console.error('Error storing item', error)
+      });
     });
   }
 
