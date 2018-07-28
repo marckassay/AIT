@@ -15,13 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import { UUIDData } from '../app/app.component';
 import { FabAction, FabContainerComponent, FabEmission } from '../app/components/fabcontainer.component/fabcontainer.component';
-import { AITSignal } from '../app/core/AITSignal';
 import { Insomnia } from '@ionic-native/insomnia';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
-import { UUIDData } from '../app/app.component';
+import { AITSignal } from '../app/core/AITSignal';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { ServiceLocator } from '../app/app.module';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -99,14 +99,14 @@ export class AITBasePage implements OnInit {
 
   ionViewDidLoad() {
     this.menuCtrl.get('left').ionOpen.subscribe(() => {
-      this.sots.unsubscribe();
+     // this.sots.unsubscribe();
     });
     this.menuCtrl.get('right').ionOpen.subscribe(() => {
-      this.sots.unsubscribe();
+      // this.sots.unsubscribe();
 
       // reset() call is needed here for when timer has completed or paused
       // and then user enters into settings.
-      this.sots.sequencer.reset();
+     // this.sots.sequencer.reset();
     });
     // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
     // called since sidemenus are just menus, not pages.
@@ -136,9 +136,20 @@ export class AITBasePage implements OnInit {
       this.menu.reset();
 
       this.storage.getItem(uuid).then((value: any) => {
-        this.uuidData = (value as UUIDData);
 
-        this.aitBuildTimer();
+        this.uuidData = (value as UUIDData);
+        if (value.hasOwnProperty('hasLastSettingChangedTime')) {
+          if (value.hasLastSettingChangedTime || this.isFirstViewing) {
+            this.aitBuildTimer();
+
+            value.hasLastSettingChangedTime = false;
+            this.storage.setItem(this.uuidData);
+          }
+
+          this.ngDectector.detectChanges();
+        } else {
+          this.aitBuildTimer();
+        }
       }).catch(() => {
         // console.log("interval-display preinitializeDisplay error")
       });

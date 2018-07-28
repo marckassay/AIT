@@ -192,6 +192,9 @@ export interface IntervalStorageData extends UUIDData {
   countdownmaxlimit: number;
 
   warnings: CountdownWarnings;
+
+  // this field needs to be maintained by object that reads it.
+  hasLastSettingChangedTime: boolean;
 }
 
 export interface StopwatchStorageData extends UUIDData {
@@ -206,4 +209,7 @@ export interface StopwatchStorageData extends UUIDData {
 export interface TimerStorageData extends StopwatchStorageData {
   time: number;
   warnings: CountdownWarnings;
+
+  // this field needs to be maintained by object that reads it.
+  hasLastSettingChangedTime: boolean;
 }

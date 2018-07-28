@@ -17,23 +17,7 @@
 */
 import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
-import { UUIDData } from '../app.component';
-
-interface IntervalDataShape extends UUIDData {
-  activerest: {lower: number, upper: number};
-  intervals: number;
-  countdown: number;
-  hasLastSettingChangedTime: boolean;
-}
-
-interface TimerDataShape extends UUIDData {
-  time: number;
-  hasLastSettingChangedTime: boolean;
-}
-
-/* interface StopwatchDataShape extends UUIDData {
-  hasLastSettingChangedTime: boolean;
-} */
+import { IntervalStorageData, TimerStorageData, UUIDData } from '../app.component';
 
 @Injectable()
 export class AITStorage {
@@ -130,18 +114,18 @@ export class AITStorage {
   setItem(data: UUIDData) {
     // checking to see if data's timer info has chanaged. ignoring warnings key and any other fields
     // if timer info has changed, set the 'hasLastSettingChangedTime' field to true.
-    this.getItem(data.uuid).then((value: IntervalDataShape | TimerDataShape) => {
-      if ((value as IntervalDataShape).activerest) {
-        if (((value as IntervalDataShape).activerest.lower !== (data as IntervalDataShape).activerest.lower) ||
-        ((value as IntervalDataShape).activerest.upper !== (data as IntervalDataShape).activerest.upper) ||
-        ((value as IntervalDataShape).intervals !== (data as IntervalDataShape).intervals) ||
-        ((value as IntervalDataShape).countdown !== (data as IntervalDataShape).countdown)) {
-          (data as IntervalDataShape).hasLastSettingChangedTime = true;
+    this.getItem(data.uuid).then((value: IntervalStorageData | TimerStorageData) => {
+      if ((value as IntervalStorageData).activerest) {
+        if (((value as IntervalStorageData).activerest.lower !== (data as IntervalStorageData).activerest.lower) ||
+        ((value as IntervalStorageData).activerest.upper !== (data as IntervalStorageData).activerest.upper) ||
+        ((value as IntervalStorageData).intervals !== (data as IntervalStorageData).intervals) ||
+        ((value as IntervalStorageData).countdown !== (data as IntervalStorageData).countdown)) {
+          (data as IntervalStorageData).hasLastSettingChangedTime = true;
         } else {
-          (data as IntervalDataShape).hasLastSettingChangedTime = false;
+          (data as IntervalStorageData).hasLastSettingChangedTime = false;
         }
-      } else if ((value as TimerDataShape).time) {
-        (data as IntervalDataShape).hasLastSettingChangedTime = ((value as TimerDataShape).time !== (data as TimerDataShape).time);
+      } else if ((value as TimerStorageData).time) {
+        (data as TimerStorageData).hasLastSettingChangedTime = ((value as TimerStorageData).time !== (data as TimerStorageData).time);
       }
 
       this.storage.set(data.uuid, data).then(() => {
