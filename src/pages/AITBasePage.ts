@@ -178,9 +178,6 @@ export class AITBasePage implements OnInit {
   private aitResetView() {
     this.viewState = SequenceStates.Loaded;
     this.grandTime = this.sots.getGrandTime({ time: -1 });
-
-    // this is need to refresh the view when being revisited from changed in settings
-    this.ngDectector.detectChanges();
   }
 
   private aitResetTimer(): void {
@@ -194,8 +191,13 @@ export class AITBasePage implements OnInit {
     setTimeout(() => {
       (value) ? this.statusBar.hide() : this.statusBar.show();
     }, 500);
+
+    // this is need to refresh the view when being revisited from changed in settings
+    this.ngDectector.detectChanges();
   }
 
+  // when this.fabcontainer buttons are clicked, it will first execute code in
+  // fabcontainer.component. afterwards it will execute this function.
   protected onAction(emission: FabEmission) {
     switch (emission.action) {
       case FabAction.Home:
