@@ -95,6 +95,7 @@ export class IntervalDisplayPage extends AITBasePage {
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
         error!;
+        this.menu.completed();
 
         this.ngDectector.detectChanges();
       },
@@ -103,6 +104,7 @@ export class IntervalDisplayPage extends AITBasePage {
         this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
         this.aitSetViewInRunningMode(false);
+        this.menu.completed();
 
         this.ngDectector.detectChanges();
       }

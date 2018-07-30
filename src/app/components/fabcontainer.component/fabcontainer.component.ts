@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FabContainer } from 'ionic-angular';
 
 export interface FabEmission {
@@ -33,8 +33,9 @@ export enum FabAction {
 }
 
 export enum FabState {
+  Completed,
   Start,
-  Pause
+  Pause,
 }
 
 @Component({
@@ -44,9 +45,6 @@ export enum FabState {
 export class FabContainerComponent {
   @Output()
   onAction = new EventEmitter<FabEmission>();
-
-  @Input()
-  settingsDisabled: boolean;
 
   public states = FabState;
   _viewState: FabState;
@@ -79,7 +77,7 @@ export class FabContainerComponent {
     this.viewState = FabState.Start;
   }
 
-  disableSettingsButton(): void {
-    this.settingsDisabled = true;
+  completed(): void {
+    this.viewState = FabState.Completed;
   }
 }

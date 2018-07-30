@@ -61,7 +61,7 @@ export class AITBasePage implements OnInit {
   protected grandTime: string;
   private isFirstViewing: boolean;
 
-  constructor( @Optional() ngDectector: ChangeDetectorRef,
+  constructor(@Optional() ngDectector: ChangeDetectorRef,
     @Optional() navParams: NavParams,
     @Optional() navCtrl: NavController) {
 
@@ -88,7 +88,6 @@ export class AITBasePage implements OnInit {
     this.ngDectector.detach();
 
     this.screenOrientation.onChange().subscribe(() => {
-      // this is need to refresh the view when being revisited from changed in settings
       this.ngDectector.detectChanges();
     });
 
@@ -98,16 +97,12 @@ export class AITBasePage implements OnInit {
   }
 
   ionViewDidLoad() {
+    /*
     this.menuCtrl.get('left').ionOpen.subscribe(() => {
-     // this.sots.unsubscribe();
     });
     this.menuCtrl.get('right').ionOpen.subscribe(() => {
-      // this.sots.unsubscribe();
-
-      // reset() call is needed here for when timer has completed or paused
-      // and then user enters into settings.
-     // this.sots.sequencer.reset();
     });
+    */
     // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
     // called since sidemenus are just menus, not pages.
     this.menuCtrl.get('right').ionClose.debounceTime(125).subscribe(() => {
@@ -171,7 +166,6 @@ export class AITBasePage implements OnInit {
       }, 200);
     }
 
-    // this is need to refresh the view when being revisited from changed in settings
     this.ngDectector.detectChanges();
   }
 
@@ -192,12 +186,11 @@ export class AITBasePage implements OnInit {
       (value) ? this.statusBar.hide() : this.statusBar.show();
     }, 500);
 
-    // this is need to refresh the view when being revisited from changed in settings
     this.ngDectector.detectChanges();
   }
 
   // when this.fabcontainer buttons are clicked, it will first execute code in
-  // fabcontainer.component. afterwards it will execute this function.
+  // fabcontainer.component (Child component). afterwards it will execute this function.
   protected onAction(emission: FabEmission) {
     switch (emission.action) {
       case FabAction.Home:
