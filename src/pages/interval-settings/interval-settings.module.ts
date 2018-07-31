@@ -30,4 +30,4 @@ import { IntervalSettingsPage } from './interval-settings';
     IntervalSettingsPage
   ]
 })
-export class IntervalSettingsPageModule {}
+export class IntervalSettingsPageModule { }

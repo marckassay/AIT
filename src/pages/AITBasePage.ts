@@ -152,8 +152,7 @@ export class AITBasePage implements OnInit {
   }
 
   protected aitBuildTimer(): void {
-    this.viewState = SequenceStates.Loaded;
-    this.grandTime = this.sots.getGrandTime({ time: -1 });
+    this.aitResetView();
     this.aitSubscribeTimer();
   }
 
@@ -181,7 +180,9 @@ export class AITBasePage implements OnInit {
   protected aitSetViewInRunningMode(value: boolean) {
     this.menuCtrl.enable(!value, 'left');
     this.menuCtrl.enable(!value, 'right');
+
     (value) ? this.insomnia.keepAwake() : this.insomnia.allowSleepAgain();
+
     setTimeout(() => {
       (value) ? this.statusBar.hide() : this.statusBar.show();
     }, 500);

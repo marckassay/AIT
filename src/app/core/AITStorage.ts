@@ -117,9 +117,9 @@ export class AITStorage {
     this.getItem(data.uuid).then((value: IntervalStorageData | TimerStorageData) => {
       if ((value as IntervalStorageData).activerest) {
         if (((value as IntervalStorageData).activerest.lower !== (data as IntervalStorageData).activerest.lower) ||
-        ((value as IntervalStorageData).activerest.upper !== (data as IntervalStorageData).activerest.upper) ||
-        ((value as IntervalStorageData).intervals !== (data as IntervalStorageData).intervals) ||
-        ((value as IntervalStorageData).countdown !== (data as IntervalStorageData).countdown)) {
+          ((value as IntervalStorageData).activerest.upper !== (data as IntervalStorageData).activerest.upper) ||
+          ((value as IntervalStorageData).intervals !== (data as IntervalStorageData).intervals) ||
+          ((value as IntervalStorageData).countdown !== (data as IntervalStorageData).countdown)) {
           (data as IntervalStorageData).hasLastSettingChangedTime = true;
         } else {
           (data as IntervalStorageData).hasLastSettingChangedTime = false;

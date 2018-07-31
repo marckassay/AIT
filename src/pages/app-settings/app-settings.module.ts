@@ -30,4 +30,4 @@ import { AppSettingsPage } from './app-settings';
     AppSettingsPage,
   ]
 })
-export class AppSettingsPageModule {}
+export class AppSettingsPageModule { }

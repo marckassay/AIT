@@ -41,7 +41,7 @@ export class AITBaseSettingsPage implements OnInit {
   protected appVibratorDisabled: boolean;
   protected isFirstViewing: boolean;
 
-  constructor( @Optional() ngDectector: ChangeDetectorRef) {
+  constructor(@Optional() ngDectector: ChangeDetectorRef) {
     this.ngDectector = ngDectector;
 
     this.isFirstViewing = true;

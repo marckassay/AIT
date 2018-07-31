@@ -30,4 +30,4 @@ import { FabContainerComponent } from './fabcontainer.component';
     FabContainerComponent
   ]
 })
-export class FabContainerComponentModule {}
+export class FabContainerComponentModule { }

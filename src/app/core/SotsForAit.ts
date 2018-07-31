@@ -59,25 +59,25 @@ export class SotsForAit implements ISotsForAit {
           ]
         })
         .group(timeOrIntervals!,
-        add(CountdownSegment, {
-          duration: SotsUtil.secToMilli(rest!),
-          omitFirst: true,
-          states: [
-            { state: SequenceStates.Rest, timeLessThanOrEqualTo: rest!.toString() },
-            { state: SequenceStates.Warning, timeLessThanOrEqualTo: '3' },
-            { state: SequenceStates.DoubleBeep, timeAt: rest!.toString() },
-            { state: SequenceStates.SingleBeep, timeAt: '2,1' }
-          ]
-        }),
-        add(CountdownSegment, {
-          duration: SotsUtil.secToMilli(active!),
-          states: [
-            { state: SequenceStates.Active, timeLessThanOrEqualTo: active!.toString() },
-            { state: SequenceStates.Warning, timeLessThanOrEqualTo: '3' },
-            { state: SequenceStates.DoubleBeep, timeAt: active!.toString() },
-            { state: SequenceStates.SingleBeep, timeAt: SotsUtil.constructIntervalSingleAudiblesTimes(warnings!) }
-          ]
-        })
+          add(CountdownSegment, {
+            duration: SotsUtil.secToMilli(rest!),
+            omitFirst: true,
+            states: [
+              { state: SequenceStates.Rest, timeLessThanOrEqualTo: rest!.toString() },
+              { state: SequenceStates.Warning, timeLessThanOrEqualTo: '3' },
+              { state: SequenceStates.DoubleBeep, timeAt: rest!.toString() },
+              { state: SequenceStates.SingleBeep, timeAt: '2,1' }
+            ]
+          }),
+          add(CountdownSegment, {
+            duration: SotsUtil.secToMilli(active!),
+            states: [
+              { state: SequenceStates.Active, timeLessThanOrEqualTo: active!.toString() },
+              { state: SequenceStates.Warning, timeLessThanOrEqualTo: '3' },
+              { state: SequenceStates.DoubleBeep, timeAt: active!.toString() },
+              { state: SequenceStates.SingleBeep, timeAt: SotsUtil.constructIntervalSingleAudiblesTimes(warnings!) }
+            ]
+          })
         );
       // else if, this is called by timer-display
     } else if (timeOrIntervals !== undefined) {
