@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Finds and executes a node program installed locally
+
+# Makes it so you don't have to install it globally and risk having the wrong
+# version for your project. This is not meant to be run directly, but through
+# a symlink named after the program you want to run. e.g. "eslint"
+
+PROGRAM=`basename "$0"`
+
+DIR=`pwd`
+while [ ! -x "$DIR/node_modules/.bin" ]; do
+  DIR=`dirname "$DIR"`
+  if [ "$DIR" = "/" ]; then
+    echo "Local node program not found: $PROGRAM" 1>&2
+    exit 1
+  fi
+done
+
+exec "$DIR/node_modules/.bin/$PROGRAM" "$@"
