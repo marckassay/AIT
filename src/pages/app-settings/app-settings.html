@@ -37,6 +37,11 @@
       <ion-label>sound</ion-label>
     </ion-item>
 
+    <ion-item>
+      <ion-toggle [(ngModel)]="data.brightness" checked="{{data.brightness != undefined}}"></ion-toggle>
+      <ion-label>remember display brightness</ion-label>
+    </ion-item>
+
     <ion-list radio-group>
       <ion-item-group>
         <ion-item-divider>BASE THEME</ion-item-divider>

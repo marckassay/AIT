@@ -25,6 +25,7 @@ import { HomeAction, HomeEmission } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 import { AITBaseSettingsPage } from '../pages/AITBaseSettingsPage';
+import { Brightness } from '@ionic-native/brightness';
 
 @Component({
   templateUrl: 'app.html'
@@ -34,6 +35,7 @@ export class AppComponent {
   navCtrl: Nav;
 
   combinedTheme: string;
+  appstoragedata: AppStorageData;
 
   protected isFirstViewing: boolean;
 
@@ -44,6 +46,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private screenOrientation: ScreenOrientation,
     private settings: ThemeSettingsProvider,
+    private brightness: Brightness,
     private menuCtrl: MenuController,
     private storage: AITStorage,
     private componentFactoryResolver: ComponentFactoryResolver) {
@@ -62,15 +65,17 @@ export class AppComponent {
     this.storage.checkAppStartupData().then(() => {
 
       this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
-
         if (value) {
-          this.settings.base = (value as AppStorageData).base as BaseTheme;
-          this.settings.accent = (value as AppStorageData).accent as AccentTheme;
+          this.appstoragedata = (value as AppStorageData);
+
+          this.settings.base = this.appstoragedata.base as BaseTheme;
+          this.settings.accent = this.appstoragedata.accent as AccentTheme;
 
           this.settings.combinedTheme.subscribe((value: string) => {
             this.combinedTheme = value;
           });
 
+          this.setDisplayBrightness();
           this.setRootAndCreatePage(value.current_uuid);
         } else {
           // sometimes or alltimes it fails on initial load with no db.
@@ -79,6 +84,27 @@ export class AppComponent {
           });
         }
       });
+    });
+  }
+
+  // TODO: change name to reflect its listening
+  setDisplayBrightness() {
+    // TODO: move this to some other area for that it can be accessed if this option is turned
+    // on initially.
+    this.platform.resume.subscribe(() => {
+      const lastBrightnessValue = this.appstoragedata.brightness;
+      if (lastBrightnessValue !== undefined) {
+        this.brightness.getBrightness().then((val) => {
+          this.appstoragedata.brightness = val;
+        });
+      }
+    });
+
+    this.platform.pause.subscribe(() => {
+      const lastBrightnessValue = this.appstoragedata.brightness;
+      if (lastBrightnessValue !== undefined) {
+        this.brightness.setBrightness(lastBrightnessValue);
+      }
     });
   }
 
@@ -164,6 +190,8 @@ export interface UUIDData {
 export interface AppStorageData extends UUIDData {
   vibrate: boolean;
   sound: boolean;
+  // default value is 'undefined'; which means be default this option is disabled
+  brightness: number | undefined;
   lighttheme: boolean;
   base: number;
   accent: number;

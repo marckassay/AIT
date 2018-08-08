@@ -21,6 +21,7 @@
     "@angular/http": "^4.4.4",
     "@angular/platform-browser": "^4.4.4",
     "@angular/platform-browser-dynamic": "^4.4.4",
+    "@ionic-native/brightness": "^4.12.2",
     "@ionic-native/core": "^4.3.2",
     "@ionic-native/in-app-browser": "^4.5.2",
     "@ionic-native/insomnia": "^4.3.2",
@@ -36,6 +37,7 @@
     "angular2-uuid": "^1.1.1",
     "cordova": "^8.0.0",
     "cordova-android": "^6.3.0",
+    "cordova-plugin-brightness": "^0.2.0",
     "cordova-plugin-console": "^1.1.0",
     "cordova-plugin-device": "^1.1.6",
     "cordova-plugin-inappbrowser": "^2.0.1",
@@ -84,7 +86,8 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-inappbrowser": {}
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-brightness": {}
     },
     "platforms": [
       "android"
