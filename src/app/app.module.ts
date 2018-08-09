@@ -21,7 +21,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Insomnia } from '@ionic-native/insomnia';
-import { Brightness } from '@ionic-native/brightness';
+import { AITBrightness } from './core/AITBrightness';
 import { HomeDisplayPageModule } from '../pages/home-display/home-display.module';
 import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { FabContainerComponent } from './components/fabcontainer.component/fabcontainer.component';
@@ -91,7 +91,7 @@ import { ActiveRestRendererComponent } from './components/activerestrenderer.com
     InAppBrowser,
     Vibration,
     Insomnia,
-    Brightness,
+    AITBrightness,
     AITSignal,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
