@@ -163,11 +163,6 @@ export class AppComponent {
           this.navCtrl.push('AppSettingsPage');
         });
         break;
-      case HomeAction.Info:
-        this.menuCtrl.toggle('left').then(() => {
-          this.navCtrl.push('AppInfoPage');
-        });
-        break;
     }
   }
 }

@@ -41,7 +41,6 @@ import { StopwatchDisplayPageModule } from '../pages/stopwatch-display/stopwatch
 import { StopwatchSettingsPageModule } from '../pages/stopwatch-settings/stopwatch-settings.module';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { ActiveRestRendererComponentModule } from './components/activerestrenderer.component/activerestrenderer.component.module';
 import { ActiveRestRendererComponent } from './components/activerestrenderer.component/activerestrenderer.component';
 
@@ -88,7 +87,6 @@ import { ActiveRestRendererComponent } from './components/activerestrenderer.com
     ThemeSettingsProvider,
     IonicStorageModule,
     AITStorage,
-    InAppBrowser,
     Vibration,
     Insomnia,
     AITBrightness,
