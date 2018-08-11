@@ -43,6 +43,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ActiveRestRendererComponentModule } from './components/activerestrenderer.component/activerestrenderer.component.module';
 import { ActiveRestRendererComponent } from './components/activerestrenderer.component/activerestrenderer.component';
+import { Brightness } from '@ionic-native/brightness';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { ActiveRestRendererComponent } from './components/activerestrenderer.com
     Vibration,
     Insomnia,
     AITBrightness,
+    Brightness,
     AITSignal,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]

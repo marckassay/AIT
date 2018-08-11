@@ -49,7 +49,6 @@
     </platform>
     <allow-navigation href="http://192.168.0.4:8100" />
     <hook src="scripts/appAfterRun.js" type="after_run" />
-    <engine name="android" spec="^6.3.0" />
     <plugin name="cordova-plugin-console" spec="^1.1.0" />
     <plugin name="cordova-plugin-insomnia" spec="^4.3.0" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
@@ -59,4 +58,6 @@
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <allow-navigation href="http://192.168.1.68:8100" />
     <plugin name="cordova-plugin-brightness" spec="^0.2.0" />
+    <plugin name="clovelced-plugin-audiomanagement" spec="..\cordova-plugin-audiomanagement" />
+    <engine name="android" spec="^6.3.0" />
 </widget>

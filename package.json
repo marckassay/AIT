@@ -44,6 +44,7 @@
     "cordova-plugin-splashscreen": "^4.1.0",
     "cordova-plugin-statusbar": "^2.4.0",
     "cordova-plugin-vibration": "^2.1.5",
+    "cordova-simulate": "^0.4.0",
     "cordova-sqlite-storage": "^2.0.4",
     "debug": "^3.1.0",
     "es6-promise-plugin": "git+https://github.com/vstirbu/PromisesPlugin.git",
@@ -81,7 +82,8 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-brightness": {}
+      "cordova-plugin-brightness": {},
+      "clovelced-plugin-audiomanagement": {}
     },
     "platforms": [
       "android"

@@ -55,7 +55,6 @@ export class AppComponent {
       this.screenOrientation.unlock();
       this.statusBar.styleLightContent();
       this.registerAppEventHandlers();
-      this.brightness.restoreBrightness();
     });
 
     this.isFirstViewing = true;
@@ -90,10 +89,6 @@ export class AppComponent {
 
   registerAppEventHandlers() {
     this.platform.resume.subscribe(() => {
-      this.brightness.storeBrightness();
-    });
-
-    this.platform.pause.subscribe(() => {
       this.brightness.restoreBrightness();
     });
   }
@@ -175,7 +170,7 @@ export interface UUIDData {
 export interface AppStorageData extends UUIDData {
   vibrate: boolean;
   sound: boolean;
-  // default value is 'undefined'; which means be default this option is disabled
+  // default value is 'undefined'; which means by default this option is disabled
   brightness: number | undefined;
   lighttheme: boolean;
   base: number;

@@ -65,11 +65,7 @@ export class AppSettingsPage {
   }
 
   toggleBrightness() {
-    if (this.data.brightness === undefined) {
-      this.brightness.storeBrightness(true);
-    } else {
-      this.data.brightness = undefined;
-    }
+    this.brightness.storeBrightness();
   }
 
   toggleBaseTheme(value: BaseTheme) {

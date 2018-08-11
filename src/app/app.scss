@@ -25,7 +25,6 @@
 @import "../pages/stopwatch-display/stopwatch-display.scss";
 @import "../pages/stopwatch-settings/stopwatch-settings.scss";
 @import "../pages/app-settings/app-settings.scss";
-@import "../pages/app-info/app-info.scss";
 @import "../pages/home-display/home-display.scss";
 @import "./components/activerestrenderer.component/activerestrenderer.component.scss";
 
@@ -179,9 +178,6 @@ ion-nav {
   }
   page-app-settings {
     @include page-app-settings-theme-apply($map);
-  }
-  page-app-info {
-    @include page-app-info-theme-apply($map);
   }
   page-home-display {
     @include page-home-display-theme-apply($map);

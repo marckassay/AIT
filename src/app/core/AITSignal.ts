@@ -31,7 +31,7 @@ export class AITSignal {
   constructor(public vibration: Vibration,
     public storage: AITStorage) {
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
-      this.data = <AppStorageData>value;
+      this.data = (value as AppStorageData);
     });
     this.sound = new AITSound();
     this.vibrate = new AITVibrate(vibration);
