@@ -25,12 +25,15 @@ export class AITBrightness {
 
   constructor(public brightness: Brightness,
     public storage: AITStorage) {
-    this.restoreBrightness();
   }
 
   /**
    * Retrieves app's 'brightness' data field and depending on the value of 'enabling' and the value of
    * the app's brightness field, it will behave diffently.
+   *
+   * TODO: currently this function unconditionally stores the brightness value to 100%. This wasn't
+   * my original intention, but the ionic-plugin is designed in a way that makes it cumbersome to set.
+   * Not sure if this will be modified in the future or not.
    *
    * @param enabling If 'enabling' is "true", it will get the device's brightness value and set it to
    *                the app's brightness field. If 'enabling' is "false", it will set the app's
@@ -41,32 +44,40 @@ export class AITBrightness {
    */
   storeBrightness(enabling?: boolean): void {
     let data: AppStorageData;
+    let enablingComputed = enabling;
 
     this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
+
       data = (value as AppStorageData);
 
       // this is to have storeBrightness act as a toggle function for brightness
-      if (enabling === undefined) {
-        enabling = (data === undefined);
+      if (enablingComputed === undefined) {
+        enablingComputed = (data.brightness === undefined) ? true : false;
       }
 
-      if (enabling === true) {
-        this.brightness.getBrightness().then((value) => {
-          data.brightness = value;
+      if (enablingComputed === true) {
+        this.brightness.getBrightness().then((value: any) => {
+          value!;
+          // data.brightness = parseFloat(value);
+          // always set display brightness to the highest (1).
+          data.brightness = 1;
+
+          this.storage.setItem(data);
         });
       } else {
         data.brightness = undefined;
-      }
 
-      this.storage.setItem(data);
+        this.storage.setItem(data);
+      }
     });
   }
 
   // Retrieves app's 'brightness' data field and if its defined it will set the device's brightness
   // to that value.
   restoreBrightness(): void {
-    this.storage.getItem(AITStorage.APP_ID).then((value) => {
+    this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
       const lastBrightnessValue: number | undefined = (value as AppStorageData).brightness;
+
       if (lastBrightnessValue !== undefined) {
         this.brightness.setBrightness(lastBrightnessValue);
       }

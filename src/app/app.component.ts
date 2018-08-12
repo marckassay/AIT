@@ -54,7 +54,6 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.screenOrientation.unlock();
       this.statusBar.styleLightContent();
-      this.registerAppEventHandlers();
     });
 
     this.isFirstViewing = true;
@@ -69,6 +68,8 @@ export class AppComponent {
         if (value) {
           this.appstoragedata = (value as AppStorageData);
 
+          this.registerAppEventHandlers();
+
           this.settings.base = this.appstoragedata.base as BaseTheme;
           this.settings.accent = this.appstoragedata.accent as AccentTheme;
 
@@ -77,6 +78,9 @@ export class AppComponent {
           });
 
           this.setRootAndCreatePage(value.current_uuid);
+          Observable.timer(8000).subscribe(() => {
+            this.brightness.restoreBrightness();
+          });
         } else {
           // sometimes or alltimes it fails on initial load with no db.
           Observable.timer(500).subscribe(() => {
