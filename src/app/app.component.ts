@@ -79,7 +79,7 @@ export class AppComponent {
 
           this.setRootAndCreatePage(value.current_uuid);
           Observable.timer(8000).subscribe(() => {
-            this.brightness.restoreBrightness();
+            this.brightness.restoreBrightest();
           });
         } else {
           // sometimes or alltimes it fails on initial load with no db.
@@ -93,7 +93,7 @@ export class AppComponent {
 
   registerAppEventHandlers() {
     this.platform.resume.subscribe(() => {
-      this.brightness.restoreBrightness();
+      this.brightness.restoreBrightest();
     });
   }
 

@@ -65,7 +65,7 @@ export class AppSettingsPage {
   }
 
   toggleBrightness() {
-    this.brightness.storeBrightness();
+    this.brightness.enableBrightest();
   }
 
   toggleBaseTheme(value: BaseTheme) {

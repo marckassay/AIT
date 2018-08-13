@@ -42,7 +42,7 @@ export class AITBrightness {
    *                Otherwise, app's brightness field will be set to "false".
    * @returns void
    */
-  storeBrightness(enabling?: boolean): void {
+  enableBrightest(enabling?: boolean): void {
     let data: AppStorageData;
     let enablingComputed = enabling;
 
@@ -50,31 +50,26 @@ export class AITBrightness {
 
       data = (value as AppStorageData);
 
-      // this is to have storeBrightness act as a toggle function for brightness
+      // this is to have enableBrightest act as a toggle function for brightness
       if (enablingComputed === undefined) {
         enablingComputed = (data.brightness === undefined) ? true : false;
       }
 
       if (enablingComputed === true) {
-        this.brightness.getBrightness().then((value: any) => {
-          value!;
-          // data.brightness = parseFloat(value);
-          // always set display brightness to the highest (1).
-          data.brightness = 1;
-
-          this.storage.setItem(data);
-        });
+        data.brightness = 1;
+        this.storage.setItem(data);
+        this.brightness.setBrightness(data.brightness);
       } else {
         data.brightness = undefined;
-
         this.storage.setItem(data);
+        this.brightness.setBrightness(-1);
       }
     });
   }
 
   // Retrieves app's 'brightness' data field and if its defined it will set the device's brightness
   // to that value.
-  restoreBrightness(): void {
+  restoreBrightest(): void {
     this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
       const lastBrightnessValue: number | undefined = (value as AppStorageData).brightness;
 
