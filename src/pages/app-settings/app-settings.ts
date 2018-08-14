@@ -64,6 +64,13 @@ export class AppSettingsPage {
     });
   }
 
+  ionViewWillLeave() {
+    if (this.data) {
+      this.storage.setItem(this.data);
+      this.signal.data = this.data;
+    }
+  }
+
   toggleBrightness() {
     this.brightness.enableBrightest();
   }
