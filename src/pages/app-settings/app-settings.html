@@ -37,9 +37,9 @@
       <ion-label>sound</ion-label>
     </ion-item>
 
-    <ion-item disabled>
-      <ion-toggle checked="{{data.volume != undefined}}" (ionChange)="toggleBrightness()" ></ion-toggle>
-      <ion-label>remember alarm volume setting</ion-label>
+    <ion-item>
+      <ion-toggle checked="{{data.volume.app != undefined}}" (ionChange)="toggleRememberVolume()" disabled="{{data.sound == false}}"></ion-toggle>
+      <ion-label>remember volume setting</ion-label>
     </ion-item>
 
     <ion-item>

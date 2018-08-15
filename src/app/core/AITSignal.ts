@@ -24,15 +24,19 @@ import { AppStorageData } from '../app.component';
 
 @Injectable()
 export class AITSignal {
+  private _data: AppStorageData;
+  public get data(): AppStorageData {
+    return this._data;
+  }
+  public set data(value: AppStorageData) {
+    this._data = value;
+  }
+
   sound: AITSound;
   vibrate: AITVibrate;
-  data: AppStorageData;
 
   constructor(public vibration: Vibration,
     public storage: AITStorage) {
-    this.storage.getItem(AITStorage.APP_ID).then((value) => {
-      this.data = (value as AppStorageData);
-    });
     this.sound = new AITSound();
     this.vibrate = new AITVibrate(vibration);
   }
@@ -50,5 +54,27 @@ export class AITSignal {
   triple() {
     if (this.data.sound) { this.sound.completeBeep(); }
     if (this.data.vibrate) { this.vibrate.tripleVibrate(); }
+  }
+
+  toggleRememberVolume(appstoragedata: AppStorageData) {
+    if (appstoragedata.volume.app !== undefined) {
+      appstoragedata.volume.app = undefined;
+      appstoragedata.volume.device = undefined;
+    } else {
+      appstoragedata.volume.app = 9;
+      appstoragedata.volume.device = 9;
+    }
+
+    this.storage.setItem(appstoragedata);
+
+    this.restoreVolume();
+  }
+
+  restoreVolume() {
+    if (this.data.volume.app !== undefined) {
+      this.sound.volume = this.data.volume.app;
+      // TODO: get device volume from Android and then update this field
+      // this.data.volume.device = ???
+    }
   }
 }

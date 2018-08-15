@@ -40,6 +40,7 @@ export class AITStorage {
             current_uuid: AITStorage.INITIAL_INTERVAL_ID,
             vibrate: true,
             sound: true,
+            volume: {app: undefined, device: undefined},
             brightness: undefined,
             base: 0,
             accent: 0

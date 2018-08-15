@@ -71,6 +71,10 @@ export class AppSettingsPage {
     }
   }
 
+  toggleRememberVolume() {
+    this.signal.toggleRememberVolume(this.data);
+  }
+
   toggleBrightness() {
     this.brightness.enableBrightest();
   }

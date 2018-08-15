@@ -26,6 +26,7 @@ import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSetti
 import { Observable } from 'rxjs/Observable';
 import { AITBaseSettingsPage } from '../pages/AITBaseSettingsPage';
 import { AITBrightness } from './core/AITBrightness';
+import { AITSignal } from './core/AITSignal';
 
 @Component({
   templateUrl: 'app.html'
@@ -46,6 +47,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private screenOrientation: ScreenOrientation,
     private settings: ThemeSettingsProvider,
+    private signal: AITSignal,
     private brightness: AITBrightness,
     private menuCtrl: MenuController,
     private storage: AITStorage,
@@ -80,6 +82,9 @@ export class AppComponent {
           this.setRootAndCreatePage(value.current_uuid);
           Observable.timer(8000).subscribe(() => {
             this.brightness.restoreBrightest();
+            if (this.appstoragedata.volume.app !== undefined) {
+              this.signal.restoreVolume();
+            }
           });
         } else {
           // sometimes or alltimes it fails on initial load with no db.
@@ -174,6 +179,7 @@ export interface UUIDData {
 export interface AppStorageData extends UUIDData {
   vibrate: boolean;
   sound: boolean;
+  volume: { app: number | undefined, device: number | undefined };
   // default value is 'undefined'; which means by default this option is disabled
   brightness: number | undefined;
   lighttheme: boolean;

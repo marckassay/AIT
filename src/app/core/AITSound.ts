@@ -19,6 +19,7 @@ import { Howl } from 'howler';
 
 export class AITSound {
   sound_1: Howl;
+  volume: number;
   constructor() {
     this.sound_1 = new Howl({
       src: ['assets/sounds/beep.mp3']
