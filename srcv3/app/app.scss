@@ -1,0 +1,218 @@
+/*
+    AiT - Another Interval Timer
+    Copyright (C) 2018 Marc Kassay
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+// overriding build/main.css (line: ~4994) since this app
+// is sensitive to viewport sizes and needs specific font sizes
+@import "../pages/interval-display/interval-display.scss";
+@import "../pages/interval-settings/interval-settings.scss";
+@import "../pages/timer-display/timer-display.scss";
+@import "../pages/timer-settings/timer-settings.scss";
+@import "../pages/stopwatch-display/stopwatch-display.scss";
+@import "../pages/stopwatch-settings/stopwatch-settings.scss";
+@import "../pages/app-settings/app-settings.scss";
+@import "../pages/home-display/home-display.scss";
+@import "./components/activerestrenderer.component/activerestrenderer.component.scss";
+
+html {
+  font-size: 62.5%;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  font-size-adjust: none;
+}
+
+/* fallback */
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url('#{$font-path}/materialicons.woff2') format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr; // common ligatures
+  // -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+  font-family: 'selawk';
+  src: url('#{$font-path}/selawk.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'selawksb';
+  src: url('#{$font-path}/selawksb.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'sourcecodeprosb';
+  src: url('#{$font-path}/SourceCodePro-Semibold.ttf') format('truetype');
+} // This is to create drop shadow from the main-display on the side menus
+// that get revealed from underneath.
+ion-nav {
+  box-shadow: rgba(0, 0, 0, 0.2) 0em 0em 3px 3px;
+}
+
+@mixin theme-map-apply ($map) {
+  .ait-brand {
+    margin: 6px;
+    padding: 0 6px;
+    font-size: 3rem;
+    font-family: 'sourcecodeprosb';
+    width: fit-content;
+    color: map-get($map, text-color);
+  }
+  .content-ios,
+  .content-md,
+  .content-wp {
+    background-color: map-get($map, side-background);
+  }
+  .fab-md {
+    color: map-get($map, strongest);
+    background-color: map-get($map, primary);
+  }
+  .item-divider {
+    border-bottom: 1px solid map-get($map, text-color);
+  }
+  .item-inner {
+    border-bottom: 1px solid map-get($map, weakest) !important;
+  }
+  .radio-checked {
+    border-color: map-get($map, primary) !important;
+  }
+  .range-pin::before,
+  .range-pin {
+    color: map-get($map, strong);
+  }
+  .radio-inner,
+  .range-pin::before,
+  .range-pin,
+  .range-knob,
+  .range-tick,
+  .range .range-bar-active,
+  .toggle-checked .toggle-inner {
+    background: map-get($map, primary) !important;
+  }
+  .toggle-checked .toggle-icon {
+    background: map-get($map, secondary) !important;
+  }
+  .toggle-icon,
+  .toggle-inner {
+    background-color: map-get($map, toggle-deactive);
+  }
+  .toolbar-background-ios,
+  .toolbar-background-md,
+  .toolbar-background-wp {
+    background-color: map-get($map, strong);
+  }
+  .item-radio-checked ion-label {
+    color: map-get($map, primary);
+  }
+  .item-inner {
+    border-bottom: 1px solid map-get($map, weakest) !important;
+  }
+  ion-navbar>button,
+  .toolbar-title {
+    color: map-get($map, text-color);
+  }
+  ion-label,
+  ion-input {
+    font-family: selawk;
+    color: map-get($map, text-color);
+  }
+  ion-range {
+    margin: 5px 0;
+  }
+  ion-item-divider,
+  ion-item {
+    background-color: map-get($map, weak);
+  }
+}
+
+@mixin grand-theme-map-apply($map) {
+  @include theme-map-apply($map);
+  page-interval-display {
+    @include page-interval-display-theme-apply($map);
+  }
+  page-interval-settings {
+    @include page-interval-settings-theme-apply($map);
+  }
+  page-timer-display {
+    @include page-timer-display-theme-apply($map);
+  }
+  page-timer-settings {
+    @include page-timer-settings-theme-apply($map);
+  }
+  page-stopwatch-display {
+    @include page-stopwatch-display-theme-apply($map);
+  }
+  page-stopwatch-settings {
+    @include page-stopwatch-settings-theme-apply($map);
+  }
+  page-app-settings {
+    @include page-app-settings-theme-apply($map);
+  }
+  page-home-display {
+    @include page-home-display-theme-apply($map);
+  }
+  activerest-renderer {
+    @include activerest-renderer-theme-apply($map);
+  }
+}
+
+.theme-light-rgbandy {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-light);
+  @include grand-theme-map-apply($map);
+}
+
+.theme-dark-rgbandy {
+  $map: theme-map-get($accent-theme-RGBandY, $base-theme-dark);
+  @include grand-theme-map-apply($map);
+}
+
+.theme-light-monokai {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-light);
+  @include grand-theme-map-apply($map);
+}
+
+.theme-dark-monokai {
+  $map: theme-map-get($accent-theme-monokai, $base-theme-dark);
+  @include grand-theme-map-apply($map);
+}
+
+.theme-light-coolgrey {
+  $map: theme-map-get($accent-theme-coolgrey, $base-theme-light);
+  @include grand-theme-map-apply($map);
+}
+
+.theme-dark-coolgrey {
+  $map: theme-map-get($accent-theme-coolgrey, $base-theme-dark);
+  @include grand-theme-map-apply($map);
+}

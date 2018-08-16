@@ -1,44 +1,25 @@
 {
   "compilerOptions": {
-    "module": "es2015",
-    "moduleResolution": "node",
-    "target": "es5",
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "lib": [
       "dom",
       "es2015"
     ],
-    "experimentalDecorators": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    // 'strictPropertyInitialization' 2.7+ only
-    // "strictPropertyInitialization": false,
-    "strict": false,
-    // 'strictFunctionTypes' below is disabled to circumvent: https://github.com/ReactiveX/rxjs/issues/3031
-    //"strictFunctionTypes": false,
+    "module": "es2015",
+    "moduleResolution": "node",
     "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "listFiles": false,
-    "noEmitOnError": true,
-    "emitDecoratorMetadata": true,
-    "inlineSources": true,
-    "newLine": "LF",
-    "listEmittedFiles": false,
-    "traceResolution": false,
-    "stripInternal": true
+    "target": "es5"
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/**/*.spec.ts",
+    "src/**/__tests__/*.ts"
   ],
   "compileOnSave": false,
   "atom": {

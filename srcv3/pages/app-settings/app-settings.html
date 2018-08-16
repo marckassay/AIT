@@ -1,0 +1,81 @@
+<!--
+    AiT - Another Interval Timer
+    Copyright (C) 2018 Marc Kassay
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ion-header>
+  <div ion-navbar class="toolbar toolbar-md">
+    <button left back-button ion-button="bar-button" (click)="navBack()">
+      <ion-icon class="material-icons">arrow_back</ion-icon>
+    </button>
+    <ion-title>
+      <span class="ait-brand">AiT</span> SETTINGS</ion-title>
+  </div>
+</ion-header>
+
+<ion-content padding>
+  <ng-container *ngIf="data">
+    <ion-item>
+      <ion-toggle [(ngModel)]="data.vibrate" checked="data.vibrate"></ion-toggle>
+      <ion-label>vibrate</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-toggle [(ngModel)]="data.sound" checked="data.sound"></ion-toggle>
+      <ion-label>sound</ion-label>
+    </ion-item>
+
+    <ion-item disabled>
+      <ion-toggle checked="{{data.volume != undefined}}" (ionChange)="toggleBrightness()" ></ion-toggle>
+      <ion-label>remember alarm volume setting</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-toggle checked="{{data.brightness != undefined}}" (ionChange)="toggleBrightness()" ></ion-toggle>
+      <ion-label>always use highest brightness</ion-label>
+    </ion-item>
+
+    <ion-list radio-group>
+      <ion-item-group>
+        <ion-item-divider>BASE THEME</ion-item-divider>
+        <ion-item>
+          <ion-label>dark theme</ion-label>
+          <ion-radio checked="{{data.base == 0}}" (ionSelect)="toggleBaseTheme(BaseTheme.Dark)"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>light theme</ion-label>
+          <ion-radio checked="{{data.base == 1}}" (ionSelect)="toggleBaseTheme(BaseTheme.Light)"></ion-radio>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+    <ion-list radio-group>
+      <ion-item-group>
+        <ion-item-divider>ACCENT THEME</ion-item-divider>
+        <ion-item>
+          <ion-label>monokai</ion-label>
+          <ion-radio checked="{{data.accent == 0}}" (ionSelect)="toggleAccentTheme(AccentTheme.Monokai)"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>RGB and sometimes Y</ion-label>
+          <ion-radio checked="{{data.accent == 1}}" (ionSelect)="toggleAccentTheme(AccentTheme.RGBandY)"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Cool Grey</ion-label>
+          <ion-radio checked="{{data.accent == 2}}" (ionSelect)="toggleAccentTheme(AccentTheme.CoolGrey)"></ion-radio>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+  </ng-container>
+</ion-content>

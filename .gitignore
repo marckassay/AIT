@@ -13,16 +13,16 @@ log.txt
 npm-debug.log*
 
 .idea/
+.ionic/
+.sourcemaps/
 .sass-cache/
 .tmp/
 .versions/
-.sourcemaps/
 coverage/
 dist/
 node_modules/
 tmp/
 temp/
-hooks/
 platforms/
 plugins/
 plugins/android.json
@@ -33,4 +33,3 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-keystore.properties

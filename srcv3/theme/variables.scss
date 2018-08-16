@@ -1,0 +1,86 @@
+/*
+    AiT - Another Interval Timer
+    Copyright (C) 2018 Marc Kassay
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
+$font-path: "../assets/fonts";
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+@import "ionic.globals";
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/theming/overriding-ionic-variables/
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+@import "base-theme-light";
+@import "base-theme-dark";
+@import "accent-theme-RGBandY";
+@import "accent-theme-monokai";
+@import "accent-theme-coolgrey";
+@import "theme-map-get";
+
+// Ait overides Ionic variables...
+$font-size-base: 1.4rem;
+$list-header-font-size: 1.8rem;
+$list-ios-header-font-size: $list-header-font-size;
+$list-md-header-font-size: $list-header-font-size;
+$list-wp-header-font-size: $list-header-font-size;
+
+// this is for the home-display button(s)
+$button-md-background-color-activated: #37bdf7;
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+//@import "ionic.theme.dark";
+@import "ionic.theme.default";
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/ionicons/
+//@import "ionic.ionicons";
+// Fonts
+// --------------------------------------------------
+$font-family-base: "selawk";
+$font-family-ios-base: $font-family-base;
+$font-family-md-base: $font-family-base;
+$font-family-wp-base: $font-family-base;

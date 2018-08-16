@@ -1,9 +1,7 @@
 {
-  "name": "AiT",
+  "name": "AIT",
   "integrations": {
     "cordova": {}
   },
-  "type": "ionic-angular",
-  "pro_id": "caa4f4ae",
-  "app_id": ""
+  "type": "ionic-angular"
 }
