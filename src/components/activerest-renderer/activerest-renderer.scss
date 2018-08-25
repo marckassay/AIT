@@ -1,3 +1,96 @@
-activerest-renderer {
+/*
+    AiT - Another Interval Timer
+    Copyright (C) 2018 Marc Kassay
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+$font-size-go-portrait:         60vw;
+$font-size-go-landscape:        50vh;
+$font-size-stop-portrait:       15vw;
+$font-size-stop-landscape:      10vh;
+
+@mixin activerest-renderer-theme-apply ($map) {
+  p.left {text-align: left};
+  p.right {text-align: right};
+
+  .active.go {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
+    color: map-get($map, go);
+  }
+
+  .active.loaded {
+    @extend .active.go;
+    color: map-get($map, getready);
+  }
+
+  .active.stop {
+    @extend .active.go;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+    color: map-get($map, go);
+  }
+
+  .active.completed {
+    @extend .active.go;
+    color: map-get($map, primary);
+  }
+
+  .active.getReady {
+    @extend .active.stop;
+    color: map-get($map, getready);
+  }
+
+  .active.countdown {
+    @extend .active.go;
+    color: map-get($map, display-disabled);
+  }
+
+
+
+
+  .rest.go {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
+    color: map-get($map, stop);
+  }
+
+  .rest.stop {
+    @extend .rest.go;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+  }
+
+  .rest.loaded {
+    @extend .rest.stop;
+    color: map-get($map, getready);
+  }
+
+  .rest.getReady {
+    @extend .rest.stop;
+    color: map-get($map, getready);
+  }
+
+  .rest.completed {
+    @extend .rest.stop;
+    color: map-get($map, primary);
+  }
+
+  .rest.countdown {
+    @extend .rest.stop;
+    color: map-get($map, display-disabled);
+  }
 }

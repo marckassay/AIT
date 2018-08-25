@@ -1,4 +1,41 @@
-<!-- Generated template for the FabContainerComponent component -->
-<div>
-  {{text}}
-</div>
+<!--
+    AiT - Another Interval Timer
+    Copyright (C) 2018 Marc Kassay
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ion-fab bottom right #fabMenu>
+  <button ion-fab (click)="actionRequest(actions.Main, fabMenu)" class="main"></button>
+  <ion-fab-list side="top">
+    <div *ngIf="viewState == states.Start">
+      <button ion-fab (click)="actionRequest(actions.Start, fabMenu)" class="start">
+        <ion-icon class="material-icons">play_circle_outline</ion-icon>
+      </button>
+    </div>
+    <div *ngIf="viewState == states.Pause">
+      <button ion-fab (click)="actionRequest(actions.Pause, fabMenu)" class="pause">
+        <ion-icon class="material-icons">pause_circle_outline</ion-icon>
+      </button>
+    </div>
+    <button ion-fab (click)="actionRequest(actions.Reset, fabMenu)" class="reset">
+      <ion-icon class="material-icons">restore</ion-icon>
+    </button>
+    <button id="settings" ion-fab (click)="actionRequest(actions.Program, fabMenu)" class="program">
+      <ion-icon class="material-icons">settings</ion-icon>
+    </button>
+    <button ion-fab (click)="actionRequest(actions.Home, fabMenu)" class="home">
+      <ion-icon class="material-icons">home</ion-icon>
+    </button>
+  </ion-fab-list>
+</ion-fab>
