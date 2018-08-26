@@ -22,16 +22,18 @@ import { SequenceStates } from '../../app/core/SotsUtil';
 import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
 import { ViewChild } from '@angular/core';
-import { ActiveRestRendererComponent } from '../../app/components/activerestrenderer.component/activerestrenderer.component';
+import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 
-@IonicPage()
+@IonicPage({
+  priority: 'high'
+})
 @Component({
   selector: 'page-interval-display',
   templateUrl: 'interval-display.html'
 })
 export class IntervalDisplayPage extends AITBasePage {
-  @ViewChild(ActiveRestRendererComponent)
-  private activeRestRenderer: ActiveRestRendererComponent;
+  @ViewChild(ActiverestRendererComponent)
+  private activeRestRenderer: ActiverestRendererComponent;
 
   @Input('data')
   get data(): IntervalStorageData {
@@ -94,7 +96,7 @@ export class IntervalDisplayPage extends AITBasePage {
       },
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
-        error!;
+        throw error;
         this.menu.completed();
 
         this.ngDectector.detectChanges();

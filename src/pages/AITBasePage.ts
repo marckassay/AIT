@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { UUIDData } from '../app/app.component';
-import { FabAction, FabContainerComponent, FabEmission } from '../app/components/fabcontainer.component/fabcontainer.component';
+import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { Insomnia } from '@ionic-native/insomnia';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';

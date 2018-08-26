@@ -15,9 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { IntervalDisplayPage, IntervalSettingsPage, StopwatchDisplayPage, StopwatchSettingsPage, TimerDisplayPage, TimerSettingsPage } from '../pages/pages';
 import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { APP_SETTINGS_PAGE, INTERVAL_DISPLAY_PAGE, TIMER_DISPLAY_PAGE, STOPWATCH_DISPLAY_PAGE, INTERVAL_SETTINGS_PAGE, TIMER_SETTINGS_PAGE, STOPWATCH_SETTINGS_PAGE } from '../pages/pages.constants';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MenuController, Nav, Platform } from 'ionic-angular';
 import { AITStorage } from './core/AITStorage';
@@ -102,14 +102,14 @@ export class AppComponent {
     let settingsPage: any;
 
     if (uuid === AITStorage.INITIAL_INTERVAL_ID) {
-      displayPage = IntervalDisplayPage;
-      settingsPage = IntervalSettingsPage;
+      displayPage = INTERVAL_DISPLAY_PAGE;
+      settingsPage = INTERVAL_SETTINGS_PAGE;
     } else if (uuid === AITStorage.INITIAL_TIMER_ID) {
-      displayPage = TimerDisplayPage;
-      settingsPage = TimerSettingsPage;
+      displayPage = TIMER_DISPLAY_PAGE;
+      settingsPage = TIMER_SETTINGS_PAGE;
     } else if (uuid === AITStorage.INITIAL_STOPWATCH_ID) {
-      displayPage = StopwatchDisplayPage;
-      settingsPage = StopwatchSettingsPage;
+      displayPage = STOPWATCH_DISPLAY_PAGE;
+      settingsPage = STOPWATCH_SETTINGS_PAGE;
     }
 
     this.navCtrl.setRoot(displayPage, uuid).then(() => {
@@ -137,21 +137,21 @@ export class AppComponent {
 
     switch (emission.action) {
       case HomeAction.IntervalTimer:
-        if (currentPage !== IntervalDisplayPage) {
+        if (currentPage !== INTERVAL_DISPLAY_PAGE) {
           this.setRootAndCreatePage(AITStorage.INITIAL_INTERVAL_ID);
         } else {
           this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Timer:
-        if (currentPage !== TimerDisplayPage) {
+        if (currentPage !== TIMER_DISPLAY_PAGE) {
           this.setRootAndCreatePage(AITStorage.INITIAL_TIMER_ID);
         } else {
           this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Stopwatch:
-        if (currentPage !== StopwatchDisplayPage) {
+        if (currentPage !== STOPWATCH_DISPLAY_PAGE) {
           this.setRootAndCreatePage(AITStorage.INITIAL_STOPWATCH_ID);
         } else {
           this.menuCtrl.toggle('left');
@@ -159,7 +159,7 @@ export class AppComponent {
         break;
       case HomeAction.Settings:
         this.menuCtrl.toggle('left').then(() => {
-          this.navCtrl.push('AppSettingsPage');
+          this.navCtrl.push(APP_SETTINGS_PAGE);
         });
         break;
     }

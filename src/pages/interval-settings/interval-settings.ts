@@ -21,7 +21,9 @@ import * as moment from 'moment';
 import { IntervalStorageData } from '../../app/app.component';
 import { AITBaseSettingsPage } from '../AITBaseSettingsPage';
 
-@IonicPage()
+@IonicPage({
+  priority: 'off'
+})
 @Component({
   selector: 'page-interval-settings',
   templateUrl: 'interval-settings.html',

@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 
 export enum HomeAction {
   IntervalTimer,
@@ -28,6 +29,7 @@ export interface HomeEmission {
   action: HomeAction;
 }
 
+@IonicPage()
 @Component({
   selector: 'page-home-display',
   templateUrl: 'home-display.html',

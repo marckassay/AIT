@@ -24,7 +24,6 @@ import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../../app/core/Th
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 import { AITSignal } from '../../app/core/AITSignal';
 
-@IonicPage()
 @Component({
   selector: 'page-app-settings',
   templateUrl: 'app-settings.html',

@@ -1,23 +1,21 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
-import { MyApp } from './app.component';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    MyApp
+    AppComponent
   ],
   imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(AppComponent, {
+      menuType: 'reveal'
+    })
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp
-  ],
+  entryComponents: [AppComponent],
   providers: [
     StatusBar,
     SplashScreen,
