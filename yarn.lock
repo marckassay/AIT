@@ -78,10 +78,20 @@
   dependencies:
     tslib "^1.7.1"
 
+"@ionic-native/brightness@^4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/brightness/-/brightness-4.15.0.tgz#f5a10e273c550405441191a91959c24c0d9898a1"
+  integrity sha512-wpE4jzTkCPhQoaCzUK2odiXe60ogiYtRT+ypgZpQouKTqH6ClAwcPUkYB4pRgXcW/nb7yWLikMCwx7anYXJzDQ==
+
 "@ionic-native/core@~4.12.0":
   version "4.12.2"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-4.12.2.tgz#80ffab6cc5470c56ade0743b72af9e7af398cfb5"
   integrity sha512-s1lAvBvluzYG2py57RofFq3tpfGz+vYLexgjZ2vlZnqCdVPMT6/Vo5nu2F+kx+1g+Ps3hA1TGKQsX9yV7j7nPA==
+
+"@ionic-native/screen-orientation@^4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/screen-orientation/-/screen-orientation-4.15.0.tgz#94c8354758dc1694953b4a2f3097c89218a105fd"
+  integrity sha512-f1lTQ0e0ATqsRd35K8OxcPlx9tWyYF4jEkaXWGs7TIh9OVUsOVe9HAz1HQZD9z1rwnOq6GSxsormqz8vJODiPQ==
 
 "@ionic-native/splash-screen@~4.12.0":
   version "4.12.2"
@@ -92,6 +102,11 @@
   version "4.12.2"
   resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-4.12.2.tgz#cd140592f2e3739a6f83872819ed5b440fc8fd85"
   integrity sha512-9oRqMdI2OSyw4rXgtUBNC38axLnnNjxkHveBsR7KxdlWJGmIxchLgLu/OSIvMcMC7n0syakR3Ubar4lWOkvYvA==
+
+"@ionic-native/vibration@^4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/vibration/-/vibration-4.15.0.tgz#137af726d1cfec0be843ce535ea1eb9e30b58949"
+  integrity sha512-jLIc2Rk+X68pNe8e4dypoQMBvh3DKMby9RirxWZZyaPWI8mKzzWaHaNGQElbGdncLHxdDrTjgY61R+pJZCq2UA==
 
 "@ionic/app-scripts@3.2.0":
   version "3.2.0"
@@ -981,6 +996,11 @@ cordova-common@2.2.5:
     underscore "^1.8.3"
     unorm "^1.3.3"
 
+cordova-plugin-brightness@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-brightness/-/cordova-plugin-brightness-0.2.0.tgz#af2b57d5f8054828a54f86bd6886d015d00293bc"
+  integrity sha512-ujW4v58jArPxPf8CjEppl9hM2/9jep1+nflzAOGoT4yc5UIuLja6j6+wxK2fv6+UWqVEWEKB3JkfnijVUl6HjQ==
+
 cordova-plugin-device@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.2.tgz#fc08f3722e67eef7b6c67bfc99a83df6add0baba"
@@ -996,6 +1016,11 @@ cordova-plugin-ionic-webview@^2.1.4:
   resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-webview/-/cordova-plugin-ionic-webview-2.1.4.tgz#e0c87297157537343b31fa1b79fab658635ff76e"
   integrity sha512-+nsqWEI2Ak2CuLJe5KGDlNIRDcaDLyK/UfuCnYnRk1UuUSUZoon4dd5BLEikf3YjbxqY7G0gixkkYzvlJTdkrg==
 
+cordova-plugin-screen-orientation@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-screen-orientation/-/cordova-plugin-screen-orientation-3.0.1.tgz#75a357ce2938081e8f61d4605394b6d77463c1f8"
+  integrity sha1-daNXzik4CB6PYdRgU5S213Rjwfg=
+
 cordova-plugin-splashscreen@^5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-5.0.2.tgz#747e74f56e201cd585bc62d14bca19f6867ff1ed"
@@ -1005,6 +1030,11 @@ cordova-plugin-statusbar@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.4.2.tgz#fc1fbdc0d8d7033a7e8e1f1f7ff167ac9bd4faf6"
   integrity sha1-/B+9wNjXAzp+jh8ff/FnrJvU+vY=
+
+cordova-plugin-vibration@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-vibration/-/cordova-plugin-vibration-3.1.0.tgz#63e57a1de72e318b0944ef727d7c4eff13ca2c93"
+  integrity sha1-Y+V6HecuMYsJRO9yfXxO/xPKLJM=
 
 cordova-plugin-whitelist@^1.3.3:
   version "1.3.3"
@@ -1356,6 +1386,11 @@ es6-map@^0.1.3:
     es6-set "~0.1.5"
     es6-symbol "~3.1.1"
     event-emitter "~0.3.5"
+
+es6-promise-plugin@4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/es6-promise-plugin/-/es6-promise-plugin-4.2.2.tgz#cfa0cc1383d91f999a62a2bbf4bd97bec305e0ac"
+  integrity sha512-uoA4aVplXI9oqUYJFBAVRwAqIN9/n9JgrTAUGX3qPbnSZVE5yY1+6/MsoN5f4xsaPO62WjPHOdtts6okMN6tNA==
 
 es6-set@~0.1.5:
   version "0.1.5"

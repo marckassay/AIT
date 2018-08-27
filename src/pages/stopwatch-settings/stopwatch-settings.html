@@ -34,7 +34,7 @@
       <ion-item-divider>PROGRAM SETTINGS</ion-item-divider>
       <!-- countdown -->
       <ion-item>
-        <ion-range (ionChange)="dataChanged('countdown')" debounce="500" [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit"
+        <ion-range (ionChange)="dataChanged()" debounce="500" [(ngModel)]="data.countdown" min="5" [max]="data.countdownmaxlimit"
           step="5" snaps="true" pin="true">
           <ion-label range-left>countdown</ion-label>
         </ion-range>
@@ -51,15 +51,15 @@
       </ion-item-divider>
       <ion-item>
         <ion-label>every 15 seconds</ion-label>
-        <ion-toggle (ionChange)="dataChanged('fivesecond')" [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
+        <ion-toggle (ionChange)="dataChanged()" [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
       </ion-item>
       <ion-item>
         <ion-label>every 30 seconds</ion-label>
-        <ion-toggle (ionChange)="dataChanged('tensecond')" [(ngModel)]="data.warnings.tensecond"></ion-toggle>
+        <ion-toggle (ionChange)="dataChanged()" [(ngModel)]="data.warnings.tensecond"></ion-toggle>
       </ion-item>
       <ion-item>
         <ion-label>every minute</ion-label>
-        <ion-toggle (ionChange)="dataChanged('fifteensecond')" [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
+        <ion-toggle (ionChange)="dataChanged()" [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
       </ion-item>
     </ion-item-group>
 

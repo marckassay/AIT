@@ -21,7 +21,7 @@ import { SequenceStates } from '../../app/core/SotsUtil';
 
 @Component({
   selector: 'activerest-renderer',
-  templateUrl: 'activerestrenderer.html'
+  templateUrl: 'activerest-renderer.html'
 })
 export class ActiverestRendererComponent {
   // this type assignment to variable is for angular view

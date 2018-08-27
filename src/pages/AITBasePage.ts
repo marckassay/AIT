@@ -17,7 +17,7 @@
 */
 import { UUIDData } from '../app/app.component';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { Insomnia } from '@ionic-native/insomnia';
+import { Brightness } from '@ionic-native/brightness';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
@@ -53,7 +53,7 @@ export class AITBasePage implements OnInit {
   protected storage: AITStorage;
   protected signal: AITSignal;
   protected ngDectector: ChangeDetectorRef;
-  protected insomnia: Insomnia;
+  protected display: Brightness;
   protected screenOrientation: ScreenOrientation;
   protected splashScreen: SplashScreen;
   protected statusBar: StatusBar;
@@ -78,7 +78,7 @@ export class AITBasePage implements OnInit {
     this.storage = ServiceLocator.injector.get(AITStorage);
     this.menuCtrl = ServiceLocator.injector.get(MenuController);
     this.signal = ServiceLocator.injector.get(AITSignal);
-    this.insomnia = ServiceLocator.injector.get(Insomnia);
+    this.display = ServiceLocator.injector.get(Brightness);
     this.splashScreen = ServiceLocator.injector.get(SplashScreen);
     this.statusBar = ServiceLocator.injector.get(StatusBar);
 
@@ -181,7 +181,7 @@ export class AITBasePage implements OnInit {
     this.menuCtrl.enable(!value, 'left');
     this.menuCtrl.enable(!value, 'right');
 
-    (value) ? this.insomnia.keepAwake() : this.insomnia.allowSleepAgain();
+    (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
 
     setTimeout(() => {
       (value) ? this.statusBar.hide() : this.statusBar.show();
