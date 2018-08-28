@@ -79,10 +79,12 @@ export class TimerDisplayPage extends AITBasePage {
       },
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
-        error!;
+
         this.menu.completed();
 
         this.ngDectector.detectChanges();
+
+        throw error;
       },
       complete: (): void => {
         this.viewState = SequenceStates.Completed;

@@ -79,8 +79,7 @@ export class AITBaseSettingsPage implements OnInit {
     });
   }
 
-  protected dataChanged(property?: string): void {
-    property!;
+  protected dataChanged(): void {
     this.ngDectector.detectChanges();
 
     this.storage.setItem(this.uuidData);

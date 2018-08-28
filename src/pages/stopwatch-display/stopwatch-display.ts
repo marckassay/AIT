@@ -79,9 +79,10 @@ export class StopwatchDisplayPage extends AITBasePage {
       },
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
-        error!;
 
         this.ngDectector.detectChanges();
+
+        throw error;
       }
     });
 

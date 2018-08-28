@@ -60,8 +60,7 @@ export class TimerSettingsPage extends AITBaseSettingsPage {
     this.grandTime = { minutes: 15, seconds: 0 };
   }
 
-  protected dataChanged(property?: string): void {
-    property!;
+  protected dataChanged(): void {
     this.data.time = (this.grandTime.minutes * 60) + this.grandTime.seconds;
     this.storage.setItem(this.data);
     this.ngDectector.detectChanges();
