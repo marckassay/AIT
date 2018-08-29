@@ -9,7 +9,9 @@
 log.txt
 *.sublime-project
 *.sublime-workspace
-.vscode/
+
+# Include VS Code tasks
+# .vscode/
 npm-debug.log*
 
 .idea/
@@ -34,4 +36,5 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 
+# Omit in favor of yarn.lock
 package-lock.json
