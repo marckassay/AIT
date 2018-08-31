@@ -24,9 +24,7 @@ import { AITBasePage } from '../AITBasePage';
 import { ViewChild } from '@angular/core';
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 
-@IonicPage({
-  priority: 'high'
-})
+@IonicPage()
 @Component({
   selector: 'page-interval-display',
   templateUrl: 'interval-display.html'

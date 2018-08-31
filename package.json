@@ -1,8 +1,9 @@
 {
   "name": "ait",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "version": "1.6.0",
+  "description": "An Ionic project",
+  "author": "Marc Kassay",
+  "homepage": "https://github.com/marckassay/AIT",
   "private": true,
   "scripts": {
     "start": "ionic-app-scripts serve",
@@ -51,7 +52,6 @@
     "tslint": "^5.11.0",
     "typescript": "~2.6.2"
   },
-  "description": "An Ionic project",
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},

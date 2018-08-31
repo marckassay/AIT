@@ -32,8 +32,7 @@ export interface HomeEmission {
 @IonicPage()
 @Component({
   selector: 'page-home-display',
-  templateUrl: 'home-display.html',
-  encapsulation: ViewEncapsulation.None
+  templateUrl: 'home-display.html'
 })
 export class HomeDisplayPage {
   public actions = HomeAction;

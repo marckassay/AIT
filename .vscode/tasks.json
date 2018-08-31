@@ -4,9 +4,31 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "AiT launch local",
       "type": "npm",
-      "script": "serve --local --consolelogs --browser chrome",
+      "script": "build",
+      "identifier": "ait_build",
+      "label": "AiT Build",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "watch",
+      "identifier": "ait_watch",
+      "label": "AiT Watch",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "start",
+      "identifier": "ait_serve",
+      "label": "AiT Serve",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "",
+      "identifier": "ait_kill",
+      "label": "AiT Kill",
       "problemMatcher": []
     }
   ]

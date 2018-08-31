@@ -30,7 +30,7 @@ import { AITBrightness } from './core/AITBrightness';
 @Component({
   templateUrl: 'app.html'
 })
-export class AppComponent {
+export class App {
   @ViewChild(Nav)
   navCtrl: Nav;
 

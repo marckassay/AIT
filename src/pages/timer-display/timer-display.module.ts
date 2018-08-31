@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { TimerDisplayPage } from './timer-display';
-import { TimerSettingsPage } from '../timer-settings/timer-settings';
+import { FabContainerComponentModule } from '../../components/fab-container/fab-container.module';
 
 @NgModule({
   declarations: [
-    TimerDisplayPage, TimerSettingsPage
+    TimerDisplayPage
   ],
   imports: [
-    IonicPageModule.forChild([TimerDisplayPage, TimerSettingsPage]),
-  ],
+    FabContainerComponentModule,
+    IonicPageModule.forChild([TimerDisplayPage])
+  ]
 })
 export class TimerDisplayPageModule { }

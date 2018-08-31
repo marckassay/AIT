@@ -8,6 +8,6 @@ import { StopwatchSettingsPage } from './stopwatch-settings';
   ],
   imports: [
     IonicPageModule.forChild([StopwatchSettingsPage]),
-  ],
+  ]
 })
 export class StopwatchSettingsPageModule { }

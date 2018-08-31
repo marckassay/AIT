@@ -19,7 +19,6 @@ import { ChangeDetectorRef, OnInit, Optional } from '@angular/core';
 import { MenuController, ToastController } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
 import { AppStorageData, UUIDData } from '../app/app.component';
-import { ServiceLocator } from '../app/app.module';
 
 export class AITBaseSettingsPage implements OnInit {
   // set by app.component when component is instantiated
@@ -41,17 +40,16 @@ export class AITBaseSettingsPage implements OnInit {
   protected appVibratorDisabled: boolean;
   protected isFirstViewing: boolean;
 
-  constructor(@Optional() ngDectector: ChangeDetectorRef) {
+  constructor(@Optional() ngDectector: ChangeDetectorRef,
+    @Optional() AITStorage,
+    @Optional() MenuController,
+    @Optional() ToastController) {
     this.ngDectector = ngDectector;
 
     this.isFirstViewing = true;
   }
 
   ngOnInit() {
-    this.storage = ServiceLocator.injector.get(AITStorage);
-    this.menuCtrl = ServiceLocator.injector.get(MenuController);
-    this.toastCtrl = ServiceLocator.injector.get(ToastController);
-
     this.loadViewData();
   }
 

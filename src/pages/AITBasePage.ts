@@ -23,11 +23,11 @@ import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
 import { AITSignal } from '../app/core/AITSignal';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { ServiceLocator } from '../app/app.module';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SotsForAit } from '../app/core/SotsForAit';
 import { SequenceStates } from '../app/core/SotsUtil';
+import { AITBrightness } from '../app/core/AITBrightness';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -63,7 +63,15 @@ export class AITBasePage implements OnInit {
 
   constructor(@Optional() ngDectector: ChangeDetectorRef,
     @Optional() navParams: NavParams,
-    @Optional() navCtrl: NavController) {
+    @Optional() navCtrl: NavController,
+    @Optional() screenOrientation: ScreenOrientation,
+    @Optional() storage: AITStorage,
+    @Optional() menuCtrl: MenuController,
+    @Optional() signal: AITSignal,
+    @Optional() display: AITBrightness,
+    @Optional() splashScreen: SplashScreen,
+    @Optional() statusBar: StatusBar
+  ) {
 
     this.sots = new SotsForAit();
     this.ngDectector = ngDectector;
@@ -74,14 +82,6 @@ export class AITBasePage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.screenOrientation = ServiceLocator.injector.get(ScreenOrientation);
-    this.storage = ServiceLocator.injector.get(AITStorage);
-    this.menuCtrl = ServiceLocator.injector.get(MenuController);
-    this.signal = ServiceLocator.injector.get(AITSignal);
-    this.display = ServiceLocator.injector.get(Brightness);
-    this.splashScreen = ServiceLocator.injector.get(SplashScreen);
-    this.statusBar = ServiceLocator.injector.get(StatusBar);
-
     // detaching here when timer has completed or paused, and the user re-enters the view, changed
     // wouldn't change. So all subclass views need to manually check for changes. this is done by
     // using 'this.ngDectector.detectChanges()' in the subscribe callbacks (next, complete, error)
