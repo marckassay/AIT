@@ -127,9 +127,10 @@ export class App {
 
   private createComponentForRightMenu(settingsPage: any, uuid: string) {
     const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-    this.rightMenuInnerHTML.clear();
-    const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-    componentInstance.instance.uuid = uuid;
+    throw Error;
+    /*     this.rightMenuInnerHTML.clear();
+        const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+        componentInstance.instance.uuid = uuid; */
   }
 
   onHomeAction(emission: HomeEmission) {

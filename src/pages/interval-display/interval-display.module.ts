@@ -11,10 +11,7 @@ import { FabContainerComponentModule } from '../../components/fab-container/fab-
   imports: [
     ActiverestRendererComponentModule,
     FabContainerComponentModule,
-    IonicPageModule.forChild([IntervalDisplayPage])
-  ]/* ,
-  entryComponents: [
-    IntervalDisplayPage
-  ] */
+    IonicPageModule.forChild(IntervalDisplayPage)
+  ]
 })
 export class IntervalDisplayPageModule { }

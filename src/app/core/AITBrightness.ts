@@ -78,4 +78,8 @@ export class AITBrightness {
       }
     });
   }
+
+  setKeepScreenOn(value: boolean): void {
+    this.brightness.setKeepScreenOn(value);
+  }
 }

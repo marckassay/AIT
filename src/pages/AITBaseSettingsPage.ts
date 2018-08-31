@@ -32,20 +32,14 @@ export class AITBaseSettingsPage implements OnInit {
     this._uuidData = value;
   }
 
-  protected storage: AITStorage;
-  protected menuCtrl: MenuController;
-  protected toastCtrl: ToastController;
-  protected ngDectector: ChangeDetectorRef;
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
   protected isFirstViewing: boolean;
 
-  constructor(@Optional() ngDectector: ChangeDetectorRef,
-    @Optional() AITStorage,
-    @Optional() MenuController,
-    @Optional() ToastController) {
-    this.ngDectector = ngDectector;
-
+  constructor(@Optional() protected ngDectector: ChangeDetectorRef,
+    @Optional() protected storage: AITStorage,
+    @Optional() protected menuCtrl: MenuController,
+    @Optional() protected toastCtrl: ToastController) {
     this.isFirstViewing = true;
   }
 

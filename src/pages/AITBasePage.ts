@@ -17,7 +17,6 @@
 */
 import { UUIDData } from '../app/app.component';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { Brightness } from '@ionic-native/brightness';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
@@ -46,38 +45,21 @@ export class AITBasePage implements OnInit {
   protected states = SequenceStates;
   protected viewState: SequenceStates;
   protected sots: SotsForAit;
-
-  protected navCtrl: NavController;
-  protected navParams: NavParams;
-  protected menuCtrl: MenuController;
-  protected storage: AITStorage;
-  protected signal: AITSignal;
-  protected ngDectector: ChangeDetectorRef;
-  protected display: Brightness;
-  protected screenOrientation: ScreenOrientation;
-  protected splashScreen: SplashScreen;
-  protected statusBar: StatusBar;
-
   protected grandTime: string;
   private isFirstViewing: boolean;
 
-  constructor(@Optional() ngDectector: ChangeDetectorRef,
-    @Optional() navParams: NavParams,
-    @Optional() navCtrl: NavController,
-    @Optional() screenOrientation: ScreenOrientation,
-    @Optional() storage: AITStorage,
-    @Optional() menuCtrl: MenuController,
-    @Optional() signal: AITSignal,
-    @Optional() display: AITBrightness,
-    @Optional() splashScreen: SplashScreen,
-    @Optional() statusBar: StatusBar
+  constructor(@Optional() protected ngDectector: ChangeDetectorRef,
+    @Optional() protected navParams: NavParams,
+    @Optional() protected navCtrl: NavController,
+    @Optional() protected screenOrientation: ScreenOrientation,
+    @Optional() protected storage: AITStorage,
+    @Optional() protected menuCtrl: MenuController,
+    @Optional() protected signal: AITSignal,
+    @Optional() protected display: AITBrightness,
+    @Optional() protected splashScreen: SplashScreen,
+    @Optional() protected statusBar: StatusBar
   ) {
-
     this.sots = new SotsForAit();
-    this.ngDectector = ngDectector;
-    this.navParams = navParams;
-    this.navCtrl = navCtrl;
-
     this.isFirstViewing = true;
   }
 

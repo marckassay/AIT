@@ -7,7 +7,7 @@ import { IntervalSettingsPage } from './interval-settings';
     IntervalSettingsPage
   ],
   imports: [
-    IonicPageModule.forChild([IntervalSettingsPage]),
+    IonicPageModule.forChild(IntervalSettingsPage),
   ]
 })
 export class IntervalSettingsPageModule { }

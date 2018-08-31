@@ -21,13 +21,10 @@ import * as moment from 'moment';
 import { IntervalStorageData } from '../../app/app.component';
 import { AITBaseSettingsPage } from '../AITBaseSettingsPage';
 
-@IonicPage({
-  priority: 'off'
-})
+@IonicPage()
 @Component({
   selector: 'page-interval-settings',
-  templateUrl: 'interval-settings.html',
-  encapsulation: ViewEncapsulation.None
+  templateUrl: 'interval-settings.html'
 })
 export class IntervalSettingsPage extends AITBaseSettingsPage {
   get data(): IntervalStorageData {
