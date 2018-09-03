@@ -77,7 +77,7 @@ export class App {
             this.combinedTheme = value;
           });
 
-          this.setRootAndCreatePage(value.current_uuid);
+          this.setPageToRoot(value.current_uuid);
           Observable.timer(8000).subscribe(() => {
             this.brightness.restoreBrightest();
           });
@@ -97,40 +97,47 @@ export class App {
     });
   }
 
-  setRootAndCreatePage(uuid: string) {
+  setPageToRoot(uuid: string) {
     let displayPage: any;
-    let settingsPage: any;
 
     if (uuid === AITStorage.INITIAL_INTERVAL_ID) {
       displayPage = INTERVAL_DISPLAY_PAGE;
-      settingsPage = INTERVAL_SETTINGS_PAGE;
     } else if (uuid === AITStorage.INITIAL_TIMER_ID) {
       displayPage = TIMER_DISPLAY_PAGE;
-      settingsPage = TIMER_SETTINGS_PAGE;
     } else if (uuid === AITStorage.INITIAL_STOPWATCH_ID) {
       displayPage = STOPWATCH_DISPLAY_PAGE;
-      settingsPage = STOPWATCH_SETTINGS_PAGE;
     }
 
     this.navCtrl.setRoot(displayPage, uuid).then(() => {
       if (!this.isFirstViewing) {
         this.menuCtrl.toggle('left').then(() => {
-          this.createComponentForRightMenu(settingsPage, uuid);
           this.storage.setCurrentUUID(uuid);
         });
       } else {
         this.isFirstViewing = false;
-        this.createComponentForRightMenu(settingsPage, uuid);
       }
     });
   }
 
-  private createComponentForRightMenu(settingsPage: any, uuid: string) {
+  /*   setSettingsPageToRightMenu(uuid: string) {
+      let settingsPage: any;
+
+      if (uuid === AITStorage.INITIAL_INTERVAL_ID) {
+        settingsPage = INTERVAL_SETTINGS_PAGE;
+      } else if (uuid === AITStorage.INITIAL_TIMER_ID) {
+        settingsPage = TIMER_SETTINGS_PAGE;
+      } else if (uuid === AITStorage.INITIAL_STOPWATCH_ID) {
+        settingsPage = STOPWATCH_SETTINGS_PAGE;
+      }
+
+      this.createComponentForRightMenu(settingsPage, uuid);
+    } */
+
+  createComponentForRightMenu(settingsPage: any, uuid: string) {
     const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-    throw Error;
-    /*     this.rightMenuInnerHTML.clear();
-        const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-        componentInstance.instance.uuid = uuid; */
+    this.rightMenuInnerHTML.clear();
+    const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+    componentInstance.instance.uuid = uuid;
   }
 
   onHomeAction(emission: HomeEmission) {
@@ -139,21 +146,21 @@ export class App {
     switch (emission.action) {
       case HomeAction.IntervalTimer:
         if (currentPage !== INTERVAL_DISPLAY_PAGE) {
-          this.setRootAndCreatePage(AITStorage.INITIAL_INTERVAL_ID);
+          this.setPageToRoot(AITStorage.INITIAL_INTERVAL_ID);
         } else {
           this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Timer:
         if (currentPage !== TIMER_DISPLAY_PAGE) {
-          this.setRootAndCreatePage(AITStorage.INITIAL_TIMER_ID);
+          this.setPageToRoot(AITStorage.INITIAL_TIMER_ID);
         } else {
           this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Stopwatch:
         if (currentPage !== STOPWATCH_DISPLAY_PAGE) {
-          this.setRootAndCreatePage(AITStorage.INITIAL_STOPWATCH_ID);
+          this.setPageToRoot(AITStorage.INITIAL_STOPWATCH_ID);
         } else {
           this.menuCtrl.toggle('left');
         }

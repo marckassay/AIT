@@ -52,6 +52,11 @@ export class IntervalDisplayPage extends AITBasePage {
 
   currentInterval: number;
 
+  ionViewDidEnter() {
+
+    super.ionViewDidEnter();
+  }
+
   aitBuildTimer() {
     this.sots.build(this.data.countdown,
       this.data.warnings,
