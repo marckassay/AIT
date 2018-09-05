@@ -15,16 +15,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { APP_SETTINGS_PAGE, INTERVAL_DISPLAY_PAGE, TIMER_DISPLAY_PAGE, STOPWATCH_DISPLAY_PAGE, INTERVAL_SETTINGS_PAGE, TIMER_SETTINGS_PAGE, STOPWATCH_SETTINGS_PAGE } from '../pages/pages.constants';
+import { APP_SETTINGS_PAGE, INTERVAL_DISPLAY_PAGE, TIMER_DISPLAY_PAGE, STOPWATCH_DISPLAY_PAGE } from '../pages/pages.constants';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MenuController, Nav, Platform } from 'ionic-angular';
 import { AITStorage } from './core/AITStorage';
 import { HomeAction, HomeEmission } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
-import { AITBaseSettingsPage } from '../pages/AITBaseSettingsPage';
 import { AITBrightness } from './core/AITBrightness';
 
 @Component({
@@ -48,8 +47,7 @@ export class App {
     private settings: ThemeSettingsProvider,
     private brightness: AITBrightness,
     private menuCtrl: MenuController,
-    private storage: AITStorage,
-    private componentFactoryResolver: ComponentFactoryResolver) {
+    private storage: AITStorage) {
 
     this.platform.ready().then(() => {
       this.screenOrientation.unlock();
@@ -108,7 +106,7 @@ export class App {
       displayPage = STOPWATCH_DISPLAY_PAGE;
     }
 
-    this.navCtrl.setRoot(displayPage, uuid).then(() => {
+    this.navCtrl.setRoot(displayPage, { id: uuid, rightmenu: this.rightMenuInnerHTML }).then(() => {
       if (!this.isFirstViewing) {
         this.menuCtrl.toggle('left').then(() => {
           this.storage.setCurrentUUID(uuid);
@@ -117,27 +115,6 @@ export class App {
         this.isFirstViewing = false;
       }
     });
-  }
-
-  /*   setSettingsPageToRightMenu(uuid: string) {
-      let settingsPage: any;
-
-      if (uuid === AITStorage.INITIAL_INTERVAL_ID) {
-        settingsPage = INTERVAL_SETTINGS_PAGE;
-      } else if (uuid === AITStorage.INITIAL_TIMER_ID) {
-        settingsPage = TIMER_SETTINGS_PAGE;
-      } else if (uuid === AITStorage.INITIAL_STOPWATCH_ID) {
-        settingsPage = STOPWATCH_SETTINGS_PAGE;
-      }
-
-      this.createComponentForRightMenu(settingsPage, uuid);
-    } */
-
-  createComponentForRightMenu(settingsPage: any, uuid: string) {
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-    this.rightMenuInnerHTML.clear();
-    const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-    componentInstance.instance.uuid = uuid;
   }
 
   onHomeAction(emission: HomeEmission) {

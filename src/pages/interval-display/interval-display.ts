@@ -23,6 +23,7 @@ import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
 import { ViewChild } from '@angular/core';
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
+import { IntervalSettingsPage } from '../interval-settings/interval-settings';
 
 @IonicPage()
 @Component({
@@ -53,7 +54,6 @@ export class IntervalDisplayPage extends AITBasePage {
   currentInterval: number;
 
   ionViewDidEnter() {
-
     super.ionViewDidEnter();
   }
 
@@ -117,6 +117,9 @@ export class IntervalDisplayPage extends AITBasePage {
       }
     });
 
+    if (this.isFirstViewing) {
+      this.createComponentForRightMenu(IntervalSettingsPage);
+    }
     super.aitSubscribeTimer();
   }
 }

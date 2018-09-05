@@ -17,7 +17,7 @@
 */
 import { UUIDData } from '../app/app.component';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { ChangeDetectorRef, OnInit, Optional, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
 import { AITSignal } from '../app/core/AITSignal';
@@ -27,6 +27,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SotsForAit } from '../app/core/SotsForAit';
 import { SequenceStates } from '../app/core/SotsUtil';
 import { AITBrightness } from '../app/core/AITBrightness';
+import { AITBaseSettingsPage } from './AITBaseSettingsPage';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -44,11 +45,14 @@ export class AITBasePage implements OnInit {
   // can access enum values.
   protected states = SequenceStates;
   protected viewState: SequenceStates;
+  protected rightMenuInnerHTML: ViewContainerRef;
   protected sots: SotsForAit;
   protected grandTime: string;
-  private isFirstViewing: boolean;
+  protected isFirstViewing: boolean;
 
-  constructor(@Optional() protected ngDectector: ChangeDetectorRef,
+  constructor(
+    @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
+    @Optional() protected ngDectector: ChangeDetectorRef,
     @Optional() protected navParams: NavParams,
     @Optional() protected navCtrl: NavController,
     @Optional() protected screenOrientation: ScreenOrientation,
@@ -99,6 +103,7 @@ export class AITBasePage implements OnInit {
   }
 
   ionViewDidEnter() {
+
   }
 
   private setViewAndLoadData = () => {
@@ -107,7 +112,8 @@ export class AITBasePage implements OnInit {
   }
 
   private aitLoadData(): void {
-    const uuid = this.navParams.data;
+    const uuid = this.navParams.data.id;
+    this.rightMenuInnerHTML = this.navParams.data.rightmenu;
 
     if (uuid) {
       this.menu.reset();
@@ -136,6 +142,13 @@ export class AITBasePage implements OnInit {
   protected aitBuildTimer(): void {
     this.aitResetView();
     this.aitSubscribeTimer();
+  }
+
+  createComponentForRightMenu(settingsPage: any) {
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
+    this.rightMenuInnerHTML.clear();
+    const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+    componentInstance.instance.uuid = this.navParams.data.id;
   }
 
   protected aitSubscribeTimer(): void {
