@@ -3,6 +3,7 @@
   "version": "1.6.0",
   "description": "An Ionic project",
   "author": "Marc Kassay",
+  "license": "GPL-3.0+",
   "homepage": "https://github.com/marckassay/AIT",
   "private": true,
   "scripts": {

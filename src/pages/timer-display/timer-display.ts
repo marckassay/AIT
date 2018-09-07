@@ -21,6 +21,7 @@ import { AITBasePage } from '../AITBasePage';
 import { SequenceStates } from '../../app/core/SotsUtil';
 import { TimeEmission } from 'sots';
 import { TimerStorageData } from '../../app/app.component';
+import { TimerSettingsPage } from '../timer-settings/timer-settings';
 
 @IonicPage()
 @Component({
@@ -96,6 +97,10 @@ export class TimerDisplayPage extends AITBasePage {
         this.ngDectector.detectChanges();
       }
     });
+
+    if (this.isFirstViewing) {
+      this.createComponentForRightMenu(TimerSettingsPage);
+    }
 
     super.aitSubscribeTimer();
   }

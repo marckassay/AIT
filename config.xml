@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>AIT</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <name>AiT</name>
+    <description>Another interval timer (AiT) that targets portable devices for your timing needs. This application has been intended for interval workouts, where there are active and inactive segments.</description>
+    <author email="marckassay@gmail.com" href="https://github.com/marckassay/AIT">Marc Kassay</author>
     <content src="index.html" />
     <access origin="*" />
-    <allow-intent href="http://*/*" />
+    <allow-navigation href="http://localhost:8100" />
+    <allow-intent href="http://*/*" /
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />

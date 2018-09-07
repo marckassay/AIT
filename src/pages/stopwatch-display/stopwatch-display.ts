@@ -22,6 +22,7 @@ import { AITBasePage } from '../AITBasePage';
 import { SequenceStates } from '../../app/core/SotsUtil';
 import { TimeEmission } from 'sots';
 import { StopwatchStorageData } from '../../app/app.component';
+import { StopwatchSettingsPage } from '../stopwatch-settings/stopwatch-settings';
 
 @IonicPage()
 @Component({
@@ -87,7 +88,9 @@ export class StopwatchDisplayPage extends AITBasePage {
     });
 
     // this.grandTime = this.sots.getGrandTime({ time: -1 });
-
+    if (this.isFirstViewing) {
+      this.createComponentForRightMenu(StopwatchSettingsPage);
+    }
     super.aitSubscribeTimer();
   }
 }

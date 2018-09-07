@@ -7,7 +7,7 @@ import { StopwatchSettingsPage } from './stopwatch-settings';
     StopwatchSettingsPage
   ],
   imports: [
-    IonicPageModule.forChild([StopwatchSettingsPage]),
+    IonicPageModule.forChild(StopwatchSettingsPage),
   ]
 })
 export class StopwatchSettingsPageModule { }
