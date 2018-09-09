@@ -68,10 +68,10 @@ export class AITBasePage implements OnInit {
   }
 
   ngOnInit(): void {
-    // detaching here when timer has completed or paused, and the user re-enters the view, changed
+    // detaching here when timer has completed or paused, or the user re-enters the view, changed
     // wouldn't change. So all subclass views need to manually check for changes. this is done by
     // using 'this.ngDectector.detectChanges()' in the subscribe callbacks (next, complete, error)
-    this.ngDectector.detach();
+    // this.ngDectector.detach();
 
     this.screenOrientation.onChange().subscribe(() => {
       this.ngDectector.detectChanges();
@@ -102,6 +102,7 @@ export class AITBasePage implements OnInit {
     }
   }
 
+  // keep for subclasses
   ionViewDidEnter() {
 
   }
@@ -181,8 +182,6 @@ export class AITBasePage implements OnInit {
     setTimeout(() => {
       (value) ? this.statusBar.hide() : this.statusBar.show();
     }, 500);
-
-    this.ngDectector.detectChanges();
   }
 
   // when this.fabcontainer buttons are clicked, it will first execute code in
