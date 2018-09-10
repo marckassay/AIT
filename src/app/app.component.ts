@@ -15,13 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { APP_SETTINGS_PAGE, INTERVAL_DISPLAY_PAGE, TIMER_DISPLAY_PAGE, STOPWATCH_DISPLAY_PAGE } from '../pages/pages.constants';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MenuController, Nav, Platform } from 'ionic-angular';
 import { AITStorage } from './core/AITStorage';
-import { HomeAction, HomeEmission } from '../pages/home-display/home-display';
+import { HomeAction, HomeEmission, HomeDisplayPage } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 import { AITBrightness } from './core/AITBrightness';
@@ -38,10 +38,14 @@ export class App {
 
   protected isFirstViewing: boolean;
 
+  @ViewChild('leftMenuInnerHTML', { read: ViewContainerRef })
+  leftMenuInnerHTML: ViewContainerRef;
+
   @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })
   rightMenuInnerHTML: ViewContainerRef;
 
   constructor(private platform: Platform,
+    private componentFactoryResolver: ComponentFactoryResolver,
     private statusBar: StatusBar,
     private screenOrientation: ScreenOrientation,
     private settings: ThemeSettingsProvider,
@@ -106,7 +110,7 @@ export class App {
       displayPage = STOPWATCH_DISPLAY_PAGE;
     }
 
-    this.navCtrl.setRoot(displayPage, { id: uuid, rightmenu: this.rightMenuInnerHTML }).then(() => {
+    this.navCtrl.setRoot(displayPage, { id: uuid, rightmenu: this.rightMenuInnerHTML }, { updateUrl: false, isNavRoot: true }).then(() => {
       if (!this.isFirstViewing) {
         this.menuCtrl.toggle('left').then(() => {
           this.storage.setCurrentUUID(uuid);
@@ -114,7 +118,15 @@ export class App {
       } else {
         this.isFirstViewing = false;
       }
+
+      this.createComponentForLeftMenu();
     });
+  }
+
+  createComponentForLeftMenu() {
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomeDisplayPage);
+    // this.leftMenuInnerHTML.clear();
+    this.leftMenuInnerHTML.createComponent(resolvedComponent);
   }
 
   onHomeAction(emission: HomeEmission) {

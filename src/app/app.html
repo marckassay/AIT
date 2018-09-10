@@ -17,11 +17,11 @@
 -->
 <div [class]="combinedTheme">
   <ion-menu side="left" [content]="navCtrl">
-    <page-home-display (onAction)="onHomeAction($event)"></page-home-display>
+    <ng-container #leftMenuInnerHTML></ng-container>
   </ion-menu>
 
   <ion-menu side="right" [content]="navCtrl">
-    <ng-template #rightMenuInnerHTML></ng-template>
+    <ng-container #rightMenuInnerHTML></ng-container>
   </ion-menu>
 </div>
 <!--
