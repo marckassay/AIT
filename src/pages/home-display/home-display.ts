@@ -38,7 +38,7 @@ export class HomeDisplayPage {
   public actions = HomeAction;
 
   @Output()
-  onAction = new EventEmitter<HomeEmission>();
+  onAction: EventEmitter<HomeEmission> = new EventEmitter<HomeEmission>();
 
   actionRequest(action: HomeAction) {
     this.onAction.emit({ action: action });

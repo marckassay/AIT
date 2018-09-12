@@ -33,16 +33,17 @@ export class App {
   @ViewChild(Nav)
   navCtrl: Nav;
 
-  combinedTheme: string;
-  appstoragedata: AppStorageData;
-
-  protected isFirstViewing: boolean;
-
   @ViewChild('leftMenuInnerHTML', { read: ViewContainerRef })
   leftMenuInnerHTML: ViewContainerRef;
 
   @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })
   rightMenuInnerHTML: ViewContainerRef;
+
+  combinedTheme: string;
+
+  appstoragedata: AppStorageData;
+
+  protected isFirstViewing: boolean;
 
   constructor(private platform: Platform,
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -125,8 +126,9 @@ export class App {
 
   createComponentForLeftMenu() {
     const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomeDisplayPage);
-    // this.leftMenuInnerHTML.clear();
-    this.leftMenuInnerHTML.createComponent(resolvedComponent);
+    this.leftMenuInnerHTML.createComponent(resolvedComponent).instance.onAction.subscribe((next) => {
+      this.onHomeAction(next);
+    });
   }
 
   onHomeAction(emission: HomeEmission) {
