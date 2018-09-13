@@ -117,9 +117,10 @@ export class IntervalDisplayPage extends AITBasePage {
       }
     });
 
-    if (this.isFirstViewing) {
-      this.createComponentForRightMenu(IntervalSettingsPage);
-    }
     super.aitSubscribeTimer();
+  }
+
+  aitCreateSettingsPage() {
+    super.aitCreateSettingsPage(IntervalSettingsPage);
   }
 }

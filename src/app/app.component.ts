@@ -111,7 +111,8 @@ export class App {
       displayPage = STOPWATCH_DISPLAY_PAGE;
     }
 
-    this.navCtrl.setRoot(displayPage, { id: uuid, rightmenu: this.rightMenuInnerHTML }, { updateUrl: false, isNavRoot: true }).then(() => {
+    // TODO: add failed promise block
+    this.navCtrl.setRoot(displayPage, { id: uuid, rightmenu: this.rightMenuInnerHTML, isHomePageCreated: this.leftMenuInnerHTML.length }, { updateUrl: false, isNavRoot: true }).then(() => {
       if (!this.isFirstViewing) {
         this.menuCtrl.toggle('left').then(() => {
           this.storage.setCurrentUUID(uuid);
@@ -125,10 +126,17 @@ export class App {
   }
 
   createComponentForLeftMenu() {
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomeDisplayPage);
-    this.leftMenuInnerHTML.createComponent(resolvedComponent).instance.onAction.subscribe((next) => {
-      this.onHomeAction(next);
-    });
+    if (!this.leftMenuInnerHTML.length) {
+
+      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomeDisplayPage);
+      const homepage = this.leftMenuInnerHTML.createComponent(resolvedComponent);
+      // TODO: need a better check to set this property to true. it may fail to create component;
+      // need to be mindful of that.
+
+      homepage.instance.onAction.subscribe((next) => {
+        this.onHomeAction(next);
+      });
+    }
   }
 
   onHomeAction(emission: HomeEmission) {

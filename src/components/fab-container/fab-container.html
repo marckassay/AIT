@@ -31,11 +31,15 @@
     <button ion-fab (click)="actionRequest(actions.Reset, fabMenu)" class="reset">
       <ion-icon class="material-icons">restore</ion-icon>
     </button>
-    <button id="settings" ion-fab (click)="actionRequest(actions.Program, fabMenu)" class="program">
-      <ion-icon class="material-icons">settings</ion-icon>
-    </button>
-    <button ion-fab (click)="actionRequest(actions.Home, fabMenu)" class="home">
-      <ion-icon class="material-icons">home</ion-icon>
-    </button>
+    <div *ngIf="isSettingsPageLoaded">
+      <button id="settings" ion-fab (click)="actionRequest(actions.Program, fabMenu)" class="program">
+        <ion-icon class="material-icons">settings</ion-icon>
+      </button>
+    </div>
+    <div *ngIf="isHomePageLoaded">
+      <button ion-fab (click)="actionRequest(actions.Home, fabMenu)" class="home">
+        <ion-icon class="material-icons">home</ion-icon>
+      </button>
+    </div>
   </ion-fab-list>
 </ion-fab>

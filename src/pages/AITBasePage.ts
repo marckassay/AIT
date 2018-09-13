@@ -45,7 +45,6 @@ export class AITBasePage implements OnInit {
   // can access enum values.
   protected states = SequenceStates;
   protected viewState: SequenceStates;
-  protected rightMenuInnerHTML: ViewContainerRef;
   protected sots: SotsForAit;
   protected grandTime: string;
   protected isFirstViewing: boolean;
@@ -68,29 +67,20 @@ export class AITBasePage implements OnInit {
   }
 
   ngOnInit(): void {
-    // detaching here when timer has completed or paused, or the user re-enters the view, changed
-    // wouldn't change. So all subclass views need to manually check for changes. this is done by
-    // using 'this.ngDectector.detectChanges()' in the subscribe callbacks (next, complete, error)
-    // this.ngDectector.detach();
-
     this.screenOrientation.onChange().subscribe(() => {
       this.ngDectector.detectChanges();
     });
 
     if (this.isFirstViewing) {
+      this.menuCtrl.enable(false);
+
       this.setViewAndLoadData();
     }
   }
 
   ionViewDidLoad() {
-    /*
-    this.menuCtrl.get('left').ionOpen.subscribe(() => {
-    });
-    this.menuCtrl.get('right').ionOpen.subscribe(() => {
-    });
-    */
     // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
-    // called since sidemenus are just menus, not pages.
+    // called since sidemenus are just menus, not IonicPages.
     this.menuCtrl.get('right').ionClose.debounceTime(125).subscribe(() => {
       this.setViewAndLoadData();
     });
@@ -102,23 +92,17 @@ export class AITBasePage implements OnInit {
     }
   }
 
-  // keep for subclasses
-  ionViewDidEnter() {
-
-  }
+  // keep open for subclasses
+  ionViewDidEnter() { }
 
   private setViewAndLoadData = () => {
-    this.aitSetViewInRunningMode(false);
     this.aitLoadData();
   }
 
   private aitLoadData(): void {
     const uuid = this.navParams.data.id;
-    this.rightMenuInnerHTML = this.navParams.data.rightmenu;
 
     if (uuid) {
-      this.menu.reset();
-
       this.storage.getItem(uuid).then((value: any) => {
 
         this.uuidData = (value as UUIDData);
@@ -143,17 +127,22 @@ export class AITBasePage implements OnInit {
   protected aitBuildTimer(): void {
     this.aitResetView();
     this.aitSubscribeTimer();
+    this.aitCreateSettingsPage();
+    this.aitCreateHomePage();
+
+    this.ngDectector.detectChanges();
   }
 
-  createComponentForRightMenu(settingsPage: any) {
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-    this.rightMenuInnerHTML.clear();
-    const componentInstance = this.rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-    componentInstance.instance.uuid = this.navParams.data.id;
+  private aitResetView = () => {
+    this.viewState = SequenceStates.Loaded;
+    this.grandTime = this.sots.getGrandTime({ time: -1 });
   }
 
+  private aitResetTimer = () => {
+    this.sots.sequencer.reset();
+  }
+  // demo showing inhertiance issue: https://stackblitz.com/edit/typescript-ahw7ht
   protected aitSubscribeTimer(): void {
-    // finally, end of view cycle...
     if (this.isFirstViewing) {
       setTimeout(() => {
         this.splashScreen.hide();
@@ -161,16 +150,31 @@ export class AITBasePage implements OnInit {
       }, 200);
     }
 
-    this.ngDectector.detectChanges();
+    this.menu.reset();
   }
 
-  private aitResetView() {
-    this.viewState = SequenceStates.Loaded;
-    this.grandTime = this.sots.getGrandTime({ time: -1 });
+  protected aitCreateSettingsPage(settingsPage?: any) {
+    const rightMenuInnerHTML: ViewContainerRef = this.navParams.data.rightmenu;
+    if (!rightMenuInnerHTML.length) {
+
+      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
+      rightMenuInnerHTML.clear();
+
+      const componentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+      componentInstance.instance.uuid = this.navParams.data.id;
+    }
+
+    this.menuCtrl.get('right').enabled = true;
   }
 
-  private aitResetTimer(): void {
-    this.sots.sequencer.reset();
+  private aitCreateHomePage() {
+    const isHomePageCreated: boolean = this.navParams.data.isHomePageCreated;
+    if (!isHomePageCreated) {
+      // TODO: create a singleton/injector handle an observable to subscribe/unsubscribe to create
+      // homedisplaypage.
+    }
+
+    this.menuCtrl.get('left').enabled = true;
   }
 
   protected aitSetViewInRunningMode(value: boolean) {

@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FabContainer } from 'ionic-angular';
 
 export interface FabEmission {
@@ -56,6 +56,12 @@ export class FabContainerComponent {
   }
 
   public actions = FabAction;
+
+  @Input()
+  isSettingsPageLoaded: Boolean;
+
+  @Input()
+  isHomePageLoaded: Boolean;
 
   constructor() {
     this._viewState = FabState.Start;
