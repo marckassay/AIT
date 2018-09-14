@@ -98,10 +98,10 @@ export class TimerDisplayPage extends AITBasePage {
       }
     });
 
-    if (this.isFirstViewing) {
-      this.createComponentForRightMenu(TimerSettingsPage);
-    }
-
     super.aitSubscribeTimer();
+  }
+
+  aitCreateSettingsPage() {
+    super.aitCreateSettingsPage(TimerSettingsPage);
   }
 }

@@ -88,9 +88,11 @@ export class StopwatchDisplayPage extends AITBasePage {
     });
 
     // this.grandTime = this.sots.getGrandTime({ time: -1 });
-    if (this.isFirstViewing) {
-      this.createComponentForRightMenu(StopwatchSettingsPage);
-    }
+
     super.aitSubscribeTimer();
+  }
+
+  aitCreateSettingsPage() {
+    super.aitCreateSettingsPage(StopwatchSettingsPage);
   }
 }
