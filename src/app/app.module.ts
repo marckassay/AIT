@@ -14,6 +14,7 @@ import { Brightness } from '@ionic-native/brightness';
 import { AITSignal } from './core/AITSignal';
 import { BrowserModule } from '@angular/platform-browser';
 import { HomeDisplayPageModule } from '../pages/home-display/home-display.module';
+import { HomeDisplayService } from '../services/home-display.service';
 
 @NgModule({
   declarations: [App],
@@ -41,6 +42,7 @@ import { HomeDisplayPageModule } from '../pages/home-display/home-display.module
     AITBrightness,
     Brightness,
     AITSignal,
+    HomeDisplayService,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

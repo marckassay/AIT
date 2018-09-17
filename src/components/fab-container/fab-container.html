@@ -31,12 +31,12 @@
     <button ion-fab (click)="actionRequest(actions.Reset, fabMenu)" class="reset">
       <ion-icon class="material-icons">restore</ion-icon>
     </button>
-    <div *ngIf="isSettingsPageLoaded">
+    <div *ngIf="viewState == states.ProgramEnabled">
       <button id="settings" ion-fab (click)="actionRequest(actions.Program, fabMenu)" class="program">
         <ion-icon class="material-icons">settings</ion-icon>
       </button>
     </div>
-    <div *ngIf="isHomePageLoaded">
+    <div *ngIf="isHomeEnabled">
       <button ion-fab (click)="actionRequest(actions.Home, fabMenu)" class="home">
         <ion-icon class="material-icons">home</ion-icon>
       </button>

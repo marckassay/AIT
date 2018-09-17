@@ -25,6 +25,7 @@ import { HomeAction, HomeEmission, HomeDisplayPage } from '../pages/home-display
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './core/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
 import { AITBrightness } from './core/AITBrightness';
+import { HomeDisplayService } from '../services/home-display.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -46,6 +47,7 @@ export class App {
   protected isFirstViewing: boolean;
 
   constructor(private platform: Platform,
+    private homeService: HomeDisplayService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private statusBar: StatusBar,
     private screenOrientation: ScreenOrientation,
@@ -60,6 +62,11 @@ export class App {
     });
 
     this.isFirstViewing = true;
+    this.homeService.observable.subscribe({
+      complete: () => {
+        this.createComponentForLeftMenu();
+      }
+    });
     this.checkAppStartupData(5);
   }
 
@@ -112,17 +119,21 @@ export class App {
     }
 
     // TODO: add failed promise block
-    this.navCtrl.setRoot(displayPage, { id: uuid, rightmenu: this.rightMenuInnerHTML, isHomePageCreated: this.leftMenuInnerHTML.length }, { updateUrl: false, isNavRoot: true }).then(() => {
-      if (!this.isFirstViewing) {
-        this.menuCtrl.toggle('left').then(() => {
-          this.storage.setCurrentUUID(uuid);
-        });
-      } else {
-        this.isFirstViewing = false;
-      }
-
-      this.createComponentForLeftMenu();
-    });
+    this.navCtrl.setRoot(displayPage, {
+      id: uuid,
+      rightmenu: this.rightMenuInnerHTML
+    }, {
+        updateUrl: false,
+        isNavRoot: true
+      }).then(() => {
+        if (!this.isFirstViewing) {
+          this.menuCtrl.toggle('left').then(() => {
+            this.storage.setCurrentUUID(uuid);
+          });
+        } else {
+          this.isFirstViewing = false;
+        }
+      });
   }
 
   createComponentForLeftMenu() {

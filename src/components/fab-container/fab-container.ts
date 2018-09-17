@@ -33,9 +33,11 @@ export enum FabAction {
 }
 
 export enum FabState {
-  Completed,
-  Start,
-  Pause,
+  Completed = 2,
+  Start = 4,
+  Pause = 8,
+  ProgramEnabled = 16,
+  HomeEnabled = 32,
 }
 
 @Component({
@@ -51,17 +53,12 @@ export class FabContainerComponent {
   get viewState(): FabState {
     return this._viewState;
   }
+  @Input('viewState')
   set viewState(value: FabState) {
     this._viewState = value;
   }
 
   public actions = FabAction;
-
-  @Input()
-  isSettingsPageLoaded: Boolean;
-
-  @Input()
-  isHomePageLoaded: Boolean;
 
   constructor() {
     this._viewState = FabState.Start;
@@ -85,5 +82,9 @@ export class FabContainerComponent {
 
   completed(): void {
     this.viewState = FabState.Completed;
+  }
+
+  isHomeEnabled() {
+    return this.viewState & FabState.HomeEnabled;
   }
 }

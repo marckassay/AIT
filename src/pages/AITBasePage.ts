@@ -28,6 +28,7 @@ import { SotsForAit } from '../app/core/SotsForAit';
 import { SequenceStates } from '../app/core/SotsUtil';
 import { AITBrightness } from '../app/core/AITBrightness';
 import { AITBaseSettingsPage } from './AITBaseSettingsPage';
+import { HomeDisplayService } from '../services/home-display.service';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -54,6 +55,7 @@ export class AITBasePage implements OnInit {
     @Optional() protected ngDectector: ChangeDetectorRef,
     @Optional() protected navParams: NavParams,
     @Optional() protected navCtrl: NavController,
+    @Optional() protected homeService: HomeDisplayService,
     @Optional() protected screenOrientation: ScreenOrientation,
     @Optional() protected storage: AITStorage,
     @Optional() protected menuCtrl: MenuController,
@@ -164,16 +166,14 @@ export class AITBasePage implements OnInit {
       componentInstance.instance.uuid = this.navParams.data.id;
     }
 
+    this.menu.viewState += this.menu.states.ProgramEnabled;
     this.menuCtrl.get('right').enabled = true;
   }
 
   private aitCreateHomePage() {
-    const isHomePageCreated: boolean = this.navParams.data.isHomePageCreated;
-    if (!isHomePageCreated) {
-      // TODO: create a singleton/injector handle an observable to subscribe/unsubscribe to create
-      // homedisplaypage.
-    }
+    this.homeService.notifiyAppOfCompletion();
 
+    this.menu.viewState += this.menu.states.HomeEnabled;
     this.menuCtrl.get('left').enabled = true;
   }
 
