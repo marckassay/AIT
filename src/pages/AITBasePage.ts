@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { UUIDData } from '../app/app.component';
-import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
+import { FabAction, FabContainerComponent, FabEmission, FabState } from '../components/fab-container/fab-container';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../app/core/AITStorage';
@@ -45,6 +45,7 @@ export class AITBasePage implements OnInit {
   // this type assignment to variable is for angular view
   // can access enum values.
   protected states = SequenceStates;
+  // TODO: create a accessor and mutator and tie in FabContainerComponent viewState too.
   protected viewState: SequenceStates;
   protected sots: SotsForAit;
   protected grandTime: string;
@@ -131,7 +132,7 @@ export class AITBasePage implements OnInit {
     this.aitSubscribeTimer();
     this.aitCreateSettingsPage();
     this.aitCreateHomePage();
-
+    this.menu.setToLoadedMode();
     this.ngDectector.detectChanges();
   }
 
@@ -143,7 +144,7 @@ export class AITBasePage implements OnInit {
   private aitResetTimer = () => {
     this.sots.sequencer.reset();
   }
-  // demo showing inhertiance issue: https://stackblitz.com/edit/typescript-ahw7ht
+
   protected aitSubscribeTimer(): void {
     if (this.isFirstViewing) {
       setTimeout(() => {
@@ -151,8 +152,6 @@ export class AITBasePage implements OnInit {
         this.isFirstViewing = false;
       }, 200);
     }
-
-    this.menu.reset();
   }
 
   protected aitCreateSettingsPage(settingsPage?: any) {
@@ -166,14 +165,14 @@ export class AITBasePage implements OnInit {
       componentInstance.instance.uuid = this.navParams.data.id;
     }
 
-    this.menu.viewState += this.menu.states.ProgramEnabled;
+    this.menu.setProgramButtonToVisible();
     this.menuCtrl.get('right').enabled = true;
   }
 
   private aitCreateHomePage() {
     this.homeService.notifiyAppOfCompletion();
 
-    this.menu.viewState += this.menu.states.HomeEnabled;
+    this.menu.setHomeButtonToVisible();
     this.menuCtrl.get('left').enabled = true;
   }
 
@@ -182,6 +181,7 @@ export class AITBasePage implements OnInit {
     this.menuCtrl.enable(!value, 'right');
 
     (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
+    // (value) ? this.menu.setToRunningMode() : this.menu.setToReadyMode();
 
     setTimeout(() => {
       (value) ? this.statusBar.hide() : this.statusBar.show();

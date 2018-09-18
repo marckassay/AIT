@@ -81,7 +81,7 @@ export class TimerDisplayPage extends AITBasePage {
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
 
-        this.menu.completed();
+        this.menu.setToCompletedMode();
 
         this.ngDectector.detectChanges();
 
@@ -92,7 +92,7 @@ export class TimerDisplayPage extends AITBasePage {
         this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
         this.aitSetViewInRunningMode(false);
-        this.menu.completed();
+        this.menu.setToCompletedMode();
 
         this.ngDectector.detectChanges();
       }

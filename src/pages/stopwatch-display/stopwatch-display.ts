@@ -81,6 +81,7 @@ export class StopwatchDisplayPage extends AITBasePage {
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
 
+        this.menu.setToCompletedMode();
         this.ngDectector.detectChanges();
 
         throw error;

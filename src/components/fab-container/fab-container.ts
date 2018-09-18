@@ -33,11 +33,12 @@ export enum FabAction {
 }
 
 export enum FabState {
-  Completed = 2,
-  Start = 4,
-  Pause = 8,
-  ProgramEnabled = 16,
-  HomeEnabled = 32,
+  Loading = 1,
+  Ready = 1 << 2,
+  Running = 1 << 3,
+  Completed = 1 << 4,
+  ProgramVisible = 1 << 5,
+  HomeVisible = 1 << 6
 }
 
 @Component({
@@ -53,22 +54,21 @@ export class FabContainerComponent {
   get viewState(): FabState {
     return this._viewState;
   }
-  @Input('viewState')
   set viewState(value: FabState) {
     this._viewState = value;
   }
 
+  // this is for template can access FabAction enum members
   public actions = FabAction;
 
-  constructor() {
-    this._viewState = FabState.Start;
-  }
+  constructor() { }
 
   actionRequest(action: FabAction, fabMenu: FabContainer) {
+    // if action is Start, which only exists in the Ready state, set the state to Running
     if (action === FabAction.Start) {
-      this.viewState = FabState.Pause;
+      this.setToRunningMode();
     } else if ((action === FabAction.Pause) || (action === FabAction.Reset)) {
-      this.viewState = FabState.Start;
+      this.setToReadyMode();
     }
 
     if (action !== FabAction.Main) {
@@ -76,15 +76,68 @@ export class FabContainerComponent {
     }
   }
 
-  reset(): void {
-    this.viewState = FabState.Start;
+  /*
+  Public methods to set viewState to modes and by preserving 'secondary' modes specifically; Home
+  Program
+  */
+  setToLoadedMode(): void {
+    this.viewState |= FabState.Loading;
+    this.setToReadyMode();
   }
 
-  completed(): void {
-    this.viewState = FabState.Completed;
+  private setToReadyMode(): void {
+    if ((this.viewState & FabState.Loading) || (this.viewState & FabState.Completed)) {
+      this.viewState &= ~FabState.Loading;
+      this.viewState &= ~FabState.Completed;
+
+      this.viewState |= FabState.Ready;
+    }
   }
 
-  isHomeEnabled() {
-    return this.viewState & FabState.HomeEnabled;
+  private setToRunningMode(): void {
+    if (this.viewState & FabState.Ready) {
+      this.viewState &= ~FabState.Ready;
+
+      this.viewState |= FabState.Running;
+    }
+  }
+
+  setToCompletedMode(): void {
+    if (this.viewState & FabState.Running) {
+      this.viewState &= ~FabState.Running;
+
+      this.viewState |= FabState.Completed;
+    }
+  }
+
+  setHomeButtonToVisible(): void {
+    this.viewState |= FabState.HomeVisible;
+  }
+
+  setProgramButtonToVisible(): void {
+    this.viewState |= FabState.ProgramVisible;
+  }
+
+  /*
+  The following 'isX' properties are for the template to evaluate what buttons are to be shown.
+  */
+  public get isStartVisible() {
+    return (this.viewState & FabState.Ready) > 0;
+  }
+
+  public get isPauseVisible() {
+    return (this.viewState & FabState.Running) > 0;
+  }
+
+  public get isResetVisible() {
+    return ((this.viewState & FabState.Running) > 0 || (this.viewState & FabState.Completed) > 0);
+  }
+
+  public get isProgramVisible() {
+    return (this.viewState & FabState.ProgramVisible) > 0;
+  }
+
+  public get isHomeVisible() {
+    return (this.viewState & FabState.HomeVisible) > 0;
   }
 }
