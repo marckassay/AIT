@@ -86,12 +86,14 @@ export class FabContainerComponent {
   }
 
   private setToReadyMode(): void {
-    if ((this.viewState & FabState.Loading) || (this.viewState & FabState.Completed)) {
+    if (this.viewState & FabState.Loading) {
       this.viewState &= ~FabState.Loading;
+    } else if (this.viewState & FabState.Completed) {
       this.viewState &= ~FabState.Completed;
-
-      this.viewState |= FabState.Ready;
+    } else if (this.viewState & FabState.Running) {
+      this.viewState &= ~FabState.Running;
     }
+    this.viewState |= FabState.Ready;
   }
 
   private setToRunningMode(): void {
