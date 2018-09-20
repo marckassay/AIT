@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, ChangeDetectorRef } from '@angular/core';
 import { FabContainer } from 'ionic-angular';
 
 export interface FabEmission {
@@ -36,9 +36,10 @@ export enum FabState {
   Loading = 1,
   Ready = 1 << 2,
   Running = 1 << 3,
-  Completed = 1 << 4,
-  ProgramVisible = 1 << 5,
-  HomeVisible = 1 << 6
+  Paused = 1 << 4,
+  Completed = 1 << 5,
+  ProgramVisible = 1 << 6,
+  HomeVisible = 1 << 7
 }
 
 @Component({
@@ -61,13 +62,19 @@ export class FabContainerComponent {
   // this is for template can access FabAction enum members
   public actions = FabAction;
 
-  constructor() { }
+  constructor(protected ngDectector: ChangeDetectorRef) { }
 
   actionRequest(action: FabAction, fabMenu: FabContainer) {
-    // if action is Start, which only exists in the Ready state, set the state to Running
     if (action === FabAction.Start) {
+      // if action is Start, which exists in the Ready and Paused state, set the state to 'Running'
       this.setToRunningMode();
-    } else if ((action === FabAction.Pause) || (action === FabAction.Reset)) {
+    }
+    // else if action is Pause, which only exists in the Running state, set the state to 'Paused'
+    else if (action === FabAction.Pause) {
+      this.setToPausedMode();
+    }
+    // else if action is Reset, which only exists in the Paused and Completed states, set to 'Ready'
+    else if (action === FabAction.Reset) {
       this.setToReadyMode();
     }
 
@@ -77,8 +84,8 @@ export class FabContainerComponent {
   }
 
   /*
-  Public methods to set viewState to modes and by preserving 'secondary' modes specifically; Home
-  Program
+  methods to set viewState to modes and by preserving 'secondary' modes specifically; Home
+  Program Button visibility.
   */
   setToLoadedMode(): void {
     this.viewState |= FabState.Loading;
@@ -90,18 +97,35 @@ export class FabContainerComponent {
       this.viewState &= ~FabState.Loading;
     } else if (this.viewState & FabState.Completed) {
       this.viewState &= ~FabState.Completed;
-    } else if (this.viewState & FabState.Running) {
-      this.viewState &= ~FabState.Running;
+    } else if (this.viewState & FabState.Paused) {
+      this.viewState &= ~FabState.Paused;
     }
+
     this.viewState |= FabState.Ready;
+
+    this.ngDectector.detectChanges();
   }
 
   private setToRunningMode(): void {
     if (this.viewState & FabState.Ready) {
       this.viewState &= ~FabState.Ready;
-
-      this.viewState |= FabState.Running;
+    } else if (this.viewState & FabState.Paused) {
+      this.viewState &= ~FabState.Paused;
     }
+
+    this.viewState |= FabState.Running;
+
+    this.ngDectector.detectChanges();
+  }
+
+  private setToPausedMode(): void {
+    if (this.viewState & FabState.Running) {
+      this.viewState &= ~FabState.Running;
+
+      this.viewState |= FabState.Paused;
+    }
+
+    this.ngDectector.detectChanges();
   }
 
   setToCompletedMode(): void {
@@ -110,6 +134,8 @@ export class FabContainerComponent {
 
       this.viewState |= FabState.Completed;
     }
+
+    this.ngDectector.detectChanges();
   }
 
   setHomeButtonToVisible(): void {
@@ -124,7 +150,7 @@ export class FabContainerComponent {
   The following 'isX' properties are for the template to evaluate what buttons are to be shown.
   */
   public get isStartVisible() {
-    return (this.viewState & FabState.Ready) > 0;
+    return ((this.viewState & FabState.Ready) > 0 || (this.viewState & FabState.Paused) > 0);
   }
 
   public get isPauseVisible() {
@@ -132,7 +158,7 @@ export class FabContainerComponent {
   }
 
   public get isResetVisible() {
-    return ((this.viewState & FabState.Running) > 0 || (this.viewState & FabState.Completed) > 0);
+    return ((this.viewState & FabState.Paused) > 0 || (this.viewState & FabState.Completed) > 0);
   }
 
   public get isProgramVisible() {
