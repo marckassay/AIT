@@ -18,7 +18,7 @@
 import { IonicPage } from 'ionic-angular';
 import { IntervalStorageData } from '../../app/app.component';
 import { Component, Input } from '@angular/core';
-import { SequenceStates } from '../../app/core/SotsUtil';
+import { SequenceStates } from '../../providers/SotsUtil';
 import { TimeEmission } from 'sots';
 import { AITBasePage } from '../AITBasePage';
 import { ViewChild } from '@angular/core';

@@ -17,7 +17,7 @@
 */
 import { ChangeDetectorRef, OnInit, Optional } from '@angular/core';
 import { MenuController, ToastController } from 'ionic-angular';
-import { AITStorage } from '../app/core/AITStorage';
+import { AITStorage } from '../providers/AITStorage';
 import { AppStorageData, UUIDData } from '../app/app.component';
 
 export class AITBaseSettingsPage implements OnInit {

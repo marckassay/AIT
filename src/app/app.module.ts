@@ -5,16 +5,16 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { App } from './app.component';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { ThemeSettingsProvider } from './core/ThemeSettingsProvider';
+import { ThemeSettingsProvider } from '../providers/ThemeSettingsProvider';
 import { IonicStorageModule } from '@ionic/storage';
-import { AITStorage } from './core/AITStorage';
+import { AITStorage } from '../providers/AITStorage';
 import { Vibration } from '@ionic-native/vibration';
-import { AITBrightness } from './core/AITBrightness';
+import { AITBrightness } from '../providers/AITBrightness';
 import { Brightness } from '@ionic-native/brightness';
-import { AITSignal } from './core/AITSignal';
+import { AITSignal } from '../providers/AITSignal';
 import { BrowserModule } from '@angular/platform-browser';
 import { HomeDisplayPageModule } from '../pages/home-display/home-display.module';
-import { HomeDisplayService } from '../services/home-display.service';
+import { HomeDisplayService } from '../providers/home-display.service';
 
 @NgModule({
   declarations: [App],

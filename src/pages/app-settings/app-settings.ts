@@ -18,11 +18,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
 import { AppStorageData } from '../../app/app.component';
-import { AITStorage } from '../../app/core/AITStorage';
-import { AITBrightness } from '../../app/core/AITBrightness';
-import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../../app/core/ThemeSettingsProvider';
+import { AITStorage } from '../../providers/AITStorage';
+import { AITBrightness } from '../../providers/AITBrightness';
+import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../../providers/ThemeSettingsProvider';
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
-import { AITSignal } from '../../app/core/AITSignal';
+import { AITSignal } from '../../providers/AITSignal';
 
 @IonicPage()
 @Component({

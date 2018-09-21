@@ -20,7 +20,7 @@ import { AITVibrate } from './AITVibrate';
 import { AITSound } from './AITSound';
 import { Injectable } from '@angular/core';
 import { AITStorage } from './AITStorage';
-import { AppStorageData } from '../app.component';
+import { AppStorageData } from '../app/app.component';
 
 @Injectable()
 export class AITSignal {

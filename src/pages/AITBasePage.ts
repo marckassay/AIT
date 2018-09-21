@@ -19,16 +19,16 @@ import { UUIDData } from '../app/app.component';
 import { FabAction, FabContainerComponent, FabEmission, FabState } from '../components/fab-container/fab-container';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
-import { AITStorage } from '../app/core/AITStorage';
-import { AITSignal } from '../app/core/AITSignal';
+import { AITStorage } from '../providers/AITStorage';
+import { AITSignal } from '../providers/AITSignal';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { SotsForAit } from '../app/core/SotsForAit';
-import { SequenceStates } from '../app/core/SotsUtil';
-import { AITBrightness } from '../app/core/AITBrightness';
+import { SotsForAit } from '../providers/SotsForAit';
+import { SequenceStates } from '../providers/SotsUtil';
+import { AITBrightness } from '../providers/AITBrightness';
 import { AITBaseSettingsPage } from './AITBaseSettingsPage';
-import { HomeDisplayService } from '../services/home-display.service';
+import { HomeDisplayService } from '../providers/home-display.service';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)

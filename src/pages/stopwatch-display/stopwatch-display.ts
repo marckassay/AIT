@@ -19,7 +19,7 @@ import { Component, Input } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 
 import { AITBasePage } from '../AITBasePage';
-import { SequenceStates } from '../../app/core/SotsUtil';
+import { SequenceStates } from '../../providers/SotsUtil';
 import { TimeEmission } from 'sots';
 import { StopwatchStorageData } from '../../app/app.component';
 import { StopwatchSettingsPage } from '../stopwatch-settings/stopwatch-settings';
