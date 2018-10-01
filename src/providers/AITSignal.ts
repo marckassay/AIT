@@ -19,8 +19,8 @@ import { Vibration } from '@ionic-native/vibration';
 import { AITVibrate } from './AITVibrate';
 import { AITSound } from './AITSound';
 import { Injectable } from '@angular/core';
-import { AITStorage } from './AITStorage';
-import { AppStorageData } from '../app/app.component';
+import { AITStorage } from './storage/ait.storage.service';
+import { AppStorageData } from '../providers/storage/ait.storage.interfaces';
 
 @Injectable()
 export class AITSignal {

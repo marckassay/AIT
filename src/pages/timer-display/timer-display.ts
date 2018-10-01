@@ -20,7 +20,7 @@ import { IonicPage } from 'ionic-angular';
 import { AITBasePage } from '../AITBasePage';
 import { SequenceStates } from '../../providers/SotsUtil';
 import { TimeEmission } from 'sots';
-import { TimerStorageData } from '../../app/app.component';
+import { TimerStorageData } from '../../providers/storage/ait.storage.interfaces';
 import { TimerSettingsPage } from '../timer-settings/timer-settings';
 
 @IonicPage()

@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Component, Input } from '@angular/core';
-import { Limits } from '../../app/app.component';
+import { Limits } from '../../providers/storage/ait.storage.interfaces';
 import { SequenceStates } from '../../providers/SotsUtil';
 
 @Component({

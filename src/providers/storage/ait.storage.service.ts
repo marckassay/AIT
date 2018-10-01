@@ -17,7 +17,7 @@
 */
 import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
-import { IntervalStorageData, TimerStorageData, UUIDData } from '../app/app.component';
+import { IntervalStorageData, TimerStorageData, UUIDData } from './ait.storage.interfaces';
 
 @Injectable()
 export class AITStorage {

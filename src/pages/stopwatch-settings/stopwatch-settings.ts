@@ -17,7 +17,7 @@
 */
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
-import { StopwatchStorageData } from '../../app/app.component';
+import { StopwatchStorageData } from '../../providers/storage/ait.storage.interfaces';
 import { AITBaseSettingsPage } from '../AITBaseSettingsPage';
 
 @IonicPage()

@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { CountdownSegment, CountupSegment, Sequencer, TimeEmission, add } from 'sots';
-import { CountdownWarnings } from '../app/app.component';
+import { CountdownWarnings } from '../providers/storage/ait.storage.interfaces';
 import { PartialObserver } from 'rxjs/Observer';
 import { ISotsForAit, SequenceStates, SotsUtil } from './SotsUtil';
 import * as moment from 'moment';

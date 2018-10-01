@@ -18,7 +18,7 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import * as moment from 'moment';
-import { TimerStorageData } from '../../app/app.component';
+import { TimerStorageData } from '../../providers/storage/ait.storage.interfaces';
 import { AITBaseSettingsPage } from '../AITBaseSettingsPage';
 import { Moment } from 'moment';
 
