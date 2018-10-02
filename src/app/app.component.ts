@@ -24,7 +24,7 @@ import { AITStorage } from '../providers/storage/ait.storage.service';
 import { HomeAction, HomeEmission, HomeDisplayPage } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../providers/ThemeSettingsProvider';
 import { Observable } from 'rxjs/Observable';
-import { AITBrightness } from '../providers/AITBrightness';
+import { AITBrightness } from '../providers/ait.screen';
 import { HomeDisplayService } from '../providers/home-display.service';
 
 @Component({

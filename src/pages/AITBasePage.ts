@@ -26,7 +26,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SotsForAit } from '../providers/SotsForAit';
 import { SequenceStates } from '../providers/SotsUtil';
-import { AITBrightness } from '../providers/AITBrightness';
+import { AITBrightness } from '../providers/ait.screen';
 import { AITBaseSettingsPage } from './AITBaseSettingsPage';
 import { HomeDisplayService } from '../providers/home-display.service';
 

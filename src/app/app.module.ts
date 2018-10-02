@@ -9,7 +9,7 @@ import { ThemeSettingsProvider } from '../providers/ThemeSettingsProvider';
 import { IonicStorageModule } from '@ionic/storage';
 import { AITStorage } from '../providers/storage/ait.storage.service';
 import { Vibration } from '@ionic-native/vibration';
-import { AITBrightness } from '../providers/AITBrightness';
+import { AITBrightness } from '../providers/ait.screen';
 import { Brightness } from '@ionic-native/brightness';
 import { AITSignal } from '../providers/AITSignal';
 import { BrowserModule } from '@angular/platform-browser';
