@@ -17,15 +17,16 @@
 */
 import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { APP_SETTINGS_PAGE, INTERVAL_DISPLAY_PAGE, TIMER_DISPLAY_PAGE, STOPWATCH_DISPLAY_PAGE } from '../pages/pages.constants';
+import { APP_SETTINGS_PAGE, INTERVAL_DISPLAY_PAGE, TIMER_DISPLAY_PAGE, STOPWATCH_DISPLAY_PAGE } from '../pages/ait-constants.page';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MenuController, Nav, Platform } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait.storage.service';
 import { HomeAction, HomeEmission, HomeDisplayPage } from '../pages/home-display/home-display';
-import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../providers/ThemeSettingsProvider';
+import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../providers/theme-settings.provider';
 import { Observable } from 'rxjs/Observable';
-import { AITBrightness } from '../providers/ait.screen';
+import { AITBrightness } from '../providers/ait-screen';
 import { HomeDisplayService } from '../providers/home-display.service';
+import { AppStorageData, UUIDData } from '../providers/storage/ait.storage.interfaces';
 
 @Component({
   templateUrl: 'app.html'

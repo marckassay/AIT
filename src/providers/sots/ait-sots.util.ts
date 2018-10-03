@@ -1,5 +1,5 @@
 import { Sequencer } from 'sots';
-import { CountdownWarnings } from '../providers/storage/ait.storage.interfaces';
+import { CountdownWarnings } from '../storage/ait.storage.interfaces';
 
 export enum SequenceStates {
   SingleBeep = 2,

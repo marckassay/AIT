@@ -18,9 +18,9 @@
 import { IonicPage } from 'ionic-angular';
 import { IntervalStorageData } from '../../providers/storage/ait.storage.interfaces';
 import { Component, Input } from '@angular/core';
-import { SequenceStates } from '../../providers/SotsUtil';
+import { SequenceStates } from '../../providers/sots/ait-sots.util';
 import { TimeEmission } from 'sots';
-import { AITBasePage } from '../AITBasePage';
+import { AITBasePage } from '../ait-base.page';
 import { ViewChild } from '@angular/core';
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 import { IntervalSettingsPage } from '../interval-settings/interval-settings';

@@ -16,18 +16,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { UUIDData } from '../providers/storage/ait.storage.interfaces';
-import { FabAction, FabContainerComponent, FabEmission, FabState } from '../components/fab-container/fab-container';
+import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait.storage.service';
-import { AITSignal } from '../providers/AITSignal';
+import { AITSignal } from '../providers/ait-signal';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { SotsForAit } from '../providers/SotsForAit';
-import { SequenceStates } from '../providers/SotsUtil';
-import { AITBrightness } from '../providers/ait.screen';
-import { AITBaseSettingsPage } from './AITBaseSettingsPage';
+import { SotsForAit } from '../providers/sots/ait-sots';
+import { SequenceStates } from '../providers/sots/ait-sots.util';
+import { AITBrightness } from '../providers/ait-screen';
+import { AITBaseSettingsPage } from './ait-basesettings.page';
 import { HomeDisplayService } from '../providers/home-display.service';
 
 export class AITBasePage implements OnInit {

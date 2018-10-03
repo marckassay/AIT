@@ -16,11 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Vibration } from '@ionic-native/vibration';
-import { AITVibrate } from './AITVibrate';
-import { AITSound } from './AITSound';
+import { AITVibrate } from './ait-vibrate';
+import { AITSound } from './ait-sound';
 import { Injectable } from '@angular/core';
 import { AITStorage } from './storage/ait.storage.service';
-import { AppStorageData } from '../providers/storage/ait.storage.interfaces';
+import { AppStorageData } from './storage/ait.storage.interfaces';
 
 @Injectable()
 export class AITSignal {
