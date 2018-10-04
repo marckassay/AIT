@@ -21,7 +21,7 @@ import { IonicPage } from 'ionic-angular';
 import { AITBasePage } from '../ait-base.page';
 import { SequenceStates } from '../../providers/sots/ait-sots.util';
 import { TimeEmission } from 'sots';
-import { StopwatchStorageData } from '../../providers/storage/ait.storage.interfaces';
+import { StopwatchStorageData } from '../../providers/storage/ait-storage.interfaces';
 import { StopwatchSettingsPage } from '../stopwatch-settings/stopwatch-settings';
 
 @IonicPage()

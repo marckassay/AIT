@@ -17,8 +17,8 @@
 */
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
-import { AppStorageData } from '../../providers/storage/ait.storage.interfaces';
-import { AITStorage } from '../../providers/storage/ait.storage.service';
+import { AppStorageData } from '../../providers/storage/ait-storage.interfaces';
+import { AITStorage } from '../../providers/storage/ait-storage.service';
 import { AITBrightness } from '../../providers/ait-screen';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../../providers/theme-settings.provider';
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';

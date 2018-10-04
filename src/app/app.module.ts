@@ -7,7 +7,7 @@ import { App } from './app.component';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { ThemeSettingsProvider } from '../providers/theme-settings.provider';
 import { IonicStorageModule } from '@ionic/storage';
-import { AITStorage } from '../providers/storage/ait.storage.service';
+import { AITStorage } from '../providers/storage/ait-storage.service';
 import { Vibration } from '@ionic-native/vibration';
 import { AITBrightness } from '../providers/ait-screen';
 import { Brightness } from '@ionic-native/brightness';

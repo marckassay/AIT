@@ -17,8 +17,8 @@
 */
 import { Brightness } from '@ionic-native/brightness';
 import { Injectable } from '@angular/core';
-import { AITStorage } from './storage/ait.storage.service';
-import { AppStorageData, UUIDData } from './storage/ait.storage.interfaces';
+import { AITStorage } from './storage/ait-storage.service';
+import { AppStorageData, UUIDData } from './storage/ait-storage.interfaces';
 
 @Injectable()
 export class AITBrightness {

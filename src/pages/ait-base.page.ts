@@ -15,11 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { UUIDData } from '../providers/storage/ait.storage.interfaces';
+import { UUIDData } from '../providers/storage/ait-storage.interfaces';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { MenuController, NavController, NavParams } from 'ionic-angular';
-import { AITStorage } from '../providers/storage/ait.storage.service';
+import { AITStorage } from '../providers/storage/ait-storage.service';
 import { AITSignal } from '../providers/ait-signal';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { SplashScreen } from '@ionic-native/splash-screen';

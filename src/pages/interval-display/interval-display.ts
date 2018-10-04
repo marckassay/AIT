@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { IonicPage } from 'ionic-angular';
-import { IntervalStorageData } from '../../providers/storage/ait.storage.interfaces';
+import { IntervalStorageData } from '../../providers/storage/ait-storage.interfaces';
 import { Component, Input } from '@angular/core';
 import { SequenceStates } from '../../providers/sots/ait-sots.util';
 import { TimeEmission } from 'sots';
