@@ -156,14 +156,12 @@ export class AITBasePage implements OnInit {
 
   protected aitCreateSettingsPage(settingsPage?: any) {
     const rightMenuInnerHTML: ViewContainerRef = this.navParams.data.rightmenu;
-    if (!rightMenuInnerHTML.length) {
+    rightMenuInnerHTML.clear();
 
-      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-      rightMenuInnerHTML.clear();
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
 
-      const componentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-      componentInstance.instance.uuid = this.navParams.data.id;
-    }
+    const componentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+    componentInstance.instance.uuid = this.navParams.data.id;
 
     this.menu.setProgramButtonToVisible();
     this.menuCtrl.get('right').enabled = true;

@@ -119,7 +119,6 @@ export class App {
       displayPage = STOPWATCH_DISPLAY_PAGE;
     }
 
-    // TODO: add failed promise block
     this.navCtrl.setRoot(displayPage, {
       id: uuid,
       rightmenu: this.rightMenuInnerHTML
@@ -130,10 +129,14 @@ export class App {
         if (!this.isFirstViewing) {
           this.menuCtrl.toggle('left').then(() => {
             this.storage.setCurrentUUID(uuid);
+          }, (reason) => {
+            console.error(reason);
           });
         } else {
           this.isFirstViewing = false;
         }
+      }, (reason) => {
+        console.error(reason);
       });
   }
 
