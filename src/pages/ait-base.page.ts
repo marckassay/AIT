@@ -18,7 +18,7 @@
 import { UUIDData } from '../providers/storage/ait-storage.interfaces';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
-import { MenuController, NavController, NavParams } from 'ionic-angular';
+import { MenuController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 import { AITSignal } from '../providers/ait-signal';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
@@ -55,7 +55,6 @@ export class AITBasePage implements OnInit {
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
     @Optional() protected ngDectector: ChangeDetectorRef,
     @Optional() protected navParams: NavParams,
-    @Optional() protected navCtrl: NavController,
     @Optional() protected homeService: HomeDisplayService,
     @Optional() protected screenOrientation: ScreenOrientation,
     @Optional() protected storage: AITStorage,
@@ -75,8 +74,6 @@ export class AITBasePage implements OnInit {
     });
 
     if (this.isFirstViewing) {
-      this.menuCtrl.enable(false);
-
       this.setViewAndLoadData();
     }
   }
@@ -95,8 +92,9 @@ export class AITBasePage implements OnInit {
     }
   }
 
-  // keep open for subclasses
-  ionViewDidEnter() { }
+  ionViewDidEnter() {
+    this.aitSetViewInRunningMode(false);
+  }
 
   private setViewAndLoadData = () => {
     this.aitLoadData();
@@ -164,14 +162,12 @@ export class AITBasePage implements OnInit {
     componentInstance.instance.uuid = this.navParams.data.id;
 
     this.menu.setProgramButtonToVisible();
-    this.menuCtrl.get('right').enabled = true;
   }
 
   private aitCreateHomePage() {
     this.homeService.notifiyAppOfCompletion();
 
     this.menu.setHomeButtonToVisible();
-    this.menuCtrl.get('left').enabled = true;
   }
 
   protected aitSetViewInRunningMode(value: boolean) {
@@ -179,7 +175,6 @@ export class AITBasePage implements OnInit {
     this.menuCtrl.enable(!value, 'right');
 
     (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
-    // (value) ? this.menu.setToRunningMode() : this.menu.setToReadyMode();
 
     setTimeout(() => {
       (value) ? this.statusBar.hide() : this.statusBar.show();

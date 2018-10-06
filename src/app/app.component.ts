@@ -27,6 +27,7 @@ import { Observable } from 'rxjs/Observable';
 import { AITBrightness } from '../providers/ait-screen';
 import { HomeDisplayService } from '../providers/home-display.service';
 import { AppStorageData, UUIDData } from '../providers/storage/ait-storage.interfaces';
+import { AITBasePage } from '../pages/ait-base.page';
 
 @Component({
   templateUrl: 'app.html'
@@ -119,7 +120,7 @@ export class App {
       displayPage = STOPWATCH_DISPLAY_PAGE;
     }
 
-    this.navCtrl.setRoot(displayPage, {
+    this.navCtrl.push(displayPage, {
       id: uuid,
       rightmenu: this.rightMenuInnerHTML
     }, {
@@ -132,6 +133,7 @@ export class App {
           }, (reason) => {
             console.error(reason);
           });
+
         } else {
           this.isFirstViewing = false;
         }
@@ -155,25 +157,25 @@ export class App {
   }
 
   onHomeAction(emission: HomeEmission) {
-    const currentPage = this.navCtrl.getActive().component;
+    const currentPageName: string = this.navCtrl.getActive().component.name;
 
     switch (emission.action) {
       case HomeAction.IntervalTimer:
-        if (currentPage !== INTERVAL_DISPLAY_PAGE) {
+        if (currentPageName !== INTERVAL_DISPLAY_PAGE) {
           this.setPageToRoot(AITStorage.INITIAL_INTERVAL_ID);
         } else {
           this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Timer:
-        if (currentPage !== TIMER_DISPLAY_PAGE) {
+        if (currentPageName !== TIMER_DISPLAY_PAGE) {
           this.setPageToRoot(AITStorage.INITIAL_TIMER_ID);
         } else {
           this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Stopwatch:
-        if (currentPage !== STOPWATCH_DISPLAY_PAGE) {
+        if (currentPageName !== STOPWATCH_DISPLAY_PAGE) {
           this.setPageToRoot(AITStorage.INITIAL_STOPWATCH_ID);
         } else {
           this.menuCtrl.toggle('left');
