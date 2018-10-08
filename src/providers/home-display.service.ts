@@ -7,7 +7,7 @@ import { dematerialize, publish } from 'rxjs/operators';
 Root Component will inject this service and do the following:
   this.homeservice.observable.subscribe({
     complete: () => {
-      console.log('COMPLETED')
+        this.createComponentForLeftMenu();
     }
   });
 

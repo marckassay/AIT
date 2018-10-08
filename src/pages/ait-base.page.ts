@@ -17,7 +17,7 @@
 */
 import { UUIDData } from '../providers/storage/ait-storage.interfaces';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef, SkipSelf } from '@angular/core';
 import { MenuController, NavParams } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 import { AITSignal } from '../providers/ait-signal';
@@ -32,7 +32,7 @@ import { HomeDisplayService } from '../providers/home-display.service';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
-  protected menu: FabContainerComponent;
+  protected floatingbuttons: FabContainerComponent;
 
   public _uuidData: UUIDData;
 
@@ -59,7 +59,7 @@ export class AITBasePage implements OnInit {
     @Optional() protected homeService: HomeDisplayService,
     @Optional() protected screenOrientation: ScreenOrientation,
     @Optional() protected storage: AITStorage,
-    @Optional() protected menuCtrl: MenuController,
+    @Optional() @SkipSelf() public menuCtrl: MenuController,
     @Optional() protected signal: AITSignal,
     @Optional() protected display: AITBrightness,
     @Optional() protected splashScreen: SplashScreen,
@@ -86,7 +86,7 @@ export class AITBasePage implements OnInit {
   ionViewDidLoad(): void {
     this.createSettingsPage();
     this.createHomePage();
-    this.menu.setToLoadedMode();
+    this.floatingbuttons.setToLoadedMode();
   }
 
   protected createSettingsPage(settingsPage?: any): void {
@@ -98,13 +98,13 @@ export class AITBasePage implements OnInit {
     const componentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
     componentInstance.instance.uuid = this.navParams.data.id;
 
-    this.menu.setProgramButtonToVisible();
+    this.floatingbuttons.setProgramButtonToVisible();
   }
 
   private createHomePage(): void {
     this.homeService.notifiyAppOfCompletion();
 
-    this.menu.setHomeButtonToVisible();
+    this.floatingbuttons.setHomeButtonToVisible();
   }
 
   ionViewWillEnter(): void {
@@ -160,7 +160,7 @@ export class AITBasePage implements OnInit {
     this.ngDectector.detectChanges();
   }
 
-  private setViewInRunningMode(value: boolean): void {
+  protected setViewInRunningMode(value: boolean): void {
     this.menuCtrl.enable(!value, 'left');
     this.menuCtrl.enable(!value, 'right');
 

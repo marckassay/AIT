@@ -15,12 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, OnInit, Optional } from '@angular/core';
+import { ChangeDetectorRef, OnInit, Optional, AfterContentInit, SkipSelf } from '@angular/core';
 import { MenuController, ToastController } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 import { AppStorageData, UUIDData } from '../providers/storage/ait-storage.interfaces';
 
-export class AITBaseSettingsPage implements OnInit {
+export class AITBaseSettingsPage implements OnInit, AfterContentInit {
   // set by app.component when component is instantiated
   public uuid: string;
 
@@ -39,20 +39,14 @@ export class AITBaseSettingsPage implements OnInit {
   constructor(@Optional() protected ngDectector: ChangeDetectorRef,
     @Optional() protected storage: AITStorage,
     @Optional() protected menuCtrl: MenuController,
-    @Optional() protected toastCtrl: ToastController) {
-    this.isFirstViewing = true;
-  }
+    @Optional() protected toastCtrl: ToastController) { }
 
   ngOnInit() {
-    this.loadViewData();
+
   }
 
-  ionViewWillEnter() {
-    if (this.isFirstViewing === false) {
-      this.loadViewData();
-    }
-    // need this to refresh the view.
-    this.ngDectector.detectChanges();
+  ngAfterContentInit() {
+    this.loadViewData();
   }
 
   private loadViewData(): void {

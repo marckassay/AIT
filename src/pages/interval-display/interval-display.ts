@@ -100,7 +100,7 @@ export class IntervalDisplayPage extends AITBasePage {
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
 
-        this.menu.setToCompletedMode();
+        this.floatingbuttons.setToCompletedMode();
 
         this.ngDectector.detectChanges();
 
@@ -111,7 +111,7 @@ export class IntervalDisplayPage extends AITBasePage {
         this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
         this.setViewInRunningMode(false);
-        this.menu.setToCompletedMode();
+        this.floatingbuttons.setToCompletedMode();
 
         this.ngDectector.detectChanges();
       }
