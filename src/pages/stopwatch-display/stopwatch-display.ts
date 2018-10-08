@@ -93,7 +93,7 @@ export class StopwatchDisplayPage extends AITBasePage {
     super.aitSubscribeTimer();
   }
 
-  aitCreateSettingsPage() {
-    super.aitCreateSettingsPage(StopwatchSettingsPage);
+  createSettingsPage() {
+    super.createSettingsPage(StopwatchSettingsPage);
   }
 }

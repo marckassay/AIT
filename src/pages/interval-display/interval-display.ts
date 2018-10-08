@@ -110,7 +110,7 @@ export class IntervalDisplayPage extends AITBasePage {
         this.viewState = SequenceStates.Completed;
         this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
-        this.aitSetViewInRunningMode(false);
+        this.setViewInRunningMode(false);
         this.menu.setToCompletedMode();
 
         this.ngDectector.detectChanges();
@@ -120,7 +120,7 @@ export class IntervalDisplayPage extends AITBasePage {
     super.aitSubscribeTimer();
   }
 
-  aitCreateSettingsPage() {
-    super.aitCreateSettingsPage(IntervalSettingsPage);
+  createSettingsPage() {
+    super.createSettingsPage(IntervalSettingsPage);
   }
 }

@@ -91,7 +91,7 @@ export class TimerDisplayPage extends AITBasePage {
         this.viewState = SequenceStates.Completed;
         this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
-        this.aitSetViewInRunningMode(false);
+        this.setViewInRunningMode(false);
         this.menu.setToCompletedMode();
 
         this.ngDectector.detectChanges();
@@ -101,7 +101,7 @@ export class TimerDisplayPage extends AITBasePage {
     super.aitSubscribeTimer();
   }
 
-  aitCreateSettingsPage() {
-    super.aitCreateSettingsPage(TimerSettingsPage);
+  createSettingsPage() {
+    super.createSettingsPage(TimerSettingsPage);
   }
 }

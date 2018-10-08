@@ -35,6 +35,7 @@ export class AITBasePage implements OnInit {
   protected menu: FabContainerComponent;
 
   public _uuidData: UUIDData;
+
   get uuidData(): UUIDData {
     return this._uuidData;
   }
@@ -63,41 +64,55 @@ export class AITBasePage implements OnInit {
     @Optional() protected display: AITBrightness,
     @Optional() protected splashScreen: SplashScreen,
     @Optional() protected statusBar: StatusBar
-  ) {
-    this.sots = new SotsForAit();
-    this.isFirstViewing = true;
-  }
+  ) { }
 
   ngOnInit(): void {
+    this.isFirstViewing = true;
+    this.sots = new SotsForAit();
+
     this.screenOrientation.onChange().subscribe(() => {
       this.ngDectector.detectChanges();
     });
 
-    if (this.isFirstViewing) {
-      this.setViewAndLoadData();
-    }
-  }
-
-  ionViewDidLoad() {
-    // if coming from right sidemenu (or any sidemenu), no 'ionXxx()' will be
-    // called since sidemenus are just menus, not IonicPages.
     this.menuCtrl.get('right').ionClose.debounceTime(125).subscribe(() => {
-      this.setViewAndLoadData();
+      this.aitLoadData();
     });
   }
 
-  ionViewWillEnter() {
-    if (this.isFirstViewing === false) {
-      this.setViewAndLoadData();
-    }
+  /*
+  This event only happens once per page being created. If a page leaves but is cached, then this
+  event will not fire again on a subsequent viewing.
+  */
+  ionViewDidLoad(): void {
+    this.createSettingsPage();
+    this.createHomePage();
+    this.menu.setToLoadedMode();
   }
 
-  ionViewDidEnter() {
-    this.aitSetViewInRunningMode(false);
+  protected createSettingsPage(settingsPage?: any): void {
+    const rightMenuInnerHTML: ViewContainerRef = this.navParams.data.rightmenu;
+    rightMenuInnerHTML.clear();
+
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
+
+    const componentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
+    componentInstance.instance.uuid = this.navParams.data.id;
+
+    this.menu.setProgramButtonToVisible();
   }
 
-  private setViewAndLoadData = () => {
+  private createHomePage(): void {
+    this.homeService.notifiyAppOfCompletion();
+
+    this.menu.setHomeButtonToVisible();
+  }
+
+  ionViewWillEnter(): void {
     this.aitLoadData();
+  }
+
+  ionViewDidEnter(): void {
+    this.setViewInRunningMode(false);
   }
 
   private aitLoadData(): void {
@@ -114,11 +129,10 @@ export class AITBasePage implements OnInit {
             value.hasLastSettingChangedTime = false;
             this.storage.setItem(this.uuidData);
           }
-
-          this.ngDectector.detectChanges();
         } else {
           this.aitBuildTimer();
         }
+
       }).catch(() => {
         // console.log("interval-display preinitializeDisplay error")
       });
@@ -126,87 +140,59 @@ export class AITBasePage implements OnInit {
   }
 
   protected aitBuildTimer(): void {
-    this.aitResetView();
     this.aitSubscribeTimer();
-    this.aitCreateSettingsPage();
-    this.aitCreateHomePage();
-    this.menu.setToLoadedMode();
-    this.ngDectector.detectChanges();
-  }
+    this.aitResetTimer();
 
-  private aitResetView = () => {
-    this.viewState = SequenceStates.Loaded;
-    this.grandTime = this.sots.getGrandTime({ time: -1 });
-  }
-
-  private aitResetTimer = () => {
-    this.sots.sequencer.reset();
-  }
-
-  protected aitSubscribeTimer(): void {
     if (this.isFirstViewing) {
-      setTimeout(() => {
-        this.splashScreen.hide();
-        this.isFirstViewing = false;
-      }, 200);
+      this.isFirstViewing = false;
+      this.splashScreen.hide();
     }
   }
 
-  protected aitCreateSettingsPage(settingsPage?: any) {
-    const rightMenuInnerHTML: ViewContainerRef = this.navParams.data.rightmenu;
-    rightMenuInnerHTML.clear();
+  protected aitSubscribeTimer(): void {
 
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-
-    const componentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-    componentInstance.instance.uuid = this.navParams.data.id;
-
-    this.menu.setProgramButtonToVisible();
   }
 
-  private aitCreateHomePage() {
-    this.homeService.notifiyAppOfCompletion();
-
-    this.menu.setHomeButtonToVisible();
+  private aitResetTimer(): void {
+    this.viewState = SequenceStates.Loaded;
+    this.grandTime = this.sots.getGrandTime({ time: -1 });
+    this.sots.sequencer.reset();
+    this.ngDectector.detectChanges();
   }
 
-  protected aitSetViewInRunningMode(value: boolean) {
+  private setViewInRunningMode(value: boolean): void {
     this.menuCtrl.enable(!value, 'left');
     this.menuCtrl.enable(!value, 'right');
 
     (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
-
-    setTimeout(() => {
-      (value) ? this.statusBar.hide() : this.statusBar.show();
-    }, 500);
+    (value) ? this.statusBar.hide() : this.statusBar.show();
   }
 
   // when this.fabcontainer buttons are clicked, it will first execute code in
   // fabcontainer.component (Child component). afterwards it will execute this function.
-  protected onAction(emission: FabEmission) {
+  protected onAction(emission: FabEmission): void {
     switch (emission.action) {
       case FabAction.Home:
         this.sots.sequencer.pause();
-        this.aitSetViewInRunningMode(false);
+        this.setViewInRunningMode(false);
         this.menuCtrl.open('left');
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
-        this.aitSetViewInRunningMode(false);
+        this.setViewInRunningMode(false);
         this.menuCtrl.open('right');
         break;
       case FabAction.Reset:
-        this.aitResetView();
         this.aitResetTimer();
-        this.aitSetViewInRunningMode(false);
+        this.setViewInRunningMode(false);
         break;
       case FabAction.Start:
         this.sots.sequencer.start();
-        this.aitSetViewInRunningMode(true);
+        this.setViewInRunningMode(true);
         break;
       case FabAction.Pause:
         this.sots.sequencer.pause();
-        this.aitSetViewInRunningMode(false);
+        this.setViewInRunningMode(false);
         break;
     }
     emission.container.close();
