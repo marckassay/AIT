@@ -29,6 +29,8 @@ import { SequenceStates } from '../providers/sots/ait-sots.util';
 import { AITBrightness } from '../providers/ait-screen';
 import { AITBaseSettingsPage } from './ait-basesettings.page';
 import { HomeDisplayService } from '../providers/home-display.service';
+import { Menu } from 'ionic-angular/components/app/menu-interface';
+import { Subscription } from 'rxjs';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -51,6 +53,11 @@ export class AITBasePage implements OnInit {
   protected sots: SotsForAit;
   protected grandTime: string;
   protected isFirstViewing: boolean;
+  private leftmenu: Menu;
+  private rightmenu: Menu;
+  private rightmenuOpenSubscription: Subscription;
+  private rightmenuCloseSubscription: Subscription;
+  private rightmenuComponentInstance: AITBaseSettingsPage;
 
   constructor(
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
@@ -64,7 +71,10 @@ export class AITBasePage implements OnInit {
     @Optional() protected display: AITBrightness,
     @Optional() protected splashScreen: SplashScreen,
     @Optional() protected statusBar: StatusBar
-  ) { }
+  ) {
+    this.leftmenu = this.menuCtrl.get('left');
+    this.rightmenu = this.menuCtrl.get('right');
+  }
 
   ngOnInit(): void {
     this.isFirstViewing = true;
@@ -72,10 +82,6 @@ export class AITBasePage implements OnInit {
 
     this.screenOrientation.onChange().subscribe(() => {
       this.ngDectector.detectChanges();
-    });
-
-    this.menuCtrl.get('right').ionClose.debounceTime(125).subscribe(() => {
-      this.aitLoadData();
     });
   }
 
@@ -95,8 +101,8 @@ export class AITBasePage implements OnInit {
 
     const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
 
-    const componentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent);
-    componentInstance.instance.uuid = this.navParams.data.id;
+    this.rightmenuComponentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent).instance;
+    this.rightmenuComponentInstance.uuid = this.navParams.data.id;
 
     this.floatingbuttons.setProgramButtonToVisible();
   }
@@ -109,10 +115,48 @@ export class AITBasePage implements OnInit {
 
   ionViewWillEnter(): void {
     this.aitLoadData();
+    this.registerMenuEvents();
+  }
+
+  registerMenuEvents(): void {
+    if (this.rightmenuOpenSubscription) {
+      this.rightmenuOpenSubscription.unsubscribe();
+    }
+
+    this.rightmenuOpenSubscription = this.rightmenu.ionOpen.subscribe(() => {
+      this.rightmenuComponentInstance.loadAppData();
+    });
+
+    if (this.rightmenuCloseSubscription) {
+      this.rightmenuCloseSubscription.unsubscribe();
+    }
+    this.rightmenuCloseSubscription = this.rightmenu.ionClose.debounceTime(125).subscribe(() => {
+      this.aitLoadData();
+    });
   }
 
   ionViewDidEnter(): void {
     this.setViewInRunningMode(false);
+  }
+
+  /**
+  This is critical to fully unsubscribe the 2 Subscriptions of this class. When transitioning from
+  one ait page to another, the simlpified call stack below represents this algorhthm:
+    ...
+    createSettingsPage() TimerDisplay
+    ...
+    ionViewWillLeave() IntervalDisplay
+    ...
+    registerMenuEvents() TimerDisplay
+    ...
+
+  In this example, the user goes from IntervalDisplay to TimerDisplay. Upon first viewing of
+  TimerDisplay, the 2 Subscriptions will be undefined for its instance, but the internal list of
+  RxJS will have Subscriptions.
+  */
+  ionViewWillLeave(): void {
+    this.rightmenuOpenSubscription.unsubscribe();
+    this.rightmenuCloseSubscription.unsubscribe();
   }
 
   private aitLoadData(): void {
@@ -149,9 +193,7 @@ export class AITBasePage implements OnInit {
     }
   }
 
-  protected aitSubscribeTimer(): void {
-
-  }
+  protected aitSubscribeTimer(): void { }
 
   private aitResetTimer(): void {
     this.viewState = SequenceStates.Loaded;
@@ -161,8 +203,8 @@ export class AITBasePage implements OnInit {
   }
 
   protected setViewInRunningMode(value: boolean): void {
-    this.menuCtrl.enable(!value, 'left');
-    this.menuCtrl.enable(!value, 'right');
+    this.leftmenu.enable(!value);
+    this.rightmenu.enable(!value);
 
     (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
     (value) ? this.statusBar.hide() : this.statusBar.show();
@@ -175,12 +217,12 @@ export class AITBasePage implements OnInit {
       case FabAction.Home:
         this.sots.sequencer.pause();
         this.setViewInRunningMode(false);
-        this.menuCtrl.open('left');
+        this.leftmenu.open();
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
         this.setViewInRunningMode(false);
-        this.menuCtrl.open('right');
+        this.rightmenu.open();
         break;
       case FabAction.Reset:
         this.aitResetTimer();

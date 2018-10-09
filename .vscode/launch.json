@@ -14,11 +14,11 @@
     {
       "type": "chrome",
       "request": "launch",
+      "port": 9222,
       "name": "Debug AiT",
+      "webRoot": "${workspaceFolder}/src",
       "sourceMaps": true,
-      "preLaunchTask": "ait_serve",
-      "url": "http://localhost:8100",
-      "webRoot": "${workspaceFolder}"
+      "url": "http://localhost:8100"
     }
   ]
 }

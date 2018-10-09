@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, OnInit, Optional, AfterContentInit, SkipSelf } from '@angular/core';
-import { MenuController, ToastController } from 'ionic-angular';
+import { ChangeDetectorRef, OnInit, Optional, AfterContentInit } from '@angular/core';
+import { ToastController } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 import { AppStorageData, UUIDData } from '../providers/storage/ait-storage.interfaces';
 
@@ -37,13 +37,21 @@ export class AITBaseSettingsPage implements OnInit, AfterContentInit {
   protected isFirstViewing: boolean;
 
   constructor(@Optional() protected ngDectector: ChangeDetectorRef,
-    @Optional() protected storage: AITStorage,
-    @Optional() protected menuCtrl: MenuController,
-    @Optional() protected toastCtrl: ToastController) { }
+    @Optional() protected storage: AITStorage
+    @Optional() protected toastCtrl: ToastController,
+  ) { }
 
-  ngOnInit() {
+  loadAppData(): void {
+    this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
+      this.appSoundsDisabled = !(value as AppStorageData).sound;
+      this.appVibratorDisabled = !(value as AppStorageData).vibrate;
 
+      this.ngDectector.detectChanges();
+    });
   }
+
+  // leave open for subclasses
+  ngOnInit() { }
 
   ngAfterContentInit() {
     this.loadViewData();
@@ -52,16 +60,6 @@ export class AITBaseSettingsPage implements OnInit, AfterContentInit {
   private loadViewData(): void {
     this.storage.getItem(this.uuid).then((value: UUIDData) => {
       this.uuidData = value;
-      this.loadAppData();
-    });
-  }
-
-  private loadAppData(): void {
-    this.menuCtrl.get('right').ionOpen.subscribe(() => {
-      this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
-        this.appSoundsDisabled = !(value as AppStorageData).sound;
-        this.appVibratorDisabled = !(value as AppStorageData).vibrate;
-      });
     });
   }
 
