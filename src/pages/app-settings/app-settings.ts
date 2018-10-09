@@ -71,6 +71,14 @@ export class AppSettingsPage {
     }
   }
 
+  testVolume(event?: MouseEvent) {
+    this.signal.double();
+  }
+
+  toggleVolume() {
+
+  }
+
   toggleBrightness() {
     this.brightness.enableBrightest();
   }

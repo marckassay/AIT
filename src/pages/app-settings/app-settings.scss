@@ -19,6 +19,16 @@
   ion-icon {
     color: map-get($map, primary);
   }
+
+  .soundItem > .item-inner {
+    border-bottom: hidden !important;
+  }
+
+  .testVolumeButton {
+    color: map-get($map, primary);
+    background-color: map-get($map, weakest);
+  }
+
   .ait-brand {
     margin: 0px;
     padding: 0 0px;

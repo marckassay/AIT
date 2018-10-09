@@ -37,7 +37,7 @@ export class AITBaseSettingsPage implements OnInit, AfterContentInit {
   protected isFirstViewing: boolean;
 
   constructor(@Optional() protected ngDectector: ChangeDetectorRef,
-    @Optional() protected storage: AITStorage
+    @Optional() protected storage: AITStorage,
     @Optional() protected toastCtrl: ToastController,
   ) { }
 
