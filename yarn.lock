@@ -3819,6 +3819,13 @@ rxjs@5.5.11:
   dependencies:
     symbol-observable "1.0.1"
 
+rxjs@^5.5.11:
+  version "5.5.12"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.5.12.tgz#6fa61b8a77c3d793dbaf270bee2f43f652d741cc"
+  integrity sha512-xx2itnL5sBbqeeiVgNPVuQQ1nC8Jp2WfNJhXWHmElW9YmrpS9UVnNzhP3EH3HFqexO5Tlp8GhYY+WEcqcVMvGw==
+  dependencies:
+    symbol-observable "1.0.1"
+
 safe-buffer@5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
@@ -4024,6 +4031,13 @@ sntp@1.x.x:
   integrity sha1-ZUEYTMkK7qbG57NeJlkIJEPGYZg=
   dependencies:
     hoek "2.x.x"
+
+sots@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/sots/-/sots-3.0.1.tgz#02b1e772a7c203d8dfc9d1be89bb93e45947200e"
+  integrity sha512-b6wvp4SZqibCJxnOyoI1IGFLsQHz0HbpCDz9hsIrXu9oawrLy+ED6H8fRs+JK3r73awepJjtRd0EOwfGWgHz0A==
+  dependencies:
+    rxjs "^5.5.11"
 
 source-list-map@^2.0.0:
   version "2.0.0"

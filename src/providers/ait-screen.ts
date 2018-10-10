@@ -28,18 +28,18 @@ export class AITBrightness {
   }
 
   /**
-   * Retrieves app's 'brightness' data field and depending on the value of 'enabling' and the value of
-   * the app's brightness field, it will behave diffently.
+   * Retrieves ait's 'brightness' data field and depending on the value of 'enabling' and the value of
+   * the ait's brightness field, it will behave diffently.
    *
    * TODO: currently this function unconditionally stores the brightness value to 100%. This wasn't
    * my original intention, but the ionic-plugin is designed in a way that makes it cumbersome to set.
    * Not sure if this will be modified in the future or not.
    *
    * @param enabling If 'enabling' is "true", it will get the device's brightness value and set it to
-   *                the app's brightness field. If 'enabling' is "false", it will set the app's
+   *                the ait's brightness field. If 'enabling' is "false", it will set the ait's
    *                brightness field to "undefined". If 'enabling' is 'undefined', it will overwrite
-   *                it ('enabling' parameter) to "true" if app's brightness field is defined.
-   *                Otherwise, app's brightness field will be set to "false".
+   *                it ('enabling' parameter) to "true" if ait's brightness field is defined.
+   *                Otherwise, ait's brightness field will be set to "false".
    * @returns void
    */
   enableBrightest(enabling?: boolean): void {
@@ -56,6 +56,8 @@ export class AITBrightness {
       }
 
       if (enablingComputed === true) {
+        const currentBrightness = this.brightness.getBrightness();
+        console.log("AITScreen.enableBrightest()::currentBrightness: " + currentBrightness);
         data.brightness = 1;
         this.storage.setItem(data);
         this.brightness.setBrightness(data.brightness);
@@ -67,7 +69,7 @@ export class AITBrightness {
     });
   }
 
-  // Retrieves app's 'brightness' data field and if its defined it will set the device's brightness
+  // Retrieves ait's 'brightness' data field and if its defined it will set the device's brightness
   // to that value.
   restoreBrightest(): void {
     this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
