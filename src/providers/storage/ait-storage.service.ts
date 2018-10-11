@@ -17,7 +17,7 @@
 */
 import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
-import { IntervalStorageData, TimerStorageData, UUIDData } from './ait-storage.interfaces';
+import { IntervalStorageData, TimerStorageData, UUIDData, BrightnessSet } from './ait-storage.interfaces';
 
 @Injectable()
 export class AITStorage {
@@ -40,11 +40,11 @@ export class AITStorage {
             current_uuid: AITStorage.INITIAL_INTERVAL_ID,
             vibrate: true,
             sound: true,
-            brightness: undefined,
+            brightness: -70 as BrightnessSet,
             base: 0,
             accent: 0
           };
-
+          // TODO: get xData only when Page is shown
           this.storage.set(AITStorage.APP_ID, data_app).then(() => {
             this.checkIntervalStartupData();
             this.checkTimerStartupData();
@@ -133,8 +133,8 @@ export class AITStorage {
         if (data.uuid !== AITStorage.APP_ID) {
           this.setCurrentUUID(data.uuid);
         }
-      }, () => {
-        // console.error('Error storing item', error)
+      }, (reason: any) => {
+        console.error('Error setting item', reason);
       });
     });
   }
@@ -142,8 +142,8 @@ export class AITStorage {
   getItem(uuid: string): Promise<UUIDData> {
     return this.storage.get(uuid).then((value: any) => {
       return value;
-    }, () => {
-      // console.error('Error retrieving item', error)
+    }, (reason: any) => {
+      console.error('Error retrieving item', reason);
     });
   }
 
@@ -153,19 +153,18 @@ export class AITStorage {
         value.current_uuid = uuid;
         this.setItem(value);
       }
-    }, () => {
-      // console.error('Error storing item', error)
+    }, (reason: any) => {
+      console.error('Error storing item', reason);
     });
   }
-
-  getCurrentUUID(): Promise<UUIDData> {
-    return this.getItem(AITStorage.APP_ID).then(
-      (value) => {
+  /*
+    getCurrentUUID(): Promise<UUIDData> {
+      return this.getItem(AITStorage.APP_ID).then((value: any) => {
         return this.getItem(value.current_uuid);
-      },
-      (reason) => {
-        return reason;
-      }
-    );
-  }
+      }, (reason: any) => {
+        console.error('Error retrieving item', reason);
+        return undefined;
+      });
+    }
+  */
 }

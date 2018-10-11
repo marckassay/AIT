@@ -17,9 +17,9 @@
 */
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, MenuController, NavController, NavParams } from 'ionic-angular';
-import { AppStorageData } from '../../providers/storage/ait-storage.interfaces';
+import { AppStorageData, BrightnessSet } from '../../providers/storage/ait-storage.interfaces';
 import { AITStorage } from '../../providers/storage/ait-storage.service';
-import { AITBrightness } from '../../providers/ait-screen';
+import { AITBrightness, BrightnessUtil } from '../../providers/ait-screen';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../../providers/theme-settings.provider';
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 import { AITSignal } from '../../providers/ait-signal';
@@ -44,6 +44,8 @@ export class AppSettingsPage {
   BaseTheme = BaseTheme;
   AccentTheme = AccentTheme;
 
+  absoluteBrightnessValue: BrightnessSet;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public storage: AITStorage,
@@ -59,8 +61,9 @@ export class AppSettingsPage {
 
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = value as AppStorageData;
-    }).catch(() => {
-      // console.log("app-settings storage error");
+      this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
+    }).catch((reason: any) => {
+      console.log("app-settings storage error" + reason);
     });
   }
 
@@ -80,7 +83,7 @@ export class AppSettingsPage {
   }
 
   toggleBrightness() {
-    this.brightness.enableBrightest();
+    this.data.brightness = BrightnessUtil.reverseSign(this.data.brightness);
   }
 
   toggleBaseTheme(value: BaseTheme) {
@@ -96,4 +99,10 @@ export class AppSettingsPage {
   navBack() {
     this.navCtrl.pop();
   }
+
+  dataChanged(event: any): void {
+    this.data.brightness = (event.value as BrightnessSet);
+    // this.ngDectector.detectChanges();
+  }
+
 }

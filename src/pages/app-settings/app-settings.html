@@ -47,10 +47,18 @@
         <ion-label>remember device alarm volume</ion-label>
       </ion-item>
 
-      <ion-item>
-        <ion-toggle checked="{{data.brightness != undefined}}" (ionChange)="toggleBrightness()"></ion-toggle>
+      <ion-item class="brightnessItem">
+        <ion-toggle #toggleBrightnessUI [checked]="data.brightness > 0" (ionChange)="toggleBrightness()"></ion-toggle>
         <ion-label>remember display brightness</ion-label>
       </ion-item>
+
+      <ion-item class="brightnessValueItem">
+        <ion-range [disabled]="toggleBrightnessUI.checked == false" (ionChange)="dataChanged($event)" debounce="500"
+          [ngModel]="absoluteBrightnessValue" min="10" max="100" step="10" snaps="true" pin="true">
+          <ion-label range-left>brightness value</ion-label>
+        </ion-range>
+      </ion-item>
+
     </ion-list>
     <ion-list radio-group>
       <ion-item-group>

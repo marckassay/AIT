@@ -132,12 +132,20 @@ ion-nav {
   .radio-inner,
   .range-pin::before,
   .range-pin,
-  .range-knob,
-  .range-tick,
+  .range-knob-handle[aria-disabled=false] > .range-knob,
   .range .range-bar-active,
   .toggle-checked .toggle-inner {
     background: map-get($map, primary) !important;
   }
+
+  .range-knob-handle[aria-disabled=true] > .range-knob {
+    outline: none;
+  }
+  .range-disabled .range-bar-active,
+  .range-tick {
+    display: none;
+  }
+
   .toggle-checked .toggle-icon {
     background: map-get($map, secondary) !important;
   }
@@ -152,9 +160,6 @@ ion-nav {
   }
   .item-radio-checked ion-label {
     color: map-get($map, primary);
-  }
-  .item-inner {
-    border-bottom: 1px solid map-get($map, weakest) !important;
   }
   ion-navbar>button,
   .toolbar-title {

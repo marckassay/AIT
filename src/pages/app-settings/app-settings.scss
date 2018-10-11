@@ -20,8 +20,13 @@
     color: map-get($map, primary);
   }
 
-  .soundItem > .item-inner {
+  .soundItem > .item-inner,
+  .brightnessItem > .item-inner {
     border-bottom: hidden !important;
+  }
+
+  .brightnessValueItem > .item-inner {
+    border-top: hidden;
   }
 
   .testVolumeButton {

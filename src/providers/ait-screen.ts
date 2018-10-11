@@ -18,7 +18,25 @@
 import { Brightness } from '@ionic-native/brightness';
 import { Injectable } from '@angular/core';
 import { AITStorage } from './storage/ait-storage.service';
-import { AppStorageData, UUIDData } from './storage/ait-storage.interfaces';
+import { AppStorageData, UUIDData, BrightnessSet, DeviceBrightnessSet } from './storage/ait-storage.interfaces';
+
+export class BrightnessUtil {
+  static convertToBrightnessNumber(value: DeviceBrightnessSet): BrightnessSet {
+    return (value * 100) as BrightnessSet;
+  }
+
+  static convertToDeviceBrightnessNumber(value: BrightnessSet): DeviceBrightnessSet {
+    return (value / 100) as DeviceBrightnessSet;
+  }
+
+  static reverseSign(value: BrightnessSet): BrightnessSet {
+    return (value * -1) as BrightnessSet;
+  }
+
+  static absolute(value: BrightnessSet): BrightnessSet {
+    return Math.abs(value as number) as BrightnessSet;
+  }
+}
 
 @Injectable()
 export class AITBrightness {
@@ -28,56 +46,44 @@ export class AITBrightness {
   }
 
   /**
-   * Retrieves ait's 'brightness' data field and depending on the value of 'enabling' and the value of
-   * the ait's brightness field, it will behave diffently.
+   * Sets ait's 'brightness' data field [-100,100] in intervals of tens. The value will be divided
+   * 100 so that its converted for the platform, Android. The following is their statement:
    *
-   * TODO: currently this function unconditionally stores the brightness value to 100%. This wasn't
-   * my original intention, but the ionic-plugin is designed in a way that makes it cumbersome to set.
-   * Not sure if this will be modified in the future or not.
+   *    "A value of less than 0, the default, means to use the preferred screen
+   *    brightness. 0 to 1 adjusts the brightness from dark to full bright."
    *
-   * @param enabling If 'enabling' is "true", it will get the device's brightness value and set it to
-   *                the ait's brightness field. If 'enabling' is "false", it will set the ait's
-   *                brightness field to "undefined". If 'enabling' is 'undefined', it will overwrite
-   *                it ('enabling' parameter) to "true" if ait's brightness field is defined.
-   *                Otherwise, ait's brightness field will be set to "false".
+   * If ait's 'brightness' value is -100, it means that the default value is being used. The default
+   * value is having this brightness feature disabled. If the value is between [10, 100], it means the
+   * brightness feature is enabled. In so many words, apps will never know what brightness value the
+   * user has the device brightness set to.
+   *
+   * Upon the ait is no longer active app and its brightness feature is enabled, the device will
+   * return to its default value. This is done by Android and not AiT.
+   *
+   * @param value Any positive number enables ait's brightness feature, while any negative number
+   *              disables it.
    * @returns void
    */
-  enableBrightest(enabling?: boolean): void {
-    let data: AppStorageData;
-    let enablingComputed = enabling;
+  setBrightness(value: BrightnessSet): void {
 
-    this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
+    this.storage.getItem(AITStorage.APP_ID).then((val: UUIDData) => {
+      let data: AppStorageData = (val as AppStorageData);
 
-      data = (value as AppStorageData);
-
-      // this is to have enableBrightest act as a toggle function for brightness
-      if (enablingComputed === undefined) {
-        enablingComputed = (data.brightness === undefined) ? true : false;
-      }
-
-      if (enablingComputed === true) {
-        const currentBrightness = this.brightness.getBrightness();
-        console.log("AITScreen.enableBrightest()::currentBrightness: " + currentBrightness);
-        data.brightness = 1;
+      if (data.brightness !== value) {
+        data.brightness = value;
         this.storage.setItem(data);
-        this.brightness.setBrightness(data.brightness);
-      } else {
-        data.brightness = undefined;
-        this.storage.setItem(data);
-        this.brightness.setBrightness(-1);
+
+        this.brightness.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(data.brightness));
       }
     });
   }
 
   // Retrieves ait's 'brightness' data field and if its defined it will set the device's brightness
   // to that value.
-  restoreBrightest(): void {
+  restoreBrightness(): void {
     this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
-      const lastBrightnessValue: number | undefined = (value as AppStorageData).brightness;
-
-      if (lastBrightnessValue !== undefined) {
-        this.brightness.setBrightness(lastBrightnessValue);
-      }
+      const lastBrightnessValue: BrightnessSet = (value as AppStorageData).brightness;
+      this.brightness.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(lastBrightnessValue));
     });
   }
 
