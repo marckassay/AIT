@@ -15,11 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
-import * as moment from 'moment';
 import { TimerStorageData } from '../../providers/storage/ait-storage.interfaces';
 import { AITBaseSettingsPage } from '../ait-basesettings.page';
+import * as moment from 'moment';
 import { Moment } from 'moment';
 
 @IonicPage()
@@ -31,7 +31,6 @@ import { Moment } from 'moment';
 export class TimerSettingsPage extends AITBaseSettingsPage {
   grandTime: { minutes: number, seconds: number };
 
-  @Input('data')
   get data(): TimerStorageData {
     return this._uuidData as TimerStorageData;
   }
@@ -56,13 +55,14 @@ export class TimerSettingsPage extends AITBaseSettingsPage {
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.grandTime = { minutes: 15, seconds: 0 };
+
+    super.ngOnInit();
   }
 
   protected dataChanged(): void {
     this.data.time = (this.grandTime.minutes * 60) + this.grandTime.seconds;
-    this.storage.setItem(this.data);
-    this.ngDectector.detectChanges();
+
+    super.dataChanged();
   }
 }

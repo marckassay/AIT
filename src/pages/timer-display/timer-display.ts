@@ -48,10 +48,15 @@ export class TimerDisplayPage extends AITBasePage {
     this._formattedGrandTime = value;
   }
 
+  ionViewDidEnter() {
+    super.ionViewDidEnter();
+  }
+
   aitBuildTimer() {
     this.sots.build(this.data.countdown,
       this.data.warnings,
-      this.data.time);
+      this.data.time
+    );
 
     super.aitBuildTimer();
   }
