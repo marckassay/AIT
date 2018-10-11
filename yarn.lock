@@ -850,6 +850,11 @@ cliui@^3.2.0:
     strip-ansi "^3.0.1"
     wrap-ansi "^2.0.0"
 
+clovelced-plugin-audiomanagement@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/clovelced-plugin-audiomanagement/-/clovelced-plugin-audiomanagement-1.0.2.tgz#34cef4aa5046eba615c2634234b4d8147698b82d"
+  integrity sha1-NM70qlBG66YVwmNCNLTYFHaYuC0=
+
 co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"

@@ -78,12 +78,17 @@ export class AppSettingsPage {
     this.signal.double();
   }
 
-  toggleVolume() {
-
+  toggleRememberSound() {
+    // TODO: start adding sound code
+    // this.data.sound = ;
   }
 
-  toggleBrightness() {
+  toggleRememberBrightness() {
     this.data.brightness = BrightnessUtil.reverseSign(this.data.brightness);
+  }
+
+  brightnessChanged(event: any): void {
+    this.data.brightness = (event.value as BrightnessSet);
   }
 
   toggleBaseTheme(value: BaseTheme) {
@@ -99,10 +104,4 @@ export class AppSettingsPage {
   navBack() {
     this.navCtrl.pop();
   }
-
-  dataChanged(event: any): void {
-    this.data.brightness = (event.value as BrightnessSet);
-    // this.ngDectector.detectChanges();
-  }
-
 }
