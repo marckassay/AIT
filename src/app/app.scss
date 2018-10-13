@@ -141,7 +141,10 @@ ion-nav {
   .range-knob-handle[aria-disabled=true] > .range-knob {
     outline: none;
   }
-  .range-disabled .range-bar-active,
+  .range-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
   .range-tick {
     display: none;
   }

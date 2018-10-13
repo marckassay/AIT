@@ -39,7 +39,7 @@ export class AITStorage {
             uuid: AITStorage.APP_ID,
             current_uuid: AITStorage.INITIAL_INTERVAL_ID,
             vibrate: true,
-            sound: 1,
+            sound: 50,
             brightness: -70,
             base: 0,
             accent: 0

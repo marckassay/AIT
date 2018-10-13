@@ -55,7 +55,7 @@ export class AppSettingsPage {
     public menuCtrl: MenuController) {
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter(): void {
     this.menuCtrl.enable(false, 'left');
     this.menuCtrl.enable(false, 'right');
 
@@ -67,23 +67,24 @@ export class AppSettingsPage {
     });
   }
 
-  ionViewWillLeave() {
+  ionViewWillLeave(): void {
     if (this.data) {
       this.storage.setItem(this.data);
       this.signal.data = this.data;
     }
   }
 
-  testVolume(event?: MouseEvent) {
+  toggleSound(): void {
+    this.data.sound = BrightnessUtil.reverseSign(this.data.sound);
+  }
+  testVolume(event?: MouseEvent): void {
     this.signal.double();
   }
-
-  toggleRememberSound() {
-    // TODO: start adding sound code
+  toggleRememberVolume(): void {
     // this.data.sound = ;
   }
 
-  toggleRememberBrightness() {
+  toggleRememberBrightness(): void {
     this.data.brightness = BrightnessUtil.reverseSign(this.data.brightness);
   }
 
@@ -91,17 +92,17 @@ export class AppSettingsPage {
     this.data.brightness = (event.value as BrightnessSet);
   }
 
-  toggleBaseTheme(value: BaseTheme) {
+  toggleBaseTheme(value: BaseTheme): void {
     this.settings.base = value;
     this._data.base = value;
   }
 
-  toggleAccentTheme(value: AccentTheme) {
+  toggleAccentTheme(value: AccentTheme): void {
     this.settings.accent = value;
     this._data.accent = value;
   }
 
-  navBack() {
+  navBack(): void {
     this.navCtrl.pop();
   }
 }

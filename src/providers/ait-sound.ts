@@ -15,17 +15,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-// import { Howl } from 'howler';
-
 export class AITSound {
   // sound_1: Howl;
   constructor() {
     /*     this.sound_1 = new Howl({
           src: ['assets/sounds/beep.mp3']
         }); */
+
   }
 
   singleBeep() {
+
     /*     this.sound_1.stop();
         this.sound_1.rate(1.0);
         this.sound_1.play(); */
