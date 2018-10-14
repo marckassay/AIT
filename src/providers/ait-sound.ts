@@ -16,12 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 export class AITSound {
-  // sound_1: Howl;
+  currentvol: number;
   constructor() {
-    /*     this.sound_1 = new Howl({
-          src: ['assets/sounds/beep.mp3']
-        }); */
 
+    /*     AudioManagement.getVolume(VolumeType.MUSIC, (result) => {
+          this.currentvol = result.volume;
+        }); */
   }
 
   singleBeep() {
