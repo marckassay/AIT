@@ -850,6 +850,9 @@ cliui@^3.2.0:
     strip-ansi "^3.0.1"
     wrap-ansi "^2.0.0"
 
+"clovelced-plugin-audiomanagement@file:../cordova-plugin-audiomanagement":
+  version "1.0.1"
+
 co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
@@ -2687,6 +2690,9 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
+
+"marcmod@E:\\temp\\marcmod\\":
+  version "1.0.0"
 
 math-random@^1.0.1:
   version "1.0.1"

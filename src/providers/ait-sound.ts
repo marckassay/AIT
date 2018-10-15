@@ -15,13 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import * as marcmod from "marcmod";
 export class AITSound {
-  currentvol: number;
   constructor() {
 
-    /*     AudioManagement.getVolume(VolumeType.MUSIC, (result) => {
-          this.currentvol = result.volume;
-        }); */
   }
 
   singleBeep() {
@@ -32,6 +29,10 @@ export class AITSound {
   }
 
   tripleBeep() {
+
+    marcmod.getAudioMode((result) => {
+      console.log("MUSIC VOL" + result);
+    });
     /*     let interval = 0;
         let intervalId = setInterval(() => {
           if (interval === 0 || interval === 2) {
