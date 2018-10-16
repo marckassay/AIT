@@ -43,7 +43,8 @@ export class AITSignal {
   }
 
   double() {
-    if (this.data.sound) { this.sound.tripleBeep(); }
+    this.sound.tripleBeep();
+    //if (this.data.sound) { this.sound.tripleBeep(); }
     if (this.data.vibrate) { this.vibrate.doubleVibrate(); }
   }
 

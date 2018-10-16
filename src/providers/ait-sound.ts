@@ -16,6 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import * as marcmod from "marcmod";
+import * as AudioManagement from "clovelced-plugin-audiomanagement";
+
 export class AITSound {
   constructor() {
 
@@ -29,10 +31,12 @@ export class AITSound {
   }
 
   tripleBeep() {
-
-    marcmod.getAudioMode((result) => {
-      console.log("MUSIC VOL" + result);
+    AudioManagement.getVolume("MUSIC", (result): void => {
+      console.log("AudioManagement.getVolume" + result.volume);
     });
+    /*     marcmod.getAudioMode((result) => {
+          console.log("MUSIC VOL" + result);
+        }); */
     /*     let interval = 0;
         let intervalId = setInterval(() => {
           if (interval === 0 || interval === 2) {
