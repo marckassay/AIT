@@ -28,6 +28,7 @@ export class AITSignal {
 
   constructor(public vibration: Vibration,
     public storage: AITStorage) {
+    // TODO: if AudioManagement is not defined, assign mock to audioman.
     this.audioman = AudioManagement;
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = (value as AppStorageData);

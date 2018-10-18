@@ -75,19 +75,31 @@ export class AppSettingsPage {
   }
 
   toggleSound(): void {
-    if (this.data.sound < 0) {
+    if (this.data.sound === 0) {
       this.signal.audioman.getVolume(1, (result) => {
-        this.data.sound = result.volume as BrightnessSet;
+        this.data.sound = result.volume;
       });
-    } else if (this.data.sound > 0) {
-      this.data.sound = BrightnessUtil.reverseSign(this.data.sound);
+    } else if (Math.abs(this.data.sound) > 0) {
+      this.data.sound = 0;
     }
   }
+
+  /**
+   * The UI for this event handler is only enabled when: `Math.abs(this.data.sound) > 0`.
+   */
   testVolume(event?: MouseEvent): void {
     this.signal.double();
   }
+
+  /**
+   * This UI is only enabled when: `Math.abs(this.data.sound) > 0`. And it simply will reverse the
+   * sign of `this.data.sound` to indicate that a value of less than 0 disables this
+   * "remember volume" feature, while a sign of greater than 0 enables it.
+   */
   toggleRememberVolume(): void {
-    // this.data.sound = ;
+    if (this.data.sound !== 0) {
+      this.data.sound = (this.data.sound * -1);
+    }
   }
 
   toggleRememberBrightness(): void {
@@ -95,6 +107,7 @@ export class AppSettingsPage {
   }
 
   brightnessChanged(event: any): void {
+    // TODO: async to change device brightness momentarily
     this.data.brightness = (event.value as BrightnessSet);
   }
 

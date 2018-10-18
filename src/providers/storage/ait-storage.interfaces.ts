@@ -7,9 +7,18 @@ export type BrightnessSet = -100 | -90 | -80 | -70 | -60 | -50 | -40 | -30 | -20
 
 export interface AppStorageData extends UUIDData {
   vibrate: boolean;
-  sound: BrightnessSet;
-  // default value is '-0.70'; which means by default this feature is disabled
+  /**
+   * Possible values are anything between these 3 members [-1, 0, 1]. A negitive number indicates these
+   * "remember volume" is disabled, while a positive number indicates that its enabled. A value of
+   * 0 indicates that sound is disabled.
+   */
+  sound: number;
+
+  /**
+   *  Default value is '-70'; which means by default this feature is disabled.
+   */
   brightness: BrightnessSet;
+
   lighttheme: boolean;
   base: number;
   accent: number;
