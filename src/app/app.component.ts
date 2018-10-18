@@ -89,9 +89,6 @@ export class App {
           });
 
           this.setPageToRoot(value.current_uuid);
-          Observable.timer(8000).subscribe(() => {
-            this.brightness.restoreBrightness();
-          });
         } else {
           // sometimes or alltimes it fails on initial load with no db.
           Observable.timer(500).subscribe(() => {
@@ -104,7 +101,10 @@ export class App {
 
   registerAppEventHandlers() {
     this.platform.resume.subscribe(() => {
-      this.brightness.restoreBrightness();
+      // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
+      // running state when they set ait to the device's background and then returns. At that point
+      // this may be called.
+      // this.brightness.applyBrightnessOffset();
     });
   }
 

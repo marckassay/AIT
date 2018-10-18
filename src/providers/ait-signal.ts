@@ -16,40 +16,83 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Vibration } from '@ionic-native/vibration';
-import { AITVibrate } from './ait-vibrate';
-import { AITSound } from './ait-sound';
 import { Injectable } from '@angular/core';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData } from './storage/ait-storage.interfaces';
+import { AudioManagement } from "clovelced-plugin-audiomanagement";
 
 @Injectable()
 export class AITSignal {
-  sound: AITSound;
-  vibrate: AITVibrate;
   data: AppStorageData;
+  audioman: typeof AudioManagement;
 
   constructor(public vibration: Vibration,
     public storage: AITStorage) {
+    this.audioman = AudioManagement;
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = (value as AppStorageData);
     });
-    this.sound = new AITSound();
-    this.vibrate = new AITVibrate(vibration);
   }
 
   single() {
-    if (this.data.sound) { this.sound.singleBeep(); }
-    if (this.data.vibrate) { this.vibrate.singleVibrate(); }
+    if (this.data.sound) { this.singleBeep(); }
+    if (this.data.vibrate) { this.singleVibrate(); }
   }
 
   double() {
-    this.sound.tripleBeep();
-    //if (this.data.sound) { this.sound.tripleBeep(); }
-    if (this.data.vibrate) { this.vibrate.doubleVibrate(); }
+    if (this.data.sound) { this.tripleBeep(); }
+    if (this.data.vibrate) { this.doubleVibrate(); }
   }
 
   triple() {
-    if (this.data.sound) { this.sound.completeBeep(); }
-    if (this.data.vibrate) { this.vibrate.tripleVibrate(); }
+    if (this.data.sound) { this.completeBeep(); }
+    if (this.data.vibrate) { this.tripleVibrate(); }
+  }
+
+  private singleVibrate() {
+    this.vibration.vibrate(500);
+  }
+
+  private doubleVibrate() {
+    this.vibration.vibrate([500, 500, 500]);
+  }
+
+  private tripleVibrate() {
+    this.vibration.vibrate([1000, 500, 1000]);
+  }
+
+  private singleBeep() {
+    /*     this.sound_1.stop();
+        this.sound_1.rate(1.0);
+        this.sound_1.play(); */
+  }
+
+  private tripleBeep() {
+    /*     marcmod.getAudioMode((result) => {
+          console.log("MUSIC VOL" + result);
+        }); */
+    /*     let interval = 0;
+        let intervalId = setInterval(() => {
+          if (interval === 0 || interval === 2) {
+            this.sound_1.stop();
+            this.sound_1.rate(1.5);
+            this.sound_1.play();
+          } else if (interval === 1) {
+            this.sound_1.stop();
+            this.sound_1.rate(.5);
+            this.sound_1.play();
+          }
+          (interval === 2) ? clearInterval(intervalId) : interval++;
+        }, 250); */
+  }
+
+  private completeBeep() {
+    /*     let interval = 0;
+        let intervalId = setInterval(() => {
+          this.sound_1.stop();
+          this.sound_1.rate(1);
+          this.sound_1.play();
+          (interval === 50) ? clearInterval(intervalId) : interval++;
+        }, 150); */
   }
 }

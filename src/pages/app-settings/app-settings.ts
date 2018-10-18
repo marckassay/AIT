@@ -75,7 +75,13 @@ export class AppSettingsPage {
   }
 
   toggleSound(): void {
-    this.data.sound = BrightnessUtil.reverseSign(this.data.sound);
+    if (this.data.sound < 0) {
+      this.signal.audioman.getVolume(1, (result) => {
+        this.data.sound = result.volume as BrightnessSet;
+      });
+    } else if (this.data.sound > 0) {
+      this.data.sound = BrightnessUtil.reverseSign(this.data.sound);
+    }
   }
   testVolume(event?: MouseEvent): void {
     this.signal.double();

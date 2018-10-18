@@ -18,15 +18,11 @@
 import { Brightness } from '@ionic-native/brightness';
 import { Injectable } from '@angular/core';
 import { AITStorage } from './storage/ait-storage.service';
-import { AppStorageData, UUIDData, BrightnessSet, DeviceBrightnessSet } from './storage/ait-storage.interfaces';
+import { AppStorageData, UUIDData, BrightnessSet } from './storage/ait-storage.interfaces';
 
 export class BrightnessUtil {
-  static convertToBrightnessNumber(value: DeviceBrightnessSet): BrightnessSet {
-    return (value * 100) as BrightnessSet;
-  }
-
-  static convertToDeviceBrightnessNumber(value: BrightnessSet): DeviceBrightnessSet {
-    return (value / 100) as DeviceBrightnessSet;
+  static convertToDeviceBrightnessNumber(value: BrightnessSet): number {
+    return (value / 100) as number;
   }
 
   static reverseSign(value: BrightnessSet): BrightnessSet {
@@ -38,56 +34,81 @@ export class BrightnessUtil {
   }
 }
 
+
+/**
+ * Sets ait's 'brightness' data field [-100,100] in intervals of tens. This value is stored as-is
+ * however the device's brightness value uses a different numbering set. The following is their
+ * statement:
+ *
+ *    "A value of less than 0, the default, means to use the preferred screen brightness. 0 to 1 adjusts the brightness from dark to full bright."
+ *
+ * If ait's 'brightness' value is -100, it means that the default value is being used. The default
+ * value is having this brightness feature disabled. If the value is between [10, 100], it means the
+ * brightness feature is enabled. In so many words, apps will never know what brightness value the
+ * user has the device brightness set to. Hence the term 'brightnessOffset' is used versus 'brightness'
+ * which implies an absolute value.
+ *
+ * Upon the ait is no longer active app and its brightness feature is enabled, the device will
+ * return to its default value. This is done by Android and not AiT.
+ */
 @Injectable()
 export class AITBrightness {
 
-  constructor(public brightness: Brightness,
-    public storage: AITStorage) {
-  }
+  constructor(
+    public display: Brightness,
+    public storage: AITStorage) { }
 
   /**
-   * Sets ait's 'brightness' data field [-100,100] in intervals of tens. The value will be divided
-   * 100 so that its converted for the platform, Android. The following is their statement:
-   *
-   *    "A value of less than 0, the default, means to use the preferred screen
-   *    brightness. 0 to 1 adjusts the brightness from dark to full bright."
-   *
-   * If ait's 'brightness' value is -100, it means that the default value is being used. The default
-   * value is having this brightness feature disabled. If the value is between [10, 100], it means the
-   * brightness feature is enabled. In so many words, apps will never know what brightness value the
-   * user has the device brightness set to.
-   *
-   * Upon the ait is no longer active app and its brightness feature is enabled, the device will
-   * return to its default value. This is done by Android and not AiT.
+   * Sets the BrightnessSet value that the user has choosen. This value will be mapped to
+   * DeviceBrightnessSet so that it will be available to be read by the device.
    *
    * @param value Any positive number enables ait's brightness feature, while any negative number
    *              disables it.
-   * @returns void
    */
-  setBrightness(value: BrightnessSet): void {
-
+  storeBrightnessOffset(value: BrightnessSet, apply: boolean = false) {
     this.storage.getItem(AITStorage.APP_ID).then((val: UUIDData) => {
       let data: AppStorageData = (val as AppStorageData);
 
       if (data.brightness !== value) {
         data.brightness = value;
         this.storage.setItem(data);
+      }
 
-        this.brightness.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(data.brightness));
+      if (apply === true) {
+        this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(value));
       }
     });
   }
 
-  // Retrieves ait's 'brightness' data field and if its defined it will set the device's brightness
-  // to that value.
-  restoreBrightness(): void {
+  retrieveBrightnessOffset(): Promise<BrightnessSet> {
+    return this.storage.getItem(AITStorage.APP_ID)
+      .then((value: UUIDData): BrightnessSet => {
+        return (value as AppStorageData).brightness;
+      });
+  }
+
+  /**
+   * Retrieves ait's 'brightness' data field and if its defined (greater than 0), it will set the
+   * device's brightness to that value.
+   */
+  applyBrightnessOffset(): void {
     this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
       const lastBrightnessValue: BrightnessSet = (value as AppStorageData).brightness;
-      this.brightness.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(lastBrightnessValue));
+      if (lastBrightnessValue > 0) {
+        this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(lastBrightnessValue));
+      }
     });
   }
 
+  /**
+   * Sets the device's API brightness to -1, to remove our offset (if any) and return to the
+   * brightness value prior to AiT being launched. Calling this method doesn't modify app's storage.
+   */
+  removeBrightnessOffset(): void {
+    this.display.setBrightness(-1);
+  }
+
   setKeepScreenOn(value: boolean): void {
-    this.brightness.setKeepScreenOn(value);
+    this.display.setKeepScreenOn(value);
   }
 }
