@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver, Optional, SkipSelf } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { APP_SETTINGS_PAGE, INTERVAL_DISPLAY_PAGE, TIMER_DISPLAY_PAGE, STOPWATCH_DISPLAY_PAGE } from '../pages/ait-constants.page';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -53,7 +53,6 @@ export class App {
     private statusBar: StatusBar,
     private screenOrientation: ScreenOrientation,
     private settings: ThemeSettingsProvider,
-    private brightness: AITBrightness,
     private storage: AITStorage,
     private menuCtrl: MenuController) {
 

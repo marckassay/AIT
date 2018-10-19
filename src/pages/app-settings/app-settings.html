@@ -34,7 +34,7 @@
       </ion-item>
 
       <ion-item class="soundItem">
-        <ion-toggle #soundToggleUI [checked]="data.sound != 0" (ionChange)="toggleSound($event)"></ion-toggle>
+        <ion-toggle #soundToggleUI [checked]="soundToggleWillEnter" (ionChange)="toggleSound($event)"></ion-toggle>
         <ion-label>sound</ion-label>
       </ion-item>
 
@@ -43,7 +43,7 @@
       </button>
 
       <ion-item>
-        <ion-toggle [disabled]="soundToggleUI.checked == false" [checked]="data.sound > 0" (ionChange)="toggleRememberVolume()"></ion-toggle>
+        <ion-toggle [disabled]="soundToggleUI.checked == false" [checked]="soundRememberToggleWillEnter" (ionChange)="toggleRememberVolume()"></ion-toggle>
         <ion-label>remember device volume</ion-label>
       </ion-item>
 

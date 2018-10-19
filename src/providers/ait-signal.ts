@@ -19,34 +19,35 @@ import { Vibration } from '@ionic-native/vibration';
 import { Injectable } from '@angular/core';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData } from './storage/ait-storage.interfaces';
-import { AudioManagement } from "clovelced-plugin-audiomanagement";
+import { AudioManagement } from '@ionic-native/audio-management';
 
 @Injectable()
+/**
+ * References audio and vibrate features of the device.
+ */
 export class AITSignal {
   data: AppStorageData;
-  audioman: typeof AudioManagement;
 
   constructor(public vibration: Vibration,
+    public audioman: AudioManagement,
     public storage: AITStorage) {
-    // TODO: if AudioManagement is not defined, assign mock to audioman.
-    this.audioman = AudioManagement;
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = (value as AppStorageData);
     });
   }
 
   single() {
-    if (this.data.sound) { this.singleBeep(); }
+    if (this.data.sound !== 0) { this.singleBeep(); }
     if (this.data.vibrate) { this.singleVibrate(); }
   }
 
   double() {
-    if (this.data.sound) { this.tripleBeep(); }
+    if (this.data.sound !== 0) { this.tripleBeep(); }
     if (this.data.vibrate) { this.doubleVibrate(); }
   }
 
   triple() {
-    if (this.data.sound) { this.completeBeep(); }
+    if (this.data.sound !== 0) { this.completeBeep(); }
     if (this.data.vibrate) { this.tripleVibrate(); }
   }
 

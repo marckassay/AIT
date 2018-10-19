@@ -8,14 +8,14 @@ export type BrightnessSet = -100 | -90 | -80 | -70 | -60 | -50 | -40 | -30 | -20
 export interface AppStorageData extends UUIDData {
   vibrate: boolean;
   /**
-   * Possible values are anything between these 3 members [-1, 0, 1]. A negitive number indicates these
-   * "remember volume" is disabled, while a positive number indicates that its enabled. A value of
-   * 0 indicates that sound is disabled.
+   * Possible values is anything between these three members [-1, 0, 1]. A negative number indicates
+   * these "remember volume" is disabled, while a positive number indicates that its enabled. A
+   * value of 0 indicates that sound is disabled.
    */
   sound: number;
 
   /**
-   *  Default value is '-70'; which means by default this feature is disabled.
+   *  Default value is '-50'; which means by default this feature is disabled.
    */
   brightness: BrightnessSet;
 

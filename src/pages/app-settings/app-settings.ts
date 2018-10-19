@@ -45,6 +45,8 @@ export class AppSettingsPage {
   AccentTheme = AccentTheme;
 
   absoluteBrightnessValue: BrightnessSet;
+  soundToggleWillEnter: boolean;
+  soundRememberToggleWillEnter: boolean;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -62,6 +64,8 @@ export class AppSettingsPage {
     this.storage.getItem(AITStorage.APP_ID).then((value) => {
       this.data = value as AppStorageData;
       this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
+      this.soundToggleWillEnter = (this.data.sound !== 0);
+      this.soundRememberToggleWillEnter = this.data.sound > 0;
     }).catch((reason: any) => {
       console.log("app-settings storage error" + reason);
     });

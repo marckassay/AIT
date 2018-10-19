@@ -43,7 +43,7 @@ export class AITBaseSettingsPage implements OnInit, AfterContentInit {
 
   loadAppData(): void {
     this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
-      this.appSoundsDisabled = !(value as AppStorageData).sound;
+      this.appSoundsDisabled = (value as AppStorageData).sound === 0;
       this.appVibratorDisabled = !(value as AppStorageData).vibrate;
 
       this.ngDectector.detectChanges();

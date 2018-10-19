@@ -17,7 +17,7 @@
 */
 import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
-import { IntervalStorageData, TimerStorageData, UUIDData, BrightnessSet } from './ait-storage.interfaces';
+import { IntervalStorageData, TimerStorageData, UUIDData } from './ait-storage.interfaces';
 
 @Injectable()
 export class AITStorage {
@@ -26,21 +26,22 @@ export class AITStorage {
   public static readonly INITIAL_TIMER_ID: string = '00000000-0000-0000-0000-000000000003';
   public static readonly INITIAL_STOPWATCH_ID: string = '00000000-0000-0000-0000-000000000004';
 
-  constructor(public storage: Storage) {
-  }
+  constructor(public storage: Storage) { }
 
   public checkAppStartupData(): Promise<void> {
 
     return this.storage.ready().then(() => {
 
+      // console.warn("clearing storage has started.");
+      // this.storage.clear().then((value) => {
       this.storage.get(AITStorage.APP_ID).then((value: UUIDData) => {
         if (!value) {
           let data_app = {
             uuid: AITStorage.APP_ID,
             current_uuid: AITStorage.INITIAL_INTERVAL_ID,
             vibrate: true,
-            sound: 50,
-            brightness: -70,
+            sound: 10,
+            brightness: -50,
             base: 0,
             accent: 0
           };
@@ -54,6 +55,10 @@ export class AITStorage {
 
         }
       });
+      // });
+      //  console.warn("clearing storage has finished. Disable this for production.");
+
+
     }, () => {
       // console.error('Error with readiness', error)
     });

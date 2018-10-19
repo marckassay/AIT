@@ -15,6 +15,7 @@ import { AITSignal } from '../providers/ait-signal';
 import { BrowserModule } from '@angular/platform-browser';
 import { HomeDisplayPageModule } from '../pages/home-display/home-display.module';
 import { HomeDisplayService } from '../providers/home-display.service';
+import { AudioManagement } from '@ionic-native/audio-management';
 
 @NgModule({
   declarations: [App],
@@ -42,6 +43,7 @@ import { HomeDisplayService } from '../providers/home-display.service';
     AITBrightness,
     Brightness,
     AITSignal,
+    AudioManagement,
     HomeDisplayService,
     MenuController,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
