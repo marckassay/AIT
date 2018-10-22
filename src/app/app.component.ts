@@ -71,7 +71,7 @@ export class App {
   }
 
   checkAppStartupData(attempts: number) {
-    // console.log("checkAppStartupData call, attempt number: "+attempts);
+    console.log("checkAppStartupData call, attempt number: " + attempts);
     this.storage.checkAppStartupData().then(() => {
 
       this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
@@ -89,7 +89,9 @@ export class App {
 
           this.setPageToRoot(value.current_uuid);
         } else {
-          // sometimes or alltimes it fails on initial load with no db.
+          // sometimes or alltimes it fails on initial load with no db created. fyi, the ionic
+          // storage plugin will first attempt to use 'indexeddb' (Browser) and then sqlite'
+          // (Android).
           Observable.timer(500).subscribe(() => {
             this.checkAppStartupData(--attempts);
           });
