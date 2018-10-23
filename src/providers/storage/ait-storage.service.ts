@@ -17,36 +17,127 @@
 */
 import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
-import { IntervalStorageData, TimerStorageData, UUIDData } from './ait-storage.interfaces';
-import { StorageDefaultData } from './ait-storage.defaultdata';
+import { UUIDData, AppStorageData } from './ait-storage.interfaces';
 import { Subject, Observable, Subscription } from 'rxjs';
+import { StorageDefaultData } from './ait-storage.defaultdata';
 
 @Injectable()
 export class AITStorage {
+  private status: 'off' | 'booting' | 'on';
   private pageObservableSubject: Array<[Subject<UUIDData>, Observable<UUIDData>]>;
-  private currentPageObservable: Observable<UUIDData>;
   private currentPageSubscription: Subscription | undefined;
+  private preOpPromise: Promise<boolean>;
+  private cache: Array<UUIDData>;
 
   constructor(public storage: Storage) {
+    this.status = "off";
     this.pageObservableSubject = [];
+    this.cache = [];
   }
 
-  getPageSubject<T>(uuid: string): Subject<T> {
-    const pair: [Subject<unknown>, Observable<UUIDData>] = this.getPageObserverableSubject(uuid);
+  getPagePromise<T>(uuid: string): Promise<T> {
+    return this.storage.get(uuid);
+  }
+
+  getPageSubject<T extends UUIDData>(uuid: string): Subject<T> {
+    const pair: [Subject<T>, Observable<T>] = this.getPageObserverableSubject();
     this.setCurrentPageAndSubscribe(pair[1]);
 
     return pair[0] as Subject<T>;
   }
 
-  private getPageObserverableSubject(uuid: string): [Subject<UUIDData>, Observable<UUIDData>] {
-    let pair: [Subject<UUIDData>, Observable<UUIDData>] | undefined = this.pageObservableSubject.find(() => false);
-    if (!pair) {
-      const subject: Subject<IntervalStorageData> = new Subject<IntervalStorageData>();
-      const observable: Observable<IntervalStorageData> = subject.asObservable();
+  private isReady(): Promise<boolean> {
+    if (this.status === "on") {
+      return Promise.resolve(true);
+    } else {
+      if (this.status === "off") {
+        this.status = "booting";
+        this.preOpPromise = this.preOperationCheck();
+      }
+
+      if (this.status === "booting") {
+        return this.preOpPromise;
+      }
+    }
+  }
+
+  private preOperationCheck(): Promise<boolean> {
+    return this.storage.ready()
+      .then((value: LocalForage): Promise<AppStorageData> => {
+        if (value) {
+          console.log("Storage is getting data from disk.");
+          return this.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID);
+        } else {
+          console.log("Storage can't boot-up!");
+          // TODO: need to handle this downstream...
+          return Promise.reject(new Error('sum ting wong'));
+        }
+      })
+      .then((value: AppStorageData | undefined): Promise<boolean> => {
+        // if in 'booting' routine, set status to 'on' since
+        // the following set() will call preOperationCheck()...
+        if (this.status === 'booting') {
+          this.status = "on";
+        }
+
+        if (value === undefined) {
+          return this.storage.set(StorageDefaultData.APP_ID, StorageDefaultData.APP_DATA)
+            .then((): Promise<boolean> => {
+              return this.setCached<boolean>(StorageDefaultData.APP_DATA);
+            });
+        } else {
+          return this.setCached<boolean>(value);
+        }
+      })
+      .catch((reason: any) => {
+        console.error(reason);
+        this.status = "off";
+        return new Promise<boolean>((resolve, reject) => { resolve(false); });
+      });
+  }
+
+  private getCached(uuid: string, asyncOperation: boolean = true): Promise<UUIDData | undefined> {
+    const cached: UUIDData | undefined = this.cache.find(value => value.uuid === uuid);
+
+    if (asyncOperation) {
+      return new Promise((resolve, reject) => { resolve(cached); });
+    } else {
+      throw new Error("getCached() syncOperation hasn't been implemented.");
+    }
+  }
+
+  private setCached<T>(data: UUIDData, asyncReturnedType: boolean = true): Promise<T> {
+    const indexOfCached: number = this.cache.findIndex(value => value.uuid === data.uuid);
+
+    if (indexOfCached) {
+      this.cache[indexOfCached] = data;
+    }
+
+    if (asyncReturnedType) {
+      let genVal: new () => T;
+      if (typeof genVal === "boolean") {
+        return new Promise<any>((resolve, reject) => { resolve(true); });
+      } else {
+        return new Promise<T>((resolve, reject) => { resolve(); });
+      }
+    } else {
+      throw new Error("setCached() syncOperation hasn't been implemented.");
+    }
+  }
+
+  private getPageObserverableSubject<T extends UUIDData>(): [Subject<T>, Observable<T>] {
+    let pair: [Subject<UUIDData>, Observable<UUIDData>] | undefined = this.pageObservableSubject.find((value: [Subject<T>, Observable<T>]) => {
+      console.log(value);
+      return true;
+    });
+
+    if (pair === undefined) {
+      const subject: Subject<T> = new Subject<T>();
+      const observable: Observable<T> = subject.asObservable();
       pair = [subject, observable];
     }
 
-    return pair;
+    return pair as [Subject<T>, Observable<T>];
   }
 
   private setCurrentPageAndSubscribe(observable: Observable<UUIDData>): void {
@@ -55,13 +146,10 @@ export class AITStorage {
       this.currentPageSubscription.unsubscribe();
     }
 
-    this.currentPageObservable = observable;
     this.currentPageSubscription = observable.subscribe(
-      (value: UUIDData) => {
-        this.storage.ready /.
+      () => {
       },
-      (error: any) => {
-
+      () => {
       }
     );
   }
@@ -172,4 +260,3 @@ this.myObject.subscribe(
       });
     }
   */
-}
