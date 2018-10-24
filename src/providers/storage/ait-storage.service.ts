@@ -35,17 +35,44 @@ export class AITStorage {
     this.cache = [];
   }
 
-  getPagePromise<T>(uuid: string): Promise<T> {
-    return this.storage.get(uuid);
+
+  getPagePromiseAndSubject<T extends UUIDData>(uuid: string): [Promise<T>, Subject<T>] {
+    return [this.getPagePromise(uuid), this.getPageSubject(uuid)];
   }
 
+  /**
+   * Returns a subclass of UUIDData that is intended to be only used for reading info. If reading
+   * and writing is needed, use the `getPagePromise` method.
+   *
+   * @param uuid every page has a uuid assigned to it
+   */
+  getPagePromise<T extends UUIDData>(uuid: string): Promise<T> {
+    return this.isReady().then((): Promise<T> => {
+      return this.getCached<T>(uuid);
+    });
+  }
+
+  /**
+   * Returns a `Subject` that is intended to be "written" to which will be observed by the
+   * `Observable` and in turn update cache then storage.
+   *
+   * @param uuid every page has a uuid assigned to it
+   */
   getPageSubject<T extends UUIDData>(uuid: string): Subject<T> {
+    /*
+    return this.isReady().then((): Promise<T> => {
+          return this.getCached<T>(uuid);
+    });
+    */
     const pair: [Subject<T>, Observable<T>] = this.getPageObserverableSubject();
     this.setCurrentPageAndSubscribe(pair[1]);
 
     return pair[0] as Subject<T>;
   }
 
+  /**
+   * Ensures that storage is in its "on" state.
+   */
   private isReady(): Promise<boolean> {
     if (this.status === "on") {
       return Promise.resolve(true);
@@ -54,19 +81,20 @@ export class AITStorage {
         this.status = "booting";
         this.preOpPromise = this.preOperationCheck();
       }
-
-      if (this.status === "booting") {
-        return this.preOpPromise;
-      }
+      return this.preOpPromise;
     }
   }
 
+  /**
+   * Algorithm to be executed once to ensure that storage is ready to be used and APP_DATA has been
+   * loaded.
+   */
   private preOperationCheck(): Promise<boolean> {
     return this.storage.ready()
       .then((value: LocalForage): Promise<AppStorageData> => {
         if (value) {
           console.log("Storage is getting data from disk.");
-          return this.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID);
+          return this.storage.get(StorageDefaultData.APP_ID) as Promise<AppStorageData>;
         } else {
           console.log("Storage can't boot-up!");
           // TODO: need to handle this downstream...
@@ -80,13 +108,16 @@ export class AITStorage {
           this.status = "on";
         }
 
+        // as intended, value should always be undefined.
         if (value === undefined) {
           return this.storage.set(StorageDefaultData.APP_ID, StorageDefaultData.APP_DATA)
             .then((): Promise<boolean> => {
-              return this.setCached<boolean>(StorageDefaultData.APP_DATA);
+              return this.setCached(StorageDefaultData.APP_DATA);
             });
-        } else {
-          return this.setCached<boolean>(value);
+        }
+        // this else isn't intended to ever be executed, its a just-in-case:
+        else {
+          return this.setCached(value);
         }
       })
       .catch((reason: any) => {
@@ -96,33 +127,48 @@ export class AITStorage {
       });
   }
 
-  private getCached(uuid: string, asyncOperation: boolean = true): Promise<UUIDData | undefined> {
+  private getCached<T>(uuid: string): Promise<T> {
+    let returnPromise = (value): Promise<T> => {
+      return new Promise<T>((resolve, reject) => { resolve(value); });
+    };
+
     const cached: UUIDData | undefined = this.cache.find(value => value.uuid === uuid);
 
-    if (asyncOperation) {
-      return new Promise((resolve, reject) => { resolve(cached); });
+    // no cache data... no problem, get UUIDData from storage...
+    if (!cached) {
+      return this.storage.get(uuid).then((value): Promise<T> => {
+        // no storage data... no problem, get UUIDData from default data and proceed with normal
+        // operation...
+        if (!value) {
+          let genVal: new () => T;
+          return this.setCached(StorageDefaultData[typeof genVal]).then(() => {
+            return returnPromise(value);
+          });
+        } else {
+          return returnPromise(value);
+        }
+      });
     } else {
-      throw new Error("getCached() syncOperation hasn't been implemented.");
+      return returnPromise(cached);
     }
   }
 
-  private setCached<T>(data: UUIDData, asyncReturnedType: boolean = true): Promise<T> {
+  /**
+   * Checks exisiting cache with `data.uuid`. If no element is found
+   *
+   * @param data The value to be stored in `storage`.
+   * @param returns `Promise<boolean>` to be passed downstream if needed.
+   */
+  private setCached(data: UUIDData): Promise<boolean> {
     const indexOfCached: number = this.cache.findIndex(value => value.uuid === data.uuid);
 
     if (indexOfCached) {
       this.cache[indexOfCached] = data;
+    } else {
+      this.cache.push(data);
     }
 
-    if (asyncReturnedType) {
-      let genVal: new () => T;
-      if (typeof genVal === "boolean") {
-        return new Promise<any>((resolve, reject) => { resolve(true); });
-      } else {
-        return new Promise<T>((resolve, reject) => { resolve(); });
-      }
-    } else {
-      throw new Error("setCached() syncOperation hasn't been implemented.");
-    }
+    return new Promise<any>((resolve, reject) => { resolve(true); });
   }
 
   private getPageObserverableSubject<T extends UUIDData>(): [Subject<T>, Observable<T>] {
@@ -147,116 +193,12 @@ export class AITStorage {
     }
 
     this.currentPageSubscription = observable.subscribe(
-      () => {
+      (value: UUIDData) => {
+
       },
-      () => {
+      (error: any) => {
+        console.error("sum ting wong.");
       }
     );
   }
 }
-
-/*
-
-  public updateMyObject(newValue) {
-  this.pageSubject.next(newValue);
-
-this.myObject.subscribe(
-  (data) => { console.log('change detacted'); },
-  (error) => {
-    console.log(error)
-  }
-)
-
-*/
-  /*
-  public checkAppStartupData(): Promise<void> {
-    return this.storage.ready().then((value: LocalForage) => {
-      this.storage.get(StorageDefaultData.APP_ID).then((value: UUIDData) => {
-        if (!value) {
-          this.storage.set(StorageDefaultData.APP_ID, StorageDefaultData.APP_DATA);
-        }
-      });
-    }, (reason: any) => {
-      console.error('Error with Storage', reason);
-    });
-  }
-
-  private checkIntervalStartupData(): void {
-    this.storage.get(StorageDefaultData.INITIAL_INTERVAL_ID).then((value: any) => {
-      if (!value) {
-        this.storage.set(StorageDefaultData.INITIAL_INTERVAL_ID, StorageDefaultData.INTERVAL_DATA);
-      }
-    });
-  }
-
-  private checkTimerStartupData(): void {
-    this.storage.get(StorageDefaultData.INITIAL_TIMER_ID).then((value: any) => {
-      if (!value) {
-        this.storage.set(StorageDefaultData.INITIAL_TIMER_ID, StorageDefaultData.TIMER_DATA);
-      }
-    });
-  }
-
-  private checkStopwatchStartupData(): void {
-    this.storage.get(StorageDefaultData.INITIAL_STOPWATCH_ID).then((value: any) => {
-      if (!value) {
-        this.storage.set(StorageDefaultData.INITIAL_STOPWATCH_ID, StorageDefaultData.STOPWATCH_DATA);
-      }
-    });
-  }
-
-  setItem(data: UUIDData) {
-    // checking to see if data's timer info has chanaged. ignoring warnings key and any other fields
-    // if timer info has changed, set the 'hasLastSettingChangedTime' field to true.
-    this.getItem(data.uuid).then((value: IntervalStorageData | TimerStorageData) => {
-      if ((value as IntervalStorageData).activerest) {
-        if (((value as IntervalStorageData).activerest.lower !== (data as IntervalStorageData).activerest.lower) ||
-          ((value as IntervalStorageData).activerest.upper !== (data as IntervalStorageData).activerest.upper) ||
-          ((value as IntervalStorageData).intervals !== (data as IntervalStorageData).intervals) ||
-          ((value as IntervalStorageData).countdown !== (data as IntervalStorageData).countdown)) {
-          (data as IntervalStorageData).hasLastSettingChangedTime = true;
-        } else {
-          (data as IntervalStorageData).hasLastSettingChangedTime = false;
-        }
-      } else if ((value as TimerStorageData).time) {
-        (data as TimerStorageData).hasLastSettingChangedTime = ((value as TimerStorageData).time !== (data as TimerStorageData).time);
-      }
-
-      this.storage.set(data.uuid, data).then(() => {
-        if (data.uuid !== AITStorage.APP_ID) {
-          this.setCurrentUUID(data.uuid);
-        }
-      }, (reason: any) => {
-        console.error('Error setting item', reason);
-      });
-    });
-  }
-
-  getItem(uuid: string): Promise<UUIDData> {
-    return this.storage.get(uuid).then((value: any) => {
-      return value;
-    }, (reason: any) => {
-      console.error('Error retrieving item', reason);
-    });
-  }
-
-  setCurrentUUID(uuid: string): void {
-    this.getItem(AITStorage.APP_ID).then((value) => {
-      if (value.current_uuid !== uuid) {
-        value.current_uuid = uuid;
-        this.setItem(value);
-      }
-    }, (reason: any) => {
-      console.error('Error storing item', reason);
-    });
-  }
-
-    getCurrentUUID(): Promise<UUIDData> {
-      return this.getItem(AITStorage.APP_ID).then((value: any) => {
-        return this.getItem(value.current_uuid);
-      }, (reason: any) => {
-        console.error('Error retrieving item', reason);
-        return undefined;
-      });
-    }
-  */
