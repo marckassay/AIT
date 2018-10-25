@@ -23,6 +23,8 @@ import { AITBrightness, BrightnessUtil } from '../../providers/ait-screen';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../../providers/theme-settings.provider';
 import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 import { AITSignal } from '../../providers/ait-signal';
+import { Subject } from 'rxjs';
+import { StorageDefaultData } from '../../providers/storage/ait-storage.defaultdata';
 
 @IonicPage()
 @Component({
@@ -47,6 +49,8 @@ export class AppSettingsPage {
   absoluteBrightnessValue: BrightnessSet;
   soundToggleWillEnter: boolean;
   soundRememberToggleWillEnter: boolean;
+  private promise: Promise<any>;
+  private subject: Subject<any>;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -61,7 +65,11 @@ export class AppSettingsPage {
     this.menuCtrl.enable(false, 'left');
     this.menuCtrl.enable(false, 'right');
 
-    this.storage.getItem(AITStorage.APP_ID).then((value) => {
+    const promiseAndSubject = this.storage.getPagePromiseAndSubject(StorageDefaultData.APP_ID);
+    this.promise = promiseAndSubject[0];
+    this.subject = promiseAndSubject[1];
+
+    this.promise.then((value) => {
       this.data = value as AppStorageData;
       this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
       this.soundToggleWillEnter = (this.data.sound !== 0);
@@ -73,7 +81,7 @@ export class AppSettingsPage {
 
   ionViewWillLeave(): void {
     if (this.data) {
-      this.storage.setItem(this.data);
+      this.subject.next(this.data);
       this.signal.data = this.data;
     }
   }

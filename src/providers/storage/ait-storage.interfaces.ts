@@ -1,5 +1,5 @@
 export interface UUIDData {
-  uuid: string;
+  readonly uuid: string;
 }
 
 export interface AppStorageData extends UUIDData {

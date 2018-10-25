@@ -24,9 +24,9 @@ import { AITStorage } from '../providers/storage/ait-storage.service';
 import { HomeAction, HomeEmission, HomeDisplayPage } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../providers/theme-settings.provider';
 import { Observable } from 'rxjs/Observable';
-import { AITBrightness } from '../providers/ait-screen';
 import { HomeDisplayService } from '../providers/home-display.service';
-import { AppStorageData, UUIDData } from '../providers/storage/ait-storage.interfaces';
+import { AppStorageData } from '../providers/storage/ait-storage.interfaces';
+import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
 
 @Component({
   templateUrl: 'app.html'
@@ -42,8 +42,6 @@ export class App {
   rightMenuInnerHTML: ViewContainerRef;
 
   combinedTheme: string;
-
-  appstoragedata: AppStorageData;
 
   protected isFirstViewing: boolean;
 
@@ -67,36 +65,23 @@ export class App {
         this.createComponentForLeftMenu();
       }
     });
-    this.checkAppStartupData(5);
+    this.checkAppStartupData();
   }
 
-  checkAppStartupData(attempts: number) {
-    console.log("checkAppStartupData call, attempt number: " + attempts);
-    this.storage.checkAppStartupData().then(() => {
+  checkAppStartupData() {
+    this.storage.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID).then((value) => {
+      if (value) {
+        this.registerAppEventHandlers();
 
-      this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
-        if (value) {
-          this.appstoragedata = (value as AppStorageData);
+        this.settings.base = value.base as BaseTheme;
+        this.settings.accent = value.accent as AccentTheme;
 
-          this.registerAppEventHandlers();
+        this.settings.combinedTheme.subscribe((val: string) => {
+          this.combinedTheme = val;
+        });
 
-          this.settings.base = this.appstoragedata.base as BaseTheme;
-          this.settings.accent = this.appstoragedata.accent as AccentTheme;
-
-          this.settings.combinedTheme.subscribe((value: string) => {
-            this.combinedTheme = value;
-          });
-
-          this.setPageToRoot(value.current_uuid);
-        } else {
-          // sometimes or alltimes it fails on initial load with no db created. fyi, the ionic
-          // storage plugin will first attempt to use 'indexeddb' (Browser) and then sqlite'
-          // (Android).
-          Observable.timer(500).subscribe(() => {
-            this.checkAppStartupData(--attempts);
-          });
-        }
-      });
+        this.setPageToRoot(value.current_uuid);
+      }
     });
   }
 
@@ -112,24 +97,20 @@ export class App {
   setPageToRoot(uuid: string) {
     let displayPage: any;
 
-    if (uuid === AITStorage.INITIAL_INTERVAL_ID) {
+    if (uuid === StorageDefaultData.INTERVAL_ID) {
       displayPage = INTERVAL_DISPLAY_PAGE;
-    } else if (uuid === AITStorage.INITIAL_TIMER_ID) {
+    } else if (uuid === StorageDefaultData.TIMER_ID) {
       displayPage = TIMER_DISPLAY_PAGE;
-    } else if (uuid === AITStorage.INITIAL_STOPWATCH_ID) {
+    } else if (uuid === StorageDefaultData.STOPWATCH_ID) {
       displayPage = STOPWATCH_DISPLAY_PAGE;
     }
 
-    this.navCtrl.push(displayPage, {
-      id: uuid,
-      rightmenu: this.rightMenuInnerHTML
-    }, {
-        updateUrl: false,
-        isNavRoot: true
-      }).then(() => {
+    this.navCtrl.push(displayPage,
+      { id: uuid, rightmenu: this.rightMenuInnerHTML },
+      { updateUrl: false, isNavRoot: true }).then(() => {
         if (!this.isFirstViewing) {
           this.menuCtrl.toggle('left').then(() => {
-            this.storage.setCurrentUUID(uuid);
+            // this.storage.setCurrentUUID(uuid);
           }, (reason) => {
             console.error(reason);
           });
@@ -162,21 +143,21 @@ export class App {
     switch (emission.action) {
       case HomeAction.IntervalTimer:
         if (currentPageName !== INTERVAL_DISPLAY_PAGE) {
-          this.setPageToRoot(AITStorage.INITIAL_INTERVAL_ID);
+          this.setPageToRoot(StorageDefaultData.INTERVAL_ID);
         } else {
           this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Timer:
         if (currentPageName !== TIMER_DISPLAY_PAGE) {
-          this.setPageToRoot(AITStorage.INITIAL_TIMER_ID);
+          this.setPageToRoot(StorageDefaultData.TIMER_ID);
         } else {
           this.menuCtrl.toggle('left');
         }
         break;
       case HomeAction.Stopwatch:
         if (currentPageName !== STOPWATCH_DISPLAY_PAGE) {
-          this.setPageToRoot(AITStorage.INITIAL_STOPWATCH_ID);
+          this.setPageToRoot(StorageDefaultData.STOPWATCH_ID);
         } else {
           this.menuCtrl.toggle('left');
         }

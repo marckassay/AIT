@@ -30,7 +30,7 @@ import { AITBrightness } from '../providers/ait-screen';
 import { AITBaseSettingsPage } from './ait-basesettings.page';
 import { HomeDisplayService } from '../providers/home-display.service';
 import { Menu } from 'ionic-angular/components/app/menu-interface';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -58,6 +58,8 @@ export class AITBasePage implements OnInit {
   private rightmenuOpenSubscription: Subscription;
   private rightmenuCloseSubscription: Subscription;
   private rightmenuComponentInstance: AITBaseSettingsPage;
+  private promise: Promise<any>;
+  private subject: Subject<any>;
 
   constructor(
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
@@ -163,7 +165,11 @@ export class AITBasePage implements OnInit {
     const uuid = this.navParams.data.id;
 
     if (uuid) {
-      this.storage.getItem(uuid).then((value: any) => {
+      const promiseAndSubject = this.storage.getPagePromiseAndSubject(uuid);
+      this.promise = promiseAndSubject[0];
+      this.subject = promiseAndSubject[1];
+
+      this.promise.then((value: any) => {
 
         this.uuidData = (value as UUIDData);
         if (value.hasOwnProperty('hasLastSettingChangedTime')) {
@@ -171,7 +177,7 @@ export class AITBasePage implements OnInit {
             this.aitBuildTimer();
 
             value.hasLastSettingChangedTime = false;
-            this.storage.setItem(this.uuidData);
+            this.subject.next(this.uuidData);
           }
         } else {
           this.aitBuildTimer();

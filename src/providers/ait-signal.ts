@@ -20,6 +20,7 @@ import { Injectable } from '@angular/core';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData } from './storage/ait-storage.interfaces';
 import { AudioManagement } from '@ionic-native/audio-management';
+import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 
 @Injectable()
 /**
@@ -31,7 +32,7 @@ export class AITSignal {
   constructor(public vibration: Vibration,
     public audioman: AudioManagement,
     public storage: AITStorage) {
-    this.storage.getItem(AITStorage.APP_ID).then((value) => {
+    this.storage.getPagePromise(StorageDefaultData.APP_ID).then((value) => {
       this.data = (value as AppStorageData);
     });
   }
