@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { TimerStorageData } from '../../providers/storage/ait-storage.interfaces';
 import { AITBaseSettingsPage } from '../ait-basesettings.page';
@@ -28,7 +28,7 @@ import { Moment } from 'moment';
   templateUrl: 'timer-settings.html',
   encapsulation: ViewEncapsulation.None
 })
-export class TimerSettingsPage extends AITBaseSettingsPage {
+export class TimerSettingsPage extends AITBaseSettingsPage implements OnInit {
   grandTime: { minutes: number, seconds: number };
 
   get data(): TimerStorageData {
@@ -56,8 +56,6 @@ export class TimerSettingsPage extends AITBaseSettingsPage {
 
   ngOnInit() {
     this.grandTime = { minutes: 15, seconds: 0 };
-
-    super.ngOnInit();
   }
 
   protected dataChanged(): void {

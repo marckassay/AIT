@@ -34,7 +34,7 @@ export class IntervalDisplayPage extends AITBasePage {
   @ViewChild(ActiverestRendererComponent)
   private activeRestRenderer: ActiverestRendererComponent;
 
-  @Input('data')
+  @Input()
   get data(): IntervalStorageData {
     return this._uuidData as IntervalStorageData;
   }

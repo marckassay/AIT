@@ -15,14 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, OnInit, Optional, AfterContentInit } from '@angular/core';
+import { ChangeDetectorRef, Optional } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 import { AppStorageData, UUIDData, StorePair } from '../providers/storage/ait-storage.interfaces';
-import { Subject } from 'rxjs';
 import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
 
-export class AITBaseSettingsPage implements OnInit {
+export class AITBaseSettingsPage {
   /**
    * This is set by AITBasePage.createSettingsPage() when component is instantiated.
    */
@@ -49,7 +48,7 @@ export class AITBaseSettingsPage implements OnInit {
   ) { }
 
   /**
-   * Caller is AITBasePage when it creates an instance of this class.
+   * Caller is `rightmenu` when it emits a `ionOpen` event. This component resides in `AITBasePage`.
    */
   loadAppData(): void {
     this.store_app = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID);
@@ -61,11 +60,6 @@ export class AITBaseSettingsPage implements OnInit {
       this.ngDectector.detectChanges();
     });
   }
-
-  /**
-   * Leave open for subclasses.
-   */
-  ngOnInit() { }
 
   ngAfterContentInit() { this.loadViewData(); }
 
