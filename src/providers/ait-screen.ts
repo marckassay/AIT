@@ -19,6 +19,8 @@ import { Brightness } from '@ionic-native/brightness';
 import { Injectable } from '@angular/core';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData, UUIDData, BrightnessSet } from './storage/ait-storage.interfaces';
+import { StorageDefaultData } from './storage/ait-storage.defaultdata';
+import { Subject } from 'rxjs';
 
 export class BrightnessUtil {
   static convertToDeviceBrightnessNumber(value: BrightnessSet): number {
@@ -66,13 +68,14 @@ export class AITBrightness {
    *              disables it.
    */
   storeBrightnessOffset(value: BrightnessSet, apply: boolean = false) {
-    this.storage.getItem(AITStorage.APP_ID).then((val: UUIDData) => {
-      let data: AppStorageData = (val as AppStorageData);
+    const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
 
-      if (data.brightness !== value) {
-        data.brightness = value;
-        this.storage.setItem(data);
+    store.promise.then((val) => {
+      if (val.brightness !== value) {
+        val.brightness = value;
       }
+
+      store.subject.next(val);
 
       if (apply === true) {
         this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(value));
@@ -81,10 +84,11 @@ export class AITBrightness {
   }
 
   retrieveBrightnessOffset(): Promise<BrightnessSet> {
-    return this.storage.getItem(AITStorage.APP_ID)
-      .then((value: UUIDData): BrightnessSet => {
-        return (value as AppStorageData).brightness;
-      });
+    const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
+
+    return store.promise.then((value): BrightnessSet => {
+      return value.brightness;
+    });
   }
 
   /**
@@ -92,8 +96,10 @@ export class AITBrightness {
    * device's brightness to that value.
    */
   applyBrightnessOffset(): void {
-    this.storage.getItem(AITStorage.APP_ID).then((value: UUIDData) => {
-      const lastBrightnessValue: BrightnessSet = (value as AppStorageData).brightness;
+    const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
+
+    store.promise.then((value) => {
+      const lastBrightnessValue: BrightnessSet = value.brightness;
       if (lastBrightnessValue > 0) {
         this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(lastBrightnessValue));
       }

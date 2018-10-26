@@ -23,7 +23,6 @@ import { MenuController, Nav, Platform } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 import { HomeAction, HomeEmission, HomeDisplayPage } from '../pages/home-display/home-display';
 import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../providers/theme-settings.provider';
-import { Observable } from 'rxjs/Observable';
 import { HomeDisplayService } from '../providers/home-display.service';
 import { AppStorageData } from '../providers/storage/ait-storage.interfaces';
 import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
@@ -106,15 +105,10 @@ export class App {
     }
 
     this.navCtrl.push(displayPage,
-      { id: uuid, rightmenu: this.rightMenuInnerHTML },
+      { uuid: uuid, rightmenu: this.rightMenuInnerHTML },
       { updateUrl: false, isNavRoot: true }).then(() => {
         if (!this.isFirstViewing) {
-          this.menuCtrl.toggle('left').then(() => {
-            // this.storage.setCurrentUUID(uuid);
-          }, (reason) => {
-            console.error(reason);
-          });
-
+          this.menuCtrl.toggle('left');
         } else {
           this.isFirstViewing = false;
         }

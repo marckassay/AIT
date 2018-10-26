@@ -42,9 +42,4 @@ export class StopwatchSettingsPage extends AITBaseSettingsPage {
       return ':10';
     }
   }
-
-  protected dataChanged(): void {
-    this.storage.setItem(this.data);
-    this.ngDectector.detectChanges();
-  }
 }

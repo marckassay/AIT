@@ -56,7 +56,7 @@ export class AITBasePage implements OnInit {
   private leftmenu: Menu;
   private rightmenu: Menu;
   private rightmenuOpenSubscription: Subscription;
-  private rightmenuCloseSubscription: Subscription;
+  // private rightmenuCloseSubscription: Subscription;
   private rightmenuComponentInstance: AITBaseSettingsPage;
   private promise: Promise<any>;
   private subject: Subject<any>;
@@ -87,16 +87,11 @@ export class AITBasePage implements OnInit {
     });
   }
 
-  /*
-  This event only happens once per page being created. If a page leaves but is cached, then this
-  event will not fire again on a subsequent viewing.
-  */
-  ionViewDidLoad(): void {
-    this.createSettingsPage();
-    this.createHomePage();
-    this.floatingbuttons.setToLoadedMode();
-  }
-
+  /**
+   * Called by any of the subclasses settings page when `ionViewDidLoad` method is called by Ionic.
+   *
+   * @param settingsPage
+   */
   protected createSettingsPage(settingsPage?: any): void {
     const rightMenuInnerHTML: ViewContainerRef = this.navParams.data.rightmenu;
     rightMenuInnerHTML.clear();
@@ -104,7 +99,7 @@ export class AITBasePage implements OnInit {
     const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
 
     this.rightmenuComponentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent).instance;
-    this.rightmenuComponentInstance.uuid = this.navParams.data.id;
+    this.rightmenuComponentInstance.uuid = this.navParams.data.uuid;
 
     this.floatingbuttons.setProgramButtonToVisible();
   }
@@ -115,11 +110,6 @@ export class AITBasePage implements OnInit {
     this.floatingbuttons.setHomeButtonToVisible();
   }
 
-  ionViewWillEnter(): void {
-    this.aitLoadData();
-    this.registerMenuEvents();
-  }
-
   registerMenuEvents(): void {
     if (this.rightmenuOpenSubscription) {
       this.rightmenuOpenSubscription.unsubscribe();
@@ -128,22 +118,37 @@ export class AITBasePage implements OnInit {
     this.rightmenuOpenSubscription = this.rightmenu.ionOpen.subscribe(() => {
       this.rightmenuComponentInstance.loadAppData();
     });
-
-    if (this.rightmenuCloseSubscription) {
-      this.rightmenuCloseSubscription.unsubscribe();
-    }
-    this.rightmenuCloseSubscription = this.rightmenu.ionClose.debounceTime(125).subscribe(() => {
-      this.aitLoadData();
-    });
   }
 
+  /**
+   * This event only happens once per page being created. If a page leaves but is cached, then this
+   * event will not fire again on a subsequent viewing.
+   */
+  ionViewDidLoad(): void {
+    this.createSettingsPage();
+    this.createHomePage();
+    this.floatingbuttons.setToLoadedMode();
+  }
+
+  /**
+   * Runs when the page is about to enter and become the active page.
+   */
+  ionViewWillEnter(): void {
+    this.aitLoadData();
+  }
+
+  /**
+   * Runs when the page has fully entered and is now the active page. This event will fire, whether
+   * it was the first load or a cached page.
+   */
   ionViewDidEnter(): void {
     this.setViewInRunningMode(false);
   }
 
   /**
-  This is critical to fully unsubscribe the 2 Subscriptions of this class. When transitioning from
-  one ait page to another, the simlpified call stack below represents this algorhthm:
+   * This is critical to fully unsubscribe the 2 Subscriptions of this class. When transitioning from
+   * one ait page to another, the simlpified call stack below represents this algorhthm:
+    ```
     ...
     createSettingsPage() TimerDisplay
     ...
@@ -151,18 +156,17 @@ export class AITBasePage implements OnInit {
     ...
     registerMenuEvents() TimerDisplay
     ...
-
-  In this example, the user goes from IntervalDisplay to TimerDisplay. Upon first viewing of
-  TimerDisplay, the 2 Subscriptions will be undefined for its instance, but the internal list of
-  RxJS will have Subscriptions.
-  */
+    ```
+   * In this example, the user goes from `IntervalDisplay` to `TimerDisplay`. Upon first viewing of
+   * `TimerDisplay`, the 2 Subscriptions will be undefined for its instance, but the internal list of
+   * RxJS will have Subscriptions.
+   */
   ionViewWillLeave(): void {
     this.rightmenuOpenSubscription.unsubscribe();
-    this.rightmenuCloseSubscription.unsubscribe();
   }
 
   private aitLoadData(): void {
-    const uuid = this.navParams.data.id;
+    const uuid = this.navParams.data.uuid;
 
     if (uuid) {
       const promiseAndSubject = this.storage.getPagePromiseAndSubject(uuid);
@@ -192,13 +196,12 @@ export class AITBasePage implements OnInit {
   protected aitBuildTimer(): void {
     this.aitSubscribeTimer();
     this.aitResetTimer();
-
-    if (this.isFirstViewing) {
-      this.isFirstViewing = false;
-      this.splashScreen.hide();
-    }
+    this.aitPostTimerBuilt();
   }
 
+  /**
+   * To be implemented by subclasses.
+   */
   protected aitSubscribeTimer(): void { }
 
   private aitResetTimer(): void {
@@ -206,6 +209,15 @@ export class AITBasePage implements OnInit {
     this.grandTime = this.sots.getGrandTime({ time: -1 });
     this.sots.sequencer.reset();
     this.ngDectector.detectChanges();
+  }
+
+  protected aitPostTimerBuilt(): void {
+    this.registerMenuEvents();
+
+    if (this.isFirstViewing) {
+      this.isFirstViewing = false;
+      this.splashScreen.hide();
+    }
   }
 
   protected setViewInRunningMode(value: boolean): void {
@@ -216,8 +228,10 @@ export class AITBasePage implements OnInit {
     (value) ? this.statusBar.hide() : this.statusBar.show();
   }
 
-  // when this.fabcontainer buttons are clicked, it will first execute code in
-  // fabcontainer.component (Child component). afterwards it will execute this function.
+  /**
+   * When `this.fabcontainer` buttons are clicked, it will first execute code in
+   * `fabcontainer.component` (Child component). afterwards it will execute this function.
+   */
   protected onAction(emission: FabEmission): void {
     switch (emission.action) {
       case FabAction.Home:

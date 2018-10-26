@@ -17,7 +17,7 @@
 */
 import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
-import { UUIDData, AppStorageData } from './ait-storage.interfaces';
+import { UUIDData, AppStorageData, StorePair } from './ait-storage.interfaces';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { StorageDefaultData } from './ait-storage.defaultdata';
 
@@ -33,6 +33,21 @@ export class AITStorage {
     this.status = "off";
     this.pageObservableSubject = [];
     this.cache = [];
+  }
+
+
+  /**
+   * Convenience method to return a `Promise` and a `Subject` in a literal object with the
+   * respective property names, `promise` and `subject`.
+   *
+   * @param omitSubject if `true` returned object will not have the subject property available. This
+   * indicated the caller only needs to read information.
+   */
+  getPagePromiseAndSubject2<T extends UUIDData>(uuid: string, omitSubject: boolean = false): StorePair<T> {
+    return {
+      promise: this.getPagePromise<T>(uuid),
+      subject: (omitSubject) ? undefined : this.getPageSubject<T>(uuid)
+    };
   }
 
   /**
@@ -68,7 +83,6 @@ export class AITStorage {
   getPageSubject<T extends UUIDData>(uuid: string): Subject<T> {
     const pair: [Subject<T>, Observable<T>] = this.getPageObserverableSubject();
     this.setCurrentPageAndSubscribe(pair[1]);
-
     return pair[0] as Subject<T>;
   }
 
@@ -103,15 +117,15 @@ export class AITStorage {
           return Promise.reject(new Error('sum ting wong'));
         }
       })
-      .then((value: AppStorageData | undefined): Promise<boolean> => {
+      .then((val: AppStorageData | undefined | null): Promise<boolean> => {
         // if in 'booting' routine, set status to 'on' since
         // the following set() will call preOperationCheck()...
         if (this.status === 'booting') {
           this.status = "on";
         }
 
-        // as intended, value should always be undefined.
-        if (value === undefined) {
+        // as intended, val should always be undefined.
+        if (!val) {
           const app_data: UUIDData = StorageDefaultData.getByID(StorageDefaultData.APP_ID);
           return this.storage.set(app_data.uuid, app_data)
             .then((): Promise<boolean> => {
@@ -120,7 +134,7 @@ export class AITStorage {
         }
         // this else isn't intended to ever be executed, its a just-in-case:
         else {
-          return this.setCached(value);
+          return this.setCached(val);
         }
       })
       .catch((reason: any) => {
@@ -135,17 +149,18 @@ export class AITStorage {
       return new Promise<T>((resolve, reject) => { resolve(value); });
     };
 
-    const cached: UUIDData | undefined = this.cache.find(value => value.uuid === uuid);
+    const cached: UUIDData | undefined = this.cache.find((value) => { return value.uuid === uuid; });
 
     // no cache data... no problem, get UUIDData from storage...
     if (!cached) {
-      return this.storage.get(uuid).then((value): Promise<T> => {
+      return this.storage.get(uuid).then<T>((value: T): Promise<T> => {
         // no storage data... no problem, get UUIDData from default data and proceed with normal
         // operation...
         if (!value) {
-          return this.setStorageAndCache(StorageDefaultData.getByID(uuid))
-            .then((val: boolean) => {
-              return returnPromise(val);
+          let defaultData: UUIDData = StorageDefaultData.getByID(uuid);
+          return this.setStorageAndCache(defaultData)
+            .then(() => {
+              return returnPromise(defaultData);
             });
         } else {
           return returnPromise(value);
@@ -163,9 +178,9 @@ export class AITStorage {
    * @param returns `Promise<boolean>` to be passed downstream if needed.
    */
   private setCached(data: UUIDData): Promise<boolean> {
-    const indexOfCached: number = this.cache.findIndex(value => value.uuid === data.uuid);
+    const indexOfCached: number = this.cache.findIndex((value) => { return value.uuid === data.uuid; });
 
-    if (indexOfCached) {
+    if (indexOfCached !== -1) {
       this.cache[indexOfCached] = data;
     } else {
       this.cache.push(data);
@@ -202,23 +217,17 @@ export class AITStorage {
       this.currentPageSubscription.unsubscribe();
     }
 
-    this.currentPageSubscription = observable.subscribe(
-      (value: UUIDData) => {
-        this.setStorageAndCache(value);
-
+    this.currentPageSubscription = observable.subscribe((value: UUIDData) => {
+      this.setStorageAndCache(value).then(() => {
         if (value.uuid !== StorageDefaultData.APP_ID) {
-          // TODO: set uuid as current_uuid
           this.getCached<AppStorageData>(StorageDefaultData.APP_ID).then((val) => {
             if (val.current_uuid !== value.uuid) {
               val.current_uuid = value.uuid;
-              this.setStorageAndCache(value);
+              this.setStorageAndCache(val);
             }
           });
         }
-      },
-      (error: any) => {
-        console.error("sum ting wong.");
-      }
-    );
+      });
+    });
   }
 }

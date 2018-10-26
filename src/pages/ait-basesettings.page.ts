@@ -18,13 +18,13 @@
 import { ChangeDetectorRef, OnInit, Optional, AfterContentInit } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 import { AITStorage } from '../providers/storage/ait-storage.service';
-import { AppStorageData, UUIDData } from '../providers/storage/ait-storage.interfaces';
+import { AppStorageData, UUIDData, StorePair } from '../providers/storage/ait-storage.interfaces';
 import { Subject } from 'rxjs';
 import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
 
 export class AITBaseSettingsPage implements OnInit {
   /**
-   * This is set by app.component when component is instantiated
+   * This is set by AITBasePage.createSettingsPage() when component is instantiated.
    */
   public uuid: string;
 
@@ -36,16 +36,12 @@ export class AITBaseSettingsPage implements OnInit {
     this._uuidData = value;
   }
 
+  protected store_app: StorePair<UUIDData>;
+  protected store: StorePair<UUIDData>;
+
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
   protected isFirstViewing: boolean;
-  private promiseAppData: Promise<AppStorageData>;
-  // TODO: although not being used, may be beneifical to have UI support vibrate and muting sounds
-  // in this page's UI.
-  // private subjectAppData: Subject<AppStorageData>;
-
-  private promisePageData: Promise<UUIDData>;
-  private subjectPageData: Subject<UUIDData>;
 
   constructor(@Optional() protected ngDectector: ChangeDetectorRef,
     @Optional() protected storage: AITStorage,
@@ -56,12 +52,9 @@ export class AITBaseSettingsPage implements OnInit {
    * Caller is AITBasePage when it creates an instance of this class.
    */
   loadAppData(): void {
-    const promiseAndSubject = this.storage.getPagePromiseAndSubject(StorageDefaultData.APP_ID);
-    this.promiseAppData = promiseAndSubject[0] as Promise<AppStorageData>;
-    // this.subjectAppData = promiseAndSubject[1] as Subject<AppStorageData>;
+    this.store_app = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID);
 
-    this.promiseAppData.then((value: AppStorageData) => {
-      // this.uuidData = value;
+    this.store_app.promise.then((value: AppStorageData) => {
       this.appSoundsDisabled = value.sound === 0;
       this.appVibratorDisabled = !value.vibrate;
 
@@ -77,19 +70,16 @@ export class AITBaseSettingsPage implements OnInit {
   ngAfterContentInit() { this.loadViewData(); }
 
   private loadViewData(): void {
-    const promiseAndSubject = this.storage.getPagePromiseAndSubject(this.uuid);
-    this.promisePageData = promiseAndSubject[0] as Promise<UUIDData>;
-    this.subjectPageData = promiseAndSubject[1] as Subject<UUIDData>;
+    this.store = this.storage.getPagePromiseAndSubject2<UUIDData>(this.uuid);
 
-    this.promisePageData.then((value: UUIDData) => {
+    this.store.promise.then((value: UUIDData) => {
       this.uuidData = value;
     });
   }
 
   protected dataChanged(): void {
     this.ngDectector.detectChanges();
-
-    this.subjectPageData.next(this.uuidData);
+    this.store.subject.next(this.uuidData);
   }
 
   protected inform(): void {
