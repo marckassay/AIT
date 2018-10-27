@@ -118,7 +118,7 @@ export class FabContainerComponent {
     this.ngDectector.detectChanges();
   }
 
-  private setToPausedMode(): void {
+  setToPausedMode(): void {
     if (this.viewState & FabState.Running) {
       this.viewState &= ~FabState.Running;
 

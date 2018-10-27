@@ -50,9 +50,10 @@ export class AITStorage {
     let deepClone = <T>(source: T): { [k: string]: any } => {
       let results: { [k: string]: any } = {};
       for (let P in source) {
-        results[P] = source[P];
         if (typeof source[P] === 'object') {
-          deepClone(source[P]);
+          results[P] = deepClone(source[P]);
+        } else {
+          results[P] = source[P];
         }
       }
       return results;

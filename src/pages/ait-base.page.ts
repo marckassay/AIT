@@ -242,11 +242,13 @@ export class AITBasePage implements OnInit {
       case FabAction.Home:
         this.sots.sequencer.pause();
         this.setViewInRunningMode(false);
+        this.floatingbuttons.setToPausedMode();
         this.leftmenu.open();
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
         this.setViewInRunningMode(false);
+        this.floatingbuttons.setToPausedMode();
         this.rightmenu.open();
         break;
       case FabAction.Reset:
