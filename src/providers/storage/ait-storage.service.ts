@@ -35,17 +35,41 @@ export class AITStorage {
     this.cache = [];
   }
 
-
   /**
    * Convenience method to return a `Promise` and a `Subject` in a literal object with the
    * respective property names, `promise` and `subject`.
    *
    * @param omitSubject if `true` returned object will not have the subject property available. This
    * indicated the caller only needs to read information.
+   *
+   * @param clonePromise if `false`, when settings receive value from this functions `promise`, it
+   * will instantaneously change the promise in the Display page of ait. That's because `UUIDData`
+   * is a JS `Object`.
    */
-  getPagePromiseAndSubject2<T extends UUIDData>(uuid: string, omitSubject: boolean = false): StorePair<T> {
+  getPagePromiseAndSubject2<T extends UUIDData>(uuid: string, omitSubject: boolean = false, clonePromise: boolean = true): StorePair<T> {
+    let deepClone = <T>(source: T): { [k: string]: any } => {
+      let results: { [k: string]: any } = {};
+      for (let P in source) {
+        results[P] = source[P];
+        if (typeof source[P] === 'object') {
+          deepClone(source[P]);
+        }
+      }
+      return results;
+    };
+
+    let promise: Promise<T>;
+    if (clonePromise) {
+      promise = this.getPagePromise<T>(uuid).then((value): Promise<T> => {
+        const val = deepClone(value) as T;
+        return new Promise<T>((resolve, reject) => { resolve(val); });
+      });
+    } else {
+      promise = this.getPagePromise<T>(uuid);
+    }
+
     return {
-      promise: this.getPagePromise<T>(uuid),
+      promise: promise,
       subject: (omitSubject) ? undefined : this.getPageSubject<T>(uuid)
     };
   }
