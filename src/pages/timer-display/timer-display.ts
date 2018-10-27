@@ -20,7 +20,7 @@ import { IonicPage } from 'ionic-angular';
 import { AITBasePage } from '../ait-base.page';
 import { SequenceStates } from '../../providers/sots/ait-sots.util';
 import { TimeEmission } from 'sots';
-import { TimerStorageData } from '../../providers/storage/ait-storage.interfaces';
+import { TimerStorageData, UUIDData } from '../../providers/storage/ait-storage.interfaces';
 import { TimerSettingsPage } from '../timer-settings/timer-settings';
 
 @IonicPage()
@@ -50,6 +50,19 @@ export class TimerDisplayPage extends AITBasePage {
 
   ionViewDidEnter() {
     super.ionViewDidEnter();
+  }
+
+  aitPreBuildTimerCheck(value: UUIDData): boolean {
+    let val = value as TimerStorageData;
+
+    if ((!this.data) || (val.time !== this.data.time)) {
+      return true;
+    } else if ((this.viewState === SequenceStates.Loaded) &&
+      (val.countdown !== this.data.countdown)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   aitBuildTimer() {
@@ -102,8 +115,6 @@ export class TimerDisplayPage extends AITBasePage {
         this.ngDectector.detectChanges();
       }
     });
-
-    super.aitSubscribeTimer();
   }
 
   createSettingsPage() {

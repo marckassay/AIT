@@ -32,10 +32,10 @@ export class TimerSettingsPage extends AITBaseSettingsPage implements OnInit {
   grandTime: { minutes: number, seconds: number };
 
   get data(): TimerStorageData {
-    return this._uuidData as TimerStorageData;
+    return this._uuidDat as TimerStorageData;
   }
   set data(value: TimerStorageData) {
-    this._uuidData = value;
+    this._uuidDat = value;
   }
 
   get formattedGrandTime(): string {

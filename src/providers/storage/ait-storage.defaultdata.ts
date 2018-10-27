@@ -37,7 +37,6 @@ export class StorageDefaultData {
     intervalmaxlimit: 20,
     countdown: 10,
     countdownmaxlimit: 60,
-    hasLastSettingChangedTime: false,
     warnings: { fivesecond: false, tensecond: true, fifteensecond: false },
   };
 
@@ -47,7 +46,6 @@ export class StorageDefaultData {
     countdown: 10,
     countdownmaxlimit: 60,
     time: 900,
-    hasLastSettingChangedTime: false,
     warnings: { fivesecond: false, tensecond: true, fifteensecond: true }
   };
 
@@ -56,7 +54,6 @@ export class StorageDefaultData {
     name: 'Program #3',
     countdown: 10,
     countdownmaxlimit: 60,
-    hasLastSettingChangedTime: false,
     warnings: { fivesecond: false, tensecond: true, fifteensecond: true }
   };
 }

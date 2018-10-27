@@ -27,12 +27,12 @@ export class AITBaseSettingsPage {
    */
   public uuid: string;
 
-  _uuidData: UUIDData;
-  get uuidData(): UUIDData {
-    return this._uuidData;
+  _uuidDat: UUIDData;
+  get uuidDat(): UUIDData {
+    return this._uuidDat;
   }
-  set uuidData(value: UUIDData) {
-    this._uuidData = value;
+  set uuidDat(value: UUIDData) {
+    this._uuidDat = value;
   }
 
   protected store_app: StorePair<UUIDData>;
@@ -67,13 +67,13 @@ export class AITBaseSettingsPage {
     this.store = this.storage.getPagePromiseAndSubject2<UUIDData>(this.uuid);
 
     this.store.promise.then((value: UUIDData) => {
-      this.uuidData = value;
+      this.uuidDat = value;
     });
   }
 
   protected dataChanged(): void {
     this.ngDectector.detectChanges();
-    this.store.subject.next(this.uuidData);
+    this.store.subject.next(this.uuidDat);
   }
 
   protected inform(): void {

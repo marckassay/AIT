@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { IonicPage } from 'ionic-angular';
-import { IntervalStorageData } from '../../providers/storage/ait-storage.interfaces';
+import { IntervalStorageData, UUIDData } from '../../providers/storage/ait-storage.interfaces';
 import { Component, Input } from '@angular/core';
 import { SequenceStates } from '../../providers/sots/ait-sots.util';
 import { TimeEmission } from 'sots';
@@ -55,6 +55,22 @@ export class IntervalDisplayPage extends AITBasePage {
 
   ionViewDidEnter() {
     super.ionViewDidEnter();
+  }
+
+  aitPreBuildTimerCheck(value: UUIDData): boolean {
+    let val = value as IntervalStorageData;
+
+    if ((!this.data) ||
+      (val.activerest.lower !== this.data.activerest.lower) ||
+      (val.activerest.upper !== this.data.activerest.upper) ||
+      (val.intervals !== this.data.intervals)) {
+      return true;
+    } else if ((this.viewState === SequenceStates.Loaded) &&
+      (val.countdown !== this.data.countdown)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   aitBuildTimer() {
@@ -116,8 +132,6 @@ export class IntervalDisplayPage extends AITBasePage {
         this.ngDectector.detectChanges();
       }
     });
-
-    super.aitSubscribeTimer();
   }
 
   createSettingsPage() {

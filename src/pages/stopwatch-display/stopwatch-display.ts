@@ -21,7 +21,7 @@ import { IonicPage } from 'ionic-angular';
 import { AITBasePage } from '../ait-base.page';
 import { SequenceStates } from '../../providers/sots/ait-sots.util';
 import { TimeEmission } from 'sots';
-import { StopwatchStorageData } from '../../providers/storage/ait-storage.interfaces';
+import { StopwatchStorageData, UUIDData } from '../../providers/storage/ait-storage.interfaces';
 import { StopwatchSettingsPage } from '../stopwatch-settings/stopwatch-settings';
 
 @IonicPage()
@@ -52,6 +52,19 @@ export class StopwatchDisplayPage extends AITBasePage {
 
   ionViewDidEnter() {
     super.ionViewDidEnter();
+  }
+
+  aitPreBuildTimerCheck(value: UUIDData): boolean {
+    let val = value as StopwatchStorageData;
+
+    if (!this.data) {
+      return true;
+    } else if ((this.viewState === SequenceStates.Loaded) &&
+      (val.countdown !== this.data.countdown)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   aitBuildTimer() {
@@ -93,8 +106,6 @@ export class StopwatchDisplayPage extends AITBasePage {
     });
 
     // this.grandTime = this.sots.getGrandTime({ time: -1 });
-
-    super.aitSubscribeTimer();
   }
 
   createSettingsPage() {

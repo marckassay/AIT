@@ -62,9 +62,6 @@ export interface IntervalStorageData extends UUIDData {
   countdownmaxlimit: number;
 
   warnings: CountdownWarnings;
-
-  // this field needs to be maintained by object that reads it.
-  hasLastSettingChangedTime: boolean;
 }
 
 export interface StopwatchStorageData extends UUIDData {
@@ -74,17 +71,11 @@ export interface StopwatchStorageData extends UUIDData {
   countdownmaxlimit: number;
 
   warnings: CountdownWarnings;
-
-  // this field needs to be maintained by object that reads it.
-  hasLastSettingChangedTime: boolean;
 }
 
 export interface TimerStorageData extends StopwatchStorageData {
   time: number;
   warnings: CountdownWarnings;
-
-  // this field needs to be maintained by object that reads it.
-  hasLastSettingChangedTime: boolean;
 }
 
 export type BrightnessSet = -100 | -90 | -80 | -70 | -60 | -50 | -40 | -30 | -20 | -10 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;

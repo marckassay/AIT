@@ -29,10 +29,10 @@ import { AITBaseSettingsPage } from '../ait-basesettings.page';
 export class StopwatchSettingsPage extends AITBaseSettingsPage {
   @Input('data')
   get data(): StopwatchStorageData {
-    return this._uuidData as StopwatchStorageData;
+    return this._uuidDat as StopwatchStorageData;
   }
   set data(value: StopwatchStorageData) {
-    this._uuidData = value;
+    this._uuidDat = value;
   }
 
   get countdownLabel(): string {

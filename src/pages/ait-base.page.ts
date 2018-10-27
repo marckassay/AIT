@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { UUIDData } from '../providers/storage/ait-storage.interfaces';
+import { UUIDData, StorePair } from '../providers/storage/ait-storage.interfaces';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef, SkipSelf } from '@angular/core';
 import { MenuController, NavParams } from 'ionic-angular';
@@ -30,14 +30,13 @@ import { AITBrightness } from '../providers/ait-screen';
 import { AITBaseSettingsPage } from './ait-basesettings.page';
 import { HomeDisplayService } from '../providers/home-display.service';
 import { Menu } from 'ionic-angular/components/app/menu-interface';
-import { Subscription, Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
 
-  public _uuidData: UUIDData;
-
+  protected _uuidData: UUIDData;
   get uuidData(): UUIDData {
     return this._uuidData;
   }
@@ -48,18 +47,18 @@ export class AITBasePage implements OnInit {
   // this type assignment to variable is for angular view
   // can access enum values.
   protected states = SequenceStates;
-  // TODO: create a accessor and mutator and tie in FabContainerComponent viewState too.
+  // TODO: create a accessor and mutator and tie in FabContainerComponent viewState too. Perhaps
+  // using a Subject would be better.
   protected viewState: SequenceStates;
+  protected store: StorePair<UUIDData>;
   protected sots: SotsForAit;
   protected grandTime: string;
   protected isFirstViewing: boolean;
   private leftmenu: Menu;
   private rightmenu: Menu;
   private rightmenuOpenSubscription: Subscription;
-  // private rightmenuCloseSubscription: Subscription;
+  private rightmenuCloseSubscription: Subscription;
   private rightmenuComponentInstance: AITBaseSettingsPage;
-  private promise: Promise<any>;
-  private subject: Subject<any>;
 
   constructor(
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
@@ -110,13 +109,23 @@ export class AITBasePage implements OnInit {
     this.floatingbuttons.setHomeButtonToVisible();
   }
 
-  registerMenuEvents(): void {
+  /**
+   * Called by `aitPostTimerBuilt` method to subscribe to `rightmenu`'s `ionOpen` event so that the
+   * `loadAppData` method in the settings page will be called. When `ionOpen` is emitted, the
+   * `ionClose` is subscribed so that what ever changes happened in the settings page, will be
+   * reflected in the display page.
+   */
+  private registerMenuEvents(): void {
     if (this.rightmenuOpenSubscription) {
       this.rightmenuOpenSubscription.unsubscribe();
     }
 
     this.rightmenuOpenSubscription = this.rightmenu.ionOpen.subscribe(() => {
       this.rightmenuComponentInstance.loadAppData();
+      this.rightmenuCloseSubscription = this.rightmenu.ionClose.subscribe(() => {
+        this.aitLoadData();
+        this.rightmenuCloseSubscription.unsubscribe();
+      });
     });
   }
 
@@ -166,43 +175,39 @@ export class AITBasePage implements OnInit {
   }
 
   private aitLoadData(): void {
-    const uuid = this.navParams.data.uuid;
-
-    if (uuid) {
-      const promiseAndSubject = this.storage.getPagePromiseAndSubject(uuid);
-      this.promise = promiseAndSubject[0];
-      this.subject = promiseAndSubject[1];
-
-      this.promise.then((value: any) => {
-
+    this.store = this.storage.getPagePromiseAndSubject2(this.navParams.data.uuid, true);
+    this.store.promise.then((value: any) => {
+      if (this.aitPreBuildTimerCheck(value)) {
         this.uuidData = (value as UUIDData);
-        if (value.hasOwnProperty('hasLastSettingChangedTime')) {
-          if (value.hasLastSettingChangedTime || this.isFirstViewing) {
-            this.aitBuildTimer();
+        this.aitBuildTimer();
+      }
+    }).catch(() => {
+      // console.log("interval-display preinitializeDisplay error")
+    });
+  }
 
-            value.hasLastSettingChangedTime = false;
-            this.subject.next(this.uuidData);
-          }
-        } else {
-          this.aitBuildTimer();
-        }
-
-      }).catch(() => {
-        // console.log("interval-display preinitializeDisplay error")
-      });
-    }
+  /**
+   * A pre-check to prevent rebuilding timer when any irrelevant settings have changed from the
+   * settings page. If the timer has been reset, it will be in its `SequenceStates.Loaded` state and
+   * if countdown time setting has changed, it will return `true`. Other than data not being defined,
+   * all others would been considered irrelevant in the `SequenceStates.Active` state and will
+   * return `false`.
+   *
+   * @param value to be used to compare with existing UUIDData, if any.
+   */
+  protected aitPreBuildTimerCheck(value: UUIDData): boolean {
+    throw new Error("Subclasses of AITBasePage need to implement aitPreBuildTimerCheck()." + value);
   }
 
   protected aitBuildTimer(): void {
     this.aitSubscribeTimer();
     this.aitResetTimer();
-    this.aitPostTimerBuilt();
+    this.aitPostBuildTimer();
   }
 
-  /**
-   * To be implemented by subclasses.
-   */
-  protected aitSubscribeTimer(): void { }
+  protected aitSubscribeTimer(): void {
+    throw new Error("Subclasses of AITBasePage need to implement aitSubscribeTimer().");
+  }
 
   private aitResetTimer(): void {
     this.viewState = SequenceStates.Loaded;
@@ -211,7 +216,7 @@ export class AITBasePage implements OnInit {
     this.ngDectector.detectChanges();
   }
 
-  protected aitPostTimerBuilt(): void {
+  protected aitPostBuildTimer(): void {
     this.registerMenuEvents();
 
     if (this.isFirstViewing) {

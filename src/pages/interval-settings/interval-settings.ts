@@ -28,10 +28,10 @@ import { AITBaseSettingsPage } from '../ait-basesettings.page';
 })
 export class IntervalSettingsPage extends AITBaseSettingsPage {
   get data(): IntervalStorageData {
-    return this._uuidData as IntervalStorageData;
+    return this._uuidDat as IntervalStorageData;
   }
   set data(value: IntervalStorageData) {
-    this._uuidData = value;
+    this._uuidDat = value;
   }
 
   get totaltime(): string {
