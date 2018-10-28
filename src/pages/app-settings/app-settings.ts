@@ -25,6 +25,7 @@ import { Navbar } from 'ionic-angular/navigation/nav-interfaces';
 import { AITSignal } from '../../providers/ait-signal';
 import { Subject } from 'rxjs';
 import { StorageDefaultData } from '../../providers/storage/ait-storage.defaultdata';
+import { AudioManagement } from '@ionic-native/audio-management';
 
 @IonicPage()
 @Component({
@@ -88,7 +89,7 @@ export class AppSettingsPage {
 
   toggleSound(): void {
     if (this.data.sound === 0) {
-      this.signal.audioman.getVolume(1, (result) => {
+      this.signal.audioman.getVolume(AudioManagement.VolumeType.Music, (result) => {
         this.data.sound = result.volume;
       });
     } else if (Math.abs(this.data.sound) > 0) {

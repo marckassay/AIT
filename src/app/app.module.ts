@@ -16,6 +16,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HomeDisplayPageModule } from '../pages/home-display/home-display.module';
 import { HomeDisplayService } from '../providers/home-display.service';
 import { AudioManagement } from '@ionic-native/audio-management';
+import { AudioManagementMock } from '../providers/mocks/AudioManagementMock';
 
 @NgModule({
   declarations: [App],
@@ -43,7 +44,7 @@ import { AudioManagement } from '@ionic-native/audio-management';
     AITBrightness,
     Brightness,
     AITSignal,
-    AudioManagement,
+    { provide: AudioManagement, useClass: AudioManagementMock },
     HomeDisplayService,
     MenuController,
     { provide: ErrorHandler, useClass: IonicErrorHandler }

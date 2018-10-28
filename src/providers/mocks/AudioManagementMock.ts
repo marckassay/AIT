@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { Storage } from "@ionic/storage";
 
 export interface MockStorageShape {
-  uuid: string;
   currentAudioMode: number;
   ringVolume: number;
   ringMaxVolume: number;
@@ -16,7 +15,6 @@ export interface MockStorageShape {
 }
 
 const storage_shape: MockStorageShape = {
-  uuid: this.MOCK_STORAGE_KEY,
   currentAudioMode: 2,
   ringVolume: 5,
   ringMaxVolume: 8,
@@ -31,12 +29,46 @@ const storage_shape: MockStorageShape = {
 type AudioModeReturn = { mode: AudioManagement.AudioMode, label: string };
 
 @Injectable()
-class AudioManagementMock extends AudioManagement {
+export class AudioManagementMock extends AudioManagement {
   private readonly MOCK_STORAGE_KEY: string = '1e715c37-c09e-49a7-84e6-950fa447e45a';
-  private ready: Promise<boolean>;
+  private ready: Promise<boolean> | undefined;
 
   constructor(public storage: Storage) {
     super();
+  }
+
+  setAudioMode(mode: AudioManagement.AudioMode, onSuccess: () => void, onError?: () => void): Promise<void> {
+    return this.setMock('currentAudioMode', mode).then(onSuccess, onError);
+  }
+  getAudioMode(onSuccess: (result: AudioModeReturn) => void, onError?: () => void): Promise<any> {
+    return this.getMock().then((value: MockStorageShape) => {
+      const val = { mode: value.currentAudioMode, label: AudioManagement.AudioMode[value.currentAudioMode] };
+      return Promise.resolve(onSuccess(val));
+    }, () => {
+      return Promise.resolve(onError());
+    });
+  }
+
+  setVolume(type: AudioManagement.VolumeType, volume: number, onSuccess: () => void, onError?: () => void): Promise<any> {
+    return this.setMock(this.volTypeToField(type), volume).then(onSuccess, onError);
+  }
+
+  getVolume(type: AudioManagement.VolumeType, onSuccess: (result: { volume: number }) => void, onError?: () => void): Promise<any> {
+    return this.getMock().then((value: MockStorageShape) => {
+      const val = { volume: value[this.volTypeToField(type)] as number };
+      return Promise.resolve(onSuccess(val));
+    }, () => {
+      return Promise.resolve(onError());
+    });
+  }
+
+  getMaxVolume(type: AudioManagement.VolumeType, onSuccess: (result: { volume: number }) => void, onError?: () => void): Promise<any> {
+    return this.getMock().then((value: MockStorageShape) => {
+      const val = { volume: value[this.volTypeToField(type, true)] as number };
+      return Promise.resolve(onSuccess(val));
+    }, () => {
+      return Promise.resolve(onError());
+    });
   }
 
   private isReady(): Promise<boolean> {
@@ -51,14 +83,19 @@ class AudioManagementMock extends AudioManagement {
           if (!value) {
             console.log("AudioManagementMock is setting mock data.");
             return this.storage.set(this.MOCK_STORAGE_KEY, storage_shape).then((value: MockStorageShape) => {
-              this.ready = new Promise<boolean>((resolve, reject) => { resolve(true); });
+              this.ready = Promise.resolve<boolean>(true);
               return this.ready;
             });
           } else {
             console.log("AudioManagementMock successfully retrieved data.");
-            this.ready = new Promise<boolean>((resolve, reject) => { resolve(true); });
+            this.ready = Promise.resolve<boolean>(true);
             return this.ready;
           }
+        })
+        .catch((reason: any) => {
+          console.error("AudioManagementMock failed to retrieved data." + reason);
+          this.ready = undefined;
+          return Promise.resolve<boolean>(false);
         });
     }
   }
@@ -79,7 +116,7 @@ class AudioManagementMock extends AudioManagement {
     return field;
   }
 
-  getMock(): Promise<MockStorageShape> {
+  private getMock(): Promise<MockStorageShape> {
     return this.isReady().then((value) => {
       if (value) {
         return this.storage.get(this.MOCK_STORAGE_KEY) as Promise<MockStorageShape>;
@@ -87,44 +124,12 @@ class AudioManagementMock extends AudioManagement {
     });
   }
 
-  setMock(field: keyof MockStorageShape, value?: number): Promise<void> {
+  private setMock(field: keyof MockStorageShape, value?: number): Promise<void> {
     return this.getMock().then((val: MockStorageShape) => {
       val[field] = value;
       return this.storage.set(this.MOCK_STORAGE_KEY, val).then(() => {
-        return new Promise<void>((resolve, reject) => { resolve(); });
+        return Promise.resolve();
       });
-    });
-  }
-
-  setAudioMode(mode: AudioManagement.AudioMode, onSuccess: () => void, onError?: () => void): Promise<void> {
-    return this.setMock('currentAudioMode', mode).then(onSuccess, onError);
-  }
-  getAudioMode(onSuccess: (result: AudioModeReturn) => void, onError?: () => void): Promise<AudioModeReturn> {
-    return this.getMock().then((value: MockStorageShape) => {
-      const val = { mode: value.currentAudioMode, label: AudioManagement.AudioMode[value.currentAudioMode] };
-      return new Promise<AudioModeReturn>((onSuccess, onError) => { onSuccess(val); });
-    });
-  }
-
-  setVolume(type: AudioManagement.VolumeType, volume: number, onSuccess: () => void, onError?: () => void): Promise<any> {
-    return this.setMock(this.volTypeToField(type), volume).then(onSuccess, onError);
-  }
-
-  getVolume(type: AudioManagement.VolumeType, onSuccess: (result: {
-    volume: number;
-  }) => void, onError?: () => void): Promise<any> {
-    return this.getMock().then((value: MockStorageShape) => {
-      const val = { volume: value[this.volTypeToField(type)] as number };
-      return new Promise<{ volume: number }>((onSuccess, onError) => { onSuccess(val); });
-    });
-  }
-
-  getMaxVolume(type: AudioManagement.VolumeType, onSuccess: (result: {
-    volume: number;
-  }) => void, onError?: () => void): Promise<any> {
-    return this.getMock().then((value: MockStorageShape) => {
-      const val = { volume: value[this.volTypeToField(type)] as number };
-      return new Promise<{ volume: number }>((onSuccess, onError) => { onSuccess(val); });
     });
   }
 }
