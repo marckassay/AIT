@@ -27,13 +27,24 @@ import { StorageDefaultData } from './storage/ait-storage.defaultdata';
  * References audio and vibrate features of the device.
  */
 export class AITSignal {
-  data: AppStorageData;
+  private _data: AppStorageData;
+  public get data(): AppStorageData {
+    return this._data;
+  }
+  public set data(value: AppStorageData) {
+    this._data = value;
+  }
 
   constructor(public vibration: Vibration,
     public audioman: AudioManagement,
     public storage: AITStorage) {
-    this.storage.getPagePromise(StorageDefaultData.APP_ID).then((value) => {
-      this.data = (value as AppStorageData);
+    this.storage.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID).then((value) => {
+      this.data = value;
+      if (value.sound > 0) {
+        this.audioman.setVolume(AudioManagement.VolumeType.Music, value.sound).then(() => {
+          console.log("AudioManagement restore Music volume to previous value.");
+        });
+      }
     });
   }
 

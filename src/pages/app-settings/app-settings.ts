@@ -101,7 +101,10 @@ export class AppSettingsPage {
    * The UI for this event handler is only enabled when: `Math.abs(this.data.sound) > 0`.
    */
   testVolume(event?: MouseEvent): void {
-    this.signal.double();
+    this.signal.audioman.getVolume(AudioManagement.VolumeType.Music, (result) => {
+      this.data.sound = result.volume;
+      this.signal.double();
+    });
   }
 
   /**
