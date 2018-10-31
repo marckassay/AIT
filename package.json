@@ -11,7 +11,8 @@
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
-    "watch": "ionic-app-scripts watch"
+    "watch": "ionic-app-scripts watch",
+    "prebuild:local": "node ./scripts/pre-build.js locals"
   },
   "dependencies": {
     "@angular/animations": "5.2.11",

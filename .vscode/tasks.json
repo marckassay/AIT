@@ -5,16 +5,8 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "build",
-      "identifier": "ait_build",
-      "label": "AiT Build",
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
-      "script": "start",
-      "identifier": "ait_serve",
-      "label": "Run and Watch dev server",
+      "script": "prebuild:local",
+      "label": "local",
       "problemMatcher": []
     }
   ]

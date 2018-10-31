@@ -5,15 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
-      "request": "launch",
-      "port": 9222,
-      "name": "Debug AiT in Chrome",
-      "webRoot": "${workspaceFolder}/src",
-      "sourceMaps": true,
-      "url": "http://localhost:8100"
-    },
-    {
       "name": "Run Android on device",
       "type": "cordova",
       "request": "launch",
@@ -24,7 +15,7 @@
       "cwd": "${workspaceFolder}",
       "ionicLiveReload": false
     },
-    {
+    /*     {
       "name": "Run iOS on device",
       "type": "cordova",
       "request": "launch",
@@ -34,7 +25,7 @@
       "sourceMaps": true,
       "cwd": "${workspaceFolder}",
       "ionicLiveReload": false
-    },
+    }, */
     {
       "name": "Attach to running android on device",
       "type": "cordova",
@@ -43,9 +34,10 @@
       "target": "device",
       "port": 9222,
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "local"
     },
-    {
+    /*     {
       "name": "Attach to running iOS on device",
       "type": "cordova",
       "request": "attach",
@@ -54,8 +46,8 @@
       "port": 9220,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}"
-    },
-    {
+    }, */
+    /*     {
       "name": "Run Android on emulator",
       "type": "cordova",
       "request": "launch",
@@ -65,8 +57,8 @@
       "sourceMaps": true,
       "cwd": "${workspaceFolder}",
       "ionicLiveReload": false
-    },
-    {
+    }, */
+    /*     {
       "name": "Run iOS on simulator",
       "type": "cordova",
       "request": "launch",
@@ -76,8 +68,8 @@
       "sourceMaps": true,
       "cwd": "${workspaceFolder}",
       "ionicLiveReload": false
-    },
-    {
+    }, */
+    /*     {
       "name": "Attach to running android on emulator",
       "type": "cordova",
       "request": "attach",
@@ -86,8 +78,8 @@
       "port": 9222,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}"
-    },
-    {
+    }, */
+    /*     {
       "name": "Attach to running iOS on simulator",
       "type": "cordova",
       "request": "attach",
@@ -96,7 +88,7 @@
       "port": 9220,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}"
-    },
+    }, */
     {
       "name": "Serve to the browser (ionic serve)",
       "type": "cordova",
@@ -105,9 +97,11 @@
       "cwd": "${workspaceFolder}",
       "devServerAddress": "localhost",
       "sourceMaps": true,
-      "ionicLiveReload": true
+      "simulatorInExternalBrowser": true,
+      "ionicLiveReload": true,
+      "preLaunchTask": "local"
     },
-    {
+    /*     {
       "name": "Simulate Android in browser",
       "type": "cordova",
       "request": "launch",
@@ -117,8 +111,8 @@
       "livereload": true,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}"
-    },
-    {
+    }, */
+    /*     {
       "name": "Simulate iOS in browser",
       "type": "cordova",
       "request": "launch",
@@ -128,17 +122,16 @@
       "livereload": true,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}"
-    },
+    }, */
     {
-      "name": "Run Browser",
+      "name": "Debug AiT in Chrome",
       "type": "cordova",
       "request": "launch",
-      "platform": "browser",
-      "target": "chrome",
-      "simulatePort": 8000,
-      "livereload": true,
+      "platform": "android",
+      "port": 9222,
+      "cwd": "${workspaceFolder}",
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}"
+      "preLaunchTask": "local"
     }
   ]
 }
