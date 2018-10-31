@@ -226,11 +226,18 @@ export class AITBasePage implements OnInit {
   }
 
   protected setViewInRunningMode(value: boolean): void {
-    this.leftmenu.enable(!value);
-    this.rightmenu.enable(!value);
+    this.signal.enable(value)
+      .then((value) => {
+        return Promise.resolve();
+      }, () => {
+        return Promise.resolve();
+      }).then(() => {
+        this.leftmenu.enable(!value);
+        this.rightmenu.enable(!value);
 
-    (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
-    (value) ? this.statusBar.hide() : this.statusBar.show();
+        (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
+        (value) ? this.statusBar.hide() : this.statusBar.show();
+      });
   }
 
   /**

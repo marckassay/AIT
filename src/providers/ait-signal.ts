@@ -27,6 +27,9 @@ import { StorageDefaultData } from './storage/ait-storage.defaultdata';
  * References audio and vibrate features of the device.
  */
 export class AITSignal {
+  audioModePriorToChange: number | undefined;
+  musicVolumePriorToChange: number | undefined;
+
   private _data: AppStorageData;
   public get data(): AppStorageData {
     return this._data;
@@ -40,12 +43,82 @@ export class AITSignal {
     public storage: AITStorage) {
     this.storage.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID).then((value) => {
       this.data = value;
-      if (value.sound > 0) {
-        this.audioman.setVolume(AudioManagement.VolumeType.Music, value.sound).then(() => {
-          console.log("AudioManagement restore Music volume to previous value.");
-        });
-      }
     });
+  }
+
+  /**
+   * Enables by applying previous sound volume. This is currently called only when the timer is in
+   * its active state. And called with `value` being `false` when timer is no longer in active
+   * state.
+   *
+   * When the `value` is `true` and sounds for the app are enabled (`this.data.sound > 0`), it will
+   * get the device's current audiomode (getAudioMode()), store that value by setting
+   * `audiomodePriorToChange` and set the device's audiomode (via setAudioMode()) to
+   * `AudioMode.Normal`.
+   *
+   * When the `value` is `false`, it will revert the settings that were done when called with the
+   * `value` of `true`. This is done using the `audioModePriorToChange` and
+   * `musicVolumePriorToChange`.
+   *
+   * @param value indicates if it should be enabled or disabled.
+   */
+  enable(value: boolean): Promise<void> {
+    if (value && this.data.sound > 0) {
+      return this.audioman.getAudioMode()
+        .then((value) => {
+          this.audioModePriorToChange = value.mode;
+          if (this.audioModePriorToChange !== AudioManagement.AudioMode.Normal) {
+            return this.audioman.setAudioMode(AudioManagement.AudioMode.Normal);
+          } else {
+            return Promise.resolve();
+          }
+        })
+        .then(() => {
+          this.audioman.getVolume(AudioManagement.VolumeType.Music)
+            .then((value) => {
+              this.musicVolumePriorToChange = value.volume;
+              return Promise.resolve();
+            });
+        })
+        .then(() => {
+          if (this.musicVolumePriorToChange !== this.data.sound) {
+            this.audioman.setVolume(AudioManagement.VolumeType.Music, this.data.sound)
+              .then(() => {
+                console.log("AudioManagement restored Music volume to previous session value.");
+                return Promise.resolve();
+              });
+          } else {
+            return Promise.resolve();
+          }
+        })
+        .catch((reason) => {
+          return Promise.reject(reason);
+        });
+    } else if (!value) {
+      return Promise.resolve(this.audioModePriorToChange && (this.audioModePriorToChange !== AudioManagement.AudioMode.Normal))
+        .then((value) => {
+          if (value) {
+            return this.audioman.setAudioMode(this.audioModePriorToChange);
+          } else {
+            return Promise.resolve();
+          }
+        })
+        .then(() => {
+          if (this.musicVolumePriorToChange && (this.musicVolumePriorToChange > 0)) {
+            return this.audioman.setVolume(AudioManagement.VolumeType.Music, this.musicVolumePriorToChange);
+          } else {
+            return Promise.resolve();
+          }
+        })
+        .then(() => {
+          this.audioModePriorToChange = undefined;
+          this.musicVolumePriorToChange = undefined;
+          return Promise.resolve();
+        })
+        .catch((reason) => {
+          return Promise.reject(reason);
+        });
+    }
   }
 
   single() {

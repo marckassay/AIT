@@ -89,9 +89,10 @@ export class AppSettingsPage {
 
   toggleSound(): void {
     if (this.data.sound === 0) {
-      this.signal.audioman.getVolume(AudioManagement.VolumeType.Music, (result) => {
-        this.data.sound = result.volume;
-      });
+      this.signal.audioman.setAudioMode(AudioManagement.AudioMode.Normal)
+        .then(() => {
+          this.signal.audioman.getVolume(AudioManagement.VolumeType.Music, (result) => { this.data.sound = result.volume; });
+        });
     } else if (Math.abs(this.data.sound) > 0) {
       this.data.sound = 0;
     }
