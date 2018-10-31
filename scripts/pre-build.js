@@ -1,17 +1,13 @@
-'use strict';
+/* 'use strict';
 
-const newLocal = 'fs';
-const fs = require(newLocal);
-
+var env;
 for (let j = 0; j < process.argv.length; j++) {
-  console.log(j + ' -> ' + (process.argv[j]));
+  if (process.argv[j].startsWith("--")) {
+    env = process.argv[j].slice(2);
+    break;
+  }
 }
+ */
+process.env.APP_ENV = "local";
 
-let rawdata = fs.readFileSync('./src/local.json');
-let enviro = JSON.parse(rawdata);
-console.log(enviro);
-var text = `//THIS FILE IS GENERATED
-export let environment = {
-  useMock: true
-};`
-fs.writeFileSync('./src/app/environments/environment.ts', text);
+console.log("process.env.APP_ENV :: " + process.env.APP_ENV);

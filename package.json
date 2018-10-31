@@ -12,7 +12,11 @@
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
     "watch": "ionic-app-scripts watch",
-    "prebuild:local": "node ./scripts/pre-build.js locals"
+    "prebuild:local": "node ./scripts/pre-build.js",
+    "prebuild:device": "node ./scripts/pre-build.js"
+  },
+  "config": {
+    "ionic_webpack": "./config/webpack.config.js"
   },
   "dependencies": {
     "@angular/animations": "5.2.11",
@@ -53,6 +57,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.2.0",
+    "cross-env": "^5.2.0",
     "tslint": "^5.11.0",
     "typescript": "~2.6.2"
   },

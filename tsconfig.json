@@ -13,7 +13,13 @@
     "moduleResolution": "node",
     "traceResolution": false,
     "sourceMap": true,
-    "target": "es5"
+    "target": "es5",
+    "baseUrl": "./src",
+    "paths": {
+      "@environment": [
+        "config/config.device"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts"

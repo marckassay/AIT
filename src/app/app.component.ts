@@ -26,6 +26,7 @@ import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../providers/them
 import { HomeDisplayService } from '../providers/home-display.service';
 import { AppStorageData } from '../providers/storage/ait-storage.interfaces';
 import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
+import { app_env } from "@environment";
 
 @Component({
   templateUrl: 'app.html'
@@ -65,6 +66,8 @@ export class App {
       }
     });
     this.checkAppStartupData();
+
+    console.log("ENV :: " + app_env.useMock);
   }
 
   checkAppStartupData() {
