@@ -12,8 +12,8 @@
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
     "watch": "ionic-app-scripts watch",
-    "prebuild:local": "node ./scripts/pre-build.js",
-    "prebuild:device": "node ./scripts/pre-build.js"
+    "prebuild:local": "node ./scripts/prebuild.js --local",
+    "prebuild:device": "node ./scripts/prebuild.js --device"
   },
   "config": {
     "ionic_webpack": "./config/webpack.config.js"

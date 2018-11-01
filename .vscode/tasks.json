@@ -8,6 +8,12 @@
       "script": "prebuild:local",
       "label": "local",
       "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "prebuild:device",
+      "label": "device",
+      "problemMatcher": []
     }
   ]
 }

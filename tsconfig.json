@@ -14,15 +14,16 @@
     "traceResolution": false,
     "sourceMap": true,
     "target": "es5",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
       "@environment": [
-        "config/config.device"
+        "src/app/config/config"
       ]
     }
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "config/config.*.ts"
   ],
   "exclude": [
     "node_modules",

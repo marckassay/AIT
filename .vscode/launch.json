@@ -13,7 +13,8 @@
       "port": 9222,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}",
-      "ionicLiveReload": false
+      "ionicLiveReload": false,
+      "preLaunchTask": "device"
     },
     /*     {
       "name": "Run iOS on device",
@@ -35,7 +36,7 @@
       "port": 9222,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}",
-      "preLaunchTask": "local"
+      "preLaunchTask": "device"
     },
     /*     {
       "name": "Attach to running iOS on device",
