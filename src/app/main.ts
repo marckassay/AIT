@@ -1,11 +1,10 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app.module';
-//import { app_env } from '@environment';
-/* if (environment.production) {
-  enableProdMode();
-} */
+import { APP_ENV } from '@environment';
 
-//console.log("maint.ts app_env : " + app_env);
+if (APP_ENV.useMock === false) {
+  enableProdMode();
+}
 
 platformBrowserDynamic().bootstrapModule(AppModule);

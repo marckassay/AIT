@@ -17,7 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "@environment": [
-        "src/app/config/config"
+        "src/app/app.env"
       ]
     }
   },

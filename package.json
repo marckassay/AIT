@@ -16,7 +16,7 @@
     "prebuild:device": "node ./scripts/prebuild.js --device"
   },
   "config": {
-    "ionic_webpack": "./config/webpack.config.js"
+    "ionic_webpack": "./scripts/webpack.config.js"
   },
   "dependencies": {
     "@angular/animations": "5.2.11",

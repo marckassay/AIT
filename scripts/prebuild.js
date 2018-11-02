@@ -1,28 +1,31 @@
 'use strict';
 var fs = require('fs')
 var path = require('path')
+var artifact = require('./build.artifact.js')
 
-var value;
+/**
+ * This script file is intended to be called by node prior to any "scripts" commands. Its purpose is
+ * to determine the (TypeScript) environment so that 'tsc' will be assigned the correct
+ * 'config/config.XXX.ts' file. This has been created as a workaround to this issue:
+ *  https://github.com/ionic-team/ionic-cli/issues/1205#issuecomment-420583034
+ */
 for (let j = 2; j < process.argv.length; j++) {
   if (process.argv[j].startsWith("--")) {
-    value = process.argv[j].slice(2);
+    artifact.ts_environment = process.argv[j].slice(2);
     break;
   }
 }
 
-var artifacts = {
-  environment: value
-};
 var IONIC_TMP_DIR = ".tmp/";
 var artifact_path = IONIC_TMP_DIR + 'build.artifact.json';
 
 // check and resolve for IONIC_TMP_DIR existence
-var dirname = path.dirname(artifact_path);
-if (fs.existsSync(dirname) == false) {
-  fs.mkdirSync(dirname);
+if (fs.existsSync(IONIC_TMP_DIR) == false) {
+  fs.mkdirSync(IONIC_TMP_DIR);
 }
-
 console.log("Writing artifact file: " + artifact_path)
-fs.writeFile(artifact_path, JSON.stringify(artifacts), (err) => {
-  console.error("The file: ./scripts/prebuild.js, failed writing artifact file!", err);
+console.log("        artifact contents: " + JSON.stringify(artifact))
+fs.writeFile(artifact_path, JSON.stringify(artifact), (err) => {
+  if (err)
+    console.error("The build file, './scripts/prebuild.js', failed writing artifact file!", err);
 });
