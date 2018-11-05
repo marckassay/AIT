@@ -1,4 +1,4 @@
 {
-  "npm.packageManager": "yarn",
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+    "npm.packageManager": "yarn",
+    "cordova.cordovaExecutable": ".\\node_modules\\.bin\\ionic.cmd"
 }

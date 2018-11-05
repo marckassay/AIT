@@ -1,0 +1,9 @@
+{
+    "executables": {
+        "name": [
+            "ionic",
+            "cordova"
+        ]
+    },
+    "deployhook": ""
+}
