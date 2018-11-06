@@ -30,12 +30,12 @@ import { AccentTheme, BaseTheme, ThemeSettingsProvider } from '../providers/them
 import { HomeDisplayService } from '../providers/home-display.service';
 import { AppStorageData } from '../providers/storage/ait-storage.interfaces';
 import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
-import { APP_ENV } from "@environment";
+// import { APP_ENV } from "@environment";
 
 @Component({
   templateUrl: 'app.html'
 })
-export class App {
+export class AppComponent {
   @ViewChild(Nav)
   navCtrl: Nav;
 
@@ -71,7 +71,7 @@ export class App {
     });
     this.checkAppStartupData();
 
-    console.log("APP_ENV :: " + APP_ENV.useMock);
+    // console.log("APP_ENV :: " + APP_ENV.useMock);
   }
 
   checkAppStartupData() {

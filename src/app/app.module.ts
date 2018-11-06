@@ -17,9 +17,19 @@ import { HomeDisplayPageModule } from '../pages/home-display/home-display.module
 import { HomeDisplayService } from '../providers/home-display.service';
 import { AudioManagement } from '@ionic-native/audio-management';
 import { AudioManagementMock } from '../providers/mocks/AudioManagementMock';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
+
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [App],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HomeDisplayPageModule,
@@ -27,13 +37,13 @@ import { AudioManagementMock } from '../providers/mocks/AudioManagementMock';
       name: '__aitdb',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
-    IonicModule.forRoot(App, {
+    IonicModule.forRoot(AppComponent, {
       menuType: 'reveal'
     }),
     AppRoutingModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [App],
+  entryComponents: [AppComponent],
   providers: [
     ScreenOrientation,
     StatusBar,
@@ -53,23 +63,5 @@ import { AudioManagementMock } from '../providers/mocks/AudioManagementMock';
   ]
 })
 export class AppModule { }
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-
-@NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [
-    StatusBar,
-    SplashScreen,
-  ],
-  bootstrap: [AppComponent]
