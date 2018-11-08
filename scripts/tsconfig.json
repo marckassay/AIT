@@ -1,0 +1,21 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outDir": "../out",
+    "sourceMap": false,
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": false,
+    "newLine": "LF",
+    "target": "es5",
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  },
+  "include": [
+    "./*.ts"
+  ]
+}

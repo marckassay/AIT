@@ -14,10 +14,10 @@ const psvalue = path.resolve(path.join('scripts', 'npm-iex'));
  * @param {string} linkvalue
  * @param {string} linkpath
  */
-async function generateSymlink(linkvalue, linkpath) {
+async function generateSymlink(linkvalue, linkpath, removeOnly = false) {
   await fs.exists(linkpath, (exists) => {
     if (exists) { fs.unlinkSync(linkpath) };
-    fs.symlinkSync(linkvalue, linkpath, 'file');
+    if (removeOnly == false) { fs.symlinkSync(linkvalue, linkpath, 'file') };
     return existsAsync(linkpath).then(() => {
       console.log("The following symlink has been created: " + linkpath);
     });
@@ -42,10 +42,10 @@ async function symlinkGenerator() {
     })
     .then(() => {
       for (const iterator of this.jsoncontents.executables.name) {
-        //generateSymlink(bashvalue, path.join(this.globalbin, iterator));
-        //generateSymlink(bashvalue, path.join(this.globalbin, iterator + '.cmd'));
+        generateSymlink(bashvalue, path.join(this.globalbin, iterator));
+        generateSymlink(bashvalue, path.join(this.globalbin, iterator + '.cmd'));
         generateSymlink(psvalue, path.join(this.globalbin, iterator + '.ps1'));
-        //generateSymlink(psvalue, path.join(this.globalbin, iterator + '.cmd.ps1'));
+        generateSymlink(psvalue, path.join(this.globalbin, iterator + '.cmd.ps1'));
       }
     });
 }

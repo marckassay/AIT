@@ -1,9 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env node
+/*
+const { exec } = require('child_process');
+exec('yarn versions', (err, stdout, stderr) => {
+  if (err) {
+    // node couldn't execute the command
+    return;
+  }
 
-args="$@"
-arg2="$2"
-if [ "$1" = "install" ] && [ -n "$arg2" ] && [ "${arg2/--//}" = "$arg2" ] ; then
-    args="${args/install/add}"
-fi
+  // the *entire* stdout and stderr (buffered)
+  console.log(`stdout: ${stdout}`);
+  console.log(`stderr: ${stderr}`);
+});
+*/
 
-yarn $args
+/**
+ *
+install cordova-android@7.1.1 --production --save-exact
+console.log(process.argv);
+*/
