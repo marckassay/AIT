@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import * as child from 'child_process';
+import { ExecException } from 'child_process';
+import { exit } from 'process';
 
 interface RegExShape {
   exe?: string;
@@ -35,8 +38,9 @@ const regex = new RegExp([
 ].join(''));
 
 // prepare argv values into argument, so that regex can parse as expected
-// let argument = '';
-let argument = 'install cordova-android@7.1.1 --production --save-exact';
+// tslint:disable-next-line:no-inferrable-types
+let argument: string = '';
+// let argument = 'install cordova-android@7.1.1 --production --save-exact';
 
 for (let j = 2; j < process.argv.length; j++) {
   argument += ' ' + process.argv[j];
@@ -59,46 +63,23 @@ switch (parsedArg.command) {
       transformedCommand = 'add';
     } else if (transformedOptions && transformedOptions.some((value) => value === '**global')) {
       transformedCommand = 'global add';
+    } else if (transformedOptions && transformedOptions.some((value) =>
+      value === '--dev' || value === '--optional' || value === '--exact')) {
+      transformedCommand = 'add';
     } else {
       transformedCommand = 'install';
     }
     break;
 }
+const tranformedExpression: string = transformedExe + ' ' + transformedCommand + ' ' + parsedArg.pkgdetails + transformedOptions.join(' ');
 
-console.log(transformedExe + ' ' + transformedCommand + ' ' + parsedArg.pkgdetails + transformedOptions.join(' '));
+console.log('The following npm expression has been tranformed into the following yarn expression:');
+console.log('npm ' + argument);
+console.log(tranformedExpression);
 
-/*
-child.exec('cli_expression', (error: ExecException, stdout: string, stderr: string) => {
+child.exec(tranformedExpression, (error: ExecException, stdout: string, stderr: string) => {
   if (error) {
-    throw error;
+    exit(1);
   }
-  console.log(stdout);
+  exit(0);
 });
-*/
-
-/*
-npm install --production	                      yarn install
-npm install                                     yarn install
-  (N / A)	                                      yarn install --flat
-  (N / A)	                                      yarn install --har
-npm install --no-package-lock	                  yarn install --no-lockfile
-  (N / A)	                                      yarn install --pure-lockfile
-
-npm install [package] --save	                  yarn add [package]
-npm install [package] --save-dev	              yarn add [package] --dev
-  (N / A)	                                      yarn add [package] --peer
-npm install [package] --save-optional	          yarn add [package] --optional
-npm install [package] --save-exact	            yarn add [package] --exact
-  (N / A)	                                      yarn add [package] --tilde
-npm install [package] --global	                yarn global add [package]
-
-npm update --global                             yarn global upgrade
-npm rebuild	                                    yarn add --force
-npm uninstall [package]	                        yarn remove[package]
-npm cache clean	                                yarn cache clean [package]
-rm -rf node_modules && npm install              yarn upgrade
-npm version major                               yarn version --major
-npm version minor                               yarn version --minor
-npm version patch                               yarn version --patch
-*/
-
