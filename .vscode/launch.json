@@ -7,6 +7,16 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Script Debugger",
+      "sourceMaps": true,
+      "program": "${workspaceFolder}\\out\\npm-wrapper.js",
+      "outFiles": [
+        "${workspaceFolder}/out/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Deug deploy-symlinks",
       "program": "${workspaceFolder}/scripts/deploy-symlinks.js"
     },
@@ -14,7 +24,8 @@
       "type": "node",
       "request": "launch",
       "name": "Debug npm-wrapper",
-      "program": "${workspaceFolder}/scripts/npm-wrapper.ts"
+      "sourceMaps": true,
+      "program": "${workspaceFolder}/out/npm-wrapper.js"
     },
     {
       "type": "node",
