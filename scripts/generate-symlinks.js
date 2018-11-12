@@ -5,8 +5,20 @@ const exec = util.promisify(require('child_process').exec);
 const yarn = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
 const readFileAsync = util.promisify(fs.readFile);
 const existsAsync = util.promisify(fs.exists);
-const bashvalue = path.resolve(path.join('scripts', 'npm-exec'));
-const psvalue = path.resolve(path.join('scripts', 'npm-iex'));
+
+function copyFileToOutScripts(filename, srcDir, destDir) {
+  if (fs.existsSync(destDir) === false) {
+    fs.mkdirSync(destDir);
+  }
+
+  fs.copyFileSync(path.join(srcDir, filename), path.join(destDir, filename));
+  fs.copyFileSync(path.join(srcDir, filename), path.join(destDir, filename));
+}
+
+function chmodFileToExe(path) {
+  fs.chmodSync(path, '777');
+  fs.chmodSync(path, '777');
+}
 
 /**
  * Deletes if there is an existing linkpath.
@@ -14,24 +26,34 @@ const psvalue = path.resolve(path.join('scripts', 'npm-iex'));
  * @param {string} linkvalue
  * @param {string} linkpath
  */
-async function generateSymlink(linkvalue, linkpath, removeOnly = false) {
-  await fs.exists(linkpath, (exists) => {
-    if (exists) { fs.unlinkSync(linkpath) };
-    if (removeOnly == false) { fs.symlinkSync(linkvalue, linkpath, 'file') };
-    return existsAsync(linkpath).then(() => {
-      console.log("The following symlink has been created: " + linkpath);
+function generateSymlink(linkvalue, linkpath) {
+  return existsAsync(linkpath)
+    .then((value) => {
+      if (value) {
+        fs.unlinkSync(linkpath);
+      }
+      fs.symlinkSync(linkvalue, linkpath, 'file');
+      return Promise.resolve();
+    })
+    .then(() => {
+      return existsAsync(linkpath).then(() => {
+        console.log("The following symlink has been created: " + linkpath);
+      });
     });
-  });
 };
 
 /**
  * Calls generateSymlink with defined target and defined value for symlink.
  */
-async function symlinkGenerator() {
+function symlinkGenerator() {
   let globalbin;
   let jsoncontents;
+  const bashFileName = 'npm-exec';
+  const psFileName = 'npm-iex';
+  const destinationFolder = path.resolve(path.join('out', 'out-scripts'));
+  const srcFolder = path.resolve(path.join('scripts', 'symlink'));
 
-  await exec(yarn + ' global bin')
+  exec(yarn + ' global bin')
     .then((value) => {
       this.globalbin = value.stdout.trim();
       return readFileAsync('symlink.config.json');
@@ -41,12 +63,37 @@ async function symlinkGenerator() {
       return util.promisify(() => { return; });
     })
     .then(() => {
-      for (const iterator of this.jsoncontents.executables.name) {
-        generateSymlink(bashvalue, path.join(this.globalbin, iterator));
-        generateSymlink(bashvalue, path.join(this.globalbin, iterator + '.cmd'));
-        generateSymlink(psvalue, path.join(this.globalbin, iterator + '.ps1'));
-        generateSymlink(psvalue, path.join(this.globalbin, iterator + '.cmd.ps1'));
+      copyFileToOutScripts(bashFileName, srcFolder, destinationFolder);
+      copyFileToOutScripts(psFileName, srcFolder, destinationFolder);
+      chmodFileToExe(path.join(destinationFolder, bashFileName));
+      chmodFileToExe(path.join(destinationFolder, psFileName));
+      return util.promisify(() => { return; });
+    })
+    .then(() => {
+      run = async () => {
+        for (const name of this.jsoncontents.executables.name) {
+          await generateSymlink(path.join(destinationFolder, bashFileName), path.join(this.globalbin, name));
+          await generateSymlink(path.join(destinationFolder, bashFileName), path.join(this.globalbin, name + '.cmd'));
+          await generateSymlink(path.join(destinationFolder, psFileName), path.join(this.globalbin, name + '.ps1'));
+          await generateSymlink(path.join(destinationFolder, psFileName), path.join(this.globalbin, name + '.cmd.ps1'));
+        }
+        return util.promisify(() => { return; });
       }
+      return run();
+    })
+    .then(() => {
+      const npmFileName = 'npm-translator';
+      const srcFolder = path.resolve(path.join('scripts', 'generated'));
+      copyFileToOutScripts(npmFileName + ".js", srcFolder, destinationFolder);
+      fs.renameSync(path.join(destinationFolder, npmFileName + ".js"), path.join(destinationFolder, npmFileName));
+      chmodFileToExe(path.join(destinationFolder, npmFileName));
+
+      run = async () => {
+        await generateSymlink(path.join(destinationFolder, npmFileName), path.join(this.globalbin, 'npm'));
+      };
+      run();
+      return util.promisify(() => { return; });
     });
 }
+
 symlinkGenerator();

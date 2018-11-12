@@ -1,4 +1,3 @@
 {
-    "npm.packageManager": "yarn",
-    "cordova.cordovaExecutable": ".\\node_modules\\.bin\\ionic.cmd"
+  "npm.packageManager": "yarn",
 }

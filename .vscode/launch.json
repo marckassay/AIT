@@ -17,8 +17,8 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Deug deploy-symlinks",
-      "program": "${workspaceFolder}/scripts/deploy-symlinks.js"
+      "name": "Debug generate-symlinks.js",
+      "program": "${workspaceFolder}/scripts/generate-symlinks.js"
     },
     {
       "type": "node",
