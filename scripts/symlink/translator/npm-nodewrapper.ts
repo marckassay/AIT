@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import * as child from 'child_process';
 import { ExecException } from 'child_process';
 import { exit } from 'process';
@@ -12,7 +13,10 @@ interface RegExShape {
 
 // maps all npm options to yarn options
 function isoMorphCollection(target: string[], source: {}): string[] {
-  return target.map((val) => source[val.trim()]);
+  return target.map((val) => {
+    const mappedval = source[val.trim()];
+    return (mappedval) ? mappedval : val;
+  });
 }
 
 const equivalenceTable = {
@@ -37,49 +41,59 @@ const regex = new RegExp([
   '(?<options>(?:\\ [-]{1,2}[a-zA-Z]+(?:[-][a-z]+)?)*)$'
 ].join(''));
 
-// prepare argv values into argument, so that regex can parse as expected
 // tslint:disable-next-line:no-inferrable-types
 let argument: string = '';
-// let argument = 'install cordova-android@7.1.1 --production --save-exact';
 
+// prepare argv values into argument, so that regex can parse as expected
 for (let j = 2; j < process.argv.length; j++) {
   argument += ' ' + process.argv[j];
 }
 argument = argument.trimLeft();
-
 const parsedArg: RegExShape = regex.exec(argument)['groups'];
+
+const transformedExe = 'yarn';
+let transformedCommand: string;
+// tslint:disable-next-line:no-inferrable-types
+let transformedPkgDetails: string = '';
 let transformedOptions: Array<string> | undefined;
+let transformedOptionsString: string;
+
+if (parsedArg.pkgdetails) {
+  transformedPkgDetails = parsedArg.pkgdetails;
+}
+
 if (parsedArg.options) {
   transformedOptions = isoMorphCollection(parsedArg.options.trim().split(' '), equivalenceTable);
 }
 
-const transformedExe = 'yarn';
-
-let transformedCommand: string;
 switch (parsedArg.command) {
   case 'install':
+    transformedCommand = 'add';
+
     if (transformedOptions && transformedOptions.some((value) => value === '**prod')) {
       transformedOptions = transformedOptions.filter((value) => value !== '**prod');
-      transformedCommand = 'add';
     } else if (transformedOptions && transformedOptions.some((value) => value === '**global')) {
       transformedCommand = 'global add';
-    } else if (transformedOptions && transformedOptions.some((value) =>
-      value === '--dev' || value === '--optional' || value === '--exact')) {
-      transformedCommand = 'add';
-    } else {
+    } else if (!transformedPkgDetails) {
       transformedCommand = 'install';
     }
     break;
+  default:
+    transformedCommand = parsedArg.command;
 }
-const tranformedExpression: string = transformedExe + ' ' + transformedCommand + ' ' + parsedArg.pkgdetails + transformedOptions.join(' ');
 
-console.log('The following npm expression has been tranformed into the following yarn expression:');
-console.log('npm ' + argument);
-console.log(tranformedExpression);
+transformedOptionsString = (transformedOptions) ? transformedOptions.join(' ') : '';
+const tranformedExpression: string = transformedCommand + ' ' + transformedPkgDetails + transformedOptionsString;
+
+/* console.log('The following npm expression has been tranformed into the following yarn expression:');
+console.log(argument);
+console.log(tranformedExpression); */
 
 child.exec(tranformedExpression, (error: ExecException, stdout: string, stderr: string) => {
   if (error) {
+    child.execSync('echo ' + error.message);
     exit(1);
   }
+  child.execSync('echo ' + stderr);
   exit(0);
 });

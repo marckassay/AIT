@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var child = require("child_process");
+var process_1 = require("process");
 // maps all npm options to yarn options
 function isoMorphCollection(target, source) {
     return target.map(function (val) {
@@ -66,16 +68,15 @@ switch (parsedArg.command) {
 }
 transformedOptionsString = (transformedOptions) ? transformedOptions.join(' ') : '';
 var tranformedExpression = transformedCommand + ' ' + transformedPkgDetails + transformedOptionsString;
-console.log('The following npm expression has been tranformed into the following yarn expression:');
+/* console.log('The following npm expression has been tranformed into the following yarn expression:');
 console.log(argument);
-console.log(tranformedExpression);
-/* child.exec(tranformedExpression, (error: ExecException, stdout: string, stderr: string) => {
-  if (error) {
-    child.execSync('echo ' + error.message);
-    exit(1);
-  }
-  child.execSync('echo ' + stderr);
-  exit(0);
+console.log(tranformedExpression); */
+child.exec(tranformedExpression, function (error, stdout, stderr) {
+    if (error) {
+        child.execSync('echo ' + error.message);
+        process_1.exit(1);
+    }
+    child.execSync('echo ' + stderr);
+    process_1.exit(0);
 });
- */
-//# sourceMappingURL=npm-translator.js.map
+//# sourceMappingURL=npm-nodewrapper.js.map

@@ -7,25 +7,15 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Script Debugger",
-      "sourceMaps": true,
-      "program": "${workspaceFolder}\\out\\npm-wrapper.js",
-      "outFiles": [
-        "${workspaceFolder}/out/*.js"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "Debug generate-symlinks.js",
-      "program": "${workspaceFolder}/scripts/generate-symlinks.js"
+      "program": "${workspaceFolder}/scripts/generated/generate-symlinks.js"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug npm-wrapper",
+      "name": "Debug npm-translator.js",
       "sourceMaps": true,
-      "program": "${workspaceFolder}/out/npm-wrapper.js"
+      "program": "${workspaceFolder}/scripts/generated/npm-translator.js"
     },
     {
       "type": "node",

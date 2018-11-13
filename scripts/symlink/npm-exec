@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PROGRAM=`basename "$0"`
 DIR=`pwd`

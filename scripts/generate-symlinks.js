@@ -16,8 +16,7 @@ function copyFileToOutScripts(filename, srcDir, destDir) {
 }
 
 function chmodFileToExe(path) {
-  fs.chmodSync(path, '777');
-  fs.chmodSync(path, '777');
+  fs.chmodSync(path, 'a+x');
 }
 
 /**
@@ -49,6 +48,7 @@ function symlinkGenerator() {
   let globalbin;
   let jsoncontents;
   const bashFileName = 'npm-exec';
+  const cmdFileName = 'npm-cmd';
   const psFileName = 'npm-iex';
   const destinationFolder = path.resolve(path.join('out', 'out-scripts'));
   const srcFolder = path.resolve(path.join('scripts', 'symlink'));
@@ -73,23 +73,22 @@ function symlinkGenerator() {
       run = async () => {
         for (const name of this.jsoncontents.executables.name) {
           await generateSymlink(path.join(destinationFolder, bashFileName), path.join(this.globalbin, name));
-          await generateSymlink(path.join(destinationFolder, bashFileName), path.join(this.globalbin, name + '.cmd'));
+          await generateSymlink(path.join(destinationFolder, cmdFileName), path.join(this.globalbin, name + '.cmd'));
           await generateSymlink(path.join(destinationFolder, psFileName), path.join(this.globalbin, name + '.ps1'));
-          await generateSymlink(path.join(destinationFolder, psFileName), path.join(this.globalbin, name + '.cmd.ps1'));
         }
         return util.promisify(() => { return; });
       }
       return run();
     })
     .then(() => {
-      const npmFileName = 'npm-translator';
+      const npmFileName = 'npm-nodewrapper';
       const srcFolder = path.resolve(path.join('scripts', 'generated'));
       copyFileToOutScripts(npmFileName + ".js", srcFolder, destinationFolder);
       fs.renameSync(path.join(destinationFolder, npmFileName + ".js"), path.join(destinationFolder, npmFileName));
       chmodFileToExe(path.join(destinationFolder, npmFileName));
 
       run = async () => {
-        await generateSymlink(path.join(destinationFolder, npmFileName), path.join(this.globalbin, 'npm'));
+        await generateSymlink(path.join(destinationFolder, npmFileName), path.join(this.globalbin, '/../', 'npm'));
       };
       run();
       return util.promisify(() => { return; });

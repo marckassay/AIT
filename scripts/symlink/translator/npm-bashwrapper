@@ -1,0 +1,9 @@
+#!/bin/bash
+
+args="$@"
+arg2="$2"
+if [ "$1" = "install" ] && [ -n "$arg2" ] && [ "${arg2/--//}" = "$arg2" ] ; then
+    args="${args/install/add}"
+fi
+
+yarn $args
