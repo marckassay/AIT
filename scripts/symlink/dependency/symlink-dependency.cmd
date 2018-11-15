@@ -1,0 +1,5 @@
+@ECHO OFF
+@SETLOCAL
+@SET PATHEXT=%PATHEXT:;.JS;=;%
+node "%~dp0%~n0.js" %*
+@ECHO ON

@@ -79,4 +79,4 @@ child.exec(tranformedExpression, function (error, stdout, stderr) {
     child.execSync('echo ' + stderr);
     process_1.exit(0);
 });
-//# sourceMappingURL=npm-nodewrapper.js.map
+//# sourceMappingURL=symlink-npm-wrapper.js.map

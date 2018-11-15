@@ -1,9 +1,12 @@
 {
-    "executables": {
-        "name": [
-            "ionic",
-            "cordova"
-        ]
+  "npmAsYarn": "true",
+  "symlinkPath": "{yarn global bin}",
+  "dependencies": [
+    {
+      "name": "ionic"
     },
-    "deployhook": ""
+    {
+      "name": "cordova"
+    }
+  ]
 }
