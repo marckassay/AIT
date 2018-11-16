@@ -1,16 +1,17 @@
 #!/bin/sh
 basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
-filename=${0##*/}
+#adaptor=${0##*/}
+adaptor="symlink-generic-adaptor.js"
 
 case `uname` in
     *CYGWIN*) basedir=`cygpath -w "$basedir"`;;
 esac
 
 if [ -x "$basedir/node" ]; then
-  "$basedir/node"  "$basedir/$filename.js" "$@"
+  "$basedir/node"  "$basedir/$adaptor" "$@"
   ret=$?
 else
-  node  "$basedir/$filename.js" "$@"
+  node  "$basedir/$adaptor" "$@"
   ret=$?
 fi
 exit $ret

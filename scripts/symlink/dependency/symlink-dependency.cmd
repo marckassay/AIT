@@ -1,5 +1,7 @@
 @ECHO OFF
 @SETLOCAL
 @SET PATHEXT=%PATHEXT:;.JS;=;%
-node "%~dp0%~n0.js" %*
+SET adaptor=%~n0
+SET adaptor="symlink-generic-adaptor.js"
+node "%~dp0%adaptor%" %*
 @ECHO ON

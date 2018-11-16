@@ -1,12 +1,18 @@
 {
-  "npmAsYarn": "true",
-  "symlinkPath": "{yarn global bin}",
+  "projectOutPath": "./out/out-scripts",
   "dependencies": [
     {
-      "name": "ionic"
+      "name": "npm",
+      "symlinkPath": "{$Env:NVM_SYMLINK}",
+      "adaptor": "./scripts/dist/adaptor/symlink-npm-wrapper.js"
     },
     {
-      "name": "cordova"
+      "name": "ionic",
+      "symlinkPath": "{yarn global bin}"
+    },
+    {
+      "name": "cordova",
+      "symlinkPath": "{yarn global bin}"
     }
   ]
 }

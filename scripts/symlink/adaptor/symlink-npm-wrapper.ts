@@ -85,10 +85,10 @@ switch (parsedArg.command) {
 transformedOptionsString = (transformedOptions) ? transformedOptions.join(' ') : '';
 const tranformedExpression: string = transformedCommand + ' ' + transformedPkgDetails + transformedOptionsString;
 
-/* console.log('The following npm expression has been tranformed into the following yarn expression:');
+console.log('The following npm expression has been tranformed into the following yarn expression:');
 console.log(argument);
-console.log(tranformedExpression); */
-
+console.log(tranformedExpression);
+/*
 child.exec(tranformedExpression, (error: ExecException, stdout: string, stderr: string) => {
   if (error) {
     child.execSync('echo ' + error.message);
@@ -97,3 +97,4 @@ child.exec(tranformedExpression, (error: ExecException, stdout: string, stderr: 
   child.execSync('echo ' + stderr);
   exit(0);
 });
+*/

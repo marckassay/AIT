@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "outDir": "./generated/",
+    "outDir": "./dist/",
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "declaration": false,
