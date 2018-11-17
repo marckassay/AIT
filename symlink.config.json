@@ -1,11 +1,6 @@
 {
-  "projectOutPath": "./out/out-scripts",
+  "projectOutPath": "out/out-scripts",
   "dependencies": [
-    {
-      "name": "npm",
-      "symlinkPath": "{$Env:NVM_SYMLINK}",
-      "adaptor": "./scripts/dist/adaptor/symlink-npm-wrapper.js"
-    },
     {
       "name": "ionic",
       "symlinkPath": "{yarn global bin}"

@@ -13,7 +13,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prestart": "node scripts/generate-symlinks.js"
+    "prestart": "node scripts/dist/symlink-generator.js"
   },
   "dependencies": {
     "@angular/common": "~6.1.1",

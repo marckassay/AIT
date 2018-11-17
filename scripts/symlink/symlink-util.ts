@@ -1,112 +1,80 @@
-import fs from 'fs';
-import util from 'util';
-import path from 'path';
+import * as child from 'child_process';
+import * as fs from 'fs';
+import { join, basename } from 'path';
+import { promisify } from 'util';
 
-export const readFileAsync = util.promisify(fs.readFile);
-export const writeFileAsync = util.promisify(fs.writeFile);
-export const renameFileAsync = util.promisify(fs.rename);
+export const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
+const renameFileAsync = promisify(fs.rename);
+const doesFileExistAsync = promisify(fs.exists);
+const exec = promisify(child.exec);
 
-const existsAsync = util.promisify(fs.exists);
-const bashFileName = 'symlink-dependency';
-const cmdFileName = 'symlink-dependency.cmd';
-const jsFileName = 'symlink-generic-adaptor.js';
-const exeSrcDir = './scripts/dist/dependency';
-const jsSrcDir = './scripts/dist/adaptor';
-const genericAdaptorPath = path.join(jsSrcDir, jsFileName);
+// called once during startup and for every custom command
+export async function deployFromScriptsToOut(name: string, adaptor?: string) {
+  // copy bash file to out/* dir ...if name is not generic, than modify file to handle custom
+  //   adaptor then copy into temp dir, rename and copy ino out/*
+  // copy cmd file to out/* dir ...if name is not generic, than modify file to handle custom
+  //   adaptor then copy into temp dir, rename and copy ino out/*
+  // copy JS file to out/* dir ...if name is not generic, than take adaptor path and then 0copy that JS file to out/*
+  return await Promise.resolve();
+}
 
-export function prepareOutPathDir(directoryPath) {
-  const batchCopyAndMake = () => {
-    copyFile(jsFileName, jsSrcDir, directoryPath);
-    copyFileAndMakeExecutable(directoryPath, bashFileName);
-    copyFileAndMakeExecutable(directoryPath, cmdFileName);
-  }
-
-  if (fs.existsSync(directoryPath) === false) {
-    fs.mkdirSync(directoryPath);
-    batchCopyAndMake();
-  } else {
-    if (fs.existsSync(path.join(jsSrcDir, jsFileName)) === false) {
-      copyFile(jsFileName, jsSrcDir, directoryPath);
-    }
-    if (fs.existsSync(path.join(directoryPath, bashFileName)) === false) {
-      copyFileAndMakeExecutable(directoryPath, bashFileName);
-    }
-    if (fs.existsSync(path.join(directoryPath, cmdFileName)) === false) {
-      copyFileAndMakeExecutable(directoryPath, cmdFileName);
-    }
-  };
+// called once per command listed in the dependencies [] of the config. also, is function must be
+// called after deployFromScriptsToOut, since that adds the generic and custom (if any). this in-turn
+// creates a new symlink in globalenv
+export async function deployFromOutToGlobalEnv(name: string, adaptor?: string) {
+  return await Promise.resolve();
 }
 
 function copyFileAndMakeExecutable(directoryPath, fileName) {
-  copyFile(fileName, exeSrcDir, directoryPath);
-  makeFileExecutable(path.join(directoryPath, fileName));
-};
+  copyFile(fileName, scriptsDependencyDirPath, directoryPath);
+  makeFileExecutable(join(directoryPath, fileName));
+}
 
 function copyFile(filename, srcDirPath, destDirPath) {
-  fs.copyFileSync(path.join(srcDirPath, filename), path.join(destDirPath, filename));
+  fs.copyFileSync(join(srcDirPath, filename), join(destDirPath, filename));
 }
 
 function copyFile2(filepath, destDirPath) {
-  const adaptorFileName = path.basename(filepath);
+  const adaptorFileName = basename(filepath);
 
-  fs.copyFileSync(filepath, path.join(destDirPath, adaptorFileName));
+  fs.copyFileSync(filepath, join(destDirPath, adaptorFileName));
 }
 
 function makeFileExecutable(filePath) {
-  fs.chmodSync(filePath, 'a+x');
-}
-
-function duplicateBashAndCmdFiles(newname, directory) {
-  copyFile(newname, directory, directory);
-  copyFile(newname + '.cmd', directory, directory);
+  fs.chmodSync(filePath, '0111'); // 'a+x'
 }
 
 // https://stackoverflow.com/a/46974091/648789
 async function replaceAdaptorValueInFile(file, replace) {
-  const search = '(?<=adaptor=).*$'
-  let contents = await readFileAsync(file, 'utf8')
-  let replaced_contents = contents.replace(search, replace)
-  let tmpfile = `${file}.jstmpreplace`
-  await writeFileAsync(tmpfile, replaced_contents, 'utf8')
-  await renameFileAsync(tmpfile, file)
-  return true
+  const search = '(?<=adaptor=).*$';
+  const contents = await readFileAsync(file, 'utf8');
+  const replaced_contents = contents.replace(search, replace);
+  const tmpfile = `${file}.jstmpreplace`;
+  await writeFileAsync(tmpfile, replaced_contents, 'utf8');
+  await renameFileAsync(tmpfile, file);
+  return true;
 }
 
-/**
- * Deletes if there is an existing linkpath.
- *
- * @param {string} linkFilename the filename of the symbolic link file.
- * @param {string} linkDirectoryPath the directory of where the symbolic link file will reside.
- * @param {string} linkValueDirectoryPath the directory where the exisitng file is for the symbolic link. Defaults to the value of `projectOutPath` that is set in `symlink.config.json` file
- * @param {string} adaptor the JS file where the symbolic links resolves to. Defaults to `symlink-dependency.js`.
- */
-export function newSymlinkFile(linkFilename, linkDirectoryPath, linkValueDirectoryPath, adaptor?: string) {
-  const commandPath = path.join(linkDirectoryPath, linkFilename);
-  const linkValueBashFilePath = path.join(linkValueDirectoryPath, bashFileName);
-  const linkValueCmdFilePath = path.join(linkValueDirectoryPath, cmdFileName);
-
-  return existsAsync(commandPath)
-    .then((value: boolean) => {
-
-      if (value === true) {
-        fs.unlinkSync(commandPath);
-      }
-
-      if (adaptor === undefined) {
-        fs.symlinkSync(linkValueBashFilePath, commandPath, 'file');
-        fs.symlinkSync(linkValueCmdFilePath, commandPath, 'file');
+async function executeScriptBlock(scriptblock: string) {
+  let results;
+  const command = scriptblock.replace(/[\{\}]/g, '');
+  await exec(command)
+    .then((value) => {
+      if (value.stderr) {
+        results = '1';
       } else {
-        // copy bash and cmd and rename file as unique
-        duplicateBashAndCmdFiles(linkFilename, linkDirectoryPath);
-
-        // replace adaptor= in cmd and bash
-        const adaptorFileName = path.basename(adaptor);
-        replaceAdaptorValueInFile(path.join(linkDirectoryPath, linkFilename), adaptorFileName);
-        replaceAdaptorValueInFile(path.join(linkDirectoryPath, linkFilename) + ".cmd", adaptorFileName);
-
-        // copy adaptor pathandfile into linkValueDirectoryPath
-        copyFile2(adaptor, linkValueDirectoryPath);
+        results = value.stdout.replace(/[\"\']/g, '').trimRight();
       }
-      return Promise.resolve();
+    })
+    .catch(() => {
+      results = '1';
     });
+
+  if (results === '1') {
+    throw new Error('The following scriptblock failed to execute: ' + scriptblock);
+  }
+
+  return results;
 }
+

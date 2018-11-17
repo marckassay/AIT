@@ -7,15 +7,15 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug generate-symlinks.js",
-      "program": "${workspaceFolder}/scripts/generated/generate-symlinks.js"
+      "name": "Debug symlink-generator.js",
+      "program": "${workspaceFolder}/scripts/dist/symlink-generator.js"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug npm-translator.js",
+      "name": "Debug symlink-npm-adaptor.js",
       "sourceMaps": true,
-      "program": "${workspaceFolder}/scripts/generated/npm-translator.js"
+      "program": "${workspaceFolder}/scripts/dist/adaptor/symlink-npm-adaptor.js"
     },
     {
       "type": "node",
