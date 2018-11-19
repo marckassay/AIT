@@ -38,14 +38,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var child = require("child_process");
 var fs = require("fs");
 var util_1 = require("util");
-function readFileAsync(path, err_message) {
+var path = require("path");
+function readFileAsync(filePath, err_message) {
     return __awaiter(this, void 0, void 0, function () {
         var readFile;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     readFile = util_1.promisify(fs.readFile);
-                    return [4 /*yield*/, readFile(path, 'utf8')
+                    return [4 /*yield*/, readFile(filePath, 'utf8')
                             .then(function (value) {
                             if (value.length !== 0) {
                                 return Promise.resolve(value);
@@ -65,14 +66,14 @@ function readFileAsync(path, err_message) {
     });
 }
 exports.readFileAsync = readFileAsync;
-function doesFileExistAsync(path, err_message) {
+function doesFileExistAsync(filePath, err_message) {
     return __awaiter(this, void 0, void 0, function () {
         var doesFileExist;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     doesFileExist = util_1.promisify(fs.exists);
-                    return [4 /*yield*/, doesFileExist(path)
+                    return [4 /*yield*/, doesFileExist(filePath)
                             .then(function (value) {
                             if (value === false && err_message) {
                                 console.error(err_message);
@@ -122,7 +123,7 @@ function executeScriptBlock(scriptblock, err_message) {
     });
 }
 exports.executeScriptBlock = executeScriptBlock;
-function removeSymbolicDependencies(path, err_message) {
+function removeSymbolicDependencies(filePath, err_message) {
     return __awaiter(this, void 0, void 0, function () {
         var remove;
         return __generator(this, function (_a) {
@@ -130,14 +131,14 @@ function removeSymbolicDependencies(path, err_message) {
                 case 0:
                     remove = util_1.promisify(fs.unlink);
                     // tslint:disable-next-line:no-bitwise
-                    if (!checkUsersPermissions(path, fs.constants.W_OK | fs.constants.R_OK)) {
-                        console.error(err_message + path);
+                    if (!checkUsersPermissions(filePath, fs.constants.W_OK | fs.constants.R_OK)) {
+                        console.error(err_message + filePath);
                         process.exit(1004);
                         return [2 /*return*/];
                     }
-                    return [4 /*yield*/, remove(path).catch(function () {
+                    return [4 /*yield*/, remove(filePath).catch(function () {
                             console.error('Although permissions to remove file is correct, failure occurred.' +
-                                ' Is there another process accessing this file?: ' + path);
+                                ' Is there another process accessing this file?: ' + filePath);
                             process.exit(1004);
                             return;
                         })];
@@ -150,7 +151,8 @@ exports.removeSymbolicDependencies = removeSymbolicDependencies;
 /**
  * Checks the destination for exisitence, if not existent it will create a copy from source.
  */
-function checkAndCreateACopy(source, destination) {
+function checkAndCreateACopy(source, destination, asExecutable) {
+    if (asExecutable === void 0) { asExecutable = true; }
     return __awaiter(this, void 0, void 0, function () {
         var copy;
         return __generator(this, function (_a) {
@@ -160,8 +162,18 @@ function checkAndCreateACopy(source, destination) {
                     return [4 /*yield*/, doesFileExistAsync(destination)
                             .then(function (value) {
                             if (value === false) {
-                                makeFileExecutable(destination);
-                                return copy(source, destination);
+                                // node.js ^10.12.0 is at least needed for mkdirSync's recursive option.
+                                var destinationDirectoryPath = path.dirname(destination);
+                                fs.mkdirSync(destinationDirectoryPath, { recursive: true });
+                                return copy(source, destination)
+                                    .then(function () {
+                                    if (asExecutable) {
+                                        return makeFileExecutable(destination);
+                                    }
+                                    else {
+                                        return Promise.resolve();
+                                    }
+                                });
                             }
                         })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -170,19 +182,30 @@ function checkAndCreateACopy(source, destination) {
     });
 }
 exports.checkAndCreateACopy = checkAndCreateACopy;
-function symlink(filePath, linkPath) {
-    return __awaiter(this, void 0, void 0, function () {
-        var link;
-        return __generator(this, function (_a) {
-            link = util_1.promisify(fs.symlink);
-            return [2 /*return*/, link(filePath, linkPath)];
-        });
-    });
+function createSymlink(filePath, linkPath) {
+    fs.symlinkSync(path.resolve(filePath), path.resolve(linkPath), 'file');
+    return Promise.resolve();
+    /*   const slink = promisify(fs.symlink);
+      console.log(path.resolve(filePath) + ' --> ' + linkPath);
+      return slink(filePath, linkPath)
+        .then(() => {
+          console.log('linking it');
+          return Promise.resolve();
+        }, (reason) => {
+          console.error('Cant link it');
+          process.exit(1007);
+          return;
+        })
+        .catch(() => {
+          console.error('Cant link it');
+          process.exit(1007);
+          return;
+        }); */
 }
-exports.symlink = symlink;
-function checkUsersPermissions(path, mode) {
+exports.createSymlink = createSymlink;
+function checkUsersPermissions(filePath, mode) {
     try {
-        fs.accessSync(path, mode);
+        fs.accessSync(filePath, mode);
         return true;
     }
     catch (err) {
@@ -190,7 +213,26 @@ function checkUsersPermissions(path, mode) {
     }
 }
 function makeFileExecutable(filePath) {
-    fs.chmodSync(filePath, '0111'); // 'a+x'
+    return __awaiter(this, void 0, void 0, function () {
+        var changeMode;
+        return __generator(this, function (_a) {
+            changeMode = util_1.promisify(fs.chmod);
+            // octal '0111' is expressed as: 'a+x'
+            return [2 /*return*/, changeMode(filePath, '0111')
+                    .then(function () {
+                    return Promise.resolve();
+                }, function () {
+                    console.error('Unable to make the following file executable for POSIX environments: ' + filePath);
+                    process.exit(1006);
+                    return;
+                })
+                    .catch(function () {
+                    console.error('Unable to make the following file executable for POSIX environments: ' + filePath);
+                    process.exit(1006);
+                    return;
+                })];
+        });
+    });
 }
 /*
 const writeFileAsync = promisify(fs.writeFile);
@@ -205,5 +247,5 @@ async function replaceTokenInFile(file, tokenExpression, replacement) {
   await this.renameFileAsync(tmpfile, file);
   return true;
 }
- */
+*/
 //# sourceMappingURL=symlink-util.js.map

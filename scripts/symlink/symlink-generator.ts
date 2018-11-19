@@ -31,13 +31,19 @@ const genericAdaptorFileName = 'adaptor.js';
 let outDirPath: string;
 
 const scriptsGenericBashDependency: string = join(scriptsDependencyDirPath, genericBashDependencyFileName);
-const outGenericBashDependency: string = join(outDirPath, genericBashDependencyFileName);
+function outGenericBashDependency(): string {
+  return join(outDirPath, genericBashDependencyFileName);
+}
 
 const scriptsGenericCmdDependency: string = join(scriptsDependencyDirPath, genericCmdDependencyFileName);
-const outGenericCmdDependency: string = join(outDirPath, genericCmdDependencyFileName);
+function outGenericCmdDependency(): string {
+  return join(outDirPath, genericCmdDependencyFileName);
+}
 
 const scriptsGenericAdaptor: string = join(scriptsAdaptorDirPath, genericAdaptorFileName);
-const outGenericAdaptor: string = join(outDirPath, genericAdaptorFileName);
+function outGenericAdaptor(): string {
+  return join(outDirPath, genericAdaptorFileName);
+}
 
 const configFilename = 'symlink.config.json';
 
@@ -67,7 +73,7 @@ async function generate() {
     throw new Error('Unable to parse symlink.config.json into a JSON object.');
   }
 
-  for (const dependency of this.config.dependencies) {
+  for (const dependency of config.dependencies) {
     await newSymbolicDependency(dependency.name, dependency.symlinkPath, dependency.adaptor);
   }
 }
@@ -92,21 +98,21 @@ async function newSymbolicDependency(symbolicName: string, symbolicDirectoryPath
   await checkAndRemoveExisitingSymbolicFiles(symbolicFilePath);
 
   if (!adaptor) {
-    await util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency);
-    await util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency);
-    await util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor);
+    await util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency());
+    await util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency(), false);
+    await util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor(), false);
 
-    bashDependencyValue = outGenericBashDependency;
-    cmdDependencyValue = outGenericCmdDependency;
+    bashDependencyValue = outGenericBashDependency();
+    cmdDependencyValue = outGenericCmdDependency();
   } else {
-    bashDependencyValue = symbolicName + '_' + outGenericBashDependency;
-    cmdDependencyValue = symbolicName + '_' + outGenericCmdDependency;
+    bashDependencyValue = symbolicName + '_' + outGenericBashDependency();
+    cmdDependencyValue = symbolicName + '_' + outGenericCmdDependency();
 
     // replaceTokenInFile(bashDependencyValue ,'(?<=adaptor=).*$',adaptorValue);
   }
 
-  await util.symlink(bashDependencyValue, symbolicFilePath);
-  await util.symlink(cmdDependencyValue, symbolicFilePath + '.cmd');
+  await util.createSymlink(bashDependencyValue, symbolicFilePath);
+  await util.createSymlink(cmdDependencyValue, symbolicFilePath + '.cmd');
 }
 
 async function checkAndRemoveExisitingSymbolicFiles(path: string) {

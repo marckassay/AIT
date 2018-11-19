@@ -53,11 +53,17 @@ var genericAdaptorFileName = 'adaptor.js';
  */
 var outDirPath;
 var scriptsGenericBashDependency = path_1.join(scriptsDependencyDirPath, genericBashDependencyFileName);
-var outGenericBashDependency = path_1.join(outDirPath, genericBashDependencyFileName);
+function outGenericBashDependency() {
+    return path_1.join(outDirPath, genericBashDependencyFileName);
+}
 var scriptsGenericCmdDependency = path_1.join(scriptsDependencyDirPath, genericCmdDependencyFileName);
-var outGenericCmdDependency = path_1.join(outDirPath, genericCmdDependencyFileName);
+function outGenericCmdDependency() {
+    return path_1.join(outDirPath, genericCmdDependencyFileName);
+}
 var scriptsGenericAdaptor = path_1.join(scriptsAdaptorDirPath, genericAdaptorFileName);
-var outGenericAdaptor = path_1.join(outDirPath, genericAdaptorFileName);
+function outGenericAdaptor() {
+    return path_1.join(outDirPath, genericAdaptorFileName);
+}
 var configFilename = 'symlink.config.json';
 /**
  * Reads the `symlink-config.json` by iterating the dependencies section of the file to create
@@ -86,7 +92,7 @@ function generate() {
                     catch (error) {
                         throw new Error('Unable to parse symlink.config.json into a JSON object.');
                     }
-                    _i = 0, _a = this.config.dependencies;
+                    _i = 0, _a = config.dependencies;
                     _b.label = 3;
                 case 3:
                     if (!(_i < _a.length)) return [3 /*break*/, 6];
@@ -127,26 +133,26 @@ function newSymbolicDependency(symbolicName, symbolicDirectoryPath, adaptor) {
                 case 3:
                     _a.sent();
                     if (!!adaptor) return [3 /*break*/, 7];
-                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency())];
                 case 4:
                     _a.sent();
-                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency(), false)];
                 case 5:
                     _a.sent();
-                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor(), false)];
                 case 6:
                     _a.sent();
-                    bashDependencyValue = outGenericBashDependency;
-                    cmdDependencyValue = outGenericCmdDependency;
+                    bashDependencyValue = outGenericBashDependency();
+                    cmdDependencyValue = outGenericCmdDependency();
                     return [3 /*break*/, 8];
                 case 7:
-                    bashDependencyValue = symbolicName + '_' + outGenericBashDependency;
-                    cmdDependencyValue = symbolicName + '_' + outGenericCmdDependency;
+                    bashDependencyValue = symbolicName + '_' + outGenericBashDependency();
+                    cmdDependencyValue = symbolicName + '_' + outGenericCmdDependency();
                     _a.label = 8;
-                case 8: return [4 /*yield*/, util.symlink(bashDependencyValue, symbolicFilePath)];
+                case 8: return [4 /*yield*/, util.createSymlink(bashDependencyValue, symbolicFilePath)];
                 case 9:
                     _a.sent();
-                    return [4 /*yield*/, util.symlink(cmdDependencyValue, symbolicFilePath + '.cmd')];
+                    return [4 /*yield*/, util.createSymlink(cmdDependencyValue, symbolicFilePath + '.cmd')];
                 case 10:
                     _a.sent();
                     return [2 /*return*/];
