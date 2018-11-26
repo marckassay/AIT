@@ -1,7 +1,22 @@
-@ECHO OFF
+:: objective:
+:: retrieve where this symlink is being executed. If being loaded from a project with a
+:: symlink.config.json file, load the 'projectOutPath' var and if available, 'adaptor' var. And
+:: then executed the (generic or not) adaptor file with node.js. This requires:
+:: 1.) loading: %CURRENTDIR%\symlink.config.json
+:: 2.) parse file in step 1 for 'projectOutPath' var.
+:: (possible secondary attempt)if that fails, then load the
+:: @ECHO OFF
 @SETLOCAL
 
 SETLOCAL enableDelayedExpansion
+@SET PATHEXT=%PATHEXT:;.JS;=;%
+
+SET CURRENTDIR="%cd%"
+ECHO %CURRENTDIR%
+SET DD="%*"
+ECHO %DD%
+ECHO %%~1%%
+ECHO "%~dp"
 
 :: skip the first 7 lines of `fsutil reparsepoint query %0`. Even columns 2-16 contains the
 :: hexadecimal chars we want versus '00'.
@@ -25,7 +40,8 @@ FOR /F "delims=Z" %%a IN ("%_result%") DO (SET _result=%%a)
 ECHO Hexadecimals of resolved symlink value:
 ECHO   !_result!
 
-:: ref: https://stackoverflow.com/questions/15004825/looping-for-every-character-in-variable-string-batch
+:: code related to the ':loop' function, have been modified from this ref:
+::   https://stackoverflow.com/a/15009416/648789
 :: string terminator: chose something that won't show up in the input file
 SET strterm=___ENDOFSTRING___
 :: add string terminator to input
@@ -36,11 +52,11 @@ SET tmp=%_result%%strterm%
   SET char=%tmp:~0,2%
   :: remove first 2 characters from input
   SET tmp=%tmp:~2%
-  :: Format char to Hexadecimal
+  :: format char to hexadecimalchar
   SET /a hexadecimalchar=0x%char%
   :: exit should set 'exitcodeAscii' dynamic var
   CMD /c exit %hexadecimalchar%
-  :: append value of 'exitcodeAscii' to _result
+  :: append value of 'exitcodeAscii' to _convertedresult
   SET _convertedresult=!_convertedresult!!=exitcodeAscii!
 
 IF NOT "%tmp%" == "%strterm%" GOTO loop
