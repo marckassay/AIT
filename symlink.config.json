@@ -3,10 +3,17 @@
   "dependencies": [
     {
       "name": "ionic",
+      "adaptor": "test_B.js",
+      "symlinkPath": "{yarn global bin}"
+    },
+    {
+      "name": "egen",
+      "adaptor": "test_A.js",
       "symlinkPath": "{yarn global bin}"
     },
     {
       "name": "cordova",
+      "adaptor": "test_C.js",
       "symlinkPath": "{yarn global bin}"
     }
   ]

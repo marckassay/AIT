@@ -3,66 +3,44 @@
 :: symlink.config.json file, load the 'projectOutPath' var and if available, 'adaptor' var. And
 :: then executed the (generic or not) adaptor file with node.js. This requires:
 :: 1.) loading: %CURRENTDIR%\symlink.config.json
-:: 2.) parse file in step 1 for 'projectOutPath' var.
+:: 2.) parse file from step 1 for 'projectOutPath' var.
+:: 3.) parse file from step 1 for custom adaptor (if avail) 'adaptor'. using the '%~n0%' will return
+::     the filename that maps to the dependencies name of the config file from step 1.
+:: 4.) with the following gathered data, executed with node, in the causal expression:
+::     'node %CURRENTDIR%\projectOutPath\adaptor.js %~0%'
+::
+::     node  "%~dp0\..\which\bin\which" %*
 :: (possible secondary attempt)if that fails, then load the
-:: @ECHO OFF
+@ECHO OFF
 @SETLOCAL
 
 SETLOCAL enableDelayedExpansion
+
 @SET PATHEXT=%PATHEXT:;.JS;=;%
 
 SET CURRENTDIR="%cd%"
+
+:: returns: E:\marckassay\AIT
 ECHO %CURRENTDIR%
-SET DD="%*"
-ECHO %DD%
-ECHO %%~1%%
-ECHO "%~dp"
 
-:: skip the first 7 lines of `fsutil reparsepoint query %0`. Even columns 2-16 contains the
-:: hexadecimal chars we want versus '00'.
-FOR /F "USEBACKQ tokens=2,4,6,8,10,12,14,16 skip=7" %%G IN (`fsutil reparsepoint query %0`) DO (
-  SETLOCAL enableDelayedExpansion
-  SET MYVAR=%%G%%H%%I%%J%%K%%L%%M%%N
-  SET _result=!_result!!MYVAR!
-)
+:: returns: ionic
+ECHO %~n0%
 
-:: trim  the first 12 chars which seems to be attributes that pertains to this file. These are not
-:: needed for this script's objective
-SET _result=!_result:~12!
+:: returns: ionic.cmd
+ECHO %~n0%~x0
 
-:: replace on '5c3f3f' (\??) to 'Z' so that the FOR /F can use delims=Z. FOR loop's delims option
-:: is limited to 1 char and the char 'Z' isn't valid for a hexadecimal value, so here its used as
-:: conveniently as a token.
-SET _result=!_result:5c3f3f=Z!
+:: returns: C:\Program Files\nodejs\bin\ionic.cmd
+ECHO %~0%
 
-:: split _result on the 'Z' token and assign the left side to _result
-FOR /F "delims=Z" %%a IN ("%_result%") DO (SET _result=%%a)
-ECHO Hexadecimals of resolved symlink value:
-ECHO   !_result!
+:: returns: parameters, switches
+ECHO %*
 
-:: code related to the ':loop' function, have been modified from this ref:
-::   https://stackoverflow.com/a/15009416/648789
-:: string terminator: chose something that won't show up in the input file
-SET strterm=___ENDOFSTRING___
-:: add string terminator to input
-SET tmp=%_result%%strterm%
+:: returns: "C:\Program Files\nodejs\bin\"
+ECHO "%~dp0"
 
-:loop
-  :: get first 2 characters from input
-  SET char=%tmp:~0,2%
-  :: remove first 2 characters from input
-  SET tmp=%tmp:~2%
-  :: format char to hexadecimalchar
-  SET /a hexadecimalchar=0x%char%
-  :: exit should set 'exitcodeAscii' dynamic var
-  CMD /c exit %hexadecimalchar%
-  :: append value of 'exitcodeAscii' to _convertedresult
-  SET _convertedresult=!_convertedresult!!=exitcodeAscii!
-
-IF NOT "%tmp%" == "%strterm%" GOTO loop
-
-ECHO Convert Hexadecimals to chars:
-ECHO   !_convertedresult!
+@echo off
+for /f "tokens=1,2,*" %%a in (' find ":" ^< "%CURRENTDIR%\symlinks.config.json" ') do echo "%%~c"
+pause
 
 ENDLOCAL
 @ECHO ON
