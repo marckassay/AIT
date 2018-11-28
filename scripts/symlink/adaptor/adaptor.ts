@@ -1,22 +1,20 @@
 #!/usr/bin/env node
 
 import * as child from 'child_process';
-import { ExecException } from 'child_process';
-import { exit } from 'process';
+import * as path from 'path';
 
-let argument = './node_modules/.bin/';
-// prepare argv values into argument, so that regex can parse as expected
-for (let j = 2; j < process.argv.length; j++) {
-  argument += ' ' + process.argv[j];
+const ext = process.platform === 'win32' ? '.cmd' : '';
+const command = path.join(process.cwd(), 'node_modules/.bin/', process.argv[2].toString() + ext);
+
+const opts = Object.assign({}, process.env);
+opts.cwd = process.cwd();
+opts.stdio = 'inherit';
+
+console.log('[adaptor.js] Executing: ' + command + ' ' + process.argv.slice(3));
+
+const result = child.spawnSync(command, process.argv.slice(3), opts);
+if (result.error || result.status !== 0) {
+  process.exit(1);
+} else {
+  process.exit(0);
 }
-
-
-console.log('Executing: ' + './node_modules/.bin/ionic -v');
-child.exec('./node_modules/bin/ionic', (error: ExecException, stdout: string, stderr: string) => {
-  if (error) {
-    console.log('echo ' + error.message);
-    exit(1);
-  }
-  console.log('echo ' + stderr);
-  exit(0);
-});
