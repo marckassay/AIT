@@ -1,16 +1,11 @@
-:: objective:
-:: retrieve where this symlink is being executed. If being loaded from a project with a
-:: symlink.config.json file, load the 'projectOutPath' var and if available, 'adaptor' var. And
-:: then executed the (generic or not) adaptor file with node.js. This requires:
-:: 1.) loading: %$CurrentDir%\symlink.config.json
-:: 2.) parse file from step 1 for 'projectOutPath' var.
-:: 3.) parse file from step 1 for custom adaptor (if avail) 'adaptor'. using the '%~n0%' will return
-::     the filename that maps to the dependencies name of the config file from step 1.
-:: 4.) with the following gathered data, executed with node, in the causal expression:
-::     'node %$CurrentDir%\projectOutPath\adaptor.js %~0%'
+:: This script file is to be used as a value for a symlink on Windows systems. This symlink is intended
+:: to reside in the $ENV:Path so that it can be called in the CLI as a command.
 ::
-::     node  "%~dp0\..\which\bin\which" %*
-:: (possible secondary attempt)if that fails, then load the
+:: This script file, along with it's sibling (bash) file for UNIX systems, takes the filename
+:: of the symlink, current directory and parses the symlink.config.json file. With the information
+:: gathered, it will call the JS adaptor file with node. This adaptor file must reside in the
+:: 'projectOutPath' directory which is relative to the current directory.
+::
 @ECHO OFF
 @SETLOCAL
 SETLOCAL enableDelayedExpansion

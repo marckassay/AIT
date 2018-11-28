@@ -97,7 +97,7 @@ function generate() {
                 case 3:
                     if (!(_i < _a.length)) return [3 /*break*/, 6];
                     dependency = _a[_i];
-                    return [4 /*yield*/, newSymbolicDependency(dependency.name, dependency.symlinkPath, dependency.adaptor)];
+                    return [4 /*yield*/, newCommandDependency(dependency.name, dependency.symlinkPath, dependency.adaptor)];
                 case 4:
                     _b.sent();
                     _b.label = 5;
@@ -112,24 +112,24 @@ function generate() {
 /**
 * Deletes if there is an existing link
 *
-* @param {string} symbolicName the filename of the symbolic link file.
-* @param {string} symbolicDirectoryPath the directory of where the symbolic link file will reside.
-* @param {string} adaptor the JS file where the symbolic links resolves to. Defaults to `symlink-dependency.js`.
+* @param {string} name the filename of the bash or batch file.
+* @param {string} commandDirectoryPath the directory of where the file will reside.
+* @param {string} adaptor the JS file where the command resolves to. Defaults to `adaptor.js`.
 */
-function newSymbolicDependency(symbolicName, symbolicDirectoryPath, adaptor) {
+function newCommandDependency(name, commandDirectoryPath, adaptor) {
     return __awaiter(this, void 0, void 0, function () {
         var bashDependencyValue, cmdDependencyValue, symbolicFilePath;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(symbolicDirectoryPath.startsWith('{') || symbolicDirectoryPath.endsWith('}'))) return [3 /*break*/, 2];
-                    return [4 /*yield*/, util.executeScriptBlock(symbolicDirectoryPath, 'Unable to execute the following scriptblock: ')];
+                    if (!(commandDirectoryPath.startsWith('{') || commandDirectoryPath.endsWith('}'))) return [3 /*break*/, 2];
+                    return [4 /*yield*/, util.executeScriptBlock(commandDirectoryPath, 'Unable to execute the following scriptblock: ')];
                 case 1:
-                    symbolicDirectoryPath = _a.sent();
+                    commandDirectoryPath = _a.sent();
                     _a.label = 2;
                 case 2:
-                    symbolicFilePath = path_1.join(symbolicDirectoryPath, symbolicName);
-                    return [4 /*yield*/, checkAndRemoveExisitingSymbolicFiles(symbolicFilePath)];
+                    symbolicFilePath = path_1.join(commandDirectoryPath, name);
+                    return [4 /*yield*/, checkAndRemoveExisitingCommandFiles(symbolicFilePath)];
                 case 3:
                     _a.sent();
                     if (!!adaptor) return [3 /*break*/, 7];
@@ -144,23 +144,31 @@ function newSymbolicDependency(symbolicName, symbolicDirectoryPath, adaptor) {
                     _a.sent();
                     bashDependencyValue = outGenericBashDependency();
                     cmdDependencyValue = outGenericCmdDependency();
-                    return [3 /*break*/, 8];
-                case 7:
-                    bashDependencyValue = symbolicName + '_' + outGenericBashDependency();
-                    cmdDependencyValue = symbolicName + '_' + outGenericCmdDependency();
-                    _a.label = 8;
-                case 8: return [4 /*yield*/, util.createSymlink(bashDependencyValue, symbolicFilePath)];
+                    return [3 /*break*/, 11];
+                case 7: return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency())];
+                case 8:
+                    _a.sent();
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency(), false)];
                 case 9:
                     _a.sent();
-                    return [4 /*yield*/, util.createSymlink(cmdDependencyValue, symbolicFilePath + '.cmd')];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor(), false)];
                 case 10:
+                    _a.sent();
+                    bashDependencyValue = name + '_' + outGenericBashDependency();
+                    cmdDependencyValue = name + '_' + outGenericCmdDependency();
+                    _a.label = 11;
+                case 11: return [4 /*yield*/, util.createSymlink(bashDependencyValue, symbolicFilePath)];
+                case 12:
+                    _a.sent();
+                    return [4 /*yield*/, util.createSymlink(cmdDependencyValue, symbolicFilePath + '.cmd')];
+                case 13:
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-function checkAndRemoveExisitingSymbolicFiles(path) {
+function checkAndRemoveExisitingCommandFiles(path) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {

@@ -74,28 +74,28 @@ async function generate() {
   }
 
   for (const dependency of config.dependencies) {
-    await newSymbolicDependency(dependency.name, dependency.symlinkPath, dependency.adaptor);
+    await newCommandDependency(dependency.name, dependency.symlinkPath, dependency.adaptor);
   }
 }
 
 /**
 * Deletes if there is an existing link
 *
-* @param {string} symbolicName the filename of the symbolic link file.
-* @param {string} symbolicDirectoryPath the directory of where the symbolic link file will reside.
-* @param {string} adaptor the JS file where the symbolic links resolves to. Defaults to `symlink-dependency.js`.
+* @param {string} name the filename of the bash or batch file.
+* @param {string} commandDirectoryPath the directory of where the file will reside.
+* @param {string} adaptor the JS file where the command resolves to. Defaults to `adaptor.js`.
 */
-async function newSymbolicDependency(symbolicName: string, symbolicDirectoryPath: string, adaptor?: string) {
+async function newCommandDependency(name: string, commandDirectoryPath: string, adaptor?: string) {
   let bashDependencyValue: string;
   let cmdDependencyValue: string;
 
   // resolve commandDirectoryPath if its in a scriptblock (or partial scriptblock which must fail).
-  if (symbolicDirectoryPath.startsWith('{') || symbolicDirectoryPath.endsWith('}')) {
-    symbolicDirectoryPath = await util.executeScriptBlock(symbolicDirectoryPath, 'Unable to execute the following scriptblock: ');
+  if (commandDirectoryPath.startsWith('{') || commandDirectoryPath.endsWith('}')) {
+    commandDirectoryPath = await util.executeScriptBlock(commandDirectoryPath, 'Unable to execute the following scriptblock: ');
   }
 
-  const symbolicFilePath: string = join(symbolicDirectoryPath, symbolicName);
-  await checkAndRemoveExisitingSymbolicFiles(symbolicFilePath);
+  const symbolicFilePath: string = join(commandDirectoryPath, name);
+  await checkAndRemoveExisitingCommandFiles(symbolicFilePath);
 
   if (!adaptor) {
     await util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency());
@@ -105,17 +105,19 @@ async function newSymbolicDependency(symbolicName: string, symbolicDirectoryPath
     bashDependencyValue = outGenericBashDependency();
     cmdDependencyValue = outGenericCmdDependency();
   } else {
-    bashDependencyValue = symbolicName + '_' + outGenericBashDependency();
-    cmdDependencyValue = symbolicName + '_' + outGenericCmdDependency();
+    await util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency());
+    await util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency(), false);
+    await util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor(), false);
 
-    // replaceTokenInFile(bashDependencyValue ,'(?<=adaptor=).*$',adaptorValue);
+    bashDependencyValue = name + '_' + outGenericBashDependency();
+    cmdDependencyValue = name + '_' + outGenericCmdDependency();
   }
 
   await util.createSymlink(bashDependencyValue, symbolicFilePath);
   await util.createSymlink(cmdDependencyValue, symbolicFilePath + '.cmd');
 }
 
-async function checkAndRemoveExisitingSymbolicFiles(path: string) {
+async function checkAndRemoveExisitingCommandFiles(path: string) {
   await util.doesFileExistAsync(path)
     .then((value: boolean) => {
       if (value === true) {
