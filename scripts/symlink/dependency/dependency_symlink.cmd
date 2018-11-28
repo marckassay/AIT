@@ -18,29 +18,46 @@ SETLOCAL enableDelayedExpansion
 
 @SET PATHEXT=%PATHEXT:;.JS;=;%
 
-SET CURRENTDIR="%cd%"
+SET CURRENTDIR=%cd%
+SET ARGS=%~n0 %*
+SET PTH=%CURRENTDIR%\symlink.config.json
 
-:: returns: E:\marckassay\AIT
-ECHO %CURRENTDIR%
+:: returns absolute path to out directory: E:\marckassay\AIT\out\out-scripts
+FOR /F "USEBACKQ tokens=2 delims=:," %%G IN (`findstr /r /c:".*projectOutPath.*:.*" %PTH%`) DO (
+  SET OUTPATH=%%G
+  SET OUTPATH=!OUTPATH:"=!
+  SET OUTPATH=!OUTPATH:/=\!
+  SET OUTPATH=!OUTPATH: =!
+)
 
-:: returns: ionic
-ECHO %~n0%
+SET EXP=".*name.*:.*%~n0%.*"
 
-:: returns: ionic.cmd
-ECHO %~n0%~x0
+:FindAdaptorLine 1
+IF EXIST %ERRORLEVEL% == 1 (
+:FindAdaptorLine 2
+)
 
-:: returns: C:\Program Files\nodejs\bin\ionic.cmd
-ECHO %~0%
+IF EXIST %ERRORLEVEL% == 1 (
+SET ADAPTORPATH=adaptor.js
+)
 
-:: returns: parameters, switches
-ECHO %*
+ECHO Executing: node %CURRENTDIR%\%OUTPATH%\%ADAPTORPATH% %ARGS%
+node %CURRENTDIR%\%OUTPATH%\%ADAPTORPATH% %ARGS%
 
-:: returns: "C:\Program Files\nodejs\bin\"
-ECHO "%~dp0"
-
-@echo off
-for /f "tokens=1,2,*" %%a in (' find ":" ^< "%CURRENTDIR%\symlinks.config.json" ') do echo "%%~c"
-pause
+:FindAdaptorLine
+  FOR /F "USEBACKQ tokens=1 delims=:," %%H IN (`findstr /n /r /c:%EXP% %PTH%`) DO ( SET COMMANDLINENUM=%%H+%%~1)
+  FOR /F "tokens=1,* delims=:" %%A IN ('findstr /n "^" %PTH% ^| findstr /l /b /c:"%COMMANDLINENUM%:"') DO ( SET ADAPTORPATH=%%B )
+  FOR /F "tokens=1,* delims=:" %%C IN ('ECHO %ADAPTORPATH% ^| findstr /r /c:".*adaptor.*:.*"') DO (
+    SET ADAPTORPATH=%%D
+    SET ADAPTORPATH=!ADAPTORPATH:"=!
+    SET ADAPTORPATH=!ADAPTORPATH:/=\!
+    SET ADAPTORPATH=!ADAPTORPATH: =!
+  )
+  IF EXIST "%CURRENTDIR%\%OUTPATH%\%ADAPTORPATH%" (
+    EXIT /B 0
+  ) ELSE (
+    EXIT /B 1
+  )
 
 ENDLOCAL
 @ECHO ON

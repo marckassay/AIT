@@ -1,20 +1,18 @@
 {
-  "projectOutPath": "out/out-scripts",
+  "projectOutPath": "out\\out-scripts",
   "dependencies": [
     {
       "name": "ionic",
-      "adaptor": "test_B.js",
-      "symlinkPath": "{yarn global bin}"
-    },
-    {
-      "name": "egen",
-      "adaptor": "test_A.js",
       "symlinkPath": "{yarn global bin}"
     },
     {
       "name": "cordova",
-      "adaptor": "test_C.js",
       "symlinkPath": "{yarn global bin}"
+    },
+    {
+      "name": "npm",
+      "adaptor": "npm_adaptor.js",
+      "symlinkPath": "C:\\Program Files\\nodejs"
     }
   ]
 }
