@@ -26,6 +26,7 @@ SET PTH=%CURRENTDIR%\symlink.config.json
 FOR /F "USEBACKQ tokens=2 delims=:," %%G IN (`findstr /r /c:".*projectOutPath.*:.*" %PTH%`) DO (
   SET OUTPATH=%%G
   SET OUTPATH=!OUTPATH:"=!
+  SET OUTPATH=!OUTPATH:\\=\!
   SET OUTPATH=!OUTPATH:/=\!
   SET OUTPATH=!OUTPATH: =!
 )
@@ -50,6 +51,7 @@ node %CURRENTDIR%\%OUTPATH%\%ADAPTORPATH% %ARGS%
   FOR /F "tokens=1,* delims=:" %%C IN ('ECHO %ADAPTORPATH% ^| findstr /r /c:".*adaptor.*:.*"') DO (
     SET ADAPTORPATH=%%D
     SET ADAPTORPATH=!ADAPTORPATH:"=!
+    SET ADAPTORPATH=!ADAPTORPATH:\\=\!
     SET ADAPTORPATH=!ADAPTORPATH:/=\!
     SET ADAPTORPATH=!ADAPTORPATH: =!
   )
