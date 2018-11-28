@@ -23,6 +23,8 @@ const scriptsAdaptorDirPath = './scripts/dist/adaptor';
 
 const genericBashDependencyFileName = 'dependency_symlink';
 const genericCmdDependencyFileName = 'dependency_symlink.cmd';
+const customBashDependencyFileName = 'custom_dependency_symlink';
+const customCmdDependencyFileName = 'custom_dependency_symlink.cmd';
 const genericAdaptorFileName = 'adaptor.js';
 
 /**
@@ -31,18 +33,18 @@ const genericAdaptorFileName = 'adaptor.js';
 let outDirPath: string;
 
 const scriptsGenericBashDependency: string = join(scriptsDependencyDirPath, genericBashDependencyFileName);
-function outGenericBashDependency(): string {
-  return join(outDirPath, genericBashDependencyFileName);
+function outBashDependency(name: string = genericBashDependencyFileName): string {
+  return join(outDirPath, name);
 }
 
 const scriptsGenericCmdDependency: string = join(scriptsDependencyDirPath, genericCmdDependencyFileName);
-function outGenericCmdDependency(): string {
-  return join(outDirPath, genericCmdDependencyFileName);
+function outCmdDependency(name: string = genericCmdDependencyFileName): string {
+  return join(outDirPath, name);
 }
 
 const scriptsGenericAdaptor: string = join(scriptsAdaptorDirPath, genericAdaptorFileName);
-function outGenericAdaptor(): string {
-  return join(outDirPath, genericAdaptorFileName);
+function outAdaptor(name: string = genericAdaptorFileName): string {
+  return join(outDirPath, name);
 }
 
 const configFilename = 'symlink.config.json';
@@ -88,6 +90,7 @@ async function generate() {
 async function newCommandDependency(name: string, commandDirectoryPath: string, adaptor?: string) {
   let bashDependencyValue: string;
   let cmdDependencyValue: string;
+  let adaptorValue: string;
 
   // resolve commandDirectoryPath if its in a scriptblock (or partial scriptblock which must fail).
   if (commandDirectoryPath.startsWith('{') || commandDirectoryPath.endsWith('}')) {
@@ -98,19 +101,27 @@ async function newCommandDependency(name: string, commandDirectoryPath: string, 
   await checkAndRemoveExisitingCommandFiles(symbolicFilePath);
 
   if (!adaptor) {
-    await util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency());
-    await util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency(), false);
-    await util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor(), false);
+    await util.checkAndCreateACopy(scriptsGenericBashDependency, outBashDependency(), true);
+    await util.checkAndCreateACopy(scriptsGenericCmdDependency, outCmdDependency());
+    await util.checkAndCreateACopy(scriptsGenericAdaptor, outAdaptor());
 
-    bashDependencyValue = outGenericBashDependency();
-    cmdDependencyValue = outGenericCmdDependency();
+    bashDependencyValue = outBashDependency();
+    cmdDependencyValue = outCmdDependency();
   } else {
-    await util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency());
-    await util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency(), false);
-    await util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor(), false);
+    bashDependencyValue = outBashDependency(name + '_');
+    cmdDependencyValue = outCmdDependency(name + '_');
+    adaptorValue = outAdaptor(util.getFullname(adaptor));
 
-    bashDependencyValue = name + '_' + outGenericBashDependency();
-    cmdDependencyValue = name + '_' + outGenericCmdDependency();
+    // if custom adaptor is defined; then a custom set of files are needed.
+    await util.checkAndCreateACopy(customBashDependencyFileName, bashDependencyValue, true);
+    await util.checkAndCreateACopy(customCmdDependencyFileName, cmdDependencyValue);
+    await util.checkAndCreateACopy(adaptor, adaptorValue);
+
+    // TODO: overwrite bashDependencyValue and cmdDependencyValue files to have in simply call its custom adaptor
+    util.replaceTokenInFile(bashDependencyValue, '{Outpath}', outDirPath);
+    util.replaceTokenInFile(cmdDependencyValue, '{Outpath}', outDirPath);
+    util.replaceTokenInFile(bashDependencyValue, '{AdaptorPath}', adaptorValue);
+    util.replaceTokenInFile(cmdDependencyValue, '{AdaptorPath}', adaptorValue);
   }
 
   await util.createSymlink(bashDependencyValue, symbolicFilePath);

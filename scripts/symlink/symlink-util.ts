@@ -77,7 +77,7 @@ export async function removeSymbolicDependencies(filePath: string, err_message: 
 /**
  * Checks the destination for exisitence, if not existent it will create a copy from source.
  */
-export async function checkAndCreateACopy(source, destination, asExecutable = true): Promise<void> {
+export async function checkAndCreateACopy(source, destination, asExecutable = false): Promise<void> {
   const copy = promisify(fs.copyFile);
   return await doesFileExistAsync(destination)
     .then((value: boolean) => {
@@ -118,6 +118,20 @@ export function createSymlink(filePath, linkPath): Promise<void> {
       }); */
 }
 
+// https://stackoverflow.com/a/46974091/648789
+export async function replaceTokenInFile(file, tokenExpression, replacement) {
+  const contents = await this.readFileAsync(file, 'utf8');
+  const replaced_contents = contents.replace(tokenExpression, replacement);
+  const tmpfile = `${file}.js.tmp`;
+  await this.writeFileAsync(tmpfile, replaced_contents, 'utf8');
+  await this.renameFileAsync(tmpfile, file);
+  return true;
+}
+
+export function getFullname(filePath): string {
+  return path.basename(filePath);
+}
+
 function checkUsersPermissions(filePath, mode): boolean {
   try {
     fs.accessSync(filePath, mode);
@@ -149,13 +163,5 @@ async function makeFileExecutable(filePath): Promise<void> {
 const writeFileAsync = promisify(fs.writeFile);
 const renameFileAsync = promisify(fs.rename);
 
-// https://stackoverflow.com/a/46974091/648789
-async function replaceTokenInFile(file, tokenExpression, replacement) {
-  const contents = await this.readFileAsync(file, 'utf8');
-  const replaced_contents = contents.replace(tokenExpression, replacement);
-  const tmpfile = `${file}.js.tmp`;
-  await this.writeFileAsync(tmpfile, replaced_contents, 'utf8');
-  await this.renameFileAsync(tmpfile, file);
-  return true;
-}
+
 */

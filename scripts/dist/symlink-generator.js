@@ -47,22 +47,27 @@ var scriptsDependencyDirPath = './scripts/symlink/dependency';
 var scriptsAdaptorDirPath = './scripts/dist/adaptor';
 var genericBashDependencyFileName = 'dependency_symlink';
 var genericCmdDependencyFileName = 'dependency_symlink.cmd';
+var customBashDependencyFileName = 'custom_dependency_symlink';
+var customCmdDependencyFileName = 'custom_dependency_symlink.cmd';
 var genericAdaptorFileName = 'adaptor.js';
 /**
  * The location to the `out` folder. This is intended to reside at the project root directory.
  */
 var outDirPath;
 var scriptsGenericBashDependency = path_1.join(scriptsDependencyDirPath, genericBashDependencyFileName);
-function outGenericBashDependency() {
-    return path_1.join(outDirPath, genericBashDependencyFileName);
+function outBashDependency(name) {
+    if (name === void 0) { name = genericBashDependencyFileName; }
+    return path_1.join(outDirPath, name);
 }
 var scriptsGenericCmdDependency = path_1.join(scriptsDependencyDirPath, genericCmdDependencyFileName);
-function outGenericCmdDependency() {
-    return path_1.join(outDirPath, genericCmdDependencyFileName);
+function outCmdDependency(name) {
+    if (name === void 0) { name = genericCmdDependencyFileName; }
+    return path_1.join(outDirPath, name);
 }
 var scriptsGenericAdaptor = path_1.join(scriptsAdaptorDirPath, genericAdaptorFileName);
-function outGenericAdaptor() {
-    return path_1.join(outDirPath, genericAdaptorFileName);
+function outAdaptor(name) {
+    if (name === void 0) { name = genericAdaptorFileName; }
+    return path_1.join(outDirPath, name);
 }
 var configFilename = 'symlink.config.json';
 /**
@@ -118,7 +123,7 @@ function generate() {
 */
 function newCommandDependency(name, commandDirectoryPath, adaptor) {
     return __awaiter(this, void 0, void 0, function () {
-        var bashDependencyValue, cmdDependencyValue, symbolicFilePath;
+        var bashDependencyValue, cmdDependencyValue, adaptorValue, symbolicFilePath;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -133,29 +138,38 @@ function newCommandDependency(name, commandDirectoryPath, adaptor) {
                 case 3:
                     _a.sent();
                     if (!!adaptor) return [3 /*break*/, 7];
-                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency())];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericBashDependency, outBashDependency(), true)];
                 case 4:
                     _a.sent();
-                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency(), false)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericCmdDependency, outCmdDependency())];
                 case 5:
                     _a.sent();
-                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor(), false)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericAdaptor, outAdaptor())];
                 case 6:
                     _a.sent();
-                    bashDependencyValue = outGenericBashDependency();
-                    cmdDependencyValue = outGenericCmdDependency();
+                    bashDependencyValue = outBashDependency();
+                    cmdDependencyValue = outCmdDependency();
                     return [3 /*break*/, 11];
-                case 7: return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericBashDependency, outGenericBashDependency())];
+                case 7:
+                    bashDependencyValue = outBashDependency(name + '_');
+                    cmdDependencyValue = outCmdDependency(name + '_');
+                    adaptorValue = outAdaptor(util.getFullname(adaptor));
+                    // if custom adaptor is defined; then a custom set of files are needed.
+                    return [4 /*yield*/, util.checkAndCreateACopy(customBashDependencyFileName, bashDependencyValue, true)];
                 case 8:
+                    // if custom adaptor is defined; then a custom set of files are needed.
                     _a.sent();
-                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericCmdDependency, outGenericCmdDependency(), false)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(customCmdDependencyFileName, cmdDependencyValue)];
                 case 9:
                     _a.sent();
-                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsGenericAdaptor, outGenericAdaptor(), false)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(adaptor, adaptorValue)];
                 case 10:
                     _a.sent();
-                    bashDependencyValue = name + '_' + outGenericBashDependency();
-                    cmdDependencyValue = name + '_' + outGenericCmdDependency();
+                    // TODO: overwrite bashDependencyValue and cmdDependencyValue files to have in simply call its custom adaptor
+                    util.replaceTokenInFile(bashDependencyValue, '{Outpath}', outDirPath);
+                    util.replaceTokenInFile(cmdDependencyValue, '{Outpath}', outDirPath);
+                    util.replaceTokenInFile(bashDependencyValue, '{AdaptorPath}', adaptorValue);
+                    util.replaceTokenInFile(cmdDependencyValue, '{AdaptorPath}', adaptorValue);
                     _a.label = 11;
                 case 11: return [4 /*yield*/, util.createSymlink(bashDependencyValue, symbolicFilePath)];
                 case 12:

@@ -11,7 +11,7 @@
     },
     {
       "name": "npm",
-      "adaptor": "npm_adaptor.js",
+      "adaptor": "scripts\\dist\\adaptor\\npm_adaptor.js",
       "symlinkPath": "C:\\Program Files\\nodejs"
     }
   ]

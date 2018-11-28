@@ -152,7 +152,7 @@ exports.removeSymbolicDependencies = removeSymbolicDependencies;
  * Checks the destination for exisitence, if not existent it will create a copy from source.
  */
 function checkAndCreateACopy(source, destination, asExecutable) {
-    if (asExecutable === void 0) { asExecutable = true; }
+    if (asExecutable === void 0) { asExecutable = false; }
     return __awaiter(this, void 0, void 0, function () {
         var copy;
         return __generator(this, function (_a) {
@@ -203,6 +203,33 @@ function createSymlink(filePath, linkPath) {
         }); */
 }
 exports.createSymlink = createSymlink;
+// https://stackoverflow.com/a/46974091/648789
+function replaceTokenInFile(file, tokenExpression, replacement) {
+    return __awaiter(this, void 0, void 0, function () {
+        var contents, replaced_contents, tmpfile;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, this.readFileAsync(file, 'utf8')];
+                case 1:
+                    contents = _a.sent();
+                    replaced_contents = contents.replace(tokenExpression, replacement);
+                    tmpfile = file + ".js.tmp";
+                    return [4 /*yield*/, this.writeFileAsync(tmpfile, replaced_contents, 'utf8')];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, this.renameFileAsync(tmpfile, file)];
+                case 3:
+                    _a.sent();
+                    return [2 /*return*/, true];
+            }
+        });
+    });
+}
+exports.replaceTokenInFile = replaceTokenInFile;
+function getFullname(filePath) {
+    return path.basename(filePath);
+}
+exports.getFullname = getFullname;
 function checkUsersPermissions(filePath, mode) {
     try {
         fs.accessSync(filePath, mode);
@@ -238,14 +265,6 @@ function makeFileExecutable(filePath) {
 const writeFileAsync = promisify(fs.writeFile);
 const renameFileAsync = promisify(fs.rename);
 
-// https://stackoverflow.com/a/46974091/648789
-async function replaceTokenInFile(file, tokenExpression, replacement) {
-  const contents = await this.readFileAsync(file, 'utf8');
-  const replaced_contents = contents.replace(tokenExpression, replacement);
-  const tmpfile = `${file}.js.tmp`;
-  await this.writeFileAsync(tmpfile, replaced_contents, 'utf8');
-  await this.renameFileAsync(tmpfile, file);
-  return true;
-}
+
 */
 //# sourceMappingURL=symlink-util.js.map
