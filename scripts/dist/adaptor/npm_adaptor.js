@@ -29,6 +29,9 @@ var regex = new RegExp([
     '(?<pkgdetails>[a-z0-9\\>\\=\\:\\+\\#\\^\\.\\@\\-\\/]*|(?<!\\k<command>)$)?',
     '(?<options>(?:\\ [-]{1,2}[a-zA-Z]+(?:[-][a-z]+)?)*)$'
 ].join(''));
+var opts = Object.assign({}, process.env);
+opts.cwd = process.cwd();
+opts.stdio = 'inherit';
 // tslint:disable-next-line:no-inferrable-types
 var argument = '';
 // prepare argv values into argument, so that regex can parse as expected
@@ -37,7 +40,7 @@ for (var j = 2; j < process.argv.length; j++) {
 }
 argument = argument.trimLeft();
 var parsedArg = regex.exec(argument)['groups'];
-var transformedExe = 'yarn';
+var transformedExe;
 var transformedCommand;
 // tslint:disable-next-line:no-inferrable-types
 var transformedPkgDetails = '';
@@ -66,16 +69,21 @@ switch (parsedArg.command) {
         transformedCommand = parsedArg.command;
 }
 transformedOptionsString = (transformedOptions) ? transformedOptions.join(' ') : '';
-var tranformedExpression = (transformedCommand + ' ' + transformedPkgDetails + ' ' + transformedOptionsString).trimRight();
-var opts = Object.assign({}, process.env);
-opts.cwd = process.cwd();
-opts.stdio = 'inherit';
+var transformedExpression = [transformedCommand, transformedPkgDetails, transformedOptionsString].filter(function (value) { return value.length > 0; });
+if (process.platform === 'win32') {
+    transformedExe = 'cmd';
+    transformedExpression = ['/c', 'yarn'].concat(transformedExpression);
+}
+else {
+    transformedExe = 'yarn';
+}
 console.log('The following npm expression has been transformed into the following yarn expression:');
 console.log(argument);
-console.log(transformedExe + ' ' + tranformedExpression);
-console.log(transformedExe, [transformedCommand, transformedPkgDetails, transformedOptionsString].toString());
-var result = child.spawnSync(transformedExe, [transformedCommand, transformedPkgDetails, transformedOptionsString], opts);
+console.log(transformedExe + ' ' + transformedExpression);
+var result = child.spawnSync(transformedExe, transformedExpression);
+// const result = child.spawnSync('cmd', ['/c', 'yarn', 'add', 'sots'], opts);
 if (result.error || result.status !== 0) {
+    console.log(result.error);
     process.exit(1);
 }
 else {

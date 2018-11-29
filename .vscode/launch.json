@@ -8,14 +8,26 @@
       "type": "node",
       "request": "launch",
       "name": "Debug symlink-generator.js",
-      "program": "${workspaceFolder}/scripts/dist/symlink-generator.js"
+      "program": "${workspaceFolder}\\scripts\\dist\\symlink-generator.js"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug symlink-npm-adaptor.js",
+      "name": "Debug adaptor.js",
       "sourceMaps": true,
-      "program": "${workspaceFolder}/scripts/dist/adaptor/symlink-npm-adaptor.js"
+      "program": "${workspaceFolder}\\scripts\\dist\\adaptor\\adaptor.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug npm-adaptor.js",
+      "sourceMaps": true,
+      "program": "${workspaceFolder}\\scripts\\dist\\adaptor\\npm_adaptor.js",
+      "args": [
+        "npm",
+        "install",
+        "sots"
+      ]
     },
     {
       "type": "node",
