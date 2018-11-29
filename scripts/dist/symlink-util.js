@@ -39,6 +39,10 @@ var child = require("child_process");
 var fs = require("fs");
 var util_1 = require("util");
 var path = require("path");
+// TODO: remove this to make it public; currently conflicts with orginial function
+var readFileAsync2 = util_1.promisify(fs.readFile);
+var writeFileAsync = util_1.promisify(fs.writeFile);
+var renameFileAsync = util_1.promisify(fs.rename);
 function readFileAsync(filePath, err_message) {
     return __awaiter(this, void 0, void 0, function () {
         var readFile;
@@ -206,21 +210,31 @@ exports.createSymlink = createSymlink;
 // https://stackoverflow.com/a/46974091/648789
 function replaceTokenInFile(file, tokenExpression, replacement) {
     return __awaiter(this, void 0, void 0, function () {
-        var contents, replaced_contents, tmpfile;
+        var tmpfile, contents, replaced_contents, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, this.readFileAsync(file, 'utf8')];
+                case 0:
+                    tmpfile = file + ".tmp";
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 5, , 6]);
+                    return [4 /*yield*/, readFileAsync2(file, 'utf8')];
+                case 2:
                     contents = _a.sent();
                     replaced_contents = contents.replace(tokenExpression, replacement);
-                    tmpfile = file + ".js.tmp";
-                    return [4 /*yield*/, this.writeFileAsync(tmpfile, replaced_contents, 'utf8')];
-                case 2:
-                    _a.sent();
-                    return [4 /*yield*/, this.renameFileAsync(tmpfile, file)];
+                    return [4 /*yield*/, writeFileAsync(tmpfile, replaced_contents, 'utf8')];
                 case 3:
                     _a.sent();
-                    return [2 /*return*/, true];
+                    return [4 /*yield*/, renameFileAsync(tmpfile, file)];
+                case 4:
+                    _a.sent();
+                    return [3 /*break*/, 6];
+                case 5:
+                    error_1 = _a.sent();
+                    console.log('ERROR Calling symlink-utils.replaceTokenInFile(' + file + ',' + tokenExpression + ',' + replacement + ')');
+                    console.log(error_1);
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
             }
         });
     });
@@ -261,10 +275,4 @@ function makeFileExecutable(filePath) {
         });
     });
 }
-/*
-const writeFileAsync = promisify(fs.writeFile);
-const renameFileAsync = promisify(fs.rename);
-
-
-*/
 //# sourceMappingURL=symlink-util.js.map

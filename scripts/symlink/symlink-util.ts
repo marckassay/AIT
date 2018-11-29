@@ -3,6 +3,11 @@ import * as fs from 'fs';
 import { promisify } from 'util';
 import * as path from 'path';
 
+// TODO: remove this to make it public; currently conflicts with orginial function
+const readFileAsync2 = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
+const renameFileAsync = promisify(fs.rename);
+
 export async function readFileAsync(filePath, err_message) {
   const readFile = promisify(fs.readFile);
   return await readFile(filePath, 'utf8')
@@ -119,13 +124,17 @@ export function createSymlink(filePath, linkPath): Promise<void> {
 }
 
 // https://stackoverflow.com/a/46974091/648789
-export async function replaceTokenInFile(file, tokenExpression, replacement) {
-  const contents = await this.readFileAsync(file, 'utf8');
-  const replaced_contents = contents.replace(tokenExpression, replacement);
-  const tmpfile = `${file}.js.tmp`;
-  await this.writeFileAsync(tmpfile, replaced_contents, 'utf8');
-  await this.renameFileAsync(tmpfile, file);
-  return true;
+export async function replaceTokenInFile(file, tokenExpression, replacement): Promise<void> {
+  const tmpfile = `${file}.tmp`;
+  try {
+    const contents = await readFileAsync2(file, 'utf8');
+    const replaced_contents = contents.replace(tokenExpression, replacement);
+    await writeFileAsync(tmpfile, replaced_contents, 'utf8');
+    await renameFileAsync(tmpfile, file);
+  } catch (error) {
+    console.log('ERROR Calling symlink-utils.replaceTokenInFile(' + file + ',' + tokenExpression + ',' + replacement + ')');
+    console.log(error);
+  }
 }
 
 export function getFullname(filePath): string {
@@ -158,10 +167,3 @@ async function makeFileExecutable(filePath): Promise<void> {
       return;
     });
 }
-
-/*
-const writeFileAsync = promisify(fs.writeFile);
-const renameFileAsync = promisify(fs.rename);
-
-
-*/

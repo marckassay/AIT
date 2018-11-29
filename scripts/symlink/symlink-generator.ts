@@ -108,20 +108,25 @@ async function newCommandDependency(name: string, commandDirectoryPath: string, 
     bashDependencyValue = outBashDependency();
     cmdDependencyValue = outCmdDependency();
   } else {
-    bashDependencyValue = outBashDependency(name + '_');
-    cmdDependencyValue = outCmdDependency(name + '_');
+    bashDependencyValue = outBashDependency(name + '_dependency');
+    cmdDependencyValue = outCmdDependency(name + '_dependency.cmd');
     adaptorValue = outAdaptor(util.getFullname(adaptor));
+    const adaptorName = util.getFullname(adaptor);
+
+    const scriptsCustomBashDependency: string = join(scriptsDependencyDirPath, customBashDependencyFileName);
+    const scriptsCustomCmdDependency: string = join(scriptsDependencyDirPath, customCmdDependencyFileName);
+
 
     // if custom adaptor is defined; then a custom set of files are needed.
-    await util.checkAndCreateACopy(customBashDependencyFileName, bashDependencyValue, true);
-    await util.checkAndCreateACopy(customCmdDependencyFileName, cmdDependencyValue);
+    await util.checkAndCreateACopy(scriptsCustomBashDependency, bashDependencyValue, true);
+    await util.checkAndCreateACopy(scriptsCustomCmdDependency, cmdDependencyValue);
     await util.checkAndCreateACopy(adaptor, adaptorValue);
 
-    // TODO: overwrite bashDependencyValue and cmdDependencyValue files to have in simply call its custom adaptor
-    util.replaceTokenInFile(bashDependencyValue, '{Outpath}', outDirPath);
-    util.replaceTokenInFile(cmdDependencyValue, '{Outpath}', outDirPath);
-    util.replaceTokenInFile(bashDependencyValue, '{AdaptorPath}', adaptorValue);
-    util.replaceTokenInFile(cmdDependencyValue, '{AdaptorPath}', adaptorValue);
+    // replace tokens inside the bash and batch files.
+    // await util.replaceTokenInFile(bashDependencyValue, '{Outpath}', outDirPath);
+    await util.replaceTokenInFile(cmdDependencyValue, '{Outpath}', outDirPath);
+    // await util.replaceTokenInFile(bashDependencyValue, '{AdaptorPath}', adaptorName);
+    await util.replaceTokenInFile(cmdDependencyValue, '{AdaptorPath}', adaptorName);
   }
 
   await util.createSymlink(bashDependencyValue, symbolicFilePath);

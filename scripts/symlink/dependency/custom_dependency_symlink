@@ -9,8 +9,13 @@
 # 'projectOutPath' directory which is relative to the current directory.
 #
 basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
-#adaptor=${0##*/}
-adaptor="adaptor.js"
+
+# SET THIS BY GENERATOR
+outpath={Outpath}
+
+# SET THIS BY GENERATOR
+adaptorpath={AdaptorPath}
+
 
 case `uname` in
     *CYGWIN*) basedir=`cygpath -w "$basedir"`;;

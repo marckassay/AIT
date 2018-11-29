@@ -123,7 +123,7 @@ function generate() {
 */
 function newCommandDependency(name, commandDirectoryPath, adaptor) {
     return __awaiter(this, void 0, void 0, function () {
-        var bashDependencyValue, cmdDependencyValue, adaptorValue, symbolicFilePath;
+        var bashDependencyValue, cmdDependencyValue, adaptorValue, symbolicFilePath, adaptorName, scriptsCustomBashDependency, scriptsCustomCmdDependency;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -149,33 +149,43 @@ function newCommandDependency(name, commandDirectoryPath, adaptor) {
                     _a.sent();
                     bashDependencyValue = outBashDependency();
                     cmdDependencyValue = outCmdDependency();
-                    return [3 /*break*/, 11];
+                    return [3 /*break*/, 13];
                 case 7:
-                    bashDependencyValue = outBashDependency(name + '_');
-                    cmdDependencyValue = outCmdDependency(name + '_');
+                    bashDependencyValue = outBashDependency(name + '_dependency');
+                    cmdDependencyValue = outCmdDependency(name + '_dependency.cmd');
                     adaptorValue = outAdaptor(util.getFullname(adaptor));
+                    adaptorName = util.getFullname(adaptor);
+                    scriptsCustomBashDependency = path_1.join(scriptsDependencyDirPath, customBashDependencyFileName);
+                    scriptsCustomCmdDependency = path_1.join(scriptsDependencyDirPath, customCmdDependencyFileName);
                     // if custom adaptor is defined; then a custom set of files are needed.
-                    return [4 /*yield*/, util.checkAndCreateACopy(customBashDependencyFileName, bashDependencyValue, true)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsCustomBashDependency, bashDependencyValue, true)];
                 case 8:
                     // if custom adaptor is defined; then a custom set of files are needed.
                     _a.sent();
-                    return [4 /*yield*/, util.checkAndCreateACopy(customCmdDependencyFileName, cmdDependencyValue)];
+                    return [4 /*yield*/, util.checkAndCreateACopy(scriptsCustomCmdDependency, cmdDependencyValue)];
                 case 9:
                     _a.sent();
                     return [4 /*yield*/, util.checkAndCreateACopy(adaptor, adaptorValue)];
                 case 10:
                     _a.sent();
-                    // TODO: overwrite bashDependencyValue and cmdDependencyValue files to have in simply call its custom adaptor
-                    util.replaceTokenInFile(bashDependencyValue, '{Outpath}', outDirPath);
-                    util.replaceTokenInFile(cmdDependencyValue, '{Outpath}', outDirPath);
-                    util.replaceTokenInFile(bashDependencyValue, '{AdaptorPath}', adaptorValue);
-                    util.replaceTokenInFile(cmdDependencyValue, '{AdaptorPath}', adaptorValue);
-                    _a.label = 11;
-                case 11: return [4 /*yield*/, util.createSymlink(bashDependencyValue, symbolicFilePath)];
+                    // replace tokens inside the bash and batch files.
+                    // await util.replaceTokenInFile(bashDependencyValue, '{Outpath}', outDirPath);
+                    return [4 /*yield*/, util.replaceTokenInFile(cmdDependencyValue, '{Outpath}', outDirPath)];
+                case 11:
+                    // replace tokens inside the bash and batch files.
+                    // await util.replaceTokenInFile(bashDependencyValue, '{Outpath}', outDirPath);
+                    _a.sent();
+                    // await util.replaceTokenInFile(bashDependencyValue, '{AdaptorPath}', adaptorName);
+                    return [4 /*yield*/, util.replaceTokenInFile(cmdDependencyValue, '{AdaptorPath}', adaptorName)];
                 case 12:
+                    // await util.replaceTokenInFile(bashDependencyValue, '{AdaptorPath}', adaptorName);
+                    _a.sent();
+                    _a.label = 13;
+                case 13: return [4 /*yield*/, util.createSymlink(bashDependencyValue, symbolicFilePath)];
+                case 14:
                     _a.sent();
                     return [4 /*yield*/, util.createSymlink(cmdDependencyValue, symbolicFilePath + '.cmd')];
-                case 13:
+                case 15:
                     _a.sent();
                     return [2 /*return*/];
             }
