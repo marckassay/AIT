@@ -83,18 +83,21 @@ switch (parsedArg.command) {
 }
 
 transformedOptionsString = (transformedOptions) ? transformedOptions.join(' ') : '';
-const tranformedExpression: string = transformedCommand + ' ' + transformedPkgDetails + transformedOptionsString;
+const tranformedExpression: string = (transformedCommand + ' ' + transformedPkgDetails + ' ' + transformedOptionsString).trimRight();
 
-console.log('The following npm expression has been tranformed into the following yarn expression:');
+const opts = Object.assign({}, process.env);
+opts.cwd = process.cwd();
+opts.stdio = 'inherit';
+
+console.log('The following npm expression has been transformed into the following yarn expression:');
 console.log(argument);
-console.log(tranformedExpression);
-/*
-child.exec(tranformedExpression, (error: ExecException, stdout: string, stderr: string) => {
-  if (error) {
-    child.execSync('echo ' + error.message);
-    exit(1);
-  }
-  child.execSync('echo ' + stderr);
-  exit(0);
-});
-*/
+console.log(transformedExe + ' ' + tranformedExpression);
+console.log(transformedExe, [transformedCommand, transformedPkgDetails, transformedOptionsString].toString());
+
+const result = child.spawnSync(transformedExe, [transformedCommand, transformedPkgDetails, transformedOptionsString], opts);
+if (result.error || result.status !== 0) {
+  process.exit(1);
+} else {
+  process.exit(0);
+}
+

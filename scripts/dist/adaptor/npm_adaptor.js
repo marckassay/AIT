@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var child = require("child_process");
 // maps all npm options to yarn options
 function isoMorphCollection(target, source) {
     return target.map(function (val) {
@@ -65,18 +66,19 @@ switch (parsedArg.command) {
         transformedCommand = parsedArg.command;
 }
 transformedOptionsString = (transformedOptions) ? transformedOptions.join(' ') : '';
-var tranformedExpression = transformedCommand + ' ' + transformedPkgDetails + transformedOptionsString;
-console.log('The following npm expression has been tranformed into the following yarn expression:');
+var tranformedExpression = (transformedCommand + ' ' + transformedPkgDetails + ' ' + transformedOptionsString).trimRight();
+var opts = Object.assign({}, process.env);
+opts.cwd = process.cwd();
+opts.stdio = 'inherit';
+console.log('The following npm expression has been transformed into the following yarn expression:');
 console.log(argument);
-console.log(tranformedExpression);
-/*
-child.exec(tranformedExpression, (error: ExecException, stdout: string, stderr: string) => {
-  if (error) {
-    child.execSync('echo ' + error.message);
-    exit(1);
-  }
-  child.execSync('echo ' + stderr);
-  exit(0);
-});
-*/
+console.log(transformedExe + ' ' + tranformedExpression);
+console.log(transformedExe, [transformedCommand, transformedPkgDetails, transformedOptionsString].toString());
+var result = child.spawnSync(transformedExe, [transformedCommand, transformedPkgDetails, transformedOptionsString], opts);
+if (result.error || result.status !== 0) {
+    process.exit(1);
+}
+else {
+    process.exit(0);
+}
 //# sourceMappingURL=npm_adaptor.js.map
