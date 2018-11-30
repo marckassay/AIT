@@ -21,7 +21,7 @@ SET $Outpath={Outpath}
 :: SET THIS BY GENERATOR
 SET $AdaptorPath={AdaptorPath}
 
-ECHO [%~n0.cmd] Executing: node %$CurrentDir%\%$Outpath%\%$AdaptorPath% %$Args%
+:: ECHO [%~n0.cmd] Executing: node %$CurrentDir%\%$Outpath%\%$AdaptorPath% %$Args%
 node %$CurrentDir%\%$Outpath%\%$AdaptorPath% %$Args%
 
 ENDLOCAL

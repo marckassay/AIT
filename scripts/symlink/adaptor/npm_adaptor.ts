@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
+import { promisify } from 'util';
 import * as child from 'child_process';
-import * as path from 'path';
+const exec = promisify(child.exec);
 
 interface RegExShape {
   exe?: string;
+  run?: string;
   command: string;
   pkgdetails: string;
   options: string;
@@ -35,7 +37,8 @@ const equivalenceTable = {
 
 const regex = new RegExp([
   '^(?<exe>npm)?\\ ?',
-  '(?<command>[a-z]+(?:[-][a-z]+)?)(?<=\\k<command>)\\ ?',
+  '(?<run>(?<=\\k<exe> )run(?:-script)?)?\\ ?',
+  '(?<command>(?<=\\k<run> )[a-z]+(?:[:][a-z]+)?|(?<!\\k<run> )[a-z]+(?:[-][a-z]+)?)(?<=\\k<command>)\\ ?',
   '(?<pkgdetails>[a-z0-9\\>\\=\\:\\+\\#\\^\\.\\@\\-\\/]*|(?<!\\k<command>)$)?',
   '(?<options>(?:\\ [-]{1,2}[a-zA-Z]+(?:[-][a-z]+)?)*)$'
 ].join(''));
@@ -90,21 +93,34 @@ let transformedExpression = [transformedCommand, transformedPkgDetails, transfor
 
 if (process.platform === 'win32') {
   transformedExe = 'cmd';
-  transformedExpression = ['/c', 'yarn'].concat(transformedExpression);
+  if (!parsedArg.run) {
+    transformedExpression = ['/c', 'yarn'].concat(transformedExpression);
+  } else {
+    transformedExpression = ['/c', 'yarn', 'run'].concat(transformedExpression);
+  }
 } else {
   transformedExe = 'yarn';
+  if (parsedArg.run) {
+    transformedExpression = ['run'].concat(transformedExpression);
+  }
 }
 
-console.log('The following npm expression has been transformed into the following yarn expression:');
+console.log('The npm expression below has been transformed into the followed yarn expression:');
 console.log(argument);
-console.log(transformedExe + ' ' + transformedExpression);
+console.log(transformedExe + ' ' + transformedExpression.join(' '));
 
-const result = child.spawnSync(transformedExe, transformedExpression);
-// const result = child.spawnSync('cmd', ['/c', 'yarn', 'add', 'sots'], opts);
-if (result.error || result.status !== 0) {
-  console.log(result.error);
-  process.exit(1);
-} else {
-  process.exit(0);
-}
-
+const exe = async () => {
+  return await exec(transformedExe + ' ' + transformedExpression.join(' '))
+    .then((onfulfilled) => {
+      if (onfulfilled.stdout) {
+        console.log(onfulfilled.stdout);
+      }
+      if (onfulfilled.stderr) {
+        console.log(onfulfilled.stderr);
+      }
+    })
+    .catch((reason) => {
+      console.log(reason);
+    });
+};
+exe();
