@@ -21,7 +21,6 @@ npm-debug.log*
 coverage/
 www/
 node_modules/
-out/
 tmp/
 temp/
 platforms/
@@ -33,6 +32,3 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-
-# Omit in favor of yarn.lock
-package-lock.json

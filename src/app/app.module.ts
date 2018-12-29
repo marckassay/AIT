@@ -43,6 +43,7 @@ import { AppComponent } from './app.component';
     AppRoutingModule
   ],
   bootstrap: [IonicApp],
+  // bootstrap: [AppComponent]
   entryComponents: [AppComponent],
   providers: [
     ScreenOrientation,
