@@ -290,6 +290,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/screen-orientation@^5.0.0-beta.22":
+  version "5.0.0-beta.22"
+  resolved "https://registry.yarnpkg.com/@ionic-native/screen-orientation/-/screen-orientation-5.0.0-beta.22.tgz#2f6a6e5ac7dda06465c1df3fd34b42afeee0fc3c"
+  integrity sha512-L5NA1IkKyevCdYJ5dQLzLAf0OtTjNY5Y+Utezifxtjump3tLxvW4tk0/kFePyWl7Huphlogg9guA3464rlGCxQ==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/splash-screen@5.0.0-beta.21":
   version "5.0.0-beta.21"
   resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.0.0-beta.21.tgz#4cd961351e6cd60320ece1ecfd83d629b00d234d"
@@ -2269,6 +2276,11 @@ cordova-plugin-ionic-webview@2.0.0:
   resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-webview/-/cordova-plugin-ionic-webview-2.0.0.tgz#ed2375835a499418d2fe15b88a92e1c113fe2593"
   integrity sha512-yRE866k9Tk2GhFJTqitS9oMBKWkZr13Hjuj2BuwKvVHkQq77OFowrsdCqzKEsfwTprF9OpHzUFZ+6Y0v93P8xg==
 
+cordova-plugin-screen-orientation@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-screen-orientation/-/cordova-plugin-screen-orientation-3.0.1.tgz#75a357ce2938081e8f61d4605394b6d77463c1f8"
+  integrity sha1-daNXzik4CB6PYdRgU5S213Rjwfg=
+
 cordova-plugin-splashscreen@5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-5.0.2.tgz#747e74f56e201cd585bc62d14bca19f6867ff1ed"
@@ -2962,6 +2974,11 @@ error-ex@^1.2.0, error-ex@^1.3.1:
   integrity sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==
   dependencies:
     is-arrayish "^0.2.1"
+
+es6-promise-plugin@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/es6-promise-plugin/-/es6-promise-plugin-4.1.0.tgz#f06107399844509eaaba8ed07077d288a5ca697e"
+  integrity sha1-8GEHOZhEUJ6quo7QcHfSiKXKaX4=
 
 es6-promise@^4.0.3:
   version "4.2.5"
@@ -8081,9 +8098,9 @@ sprintf-js@~1.0.2:
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
 spypkg@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/spypkg/-/spypkg-2.0.1.tgz#f9bdcddbf9a866d5876f752c44776fbab05be98d"
-  integrity sha512-L6WGYKa+sVKVWB4Iga7ye3OEsvL27R2wP+XjLDDXCP3qVHhoq+twFMcehDr5z7kiIOnb5L1Mst3HdnlgyQdsgA==
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/spypkg/-/spypkg-2.0.2.tgz#a402bfea2a6998a397927699ffbf8c224b16288c"
+  integrity sha512-rQKaqhu3F/d9CqwM15q+AKIs59vnuNuwJ+SgA5j+H2dJv2IewWUGRADw9Pgd6fF1NtZMNZ7fWXnYIX21ePu9OQ==
   dependencies:
     fs-extra "^7.0.1"
 
