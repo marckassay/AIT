@@ -30,7 +30,7 @@ import { StorageDefaultData } from './providers/storage/ait-storage.defaultdata'
 // import { APP_ENV } from "@environment";
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.component.html'
 })
 export class AppComponent {
   /*   @ViewChild(Nav)

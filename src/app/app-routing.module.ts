@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { IntervalDisplayPage } from './pages/interval-display/interval-display';
 
-const routes: Routes = [
-  /* { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: './home/home.module#HomePageModule' }, */
-  { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' }
+const appRoutes: Routes = [
+  { path: '', redirectTo: '/interval-display', pathMatch: 'full' },
+  { path: '**', component: IntervalDisplayPage }
 ];
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(appRoutes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
