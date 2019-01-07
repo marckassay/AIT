@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,13 +12,18 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 export class AppComponent {
   public appPages = [
     {
-      title: 'Home',
-      url: '/home',
+      title: 'Interval Display',
+      url: '/interval',
       icon: 'home'
     },
     {
-      title: 'List',
-      url: '/list',
+      title: 'Timer Display',
+      url: '/timer',
+      icon: 'list'
+    },
+    {
+      title: 'Stopwatch Display',
+      url: '/stopwatch',
       icon: 'list'
     }
   ];
@@ -25,15 +31,27 @@ export class AppComponent {
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private router: Router
   ) {
     this.initializeApp();
   }
 
-  initializeApp() {
+  async initializeApp() {
+    const page = await this.getLastPage();
+
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
+      this.router.navigate(['/' + page]);
       this.splashScreen.hide();
+    });
+  }
+
+  getLastPage() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('interval');
+      }, 1000);
     });
   }
 }
