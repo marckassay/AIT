@@ -1,4 +1,9 @@
 {
+  "linterOptions": {
+    "exclude": [
+      "temp/**/*"
+    ]
+  },
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
@@ -40,7 +45,7 @@
       }
     ],
     "no-arg": true,
-    "no-bitwise": true,
+    "no-bitwise": false,
     "no-console": [
       true,
       "debug",
@@ -60,7 +65,7 @@
       "ignore-params"
     ],
     "no-misused-new": true,
-    "no-non-null-assertion": true,
+    "no-non-null-assertion": false,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-string-throw": true,
@@ -125,7 +130,7 @@
       "page",
       "kebab-case"
     ],
-    "no-output-on-prefix": true,
+    "no-output-on-prefix": false,
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-host-property-decorator": true,

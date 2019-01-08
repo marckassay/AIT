@@ -1,0 +1,1 @@
+{"plugins":["cordova-plugin-whitelist","cordova-plugin-statusbar","cordova-plugin-device","cordova-plugin-splashscreen","cordova-plugin-ionic-webview","cordova-plugin-ionic-keyboard","cordova-plugin-screen-orientation","es6-promise-plugin","cordova-plugin-brightness","cordova-sqlite-storage","cordova-plugin-vibration","clovelced-plugin-audiomanagement"]}

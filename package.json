@@ -20,7 +20,7 @@
       "cordova",
       "npm:*"
     ],
-    "location": "C:\\Users\\marc\\AppData\\Roaming\\.spies"
+    "location": "C:\\Users\\marck\\AppData\\Roaming\\.spies"
   },
   "dependencies": {
     "@angular/common": "~7.1.4",
@@ -30,21 +30,30 @@
     "@angular/platform-browser": "~7.1.4",
     "@angular/platform-browser-dynamic": "~7.1.4",
     "@angular/router": "~7.1.4",
+    "@ionic-native/brightness": "^5.0.0-beta.22",
     "@ionic-native/core": "5.0.0-beta.21",
+    "@ionic-native/screen-orientation": "^4.19.0",
     "@ionic-native/splash-screen": "5.0.0-beta.21",
     "@ionic-native/status-bar": "5.0.0-beta.21",
+    "@ionic-native/vibration": "^4.19.0",
     "@ionic/angular": "4.0.0-rc.0",
+    "@ionic/storage": "^2.2.0",
     "cordova-android": "7.1.4",
+    "cordova-plugin-brightness": "0.2.0",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-ionic-keyboard": "2.0.5",
     "cordova-plugin-ionic-webview": "2.0.0",
     "cordova-plugin-screen-orientation": "3.0.1",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
+    "cordova-plugin-vibration": "3.1.0",
     "cordova-plugin-whitelist": "1.3.3",
+    "cordova-sqlite-storage": "2.6.0",
     "core-js": "^2.5.4",
     "es6-promise-plugin": "4.1.0",
+    "moment": "^2.23.0",
     "rxjs": "~6.3.3",
+    "sots": "^3.0.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
@@ -85,7 +94,10 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-screen-orientation": {}
+      "cordova-plugin-screen-orientation": {},
+      "cordova-plugin-brightness": {},
+      "cordova-plugin-vibration": {},
+      "clovelced-plugin-audiomanagement": {}
     },
     "platforms": [
       "android"
