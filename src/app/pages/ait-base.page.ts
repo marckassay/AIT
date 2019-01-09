@@ -17,11 +17,11 @@
 */
 import { UUIDData, StorePair } from '../providers/storage/ait-storage.interfaces';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, ViewContainerRef, SkipSelf } from '@angular/core';
+import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, SkipSelf } from '@angular/core';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 import { AITSignal } from '../providers/ait-signal';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { StatusBar } from '@ionic-native/status-bar';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SotsForAit } from '../providers/sots/ait-sots';
 import { SequenceStates } from '../providers/sots/ait-sots.util';
 import { AITBrightness } from '../providers/ait-screen';

@@ -15,11 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Vibration } from '@ionic-native/vibration';
+import { Vibration } from '@ionic-native/vibration/ngx';
 import { Injectable } from '@angular/core';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData } from './storage/ait-storage.interfaces';
-import { AudioManagement } from '@ionic-native/audio-management';
+import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 
 @Injectable()

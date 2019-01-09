@@ -297,10 +297,12 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/screen-orientation@^4.19.0":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/screen-orientation/-/screen-orientation-4.19.0.tgz#c0e1781d491af21dae4190aeda96caaa363e415a"
-  integrity sha512-b5yAG5QqtncxhSCVOwqWQNwJZsHWXW67JFQ8pqAuKl6klQX5dMOHewDk1eMExYQ3gcyBDA7tSthWJjGRo2UVpA==
+"@ionic-native/screen-orientation@^5.0.0-beta.23":
+  version "5.0.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@ionic-native/screen-orientation/-/screen-orientation-5.0.0-beta.23.tgz#5d06f517af5213823a61c213276aef2ce8f39ac0"
+  integrity sha512-WdLAuCqSbJe0t6ostEkMvS9hFZQI7oQTygAow+w0mdnDfLlv1m3quv2NnrOhV9EojrnfPzPbnB8LY1dMRvIY7Q==
+  dependencies:
+    "@types/cordova" latest
 
 "@ionic-native/splash-screen@5.0.0-beta.21":
   version "5.0.0-beta.21"
@@ -316,10 +318,12 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/vibration@^4.19.0":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/vibration/-/vibration-4.19.0.tgz#fad095a250431b6c71b1a2853be130054fdebd62"
-  integrity sha512-1Ij8jkZhHuosykNJhAtQdkHdT1wPLdpYIEuZhwD2BW/BJJigB3UQMIJzdB5yObiwN4So59Yck09OQqORP8IsBw==
+"@ionic-native/vibration@^5.0.0-beta.23":
+  version "5.0.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@ionic-native/vibration/-/vibration-5.0.0-beta.23.tgz#5e1b887f4f1d3977831061df67b6d8100482cc91"
+  integrity sha512-rTJMzxwOoObMRx7aXuZQoadF/KWDr2a4FVlHmfI8dzMf7AMaugVfNvukt/d5cCEPOG4RtsLJY8aWsvzew3O4Kg==
+  dependencies:
+    "@types/cordova" latest
 
 "@ionic/angular-toolkit@~1.2.0":
   version "1.2.2"
