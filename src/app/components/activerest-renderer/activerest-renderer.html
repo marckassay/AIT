@@ -1,62 +1,45 @@
-<!--
-    AiT - Another Interval Timer
-    Copyright (C) 2018 Marc Kassay
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
 <div [ngSwitch]="state">
-  <div *ngSwitchCase="states.CountdownWarning">
+  <div *ngSwitchCase="SequenceStates.Loaded">
     <p class="right">
       <span class="active countdown">{{limits.upper}}</span>
       <span class="rest countdown">/{{limits.lower}}</span>
     </p>
   </div>
-  <div *ngSwitchCase="states.Loaded">
+  <div *ngSwitchCase="SequenceStates.Loaded">
     <p class="right">
       <span class="active loaded">{{limits.upper}}</span>
       <span class="rest loaded">/{{limits.lower}}</span>
     </p>
   </div>
-  <div *ngSwitchCase="states.Active">
+  <div *ngSwitchCase="SequenceStates.Active">
     <p class="right">
       <span class="active go">{{time}}</span>
       <span class="rest stop">/{{limits.lower}}</span>
     </p>
   </div>
-  <div *ngSwitchCase="states.ActiveWarning">
+  <div *ngSwitchCase="SequenceStates.ActiveWarning">
     <p class="right">
       <span class="active go">{{time}}</span>
       <span class="rest getReady">/{{limits.lower}}</span>
     </p>
   </div>
-  <div *ngSwitchCase="states.Rest">
+  <div *ngSwitchCase="SequenceStates.Rest">
     <p class="left">
       <span class="active stop">{{limits.upper}}/</span>
       <span class="rest go">{{time}}</span>
     </p>
   </div>
-  <div *ngSwitchCase="states.RestWarning">
+  <div *ngSwitchCase="SequenceStates.RestWarning">
     <p class="left">
       <span class="active getReady">{{limits.upper}}/</span>
       <span class="rest go">{{time}}</span>
     </p>
   </div>
-  <div *ngSwitchCase="states.Completed">
+  <div *ngSwitchCase="SequenceStates.Completed">
     <p class="right">
       <span class="active completed">{{limits.upper}}</span>
       <span class="rest completed">/{{limits.lower}}</span>
     </p>
   </div>
-  <div *ngSwitchCase="states.Error" class="error">):</div>
+  <div *ngSwitchCase="SequenceStates.Error" class="error">):</div>
 </div>

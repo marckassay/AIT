@@ -1,39 +1,3 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>interval-display</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content padding>
-  <ion-list class="items">
-    <ion-item [routerLink]="['/home']">
-      HOME
-    </ion-item>
-    <ion-item [routerLink]="['/interval-settings']">
-      SETTINGS
-    </ion-item>
-    <ion-item [routerLink]="['/settings']">
-      APP-SETTINGS
-    </ion-item>
-  </ion-list>
-</ion-content> -->
-<!--
-    AiT - Another Interval Timer
-    Copyright (C) 2018 Marc Kassay
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
 <ion-content *ngIf="data">
   <div ion-fixed>
     <ion-grid>
@@ -42,7 +6,6 @@
           <activerest-renderer [state]="viewState" [limits]="data.activerest"></activerest-renderer>
         </ion-col>
         <ion-col id="intervalColLandscape">
-          <!-- this div is adjusted by the parent ion-col by having the following in scss: justify-content: flex-end -->
           <div [ngSwitch]="viewState">
             <div *ngSwitchCase="states.CountdownWarning" class="intervalCountdown">1/{{data.intervals}}</div>
             <div *ngSwitchCase="states.Loaded" class="intervalLoaded">1/{{data.intervals}}</div>

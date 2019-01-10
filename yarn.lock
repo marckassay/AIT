@@ -283,17 +283,17 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@ionic-native/brightness@^5.0.0-beta.22":
-  version "5.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@ionic-native/brightness/-/brightness-5.0.0-beta.22.tgz#87a8a59e17c813551bc9a4a029d281a6f776975f"
-  integrity sha512-P3IQ62AipckWIeTp87zJqkFUGwEE8GBlHjcexJDMBYVVvRFNBfxwKVHTy1by1rZyPo9jorlBkB+WjHblSAmDHw==
+"@ionic-native/brightness@^5.0.0-beta.23":
+  version "5.0.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@ionic-native/brightness/-/brightness-5.0.0-beta.23.tgz#84c3ffe89d2624aeb656f0c6d6f4181d421404a6"
+  integrity sha512-oxtmXF/NDDAI29DLD/PF47bJLUuxlGeKL+zDw8hAcN1OcBwcc4rLXYX4TK/Tw8HrtfEKMJQWx4/KRqmjr+YnbQ==
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/core@5.0.0-beta.21":
-  version "5.0.0-beta.21"
-  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.0.0-beta.21.tgz#45f8a3cc0803ae321566f320e42381697ab4271c"
-  integrity sha512-fe9eqlZYUZoEFNaO3NOF/mydAmooZwlk/0alzULg0ZHDvtPi1v3KDeO0aunQPtf+lr9/yvStZ+9K4mtEgNuVng==
+"@ionic-native/core@5.0.0-beta.23":
+  version "5.0.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.0.0-beta.23.tgz#47582886bc14a82e20e18489d758ee7d50e87d41"
+  integrity sha512-KoBOlokVSMTthQWl+zR6Qxix67CBZTJeoJo/JbBjccCHJEurdcfKg+Iwmt87AxShiku36LQ3bZ6evA5Za0CifQ==
   dependencies:
     "@types/cordova" latest
 
@@ -304,17 +304,17 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/splash-screen@5.0.0-beta.21":
-  version "5.0.0-beta.21"
-  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.0.0-beta.21.tgz#4cd961351e6cd60320ece1ecfd83d629b00d234d"
-  integrity sha512-mkaSR30T2Kmwus58LNPJ3Pfco9ozcGvNWS3/VKqyrtD8R9xnH8jK+Oy7VCAKrXWjduK4VifyeYpSo5pugLrSnw==
+"@ionic-native/splash-screen@^5.0.0-beta.23":
+  version "5.0.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.0.0-beta.23.tgz#9e8c895cc81139211543678b9615f557b88c9c56"
+  integrity sha512-NBLxTl7H8He1CPxeS2bkrI8jMCMfqFuoI281IlDiCrFebOmqJJgqS5hvrM7O1pcNXQXmZH4vCP9ZORnI9OMoiQ==
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/status-bar@5.0.0-beta.21":
-  version "5.0.0-beta.21"
-  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-5.0.0-beta.21.tgz#496b1172fb43a919af2825f0167d27048e62f7fd"
-  integrity sha512-XOioDzOJmjvTZmcCd08tJzzwgjGEHq5/ptueoTPjzjwmHJCrgyolqI5GT+1kLP87uhOEuxGSzNJbOrBORL7fKw==
+"@ionic-native/status-bar@^5.0.0-beta.23":
+  version "5.0.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-5.0.0-beta.23.tgz#6fd2c7a823c36e68c01a8b18772957631a977464"
+  integrity sha512-RemJbItPzYVDS/wdSCZ3FJA2dmG++U8XJrSNGLeliyPbEA5nSKQ1pfaHEuGehZrh8MT04+RJt+ukwab3vRSSgA==
   dependencies:
     "@types/cordova" latest
 
@@ -7531,6 +7531,11 @@ rx-lite@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/rx-lite/-/rx-lite-3.1.2.tgz#19ce502ca572665f3b647b10939f97fd1615f102"
   integrity sha1-Gc5QLKVyZl87ZHsQk5+X/RYV8QI=
+
+rxjs-compat@^6.3.3:
+  version "6.3.3"
+  resolved "https://registry.yarnpkg.com/rxjs-compat/-/rxjs-compat-6.3.3.tgz#2ab3b9ac0dac0c073749d55fef9c03ea1df2045c"
+  integrity sha512-caGN7ixiabHpOofginKEquuHk7GgaCrC7UpUQ9ZqGp80tMc68msadOeP/2AKy2R4YJsT1+TX5GZCtxO82qWkyA==
 
 rxjs@6.3.3, rxjs@^6.1.0, rxjs@~6.3.3:
   version "6.3.3"

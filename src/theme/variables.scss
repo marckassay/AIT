@@ -85,7 +85,7 @@ $font-path: "../assets/fonts";
 // rtl styles in your app. For more info, please see:
 // http://ionicframework.com/docs/theming/rtl-support/
 $app-direction: ltr;
-@import "ionic.globals";
+// @import "ionic.globals";
 // Shared Variables
 // --------------------------------------------------
 // To customize the look and feel of this app, you can override
@@ -133,7 +133,7 @@ $button-md-background-color-activated: #37bdf7;
 // so that the above variables are used and Ionic's
 // default are overridden.
 //@import "ionic.theme.dark";
-@import "ionic.theme.default";
+// @import "ionic.theme.default";
 // Ionicons
 // --------------------------------------------------
 // The premium icon font for Ionic. For more info, please see:

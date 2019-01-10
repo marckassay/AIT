@@ -23,10 +23,11 @@ import { SequenceStates } from '../../providers/sots/ait-sots.util';
   selector: 'activerest-renderer',
   templateUrl: 'activerest-renderer.html'
 })
+
 export class ActiverestRendererComponent {
   // this type assignment to variable is for angular view
   // can access enum values.
-  states = SequenceStates;
+  SequenceStates = SequenceStates;
 
   _state: SequenceStates;
   @Input()
