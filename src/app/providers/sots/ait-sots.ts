@@ -15,11 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { CountdownSegment, CountupSegment, Sequencer, TimeEmission, add } from 'sots';
-import { CountdownWarnings } from '../storage/ait-storage.interfaces';
-import { ISotsForAit, SequenceStates, SotsUtil } from './ait-sots.util';
 import * as moment from 'moment';
 import { PartialObserver } from 'rxjs';
+import { add, CountdownSegment, CountupSegment, Sequencer, TimeEmission } from 'sots';
+
+import { CountdownWarnings } from '../storage/ait-storage.interfaces';
+
+import { ISotsForAit, SequenceStates, SotsUtil } from './ait-sots.util';
 
 export class SotsForAit implements ISotsForAit {
   sequencer: Sequencer;

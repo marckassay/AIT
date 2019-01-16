@@ -15,11 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
-import { UUIDData, AppStorageData, StorePair } from './ait-storage.interfaces';
-import { Subject, Observable, Subscription } from 'rxjs';
+import { Storage } from '@ionic/storage';
+import { Observable, Subject, Subscription } from 'rxjs';
+
 import { StorageDefaultData } from './ait-storage.defaultdata';
+import { AppStorageData, StorePair, UUIDData } from './ait-storage.interfaces';
 
 @Injectable()
 export class AITStorage {

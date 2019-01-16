@@ -15,11 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, Optional, AfterContentInit } from '@angular/core';
-import { AITStorage } from '../providers/storage/ait-storage.service';
-import { AppStorageData, UUIDData, StorePair } from '../providers/storage/ait-storage.interfaces';
-import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
+import { AfterContentInit, ChangeDetectorRef, Optional } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+
+import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
+import { AppStorageData, StorePair, UUIDData } from '../providers/storage/ait-storage.interfaces';
+import { AITStorage } from '../providers/storage/ait-storage.service';
 
 export class AITBaseSettingsPage implements AfterContentInit {
   /**

@@ -24,7 +24,7 @@ $font-size-interval-portrait: 25vw;
 $font-size-interval-landscape: 25vh;
 $font-size-time-portrait: 25vw;
 $font-size-time-landscape: 25vh;
-@mixin page-interval-display-theme-apply($map) {
+@mixin app-interval-display-theme-apply($map) {
   [ion-fixed] {
     width: 100%;
     height: 100%;

@@ -1,7 +1,7 @@
 {
   "linterOptions": {
     "exclude": [
-      "temp/**/*"
+      "./temp/**/*"
     ]
   },
   "rulesDirectory": [
@@ -138,6 +138,14 @@
     "no-output-rename": true,
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+    "ordered-imports": [
+      true,
+      {
+        "grouped-imports": "true",
+        "import-sources-order": "lowercase-last",
+        "named-imports-order": "lowercase-first"
+      }
+    ]
   }
 }

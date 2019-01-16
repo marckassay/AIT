@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { StopwatchSettingsPage } from './stopwatch-settings.page';
@@ -23,4 +22,4 @@ const routes: Routes = [
   ],
   declarations: [StopwatchSettingsPage]
 })
-export class StopwatchSettingsPageModule {}
+export class StopwatchSettingsPageModule { }

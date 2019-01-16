@@ -1,26 +1,10 @@
-/**
-    AiT - Another Interval Timer
-    Copyright (C) 2018 Marc Kassay
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-import { Vibration } from '@ionic-native/vibration/ngx';
 import { Injectable } from '@angular/core';
-import { AITStorage } from './storage/ait-storage.service';
-import { AppStorageData } from './storage/ait-storage.interfaces';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
+import { Vibration } from '@ionic-native/vibration/ngx';
+
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
+import { AppStorageData } from './storage/ait-storage.interfaces';
+import { AITStorage } from './storage/ait-storage.service';
 
 @Injectable()
 /**
@@ -66,15 +50,15 @@ export class AITSignal {
     if (value && this.data.sound > 0) {
       return this.audioman.getAudioMode()
         .then((val) => {
-          this.audioModePriorToChange = val.mode;
-          if (this.audioModePriorToChange !== AudioManagement.AudioMode.Normal) {
-            return this.audioman.setAudioMode(AudioManagement.AudioMode.Normal);
+          this.audioModePriorToChange = val.audioMode;
+          if (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL) {
+            return this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL);
           } else {
             return Promise.resolve();
           }
         })
         .then(() => {
-          this.audioman.getVolume(AudioManagement.VolumeType.Music)
+          this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
             .then((val) => {
               this.musicVolumePriorToChange = val.volume;
               return Promise.resolve();
@@ -82,7 +66,7 @@ export class AITSignal {
         })
         .then(() => {
           if (this.musicVolumePriorToChange !== this.data.sound) {
-            this.audioman.setVolume(AudioManagement.VolumeType.Music, this.data.sound)
+            this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.data.sound)
               .then(() => {
                 console.log('AudioManagement restored Music volume to previous session value.');
                 return Promise.resolve();
@@ -95,7 +79,7 @@ export class AITSignal {
           return Promise.reject(reason);
         });
     } else if (!value) {
-      return Promise.resolve(this.audioModePriorToChange && (this.audioModePriorToChange !== AudioManagement.AudioMode.Normal))
+      return Promise.resolve(this.audioModePriorToChange && (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL))
         .then((val) => {
           if (val) {
             return this.audioman.setAudioMode(this.audioModePriorToChange);
@@ -105,7 +89,7 @@ export class AITSignal {
         })
         .then(() => {
           if (this.musicVolumePriorToChange && (this.musicVolumePriorToChange > 0)) {
-            return this.audioman.setVolume(AudioManagement.VolumeType.Music, this.musicVolumePriorToChange);
+            return this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.musicVolumePriorToChange);
           } else {
             return Promise.resolve();
           }

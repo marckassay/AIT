@@ -15,23 +15,25 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { UUIDData, StorePair } from '../providers/storage/ait-storage.interfaces';
-import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { ChangeDetectorRef, OnInit, Optional, ViewChild, ComponentFactoryResolver, SkipSelf } from '@angular/core';
-import { AITStorage } from '../providers/storage/ait-storage.service';
-import { AITSignal } from '../providers/ait-signal';
+import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { SotsForAit } from '../providers/sots/ait-sots';
-import { SequenceStates } from '../providers/sots/ait-sots.util';
-import { AITBrightness } from '../providers/ait-screen';
-import { AITBaseSettingsPage } from './ait-basesettings.page';
-import { HomeDisplayService } from '../providers/home-display.service';
+import { MenuController } from '@ionic/angular';
 /* import { Menu } from 'ionic-angular/components/app/menu-interface';
 import { Menu } from '@ionic/core/loader/'; */
 import { Subscription } from 'rxjs';
-import { MenuController } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+
+import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
+import { AITBrightness } from '../providers/ait-screen';
+import { AITSignal } from '../providers/ait-signal';
+import { HomeDisplayService } from '../providers/home-display.service';
+import { SotsForAit } from '../providers/sots/ait-sots';
+import { SequenceStates } from '../providers/sots/ait-sots.util';
+import { StorePair, UUIDData } from '../providers/storage/ait-storage.interfaces';
+import { AITStorage } from '../providers/storage/ait-storage.service';
+
+import { AITBaseSettingsPage } from './ait-basesettings.page';
 
 export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
@@ -47,7 +49,7 @@ export class AITBasePage implements OnInit {
 
   // this type assignment to variable is for angular view
   // can access enum values.
-  protected states = SequenceStates;
+  SequenceStates = SequenceStates;
   // TODO: create a accessor and mutator and tie in FabContainerComponent viewState too. Perhaps
   // using a Subject would be better.
   protected viewState: SequenceStates;
@@ -74,11 +76,13 @@ export class AITBasePage implements OnInit {
     @Optional() protected splashScreen: SplashScreen,
     @Optional() protected statusBar: StatusBar
   ) {
-    this.menuCtrl.get('left').then((value) => this.leftmenu = value);
-    this.menuCtrl.get('right').then((value) => this.rightmenu = value);
+    console.log('ait-base', 'constructor');
+    // this.menuCtrl.get('left').then((value) => this.leftmenu = value);
+    // this.menuCtrl.get('right').then((value) => this.rightmenu = value);
   }
 
   ngOnInit(): void {
+    console.log('ait-base', 'ngOnInffit');
     this.isFirstViewing = true;
     this.sots = new SotsForAit();
 

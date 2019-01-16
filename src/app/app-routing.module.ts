@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+
+/*
+  path: 'list',
+  component: ItemListPage,
+  loadChildren: './items/items.module#ItemsModule'
+*/
 
 const routes: Routes = [
   { path: 'interval', loadChildren: './pages/interval-display/interval-display.module#IntervalDisplayPageModule' },
   { path: 'timer', loadChildren: './pages/timer-display/timer-display.module#TimerDisplayPageModule' },
   { path: 'stopwatch', loadChildren: './pages/stopwatch-display/stopwatch-display.module#StopwatchDisplayPageModule' },
-  { path: 'interval-settings', loadChildren: './pages/interval-settings/interval-settings.module#IntervalSettingsPageModule' },
   { path: 'timer-settings', loadChildren: './pages/timer-settings/timer-settings.module#TimerSettingsPageModule' },
   { path: 'stopwatch-settings', loadChildren: './pages/stopwatch-settings/stopwatch-settings.module#StopwatchSettingsPageModule' },
   { path: 'settings', loadChildren: './pages/app-settings/app-settings.module#AppSettingsPageModule' },

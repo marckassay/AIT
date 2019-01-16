@@ -1,4 +1,4 @@
-import { IntervalStorageData, TimerStorageData, AppStorageData, StopwatchStorageData, UUIDData } from './ait-storage.interfaces';
+import { AppStorageData, IntervalStorageData, StopwatchStorageData, TimerStorageData, UUIDData } from './ait-storage.interfaces';
 
 export class StorageDefaultData {
   public static readonly APP_ID: string = '00000000-0000-0000-0000-000000000001';
@@ -54,6 +54,16 @@ export class StorageDefaultData {
       case this.INTERVAL_ID: return StorageDefaultData.INTERVAL_DATA;
       case this.TIMER_ID: return StorageDefaultData.TIMER_DATA;
       case this.STOPWATCH_ID: return StorageDefaultData.STOPWATCH_DATA;
+    }
+  }
+
+  public static getPageNameByID(uuid: string): 'interval' | 'timer' | 'stopwatch' {
+    if (uuid === StorageDefaultData.INTERVAL_ID) {
+      return 'interval';
+    } else if (uuid === StorageDefaultData.TIMER_ID) {
+      return 'timer';
+    } else if (uuid === StorageDefaultData.STOPWATCH_ID) {
+      return 'stopwatch';
     }
   }
 }

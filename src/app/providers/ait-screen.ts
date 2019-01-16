@@ -15,12 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Brightness } from '@ionic-native/brightness/ngx';
 import { Injectable } from '@angular/core';
-import { AITStorage } from './storage/ait-storage.service';
-import { AppStorageData, UUIDData, BrightnessSet } from './storage/ait-storage.interfaces';
-import { StorageDefaultData } from './storage/ait-storage.defaultdata';
+import { Brightness } from '@ionic-native/brightness/ngx';
 import { Subject } from 'rxjs';
+
+import { StorageDefaultData } from './storage/ait-storage.defaultdata';
+import { AppStorageData, BrightnessSet, UUIDData } from './storage/ait-storage.interfaces';
+import { AITStorage } from './storage/ait-storage.service';
 
 export class BrightnessUtil {
   static convertToDeviceBrightnessNumber(value: BrightnessSet): number {
@@ -42,7 +43,7 @@ export class BrightnessUtil {
  * however the device's brightness value uses a different numbering set. The following is their
  * statement:
  *
- *  "A value of less than 0, the default, means to use the preferred screen brightness. 0 to 1 
+ *  "A value of less than 0, the default, means to use the preferred screen brightness. 0 to 1
  * adjusts the brightness from dark to full bright."
  *
  * If ait's 'brightness' value is -100, it means that the default value is being used. The default

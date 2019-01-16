@@ -4403,6 +4403,13 @@ invert-kv@^2.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
+ionic-native-dev-util@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/ionic-native-dev-util/-/ionic-native-dev-util-0.6.1.tgz#4b96eddda7c02001e895a28e0eaefe049ecbab5e"
+  integrity sha512-3KutBMrdC9OTl7nXA3l2dAMlsmURgT3om99dn3ez6ACdBF2w4PBkIpd+K2GLWXyH0MFbt2IucgrK81PFzg6NZg==
+  dependencies:
+    fs-extra "^7.0.1"
+
 ionic@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/ionic/-/ionic-4.6.0.tgz#5b4d388eb123cd515e7b3074ae804cfbc937ccdc"

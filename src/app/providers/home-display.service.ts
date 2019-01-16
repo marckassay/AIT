@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
-import { Notification, Observable } from 'rxjs';
-import { dematerialize, publish } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+// import { dematerialize, publish } from 'rxjs/operators';
 
 /**
 Root Component will inject this service and do the following:

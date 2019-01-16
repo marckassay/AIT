@@ -31,17 +31,18 @@ export class IntervalDisplayPage implements OnInit {
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { IntervalStorageData, UUIDData } from '../../providers/storage/ait-storage.interfaces';
 import { Component, Input } from '@angular/core';
-import { SequenceStates } from '../../providers/sots/ait-sots.util';
-import { TimeEmission } from 'sots';
-import { AITBasePage } from '../ait-base.page';
 import { ViewChild } from '@angular/core';
+import { TimeEmission } from 'sots';
+
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
+import { SequenceStates } from '../../providers/sots/ait-sots.util';
+import { IntervalStorageData, UUIDData } from '../../providers/storage/ait-storage.interfaces';
+import { AITBasePage } from '../ait-base.page';
 // import { IntervalSettingsPageModule } from '../interval-settings/interval-settings.module';
 
 @Component({
-  selector: 'page-interval-display',
+  selector: 'app-interval-display',
   templateUrl: './interval-display.page.html',
   styleUrls: ['./interval-display.page.scss']
 })
@@ -74,7 +75,6 @@ export class IntervalDisplayPage extends AITBasePage {
 
   aitPreBuildTimerCheck(value: UUIDData): boolean {
     const val = value as IntervalStorageData;
-
     if ((!this.data) ||
       (val.activerest.lower !== this.data.activerest.lower) ||
       (val.activerest.upper !== this.data.activerest.upper) ||

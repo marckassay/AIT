@@ -1,12 +1,12 @@
-@import "../pages/interval-display/interval-display.scss";
-@import "../pages/interval-settings/interval-settings.scss";
-@import "../pages/timer-display/timer-display.scss";
-@import "../pages/timer-settings/timer-settings.scss";
-@import "../pages/stopwatch-display/stopwatch-display.scss";
-@import "../pages/stopwatch-settings/stopwatch-settings.scss";
-@import "../pages/app-settings/app-settings.scss";
-@import "../pages/home-display/home-display.scss";
-@import "../components/activerest-renderer/activerest-renderer.scss";
+@import "./pages/interval-display/interval-display.page.scss";
+@import "./pages/interval-settings/interval-settings.page.scss";
+@import "./pages/timer-display/timer-display.page.scss";
+@import "./pages/timer-settings/timer-settings.page.scss";
+@import "./pages/stopwatch-display/stopwatch-display.page.scss";
+@import "./pages/stopwatch-settings/stopwatch-settings.page.scss";
+@import "./pages/app-settings/app-settings.page.scss";
+@import "./pages/home-display/home-display.page.scss";
+@import "./components/activerest-renderer/activerest-renderer.scss";
 
 html {
   font-size: 62.5%;
@@ -146,29 +146,29 @@ ion-nav {
 
 @mixin grand-theme-map-apply($map) {
   @include theme-map-apply($map);
-  page-interval-display {
-    @include page-interval-display-theme-apply($map);
+  app-interval-display {
+    @include app-interval-display-theme-apply($map);
   }
-  page-interval-settings {
-    @include page-interval-settings-theme-apply($map);
+  app-interval-settings {
+    @include app-interval-settings-theme-apply($map);
   }
-  page-timer-display {
-    @include page-timer-display-theme-apply($map);
+  app-timer-display {
+    @include app-timer-display-theme-apply($map);
   }
-  page-timer-settings {
-    @include page-timer-settings-theme-apply($map);
+  app-timer-settings {
+    @include app-timer-settings-theme-apply($map);
   }
-  page-stopwatch-display {
-    @include page-stopwatch-display-theme-apply($map);
+  app-stopwatch-display {
+    @include app-stopwatch-display-theme-apply($map);
   }
-  page-stopwatch-settings {
-    @include page-stopwatch-settings-theme-apply($map);
+  app-stopwatch-settings {
+    @include app-stopwatch-settings-theme-apply($map);
   }
-  page-app-settings {
-    @include page-app-settings-theme-apply($map);
+  app-settings {
+    @include app-settings-theme-apply($map);
   }
-  page-home-display {
-    @include page-home-display-theme-apply($map);
+  app-home {
+    @include app-home-theme-apply($map);
   }
   activerest-renderer {
     @include activerest-renderer-theme-apply($map);

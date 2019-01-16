@@ -1,1 +1,0 @@
-Copy-Item '..\ionic-native\dist\@ionic-native\plugins\audio-management' -Destination '.\node_modules\@ionic-native' -Recurse -Force

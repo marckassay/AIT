@@ -10,6 +10,7 @@ export class TimerDisplayPage implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('timereeeeeee');
   }
 
 }

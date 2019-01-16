@@ -54,8 +54,7 @@
             "cwd": "${workspaceFolder}",
             "devServerAddress": "localhost",
             "sourceMaps": true,
-            "livereload": true,
-            "internalConsoleOptions": "openOnSessionStart"
+            "livereload": true
         },
         {
             "name": "Simulate Android in browser",
