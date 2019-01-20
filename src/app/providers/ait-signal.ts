@@ -25,9 +25,9 @@ export class AITSignal {
   constructor(public vibration: Vibration,
     public audioman: AudioManagement,
     public storage: AITStorage) {
-    this.storage.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID).then((value) => {
-      this.data = value;
-    });
+    /*     this.storage.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID).then((value) => {
+          this.data = value;
+        }); */
   }
 
   /**

@@ -1,58 +1,56 @@
-import { Component } from '@angular/core';
+import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Platform } from '@ionic/angular';
+import { MenuController, Platform } from '@ionic/angular';
 
+import { HomePage } from './pages/home/home.page';
+import { RightMenuSubject } from './providers/right-menu-subject';
 import { StorageDefaultData } from './providers/storage/ait-storage.defaultdata';
 import { AppStorageData } from './providers/storage/ait-storage.interfaces';
 import { AITStorage } from './providers/storage/ait-storage.service';
-import { AccentTheme, BaseTheme, ThemeSettingsProvider } from './providers/theme-settings.provider';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  public appPages = [
-    {
-      title: 'Interval Display',
-      url: '/interval',
-      icon: 'home'
-    },
-    {
-      title: 'Timer Display',
-      url: '/timer',
-      icon: 'list'
-    },
-    {
-      title: 'Stopwatch Display',
-      url: '/stopwatch',
-      icon: 'list'
-    }
-  ];
+  @ViewChild('leftMenuInnerHTML', { read: ViewContainerRef })
+  leftMenuInnerHTML: ViewContainerRef;
 
-  combinedTheme: string;
+  @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })
+  rightMenuInnerHTML: ViewContainerRef;
+
+  data: AppStorageData;
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private settings: ThemeSettingsProvider,
+    private menuCtrl: MenuController,
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver,
     private storage: AITStorage,
-    private router: Router
+    private rightMenuSubject: RightMenuSubject,
   ) {
     this.initializeApp();
   }
 
   async initializeApp() {
-    const page = await this.checkAppStartupData();
+    this.rightMenuSubject.subscribe((page) => {
+      this.createComponentForSideMenu(page);
+      if (!this.leftMenuInnerHTML) {
+        this.createComponentForSideMenu(HomePage);
+      }
+    });
+
+    const linkparams = await this.getStartupRoute();
 
     await this.platform.ready()
       .then(() => {
-
+        // TODO: apply theme here with  this.data
         this.statusBar.styleDefault();
-        return this.router.navigate(['/' + page])
+        return this.router.navigate(linkparams)
           .then((value) => {
             if (value) {
               this.splashScreen.hide();
@@ -61,28 +59,28 @@ export class AppComponent {
       });
   }
 
-  async checkAppStartupData() {
+  async getStartupRoute(): Promise<any> {
     return await this.storage.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID)
       .then((value) => {
         if (value) {
-          this.settings.base = value.base as BaseTheme;
-          this.settings.accent = value.accent as AccentTheme;
-
-          this.settings.combinedTheme.subscribe((val: string) => {
-            this.combinedTheme = val;
-          });
-
-          return StorageDefaultData.getPageNameByID(value.current_uuid);
+          this.data = value;
+          return ['/' + StorageDefaultData.getPageNameByID(value.current_uuid), value.current_uuid];
         }
       });
   }
 
-
-  /*   getLastPage() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve('interval');
-        }, 1000);
-      });
-    } */
+  // TODO: would like to know preferred way to type this parameter. tried
+  // 'typeof AITBaseSettingsPage | typeof HomePage'
+  private createComponentForSideMenu(page: any) {
+    let htmlElement: ViewContainerRef;
+    console.log('createComponentForSideMenu', page);
+    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<any>(page);
+    if (page instanceof HomePage === false) {
+      htmlElement = this.rightMenuInnerHTML;
+    } else {
+      htmlElement = this.leftMenuInnerHTML;
+    }
+    htmlElement.clear();
+    htmlElement.createComponent(resolvedComponent);
+  }
 }

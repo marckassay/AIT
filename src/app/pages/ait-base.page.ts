@@ -15,29 +15,31 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ComponentFactoryResolver, OnDestroy, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { MenuController } from '@ionic/angular';
-/* import { Menu } from 'ionic-angular/components/app/menu-interface';
-import { Menu } from '@ionic/core/loader/'; */
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { AITBrightness } from '../providers/ait-screen';
 import { AITSignal } from '../providers/ait-signal';
-import { HomeDisplayService } from '../providers/home-display.service';
+import { RightMenuSubject } from '../providers/right-menu-subject';
 import { SotsForAit } from '../providers/sots/ait-sots';
 import { SequenceStates } from '../providers/sots/ait-sots.util';
-import { StorePair, UUIDData } from '../providers/storage/ait-storage.interfaces';
+import { UUIDData } from '../providers/storage/ait-storage.interfaces';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 
 import { AITBaseSettingsPage } from './ait-basesettings.page';
 
-export class AITBasePage implements OnInit {
+export class AITBasePage implements OnInit, OnDestroy {
+
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
+
+  uuidData$;
 
   protected _uuidData: UUIDData;
   get uuidData(): UUIDData {
@@ -53,42 +55,39 @@ export class AITBasePage implements OnInit {
   // TODO: create a accessor and mutator and tie in FabContainerComponent viewState too. Perhaps
   // using a Subject would be better.
   protected viewState: SequenceStates;
-  protected store: StorePair<UUIDData>;
+  protected store: Observable<UUIDData>;
   protected sots: SotsForAit;
   protected grandTime: string;
   protected isFirstViewing: boolean;
-  private leftmenu: HTMLIonMenuElement;
-  private rightmenu: HTMLIonMenuElement;
-  private rightmenuOpenSubscription: Subscription;
-  private rightmenuCloseSubscription: Subscription;
-  private rightmenuComponentInstance: AITBaseSettingsPage;
 
   constructor(
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
     @Optional() protected ngDectector: ChangeDetectorRef,
-    // @Optional() protected navParams: NavParams,
-    @Optional() protected homeService: HomeDisplayService,
     @Optional() protected screenOrientation: ScreenOrientation,
     @Optional() protected storage: AITStorage,
     @Optional() @SkipSelf() public menuCtrl: MenuController,
     @Optional() protected signal: AITSignal,
     @Optional() protected display: AITBrightness,
     @Optional() protected splashScreen: SplashScreen,
-    @Optional() protected statusBar: StatusBar
+    @Optional() protected statusBar: StatusBar,
+    @Optional() protected router: Router,
+    @Optional() protected route: ActivatedRoute,
+    @Optional() protected rightMenuSubject: RightMenuSubject
   ) {
-    console.log('ait-base', 'constructor');
-    // this.menuCtrl.get('left').then((value) => this.leftmenu = value);
-    // this.menuCtrl.get('right').then((value) => this.rightmenu = value);
+    console.log('ait-base ', 'constructor');
   }
 
-  ngOnInit(): void {
-    console.log('ait-base', 'ngOnInffit');
-    this.isFirstViewing = true;
-    this.sots = new SotsForAit();
+  ngOnInit() {
+    console.log('ait-base', 'ngOnInit');
 
-    this.screenOrientation.onChange().subscribe(() => {
-      this.ngDectector.detectChanges();
-    });
+    this.route.data
+      .subscribe((data: { storage: UUIDData }) => {
+        console.log(data.storage);
+      });
+  }
+
+  ngOnDestroy(): void {
+    console.log('ait-base', 'ngOnDestroy');
   }
 
   /**
@@ -96,52 +95,9 @@ export class AITBasePage implements OnInit {
    *
    * @param settingsPage
    */
-  /*   protected createSettingsPage(settingsPage?: any): void {
-      const rightMenuInnerHTML: ViewContainerRef = this.navParams.data.rightmenu;
-      rightMenuInnerHTML.clear();
-
-      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<AITBaseSettingsPage>(settingsPage);
-
-      this.rightmenuComponentInstance = rightMenuInnerHTML.createComponent<AITBaseSettingsPage>(resolvedComponent).instance;
-      this.rightmenuComponentInstance.uuid = this.navParams.data.uuid;
-
-      this.floatingbuttons.setProgramButtonToVisible();
-    } */
-  /*
-    private createHomePage(): void {
-      this.homeService.notifiyAppOfCompletion();
-
-      this.floatingbuttons.setHomeButtonToVisible();
-    } */
-
-  /**
-   * Called by `aitPostTimerBuilt` method to subscribe to `rightmenu`'s `ionOpen` event so that the
-   * `loadAppData` method in the settings page will be called. When `ionOpen` is emitted, the
-   * `ionClose` is subscribed so that what ever changes happened in the settings page, will be
-   * reflected in the display page.
-   */
-  /*   private registerMenuEvents(): void {
-      if (this.rightmenuOpenSubscription) {
-        this.rightmenuOpenSubscription.unsubscribe();
-      }
-
-      this.rightmenuOpenSubscription = this.rightmenu.ionOpen.subscribe(() => {
-        this.rightmenuComponentInstance.loadAppData();
-        this.rightmenuCloseSubscription = this.rightmenu.ionClose.subscribe(() => {
-          this.aitLoadData();
-          this.rightmenuCloseSubscription.unsubscribe();
-        });
-      });
-    } */
-
-  /**
-   * This event only happens once per page being created. If a page leaves but is cached, then this
-   * event will not fire again on a subsequent viewing.
-   */
-  ionViewDidLoad(): void {
-    // this.createSettingsPage();
-    // this.createHomePage();
-    this.floatingbuttons.setToLoadedMode();
+  protected createSettingsPage(settingsPage: typeof AITBaseSettingsPage): void {
+    this.rightMenuSubject.next(settingsPage);
+    // this.floatingbuttons.setProgramButtonToVisible();
   }
 
   /**
@@ -156,41 +112,18 @@ export class AITBasePage implements OnInit {
    * it was the first load or a cached page.
    */
   ionViewDidEnter(): void {
+    this.floatingbuttons.setToLoadedMode();
+    this.floatingbuttons.setHomeButtonToVisible();
+    this.floatingbuttons.setProgramButtonToVisible();
+
     this.setViewInRunningMode(false);
   }
 
-  /**
-   * This is critical to fully unsubscribe the 2 Subscriptions of this class. When transitioning from
-   * one ait page to another, the simlpified call stack below represents this algorhthm:
-    ```
-    ...
-    createSettingsPage() TimerDisplay
-    ...
-    ionViewWillLeave() IntervalDisplay
-    ...
-    registerMenuEvents() TimerDisplay
-    ...
-    ```
-   * In this example, the user goes from `IntervalDisplay` to `TimerDisplay`. Upon first viewing of
-   * `TimerDisplay`, the 2 Subscriptions will be undefined for its instance, but the internal list of
-   * RxJS will have Subscriptions.
-   */
   ionViewWillLeave(): void {
-    this.rightmenuOpenSubscription.unsubscribe();
   }
 
   private aitLoadData(): void {
-    // this.route.paramMap.
-    // this.store = this.storage.getPagePromiseAndSubject2(this.navParams.data.uuid, true);
-    this.store = this.storage.getPagePromiseAndSubject2('00000000-0000-0000-0000-000000000002', true);
-    this.store.promise.then((value: any) => {
-      if (this.aitPreBuildTimerCheck(value)) {
-        this.uuidData = (value as UUIDData);
-        this.aitBuildTimer();
-      }
-    }).catch(() => {
-      // console.log("interval-display preinitializeDisplay error")
-    });
+
   }
 
   /**
@@ -233,18 +166,18 @@ export class AITBasePage implements OnInit {
   }
 
   protected setViewInRunningMode(value: boolean): void {
-    this.signal.enable(value)
-      .then(() => {
-        return Promise.resolve();
-      }, () => {
-        return Promise.resolve();
-      }).then(() => {
-        // this.leftmenu.enable(!value);
-        // this.rightmenu.enable(!value);
+    /*     this.signal.enable(value)
+          .then(() => {
+            return Promise.resolve();
+          }, () => {
+            return Promise.resolve();
+          }).then(() => { */
+    // this.leftmenu.enable(!value);
+    // this.rightmenu.enable(!value);
 
-        (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
-        (value) ? this.statusBar.hide() : this.statusBar.show();
-      });
+    (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
+    (value) ? this.statusBar.hide() : this.statusBar.show();
+    //    });
   }
 
   /**
@@ -257,13 +190,14 @@ export class AITBasePage implements OnInit {
         this.sots.sequencer.pause();
         this.setViewInRunningMode(false);
         this.floatingbuttons.setToPausedMode();
-        this.leftmenu.open();
+        this.router.navigate(['/home']);
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
         this.setViewInRunningMode(false);
         this.floatingbuttons.setToPausedMode();
-        this.rightmenu.open();
+        this.menuCtrl.open('end');
+        // this.router.navigate(['/interval-settings']);
         break;
       case FabAction.Reset:
         this.aitResetTimer();

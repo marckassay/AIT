@@ -53,6 +53,7 @@
             "platform": "serve",
             "cwd": "${workspaceFolder}",
             "devServerAddress": "localhost",
+            "devServerTimeout": 45000,
             "sourceMaps": true,
             "livereload": true
         },

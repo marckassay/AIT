@@ -5,18 +5,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { ActiverestRendererComponentModule } from 'src/app/components/activerest-renderer/activerest-renderer.module';
 import { FabContainerComponentModule } from 'src/app/components/fab-container/fab-container.module';
 
+import { IntervalDisplayResolverService } from './interval-display-router.service';
 import { IntervalDisplayPage } from './interval-display.page';
-
 
 const routes: Routes = [
   {
-    path: '',
-    component: IntervalDisplayPage
-  },
-  {
-    path: 'interval-settings',
-    loadChildren: '../interval-settings/interval-settings.module#IntervalSettingsPageModule'
-  },
+    path: ':id',
+    component: IntervalDisplayPage,
+    resolve: {
+      storage: IntervalDisplayResolverService
+    }
+  }
 ];
 
 @NgModule({
@@ -28,8 +27,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [RouterModule],
-  declarations: [IntervalDisplayPage]
-  ,
+  declarations: [IntervalDisplayPage],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class IntervalDisplayPageModule { }

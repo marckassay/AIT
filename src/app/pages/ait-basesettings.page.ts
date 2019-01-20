@@ -23,10 +23,6 @@ import { AppStorageData, StorePair, UUIDData } from '../providers/storage/ait-st
 import { AITStorage } from '../providers/storage/ait-storage.service';
 
 export class AITBaseSettingsPage implements AfterContentInit {
-  /**
-   * This is set by AITBasePage.createSettingsPage() when component is instantiated.
-   */
-  public uuid: string;
 
   _uuidDat: UUIDData;
   get uuidDat(): UUIDData {
@@ -43,7 +39,8 @@ export class AITBaseSettingsPage implements AfterContentInit {
   protected appVibratorDisabled: boolean;
   protected isFirstViewing: boolean;
 
-  constructor(@Optional() protected ngDectector: ChangeDetectorRef,
+  constructor(
+    @Optional() protected ngDectector: ChangeDetectorRef,
     @Optional() protected storage: AITStorage,
     @Optional() protected toastCtrl: ToastController,
   ) { }
@@ -52,7 +49,7 @@ export class AITBaseSettingsPage implements AfterContentInit {
    * Caller is `rightmenu` when it emits a `ionOpen` event. This component resides in `AITBasePage`.
    */
   loadAppData(): void {
-    this.store_app = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID);
+    // this.store_app = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID);
 
     this.store_app.promise.then((value: AppStorageData) => {
       this.appSoundsDisabled = value.sound === 0;
@@ -65,11 +62,11 @@ export class AITBaseSettingsPage implements AfterContentInit {
   ngAfterContentInit() { this.loadViewData(); }
 
   private loadViewData(): void {
-    this.store = this.storage.getPagePromiseAndSubject2<UUIDData>(this.uuid);
+    // this.store = this.storage.getPagePromiseAndSubject2<UUIDData>(this.uuid);
 
-    this.store.promise.then((value: UUIDData) => {
-      this.uuidDat = value;
-    });
+    /*     this.store.promise.then((value: UUIDData) => {
+          this.uuidDat = value;
+        }); */
   }
 
   protected dataChanged(): void {

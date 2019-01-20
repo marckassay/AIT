@@ -16,8 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Component, Input } from '@angular/core';
-import { Limits } from '../../providers/storage/ait-storage.interfaces';
+
 import { SequenceStates } from '../../providers/sots/ait-sots.util';
+import { Limits } from '../../providers/storage/ait-storage.interfaces';
 
 @Component({
   selector: 'activerest-renderer',

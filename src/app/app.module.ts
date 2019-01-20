@@ -12,13 +12,11 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ItemsModule } from './items/items.module';
+// import { HomePageModule } from './pages/home/home.module';
 import { AITBrightness } from './providers/ait-screen';
 import { AITSignal } from './providers/ait-signal';
-import { HomeDisplayService } from './providers/home-display.service';
-// import { AudioManagementMock } from './providers/mocks/AudioManagementMock';
+import { RightMenuSubject } from './providers/right-menu-subject';
 import { AITStorage } from './providers/storage/ait-storage.service';
-import { ThemeSettingsProvider } from './providers/theme-settings.provider';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,14 +29,12 @@ import { ThemeSettingsProvider } from './providers/theme-settings.provider';
       driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
     IonicModule.forRoot(),
-    ItemsModule,
     AppRoutingModule
   ],
   providers: [
     ScreenOrientation,
     StatusBar,
     SplashScreen,
-    ThemeSettingsProvider,
     IonicStorageModule,
     AITStorage,
     Vibration,
@@ -46,7 +42,7 @@ import { ThemeSettingsProvider } from './providers/theme-settings.provider';
     AudioManagement,
     Brightness,
     AITSignal,
-    HomeDisplayService,
+    RightMenuSubject,
     MenuController,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: AudioManagement, useClass: (true) ? AudioManagement : 'AudioManagementMock' }

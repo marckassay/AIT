@@ -70,27 +70,29 @@ export class AITBrightness {
    *              disables it.
    */
   storeBrightnessOffset(value: BrightnessSet, apply: boolean = false) {
-    const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
 
-    store.promise.then((val) => {
-      if (val.brightness !== value) {
-        val.brightness = value;
-      }
+    /*     const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
 
-      store.subject.next(val);
+        store.promise.then((val) => {
+          if (val.brightness !== value) {
+            val.brightness = value;
+          }
 
-      if (apply === true) {
-        this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(value));
-      }
-    });
+          store.subject.next(val);
+
+          if (apply === true) {
+            this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(value));
+          }
+        }); */
   }
 
-  retrieveBrightnessOffset(): Promise<BrightnessSet> {
-    const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
+  retrieveBrightnessOffset(): any {
+    /*
+        const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
 
-    return store.promise.then((value): BrightnessSet => {
-      return value.brightness;
-    });
+        return store.promise.then((value): BrightnessSet => {
+          return value.brightness;
+        }); */
   }
 
   /**
@@ -98,14 +100,14 @@ export class AITBrightness {
    * device's brightness to that value.
    */
   applyBrightnessOffset(): void {
-    const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
+    /*     const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
 
-    store.promise.then((value) => {
-      const lastBrightnessValue: BrightnessSet = value.brightness;
-      if (lastBrightnessValue > 0) {
-        this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(lastBrightnessValue));
-      }
-    });
+        store.promise.then((value) => {
+          const lastBrightnessValue: BrightnessSet = value.brightness;
+          if (lastBrightnessValue > 0) {
+            this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(lastBrightnessValue));
+          }
+        }); */
   }
 
   /**
