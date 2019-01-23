@@ -12,10 +12,10 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-// import { HomePageModule } from './pages/home/home.module';
+import { MenuItemComponent } from './components/menu-item.component';
+import { MenuItemModule } from './components/menu-item.module';
 import { AITBrightness } from './providers/ait-screen';
 import { AITSignal } from './providers/ait-signal';
-import { RightMenuSubject } from './providers/right-menu-subject';
 import { AITStorage } from './providers/storage/ait-storage.service';
 
 @NgModule({
@@ -24,11 +24,14 @@ import { AITStorage } from './providers/storage/ait-storage.service';
   imports: [
     CommonModule,
     BrowserModule,
+    MenuItemModule,
     IonicStorageModule.forRoot({
       name: '__aitdb',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      menuType: 'reveal'
+    }),
     AppRoutingModule
   ],
   providers: [
@@ -42,7 +45,6 @@ import { AITStorage } from './providers/storage/ait-storage.service';
     AudioManagement,
     Brightness,
     AITSignal,
-    RightMenuSubject,
     MenuController,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: AudioManagement, useClass: (true) ? AudioManagement : 'AudioManagementMock' }

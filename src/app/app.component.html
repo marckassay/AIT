@@ -1,16 +1,15 @@
 <ion-app>
   <!-- <ion-split-pane> -->
   <ion-menu side="start">
-    <ion-menu-toggle>
-      <ng-template #leftMenuInnerHTML></ng-template>
+    <ion-menu-toggle menu="start">
+      <menu-item-host #startMenu></menu-item-host>
     </ion-menu-toggle>
   </ion-menu>
-  <div>app.component.html</div>
   <ion-router-outlet main></ion-router-outlet>
   <!--  </ion-split-pane> -->
   <ion-menu side="end">
-    <ion-menu-toggle>
-      <ng-template #rightMenuInnerHTML></ng-template>
+    <ion-menu-toggle menu="end">
+      <menu-item-host #endMenu></menu-item-host>
     </ion-menu-toggle>
   </ion-menu>
 </ion-app>

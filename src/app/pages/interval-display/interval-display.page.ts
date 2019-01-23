@@ -4,7 +4,7 @@ import { TimeEmission } from 'sots';
 
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 import { SequenceStates } from '../../providers/sots/ait-sots.util';
-import { IntervalStorageData, UUIDData } from '../../providers/storage/ait-storage.interfaces';
+import { IntervalStorageData } from '../../providers/storage/ait-storage.interfaces';
 import { AITBasePage } from '../ait-base.page';
 import { IntervalSettingsPage } from '../interval-settings/interval-settings.page';
 
@@ -36,34 +36,19 @@ export class IntervalDisplayPage extends AITBasePage {
 
   currentInterval: number;
 
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
-  }
-
-  aitPreBuildTimerCheck(value: UUIDData): boolean {
-    const val = value as IntervalStorageData;
-    if ((!this.data) ||
-      (val.activerest.lower !== this.data.activerest.lower) ||
-      (val.activerest.upper !== this.data.activerest.upper) ||
-      (val.intervals !== this.data.intervals)) {
-      return true;
-    } else if ((this.viewState === SequenceStates.Loaded) &&
-      (val.countdown !== this.data.countdown)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  aitBuildTimer() {
+  ionViewWillEnter() {
     this.sots.build(this.data.countdown,
       this.data.warnings,
       this.data.intervals,
       this.data.activerest.lower,
       this.data.activerest.upper
     );
+  }
 
-    super.aitBuildTimer();
+  ionViewDidEnter() {
+    this.settingsPageClass = IntervalSettingsPage;
+
+    super.ionViewDidEnter();
   }
 
   aitSubscribeTimer(): void {
@@ -92,16 +77,12 @@ export class IntervalDisplayPage extends AITBasePage {
           } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
             this.signal.double();
           }
-
-          this.ngDectector.detectChanges();
         }
       },
       error: (error: any): void => {
         this.viewState = SequenceStates.Error;
 
         this.floatingbuttons.setToCompletedMode();
-
-        this.ngDectector.detectChanges();
 
         throw error;
       },
@@ -111,13 +92,7 @@ export class IntervalDisplayPage extends AITBasePage {
         this.grandTime = this.sots.getGrandTime({ time: 0 });
         this.setViewInRunningMode(false);
         this.floatingbuttons.setToCompletedMode();
-
-        this.ngDectector.detectChanges();
       }
     });
-  }
-
-  createSettingsPage() {
-    super.createSettingsPage(IntervalSettingsPage);
   }
 }

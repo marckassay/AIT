@@ -2,8 +2,12 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 import { ActiverestRendererComponentModule } from 'src/app/components/activerest-renderer/activerest-renderer.module';
 import { FabContainerComponentModule } from 'src/app/components/fab-container/fab-container.module';
+
+import { IntervalSettingsPageModule } from '../interval-settings/interval-settings.module';
+import { IntervalSettingsPage } from '../interval-settings/interval-settings.page';
 
 import { IntervalDisplayResolverService } from './interval-display-router.service';
 import { IntervalDisplayPage } from './interval-display.page';
@@ -12,18 +16,19 @@ const routes: Routes = [
   {
     path: ':id',
     component: IntervalDisplayPage,
-    resolve: {
-      storage: IntervalDisplayResolverService
-    }
+    resolve: { uuiddata: IntervalDisplayResolverService }
   }
 ];
 
 @NgModule({
+  entryComponents: [IntervalSettingsPage],
   imports: [
     CommonModule,
     FormsModule,
     ActiverestRendererComponentModule,
     FabContainerComponentModule,
+    IntervalSettingsPageModule,
+    IonicModule,
     RouterModule.forChild(routes)
   ],
   exports: [RouterModule],

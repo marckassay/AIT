@@ -1,11 +1,11 @@
-import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { MenuController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 
-import { HomePage } from './pages/home/home.page';
-import { RightMenuSubject } from './providers/right-menu-subject';
+import { MenuItemComponent } from './components/menu-item.component';
+import { MenuItemService } from './components/menu-item.service';
 import { StorageDefaultData } from './providers/storage/ait-storage.defaultdata';
 import { AppStorageData } from './providers/storage/ait-storage.interfaces';
 import { AITStorage } from './providers/storage/ait-storage.service';
@@ -14,12 +14,12 @@ import { AITStorage } from './providers/storage/ait-storage.service';
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent {
-  @ViewChild('leftMenuInnerHTML', { read: ViewContainerRef })
-  leftMenuInnerHTML: ViewContainerRef;
+export class AppComponent implements OnInit, AfterViewInit {
+  @ViewChild('startMenu')
+  startMenu: MenuItemComponent;
 
-  @ViewChild('rightMenuInnerHTML', { read: ViewContainerRef })
-  rightMenuInnerHTML: ViewContainerRef;
+  @ViewChild('endMenu')
+  endMenu: MenuItemComponent;
 
   data: AppStorageData;
 
@@ -27,23 +27,25 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private menuCtrl: MenuController,
     private router: Router,
-    private componentFactoryResolver: ComponentFactoryResolver,
     private storage: AITStorage,
-    private rightMenuSubject: RightMenuSubject,
+    private menuService: MenuItemService
   ) {
+  }
+
+  ngOnInit(): void {
+    this.menuService.subscribe(() => {
+      console.log('ngOnInit');
+    });
+
     this.initializeApp();
   }
 
-  async initializeApp() {
-    this.rightMenuSubject.subscribe((page) => {
-      this.createComponentForSideMenu(page);
-      if (!this.leftMenuInnerHTML) {
-        this.createComponentForSideMenu(HomePage);
-      }
-    });
+  ngAfterViewInit(): void {
 
+  }
+
+  async initializeApp() {
     const linkparams = await this.getStartupRoute();
 
     await this.platform.ready()
@@ -67,20 +69,5 @@ export class AppComponent {
           return ['/' + StorageDefaultData.getPageNameByID(value.current_uuid), value.current_uuid];
         }
       });
-  }
-
-  // TODO: would like to know preferred way to type this parameter. tried
-  // 'typeof AITBaseSettingsPage | typeof HomePage'
-  private createComponentForSideMenu(page: any) {
-    let htmlElement: ViewContainerRef;
-    console.log('createComponentForSideMenu', page);
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory<any>(page);
-    if (page instanceof HomePage === false) {
-      htmlElement = this.rightMenuInnerHTML;
-    } else {
-      htmlElement = this.leftMenuInnerHTML;
-    }
-    htmlElement.clear();
-    htmlElement.createComponent(resolvedComponent);
   }
 }

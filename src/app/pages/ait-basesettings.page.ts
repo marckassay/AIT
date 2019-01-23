@@ -18,8 +18,7 @@
 import { AfterContentInit, ChangeDetectorRef, Optional } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
-import { StorageDefaultData } from '../providers/storage/ait-storage.defaultdata';
-import { AppStorageData, StorePair, UUIDData } from '../providers/storage/ait-storage.interfaces';
+import { AppStorageData, UUIDData } from '../providers/storage/ait-storage.interfaces';
 import { AITStorage } from '../providers/storage/ait-storage.service';
 
 export class AITBaseSettingsPage implements AfterContentInit {
@@ -31,9 +30,6 @@ export class AITBaseSettingsPage implements AfterContentInit {
   set uuidDat(value: UUIDData) {
     this._uuidDat = value;
   }
-
-  protected store_app: StorePair<UUIDData>;
-  protected store: StorePair<UUIDData>;
 
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
@@ -51,12 +47,12 @@ export class AITBaseSettingsPage implements AfterContentInit {
   loadAppData(): void {
     // this.store_app = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID);
 
-    this.store_app.promise.then((value: AppStorageData) => {
-      this.appSoundsDisabled = value.sound === 0;
-      this.appVibratorDisabled = !value.vibrate;
+    /*     this.store_app.promise.then((value: AppStorageData) => {
+          this.appSoundsDisabled = value.sound === 0;
+          this.appVibratorDisabled = !value.vibrate;
 
-      this.ngDectector.detectChanges();
-    });
+          this.ngDectector.detectChanges();
+        }); */
   }
 
   ngAfterContentInit() { this.loadViewData(); }
@@ -70,8 +66,8 @@ export class AITBaseSettingsPage implements AfterContentInit {
   }
 
   protected dataChanged(): void {
-    this.ngDectector.detectChanges();
-    this.store.subject.next(this.uuidDat);
+    //  this.ngDectector.detectChanges();
+    // this.store.subject.next(this.uuidDat);
   }
 
   protected inform(): void {

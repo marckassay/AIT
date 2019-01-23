@@ -6,20 +6,21 @@ import { IonicModule } from '@ionic/angular';
 
 import { IntervalSettingsPage } from './interval-settings.page';
 
-const routes: Routes = [
+/* const routes: Routes = [
   {
     path: '',
     component: IntervalSettingsPage
   }
-];
+]; */
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild([])
   ],
-  declarations: [IntervalSettingsPage]
+  declarations: [IntervalSettingsPage],
+  exports: [IntervalSettingsPage]
 })
 export class IntervalSettingsPageModule { }

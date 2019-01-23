@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
-import { ActiverestRendererComponent } from './activerest-renderer';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
+import { ActiverestRendererComponent } from './activerest-renderer';
 
 @NgModule({
   declarations: [
