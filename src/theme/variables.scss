@@ -108,15 +108,15 @@ $app-direction: ltr;
 @import "theme-map-get";
 
 // Ait overides Ionic variables...
-$font-size-base: 1.4rem;
+/* $font-size-base: 1.4rem;
 $list-header-font-size: 1.8rem;
 $list-ios-header-font-size: $list-header-font-size;
 $list-md-header-font-size: $list-header-font-size;
-$list-wp-header-font-size: $list-header-font-size;
+$list-wp-header-font-size: $list-header-font-size; */
 
 // this is for the home-display button(s)
-$button-md-background-color-activated: #37bdf7;
-
+/* $button-md-background-color-activated: #37bdf7;
+ */
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here

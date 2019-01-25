@@ -20,6 +20,7 @@ import { HomePage } from './home.page';
     IonicModule,
     RouterModule.forChild([])
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
+  exports: [HomePage]
 })
 export class HomePageModule { }

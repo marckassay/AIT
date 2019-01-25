@@ -12,19 +12,21 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MenuItemComponent } from './components/menu-item.component';
-import { MenuItemModule } from './components/menu-item.module';
+import { SideMenuModule } from './components/side-menu/side-menu.module';
+import { HomePageModule } from './pages/home/home.module';
+import { HomePage } from './pages/home/home.page';
 import { AITBrightness } from './providers/ait-screen';
 import { AITSignal } from './providers/ait-signal';
 import { AITStorage } from './providers/storage/ait-storage.service';
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents: [HomePage],
   imports: [
     CommonModule,
     BrowserModule,
-    MenuItemModule,
+    SideMenuModule,
+    HomePageModule,
     IonicStorageModule.forRoot({
       name: '__aitdb',
       driverOrder: ['indexeddb', 'sqlite', 'websql']
@@ -35,17 +37,16 @@ import { AITStorage } from './providers/storage/ait-storage.service';
     AppRoutingModule
   ],
   providers: [
+    AITSignal,
+    AITStorage,
+    AITBrightness,
     ScreenOrientation,
     StatusBar,
     SplashScreen,
-    IonicStorageModule,
-    AITStorage,
     Vibration,
-    AITBrightness,
-    AudioManagement,
     Brightness,
-    AITSignal,
     MenuController,
+    IonicStorageModule,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: AudioManagement, useClass: (true) ? AudioManagement : 'AudioManagementMock' }
   ],

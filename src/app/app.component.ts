@@ -1,11 +1,12 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 
-import { MenuItemComponent } from './components/menu-item.component';
-import { MenuItemService } from './components/menu-item.service';
+import { SideMenuComponent } from './components/side-menu/side-menu.component';
+import { SideMenuRequest, SideMenuService } from './components/side-menu/side-menu.service';
+import { HomePage } from './pages/home/home.page';
 import { StorageDefaultData } from './providers/storage/ait-storage.defaultdata';
 import { AppStorageData } from './providers/storage/ait-storage.interfaces';
 import { AITStorage } from './providers/storage/ait-storage.service';
@@ -16,10 +17,10 @@ import { AITStorage } from './providers/storage/ait-storage.service';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('startMenu')
-  startMenu: MenuItemComponent;
+  startMenu: SideMenuComponent;
 
   @ViewChild('endMenu')
-  endMenu: MenuItemComponent;
+  endMenu: SideMenuComponent;
 
   data: AppStorageData;
 
@@ -28,14 +29,27 @@ export class AppComponent implements OnInit, AfterViewInit {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver,
     private storage: AITStorage,
-    private menuService: MenuItemService
-  ) {
-  }
+    private menuService: SideMenuService
+  ) { }
 
   ngOnInit(): void {
-    this.menuService.subscribe(() => {
-      console.log('ngOnInit');
+    this.menuService.subscribe((note) => {
+      if ((note as SideMenuRequest).request !== undefined) {
+        note = note as SideMenuRequest;
+        if ((note.subject === 'start') && (note.request === 'status')) {
+          console.log('app', 3, 'received request to be loaded');
+          const menuStatus = (this.startMenu.hasBeenLoaded) ? 'loaded' : 'unloaded';
+          console.log('app', 4, 'responding with status of:', menuStatus);
+          this.menuService.next({ subject: 'start', response: menuStatus });
+          if (menuStatus === 'unloaded') {
+            console.log('app', 5, 'requesting to be loaded');
+            const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
+            this.menuService.next({ subject: 'start', request: 'load', component: resolvedComponent });
+          }
+        }
+      }
     });
 
     this.initializeApp();

@@ -1,28 +1,11 @@
 <ion-app>
   <!-- <ion-split-pane> -->
   <ion-menu side="start">
-    <ion-menu-toggle menu="start">
-      <menu-item-host #startMenu></menu-item-host>
-    </ion-menu-toggle>
+    <side-menu id="start" #startMenu></side-menu>
   </ion-menu>
   <ion-router-outlet main></ion-router-outlet>
   <!--  </ion-split-pane> -->
   <ion-menu side="end">
-    <ion-menu-toggle menu="end">
-      <menu-item-host #endMenu></menu-item-host>
-    </ion-menu-toggle>
+    <side-menu id="end" #endMenu></side-menu>
   </ion-menu>
 </ion-app>
-
-<!--       <ion-content>
-            <ion-list>
-              <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-                <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-                  <ion-icon slot="start" [name]="p.icon"></ion-icon>
-                  <ion-label>
-                    {{p.title}}
-                  </ion-label>
-                </ion-item>
-              </ion-menu-toggle>
-            </ion-list>
-          </ion-content> -->

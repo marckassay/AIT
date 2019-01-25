@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ComponentFactoryResolver, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -23,7 +23,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { MenuController } from '@ionic/angular';
 
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { MenuItemService } from '../components/menu-item.service';
+import { SideMenuRequest, SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
 import { AITBrightness } from '../providers/ait-screen';
 import { AITSignal } from '../providers/ait-signal';
 import { SotsForAit } from '../providers/sots/ait-sots';
@@ -36,42 +36,44 @@ export class AITBasePage implements OnInit {
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
 
-  protected _uuidData: UUIDData;
-  get uuidData(): UUIDData {
+  protected _uuidData: any;
+  protected get uuidData(): any {
     return this._uuidData;
   }
-  set uuidData(value: UUIDData) {
+  protected set uuidData(value: any) {
     this._uuidData = value;
+    this.changeRef.markForCheck();
   }
 
-  /*   protected _settingsPageClass: typeof AITBaseSettingsPage; */
   protected _settingsPageClass: any;
-  get settingsPageClass(): any {
+  protected get settingsPageClass(): any {
     return this._settingsPageClass;
   }
-  set settingsPageClass(value: any) {
+  protected set settingsPageClass(value: any) {
     this._settingsPageClass = value;
   }
 
   // this type assignment to variable is for Angular template can access enum values.
   SequenceStates = SequenceStates;
-  protected viewState: SequenceStates;
+  protected timerState: SequenceStates;
 
   protected sots: SotsForAit;
+
   protected grandTime: string;
 
   constructor(
     @Optional() protected route: ActivatedRoute,
     @Optional() protected router: Router,
-    @Optional() @SkipSelf() public menuCtrl: MenuController,
+    @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
+    @Optional() protected changeRef: ChangeDetectorRef,
+    @Optional() /* @SkipSelf() */ public menuCtrl: MenuController,
     @Optional() protected screenOrientation: ScreenOrientation,
     @Optional() protected splashScreen: SplashScreen,
     @Optional() protected statusBar: StatusBar,
     @Optional() protected signal: AITSignal,
     @Optional() protected display: AITBrightness,
-    @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
     @Optional() protected storage: AITStorage,
-    @Optional() protected menuService: MenuItemService
+    @Optional() protected menuService: SideMenuService
   ) { }
 
   ngOnInit() {
@@ -92,27 +94,13 @@ export class AITBasePage implements OnInit {
    * Fired when the component being routed to has animated in.
    */
   ionViewDidEnter(): void {
-    this.setViewInRunningMode(false);
-
-    // TODO: defer until start button is pressed
-    this.aitSubscribeTimer();
-
     this.floatingbuttons.setToLoadedMode();
 
-    this.attachSettingsPage();
-  }
+    this.timerState = SequenceStates.Loaded;
 
-  // tslint:disable-next-line:member-ordering
-  private attachSettingsPage(): void {
+    this.attachSettingsAndCheckHome();
 
-    this.menuService.subscribe((observer) => {
-      if (observer.componentType.name === this.settingsPageClass.name) {
-        this.floatingbuttons.setProgramButtonToVisible();
-      }
-    });
-
-    const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
-    this.menuService.next(resolvedComponent);
+    this.setViewInRunningMode(false);
   }
 
   /**
@@ -127,7 +115,6 @@ export class AITBasePage implements OnInit {
   */
   ionViewDidLeave(): void {
     this.aitUnsubscribeTimer();
-
   }
 
   protected aitSubscribeTimer(): void {
@@ -138,29 +125,64 @@ export class AITBasePage implements OnInit {
     throw new Error('Subclasses of AITBasePage need to implement aitUnsubscribeTimer().');
   }
 
-  protected aitBuildTimer(): void {
-    this.aitResetTimer();
+  /**
+   * Sets the page in 1 of two states, depending if the timer is ticking or not.
+   *
+   * @param value true if timer is ticking
+   */
+  protected setViewInRunningMode(value: boolean): void {
+    // this.signal.enable(value)
+
+    ['start', 'end'].forEach((id) => {
+      this.menuCtrl.enable(!value, id);
+    });
+
+    this.display.setKeepScreenOn(value);
+
+    (value) ? this.statusBar.hide() : this.statusBar.show();
   }
 
-  private aitResetTimer(): void {
-    this.viewState = SequenceStates.Loaded;
+  private resetTimer(): void {
+    this.timerState = SequenceStates.Loaded;
     this.grandTime = this.sots.getGrandTime({ time: -1 });
     this.sots.sequencer.reset();
   }
 
-  protected setViewInRunningMode(value: boolean): void {
-    /*     this.signal.enable(value)
-          .then(() => {
-            return Promise.resolve();
-          }, () => {
-            return Promise.resolve();
-          }).then(() => { */
-
-    this.menuCtrl.enable(!value, 'start');
-    this.menuCtrl.enable(!value, 'end');
-
-    (value) ? this.display.setKeepScreenOn(true) : this.display.setKeepScreenOn(false);
-    (value) ? this.statusBar.hide() : this.statusBar.show();
+  /**
+   * `[async]` Calls `menuService` with setting page class and awaits until subscription notifies.
+   * 
+   * This method subscribes to only 2 responses and unconditional sends 1 request.
+   * 
+   * First it sends request for settings page to be loaded into `end` sidemenu. Afterwards a response
+   * stating "end is loaded", which it will request to App that `start` sidemenu can be loaded now.
+   * And if or when `start` menu is loaded, the last response received will verify this and this
+   * method is now done subcribing.
+   */
+  async attachSettingsAndCheckHome(): Promise<void> {
+    return await new Promise<void>((resolve, reject) => {
+      const menuSubscription = this.menuService.subscribe(
+        (note) => {
+          if ((note as SideMenuResponse).response !== undefined) {
+            note = (note as SideMenuResponse);
+            if ((note.subject === 'end') && (note.response === 'loaded')) {
+              console.log('aitbase', 2, 'requesting status of start');
+              this.menuService.next({ subject: 'start', request: 'status' });
+            } else if ((note.subject === 'start') && (note.response === 'loaded')) {
+              console.log('aitbase', 6, 'start is loaded');
+              this.floatingbuttons.setHomeButtonToVisible();
+              menuSubscription.unsubscribe();
+              resolve();
+            }
+          }
+        }, (err) => {
+          reject();
+        }, () => {
+          resolve();
+        });
+      console.log('aitbase', 1, 'requesting component to be loaded');
+      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
+      this.menuService.next({ subject: 'end', request: 'load', component: resolvedComponent });
+    });
   }
 
   /**
@@ -182,7 +204,7 @@ export class AITBasePage implements OnInit {
         this.menuCtrl.open('end');
         break;
       case FabAction.Reset:
-        this.aitResetTimer();
+        this.resetTimer();
         this.setViewInRunningMode(false);
         break;
       case FabAction.Start:

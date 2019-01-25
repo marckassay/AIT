@@ -1,39 +1,39 @@
-<ion-content *ngIf="data">
+<ion-content *ngIf="uuidData">
   <ion-grid>
     <ion-row align-items-baseline nowrap justify-content-start>
       <ion-col>
-        <activerest-renderer [state]="viewState" [limits]="data.activerest"></activerest-renderer>
+        <activerest-renderer [state]="timerState" [limits]="uuidData.activerest"></activerest-renderer>
       </ion-col>
       <ion-col id="intervalColLandscape">
-        <div [ngSwitch]="viewState">
-          <div *ngSwitchCase="SequenceStates.CountdownWarning" class="intervalCountdown">1/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.Loaded" class="intervalLoaded">1/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.Active" class="intervalGo">{{currentInterval}}/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.ActiveWarning" class="intervalGetReady">{{currentInterval}}/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.Rest" class="intervalStop">{{currentInterval}}/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.RestWarning" class="intervalGetReady">{{currentInterval}}/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.Completed" class="intervalCompleted">{{currentInterval}}/{{data.intervals}}</div>
+        <div [ngSwitch]="timerState">
+          <div *ngSwitchCase="SequenceStates.CountdownWarning" class="intervalCountdown">1/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.Loaded" class="intervalLoaded">1/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.Active" class="intervalGo">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.ActiveWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.Rest" class="intervalStop">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.RestWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.Completed" class="intervalCompleted">{{currentInterval}}/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SequenceStates.Error" class="intervalStop">:/</div>
         </div>
       </ion-col>
     </ion-row>
     <ion-row id="intervalColPortrait" align-items-baseline nowrap justify-content-end>
       <ion-col col-auto>
-        <div [ngSwitch]="viewState">
-          <div *ngSwitchCase="SequenceStates.CountdownWarning" class="intervalCountdown">1/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.Loaded" class="intervalLoaded">1/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.Active" class="intervalGo">{{currentInterval}}/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.ActiveWarning" class="intervalGetReady">{{currentInterval}}/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.Rest" class="intervalStop">{{currentInterval}}/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.RestWarning" class="intervalGetReady">{{currentInterval}}/{{data.intervals}}</div>
-          <div *ngSwitchCase="SequenceStates.Completed" class="intervalCompleted">{{currentInterval}}/{{data.intervals}}</div>
+        <div [ngSwitch]="timerState">
+          <div *ngSwitchCase="SequenceStates.CountdownWarning" class="intervalCountdown">1/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.Loaded" class="intervalLoaded">1/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.Active" class="intervalGo">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.ActiveWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.Rest" class="intervalStop">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.RestWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SequenceStates.Completed" class="intervalCompleted">{{currentInterval}}/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SequenceStates.Error" class="intervalStop">:/</div>
         </div>
       </ion-col>
     </ion-row>
     <ion-row align-items-baseline nowrap justify-content-start>
       <ion-col id="timeCol" align-self-stretch>
-        <div [ngSwitch]="viewState">
+        <div [ngSwitch]="timerState">
           <div *ngSwitchCase="SequenceStates.CountdownWarning" class="timeCountdown">{{grandTime}}</div>
           <div *ngSwitchCase="SequenceStates.Loaded" class="timeLoaded">{{grandTime}}</div>
           <div *ngSwitchCase="SequenceStates.Active" class="timeGo">{{grandTime}}</div>

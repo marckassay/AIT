@@ -4,7 +4,6 @@ import { TimeEmission } from 'sots';
 
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 import { SequenceStates } from '../../providers/sots/ait-sots.util';
-import { IntervalStorageData } from '../../providers/storage/ait-storage.interfaces';
 import { AITBasePage } from '../ait-base.page';
 import { IntervalSettingsPage } from '../interval-settings/interval-settings.page';
 
@@ -17,14 +16,6 @@ export class IntervalDisplayPage extends AITBasePage {
   @ViewChild(ActiverestRendererComponent)
   private activeRestRenderer: ActiverestRendererComponent;
 
-  @Input()
-  get data(): IntervalStorageData {
-    return this._uuidData as IntervalStorageData;
-  }
-  set data(value: IntervalStorageData) {
-    this._uuidData = value;
-  }
-
   protected _remainingIntervalTime: number;
   @Input()
   get remainingIntervalTime() {
@@ -36,18 +27,24 @@ export class IntervalDisplayPage extends AITBasePage {
 
   currentInterval: number;
 
+  ngOnInit() {
+    this.settingsPageClass = IntervalSettingsPage;
+
+    super.ngOnInit();
+  }
+
   ionViewWillEnter() {
-    this.sots.build(this.data.countdown,
-      this.data.warnings,
-      this.data.intervals,
-      this.data.activerest.lower,
-      this.data.activerest.upper
+    this.sots.build(this.uuidData.countdown,
+      this.uuidData.warnings,
+      this.uuidData.intervals,
+      this.uuidData.activerest.lower,
+      this.uuidData.activerest.upper
     );
+    this.grandTime = this.sots.getGrandTime({ time: -1 });
   }
 
   ionViewDidEnter() {
-    this.settingsPageClass = IntervalSettingsPage;
-
+    this.aitSubscribeTimer();
     super.ionViewDidEnter();
   }
 
@@ -68,7 +65,7 @@ export class IntervalDisplayPage extends AITBasePage {
           let valueNoAudiable: number = (value.state.valueOf() as SequenceStates);
           // tslint:disable-next-line:no-bitwise
           valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
-          this.viewState = valueNoAudiable;
+          this.timerState = valueNoAudiable;
           // console.log(this.activeRestRenderer.time + ': ' + value.state + '<->' + valueNoAudiable);
 
           // ...now take care of audiable states...
@@ -80,14 +77,14 @@ export class IntervalDisplayPage extends AITBasePage {
         }
       },
       error: (error: any): void => {
-        this.viewState = SequenceStates.Error;
+        this.timerState = SequenceStates.Error;
 
         this.floatingbuttons.setToCompletedMode();
 
         throw error;
       },
       complete: (): void => {
-        this.viewState = SequenceStates.Completed;
+        this.timerState = SequenceStates.Completed;
         this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
         this.setViewInRunningMode(false);
