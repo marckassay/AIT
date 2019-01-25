@@ -15,21 +15,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { MenuController } from '@ionic/angular';
 
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { SideMenuRequest, SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
-import { AITBrightness } from '../providers/ait-screen';
-import { AITSignal } from '../providers/ait-signal';
-import { SotsForAit } from '../providers/sots/ait-sots';
-import { SequenceStates } from '../providers/sots/ait-sots.util';
-import { UUIDData } from '../providers/storage/ait-storage.interfaces';
-import { AITStorage } from '../providers/storage/ait-storage.service';
+import { SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
+import { ScreenService } from '../services/screen.service';
+import { SignalService } from '../services/signal.service';
+import { SotsForAit } from '../services/sots/ait-sots';
+import { SequenceStates } from '../services/sots/ait-sots.util';
+import { UUIDData } from '../services/storage/ait-storage.interfaces';
+import { AITStorage } from '../services/storage/ait-storage.service';
 
 export class AITBasePage implements OnInit {
 
@@ -66,14 +63,11 @@ export class AITBasePage implements OnInit {
     @Optional() protected router: Router,
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
     @Optional() protected changeRef: ChangeDetectorRef,
-    @Optional() /* @SkipSelf() */ public menuCtrl: MenuController,
-    @Optional() protected screenOrientation: ScreenOrientation,
-    @Optional() protected splashScreen: SplashScreen,
-    @Optional() protected statusBar: StatusBar,
-    @Optional() protected signal: AITSignal,
-    @Optional() protected display: AITBrightness,
+    @Optional() protected menuCtrl: MenuController,
+    @Optional() protected signal: SignalService,
+    @Optional() protected screen: ScreenService,
     @Optional() protected storage: AITStorage,
-    @Optional() protected menuService: SideMenuService
+    @Optional() protected menuSvc: SideMenuService
   ) { }
 
   ngOnInit() {
@@ -98,9 +92,9 @@ export class AITBasePage implements OnInit {
 
     this.timerState = SequenceStates.Loaded;
 
-    this.attachSettingsAndCheckHome();
+    this.setAppToRunningMode(false, false);
 
-    this.setViewInRunningMode(false);
+    this.attachSettingsAndCheckHome();
   }
 
   /**
@@ -130,16 +124,16 @@ export class AITBasePage implements OnInit {
    *
    * @param value true if timer is ticking
    */
-  protected setViewInRunningMode(value: boolean): void {
+  protected setAppToRunningMode(value: boolean, includeMenus: boolean = true): void {
     // this.signal.enable(value)
+    this.screen.setKeepScreenOn(value);
+    this.screen.showStatusBar(!value);
 
-    ['start', 'end'].forEach((id) => {
-      this.menuCtrl.enable(!value, id);
-    });
-
-    this.display.setKeepScreenOn(value);
-
-    (value) ? this.statusBar.hide() : this.statusBar.show();
+    if (includeMenus) {
+      ['start', 'end'].forEach((id) => {
+        this.menuCtrl.enable(!value, id);
+      });
+    }
   }
 
   private resetTimer(): void {
@@ -149,39 +143,43 @@ export class AITBasePage implements OnInit {
   }
 
   /**
-   * `[async]` Calls `menuService` with setting page class and awaits until subscription notifies.
-   * 
+   * Calls `menuService` with setting page class and awaits until subscription notifies to check
+   * home page too, so that side menus and floatingbuttons can be enabled accordingly.
+   *
    * This method subscribes to only 2 responses and unconditional sends 1 request.
-   * 
+   *
    * First it sends request for settings page to be loaded into `end` sidemenu. Afterwards a response
    * stating "end is loaded", which it will request to App that `start` sidemenu can be loaded now.
    * And if or when `start` menu is loaded, the last response received will verify this and this
    * method is now done subcribing.
    */
-  async attachSettingsAndCheckHome(): Promise<void> {
-    return await new Promise<void>((resolve, reject) => {
-      const menuSubscription = this.menuService.subscribe(
+  private attachSettingsAndCheckHome(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const menuSubscription = this.menuSvc.subscribe(
         (note) => {
           if ((note as SideMenuResponse).response !== undefined) {
             note = (note as SideMenuResponse);
             if ((note.subject === 'end') && (note.response === 'loaded')) {
               console.log('aitbase', 2, 'requesting status of start');
-              this.menuService.next({ subject: 'start', request: 'status' });
+              this.floatingbuttons.setProgramButtonToVisible();
+              this.menuCtrl.enable(true, 'end');
+              this.menuSvc.next({ subject: 'start', request: 'status' });
             } else if ((note.subject === 'start') && (note.response === 'loaded')) {
               console.log('aitbase', 6, 'start is loaded');
               this.floatingbuttons.setHomeButtonToVisible();
+              this.menuCtrl.enable(true, 'start');
               menuSubscription.unsubscribe();
               resolve();
             }
           }
-        }, (err) => {
+        }, () => {
           reject();
         }, () => {
           resolve();
         });
       console.log('aitbase', 1, 'requesting component to be loaded');
       const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
-      this.menuService.next({ subject: 'end', request: 'load', component: resolvedComponent });
+      this.menuSvc.next({ subject: 'end', request: 'load', component: resolvedComponent });
     });
   }
 
@@ -193,27 +191,27 @@ export class AITBasePage implements OnInit {
     switch (emission.action) {
       case FabAction.Home:
         this.sots.sequencer.pause();
-        this.setViewInRunningMode(false);
+        this.setAppToRunningMode(false);
         this.floatingbuttons.setToPausedMode();
         this.menuCtrl.open('start');
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
-        this.setViewInRunningMode(false);
+        this.setAppToRunningMode(false);
         this.floatingbuttons.setToPausedMode();
         this.menuCtrl.open('end');
         break;
       case FabAction.Reset:
         this.resetTimer();
-        this.setViewInRunningMode(false);
+        this.setAppToRunningMode(false);
         break;
       case FabAction.Start:
         this.sots.sequencer.start();
-        this.setViewInRunningMode(true);
+        this.setAppToRunningMode(true);
         break;
       case FabAction.Pause:
         this.sots.sequencer.pause();
-        this.setViewInRunningMode(false);
+        this.setAppToRunningMode(false);
         break;
     }
     emission.container.close();

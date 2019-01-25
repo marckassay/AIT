@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { Brightness } from '@ionic-native/brightness/ngx';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
@@ -15,9 +16,10 @@ import { AppComponent } from './app.component';
 import { SideMenuModule } from './components/side-menu/side-menu.module';
 import { HomePageModule } from './pages/home/home.module';
 import { HomePage } from './pages/home/home.page';
-import { AITBrightness } from './providers/ait-screen';
-import { AITSignal } from './providers/ait-signal';
-import { AITStorage } from './providers/storage/ait-storage.service';
+import { ScreenService } from './services/screen.service';
+import { SignalService } from './services/signal.service';
+import { AITStorage } from './services/storage/ait-storage.service';
+import { ThemeService } from './services/theme.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,9 +39,10 @@ import { AITStorage } from './providers/storage/ait-storage.service';
     AppRoutingModule
   ],
   providers: [
-    AITSignal,
+    SignalService,
     AITStorage,
-    AITBrightness,
+    ScreenService,
+    ThemeService,
     ScreenOrientation,
     StatusBar,
     SplashScreen,

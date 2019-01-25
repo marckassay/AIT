@@ -17,6 +17,7 @@
 */
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { AppUtils } from 'src/app/app.utils';
 
 import { StorageDefaultData } from './ait-storage.defaultdata';
 import { AppStorageData, UUIDData } from './ait-storage.interfaces';
@@ -36,7 +37,7 @@ export class AITStorage {
       if (value) {
         return value;
       } else {
-        const defaultpage = StorageDefaultData.getPageDataByID(uuid);
+        const defaultpage = AppUtils.getPageDataByID(uuid);
         return await this.storage.set(uuid, defaultpage).then(() => {
           return defaultpage;
         });
@@ -84,7 +85,7 @@ export class AITStorage {
 
         // as intended, val should always be undefined.
         if (!val) {
-          const app_data: UUIDData = StorageDefaultData.getPageDataByID(StorageDefaultData.APP_ID);
+          const app_data: UUIDData = AppUtils.getPageDataByID(StorageDefaultData.APP_ID);
           return this.storage.set(app_data.uuid, app_data);
           /*             .then((): Promise<boolean> => {
                         return this.setCached(app_data);

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { from } from 'rxjs';
-import { UUIDData } from 'src/app/providers/storage/ait-storage.interfaces';
-import { AITStorage } from 'src/app/providers/storage/ait-storage.service';
+import { UUIDData } from 'src/app/services/storage/ait-storage.interfaces';
+import { AITStorage } from 'src/app/services/storage/ait-storage.service';
 
 @Injectable({
     providedIn: 'root',

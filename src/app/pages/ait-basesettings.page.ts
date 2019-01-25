@@ -18,8 +18,8 @@
 import { AfterContentInit, ChangeDetectorRef, Optional } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
-import { AppStorageData, UUIDData } from '../providers/storage/ait-storage.interfaces';
-import { AITStorage } from '../providers/storage/ait-storage.service';
+import { AppStorageData, UUIDData } from '../services/storage/ait-storage.interfaces';
+import { AITStorage } from '../services/storage/ait-storage.service';
 
 export class AITBaseSettingsPage implements AfterContentInit {
 

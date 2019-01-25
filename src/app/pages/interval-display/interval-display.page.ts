@@ -3,12 +3,12 @@ import { ViewChild } from '@angular/core';
 import { TimeEmission } from 'sots';
 
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
-import { SequenceStates } from '../../providers/sots/ait-sots.util';
+import { SequenceStates } from '../../services/sots/ait-sots.util';
 import { AITBasePage } from '../ait-base.page';
 import { IntervalSettingsPage } from '../interval-settings/interval-settings.page';
 
 @Component({
-  selector: 'app-interval-display',
+  selector: 'page-interval-display',
   templateUrl: './interval-display.page.html',
   styleUrls: ['./interval-display.page.scss']
 })
@@ -87,7 +87,7 @@ export class IntervalDisplayPage extends AITBasePage {
         this.timerState = SequenceStates.Completed;
         this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
-        this.setViewInRunningMode(false);
+        this.setAppToRunningMode(false);
         this.floatingbuttons.setToCompletedMode();
       }
     });

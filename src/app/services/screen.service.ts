@@ -17,10 +17,10 @@
 */
 import { Injectable } from '@angular/core';
 import { Brightness } from '@ionic-native/brightness/ngx';
-import { Subject } from 'rxjs';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { StorageDefaultData } from './storage/ait-storage.defaultdata';
-import { AppStorageData, BrightnessSet, UUIDData } from './storage/ait-storage.interfaces';
+import { BrightnessSet } from './storage/ait-storage.interfaces';
 import { AITStorage } from './storage/ait-storage.service';
 
 export class BrightnessUtil {
@@ -56,11 +56,13 @@ export class BrightnessUtil {
  * return to its default value. This is done by Android and not AiT.
  */
 @Injectable()
-export class AITBrightness {
+export class ScreenService {
 
   constructor(
-    public display: Brightness,
-    public storage: AITStorage) { }
+    private brightness: Brightness,
+    private orientation: ScreenOrientation,
+    private statusBar: StatusBar,
+    private storage: AITStorage) { }
 
   /**
    * Sets the BrightnessSet value that the user has choosen. This value will be mapped to
@@ -69,7 +71,7 @@ export class AITBrightness {
    * @param value Any positive number enables ait's brightness feature, while any negative number
    *              disables it.
    */
-  storeBrightnessOffset(value: BrightnessSet, apply: boolean = false) {
+  storeBrightnessOffset() {
 
     /*     const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
 
@@ -115,10 +117,14 @@ export class AITBrightness {
    * brightness value prior to AiT being launched. Calling this method doesn't modify app's storage.
    */
   removeBrightnessOffset(): void {
-    this.display.setBrightness(-1);
+    this.brightness.setBrightness(-1);
   }
 
   setKeepScreenOn(value: boolean): void {
-    this.display.setKeepScreenOn(value);
+    this.brightness.setKeepScreenOn(value);
+  }
+
+  showStatusBar(value: boolean): void {
+    (value) ? this.statusBar.hide() : this.statusBar.show();
   }
 }

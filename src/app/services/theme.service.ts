@@ -18,6 +18,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { AppStorageData } from './storage/ait-storage.interfaces';
+
 export enum AccentTheme {
   Monokai,
   RGBandY,
@@ -30,7 +32,7 @@ export enum BaseTheme {
 }
 
 @Injectable()
-export class ThemeSettingsProvider {
+export class ThemeService {
   private theme: BehaviorSubject<string>;
   _accent: AccentTheme;
   _base: BaseTheme;
@@ -68,7 +70,11 @@ export class ThemeSettingsProvider {
     }
   }
 
-  get combinedTheme(): Observable<string> {
+  theme$(data: AppStorageData): Observable<string> {
+    this._accent = data.accent;
+    this._base = data.base;
+    this.setCombinedTheme();
+
     return this.theme.asObservable();
   }
 }

@@ -10,7 +10,7 @@ import { AITStorage } from './storage/ait-storage.service';
 /**
  * References audio and vibrate features of the device.
  */
-export class AITSignal {
+export class SignalService {
   audioModePriorToChange: number | undefined;
   musicVolumePriorToChange: number | undefined;
 
