@@ -4,7 +4,7 @@
       <ion-col>
         <activerest-renderer [state]="timerState" [limits]="uuidData.activerest"></activerest-renderer>
       </ion-col>
-      <ion-col class="intervalColLandscape">
+      <ion-col class="top-end-col">
         <div [ngSwitch]="timerState">
           <div *ngSwitchCase="SS.CountdownWarning" class="intervalCountdown">1/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.Loaded" class="intervalLoaded">1/{{uuidData.intervals}}</div>
@@ -44,7 +44,6 @@
           <div *ngSwitchCase="SS.Error" class="timeStop">:?</div>
         </div>
       </ion-col>
-      <ion-col></ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

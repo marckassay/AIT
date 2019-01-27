@@ -8,60 +8,45 @@ $font-size-time-portrait: 25vw;
 $font-size-time-landscape: 25vh;
 
 .display-content {
-/*   .fix {
-    width: 100%;
-    height: 100%;
-  }
-    .grid {
-      width: 100%;
-      width: -moz-available;
-      width: -webkit-fill-available;
-      height: 100%;
-      height: -moz-available;
-      height: -webkit-fill-available;
-    } */
-
-    .top-row, .bottom-row {
+    .top-row {
+      @media screen and (orientation: portrait) {
+        display: grid;
+      }
+      @media screen and (orientation:landscape) {
+        display: flex;
+      }
       align-items: baseline;
-      justify-content: start;
+      justify-content: center;
       flex-wrap: nowrap;
     }
     .middle-row {
       @media screen and (orientation: portrait) {
-        display: inherit;
+        display: grid;
       }
       @media screen and (orientation:landscape) {
         display: none;
       }
-      align-items: center;
+      align-items: baseline;
+      justify-content: end;
+      flex-wrap: nowrap;
+    }
+    .bottom-row {
+      display: grid;
+      align-items: baseline;
       justify-content: start;
       flex-wrap: nowrap;
     }
 
-    .middle-col {
-      align-self: flex-start;
-    }
-    .bottom-col {
-      align-self: stretch
-    }
-
-    @media screen and (orientation: portrait) {
-    font-size: $font-size-interval-portrait;
-    }
-
-    @media screen and (orientation:landscape) {
-    font-size: $font-size-interval-landscape;
-    } 
-
-    .intervalColLandscape {
+    .top-end-col {
       @media screen and (orientation: portrait) {
         display: none;
       }
       @media screen and (orientation:landscape) {
-        display: inherit;
+        display: flex;
       }
-      justify-content: flex-end;
     }
+
+    // Below exclusively adjusts font-size and color 
 
     .intervalGo {
       @media screen and (orientation: portrait) {
@@ -90,10 +75,6 @@ $font-size-time-landscape: 25vh;
       color: var(--ion-color-primary);
     }
     
-    #timeCol {
-      display: inherit;
-      justify-content: flex-end;
-    }
     .timeGo {
       @media screen and (orientation: portrait) {
         font-size: $font-size-time-portrait;
