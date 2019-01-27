@@ -1,30 +1,30 @@
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button (click)="actionRequest(actions.Main, fabMenu)" class="main">
+  <ion-fab-button (click)="actionRequest(actions.Main, fabMenu)">
   </ion-fab-button>
   <ion-fab-list side="top">
     <div *ngIf="isStartVisible">
-      <ion-fab-button (click)="actionRequest(actions.Start, fabMenu)" class="start">
-        <ion-icon class="material-icons">play_circle_outline</ion-icon>
+      <ion-fab-button (click)="actionRequest(actions.Start, fabMenu)">
+        <ion-icon name="play"></ion-icon>
       </ion-fab-button>
     </div>
     <div *ngIf="isPauseVisible">
-      <ion-fab-button (click)="actionRequest(actions.Pause, fabMenu)" class="pause">
-        <ion-icon class="material-icons">pause_circle_outline</ion-icon>
+      <ion-fab-button (click)="actionRequest(actions.Pause, fabMenu)">
+        <ion-icon name="pause"></ion-icon>
       </ion-fab-button>
     </div>
     <div *ngIf="isResetVisible">
-      <ion-fab-button (click)="actionRequest(actions.Reset, fabMenu)" class="reset">
-        <ion-icon class="material-icons">restore</ion-icon>
+      <ion-fab-button (click)="actionRequest(actions.Reset, fabMenu)">
+        <ion-icon name="undo"></ion-icon>
       </ion-fab-button>
     </div>
     <div *ngIf="isProgramVisible">
-      <ion-fab-button id="settings" (click)="actionRequest(actions.Program, fabMenu)" class="program">
-        <ion-icon class="material-icons">settings</ion-icon>
+      <ion-fab-button id="settings" (click)="actionRequest(actions.Program, fabMenu)">
+        <ion-icon name="settings"></ion-icon>
       </ion-fab-button>
     </div>
     <div *ngIf="isHomeVisible">
-      <ion-fab-button (click)="actionRequest(actions.Home, fabMenu)" class="home">
-        <ion-icon class="material-icons">home</ion-icon>
+      <ion-fab-button (click)="actionRequest(actions.Home, fabMenu)">
+        <ion-icon name="home"></ion-icon>
       </ion-fab-button>
     </div>
   </ion-fab-list>

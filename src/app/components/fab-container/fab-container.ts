@@ -27,7 +27,8 @@ export enum FabState {
 
 @Component({
   selector: 'fab-container',
-  templateUrl: 'fab-container.html'
+  templateUrl: 'fab-container.html',
+  styleUrls: ['./fab-container.scss']
 })
 export class FabContainerComponent {
   @Output()

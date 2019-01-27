@@ -9,3 +9,35 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+$font-path: "./assets/fonts";
+
+@font-face {
+  font-family: 'selawk';
+  src: url('#{$font-path}/selawk.ttf');
+}
+
+@font-face {
+  font-family: 'selawk';
+  src: url('#{$font-path}/selawk.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'selawksb';
+  src: url('#{$font-path}/selawksb.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'sourcecodeprosb';
+  src: url('#{$font-path}/SourceCodePro-Semibold.ttf') format('truetype');
+}
+
+/* html {
+  font-size: 62.5%;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  font-size-adjust: none;
+}
+
+ */

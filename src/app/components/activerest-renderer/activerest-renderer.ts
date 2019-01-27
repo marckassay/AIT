@@ -22,13 +22,13 @@ import { Limits } from '../../services/storage/ait-storage.interfaces';
 
 @Component({
   selector: 'activerest-renderer',
-  templateUrl: 'activerest-renderer.html'
+  templateUrl: 'activerest-renderer.html',
+  styleUrls: ['./activerest-renderer.scss']
 })
-
 export class ActiverestRendererComponent {
-  // this type assignment to variable is for angular view
-  // can access enum values.
-  SequenceStates = SequenceStates;
+
+  // this type assignment to variable is for Angular template can access enum values.
+  protected SS = SequenceStates;
 
   _state: SequenceStates;
   @Input()

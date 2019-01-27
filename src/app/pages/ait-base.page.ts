@@ -51,8 +51,14 @@ export class AITBasePage implements OnInit {
   }
 
   // this type assignment to variable is for Angular template can access enum values.
-  SequenceStates = SequenceStates;
-  protected timerState: SequenceStates;
+  protected SS = SequenceStates;
+  private _timerState: SequenceStates;
+  protected get timerState(): SequenceStates {
+    return this._timerState;
+  }
+  protected set timerState(value: SequenceStates) {
+    this._timerState = value;
+  }
 
   protected sots: SotsForAit;
 

@@ -25,7 +25,7 @@ import { SideMenuComponent } from './side-menu.component';
  * It's important to remember that there are a total of 3 subscribers: `AppComponent`, `AITBasePage`
  * and `SideMenuComponent`.
  *
- * If log statements are place in `AppComponent` and `AITBasePage` with 'app' and 'aitbase' 
+ * If log statements are place in `AppComponent` and `AITBasePage` with 'app' and 'aitbase'
  * respectively as first parameters, the algorthim should come out as the following on lauching AIT:
  *
  *  aitbase 1 requesting end menu to be loaded
