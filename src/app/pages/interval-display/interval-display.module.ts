@@ -16,7 +16,7 @@ const routes: Routes = [
   {
     path: ':id',
     component: IntervalDisplayPage,
-    resolve: { uuiddata: IntervalDisplayResolverService }
+    resolve: { subject: IntervalDisplayResolverService }
   }
 ];
 

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
 
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
@@ -54,13 +55,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.menuService.subscribe((note) => {
       if ((note as SideMenuRequest).request !== undefined) {
         note = note as SideMenuRequest;
+        // if received a note on start menu's status, be nice and respond with a response. And
+        // immediately followed by a request to load start menu if needed.
         if ((note.subject === 'start') && (note.request === 'status')) {
-          console.log('app', 3, 'received request to be loaded');
           const menuStatus = (this.startMenu.hasBeenLoaded) ? 'loaded' : 'unloaded';
-          console.log('app', 4, 'responding with status of:', menuStatus);
           this.menuService.next({ subject: 'start', response: menuStatus });
+
           if (menuStatus === 'unloaded') {
-            console.log('app', 5, 'requesting to be loaded');
             const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
             this.menuService.next({ subject: 'start', request: 'load', component: resolvedComponent });
           }
@@ -72,11 +73,17 @@ export class AppComponent implements OnInit, AfterViewInit {
   async initializeApp(): Promise<void> {
     await this.platform.ready()
       .then(async () => {
-        const data = await this.storage.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID);
+        const data = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
+        let startroute: string[];
+        const appsubscrip = data.subscribe((appval) => {
+          startroute = AppUtils.convertToStartupRoute(appval);
+        });
+        appsubscrip.unsubscribe();
+
         this.initializeThemer(data);
         this.statusBar.styleDefault();
 
-        return this.router.navigate(AppUtils.convertToStartupRoute(data))
+        return this.router.navigate(startroute)
           .then((value) => {
             if (value) {
               this.splashScreen.hide();
@@ -92,7 +99,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private initializeThemer(data: AppStorageData): void {
-    this.themer.theme$(data).subscribe((value: string) => this.theme = value);
+  private initializeThemer(data: BehaviorSubject<AppStorageData>): void {
+    this.themer.app = data;
+    this.themer.theme$().subscribe((value: string) => this.theme = value);
   }
 }

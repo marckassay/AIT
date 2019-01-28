@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 
 import { SideMenuRequest, SideMenuService } from './side-menu.service';
 
@@ -21,12 +21,18 @@ export class SideMenuComponent implements OnInit {
     this.subject.subscribe((note) => {
       if ((note as SideMenuRequest).request !== undefined) {
         note = (note as SideMenuRequest);
+
         if (this.id === note.subject) {
+
           if (note.request === 'load') {
             this.menu.clear();
             const results = this.menu.createComponent(note.component);
+            if (note.uuid) {
+              (results.instance as any).uuid = note.uuid;
+            }
             this.hasBeenLoaded = results !== undefined;
             this.subject.next({ subject: this.id, response: (this.hasBeenLoaded) ? 'loaded' : 'unloaded' });
+
           } else if (note.request === 'status') {
             this.subject.next({ subject: this.id, response: (this.hasBeenLoaded) ? 'loaded' : 'unloaded' });
           }

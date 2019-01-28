@@ -17,21 +17,57 @@
 */
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { from, BehaviorSubject, Observable } from 'rxjs';
 import { AppUtils } from 'src/app/app.utils';
 
 import { StorageDefaultData } from './ait-storage.defaultdata';
 import { AppStorageData, UUIDData } from './ait-storage.interfaces';
 
+export interface CacheSubject<T extends UUIDData> {
+  uuid: string;
+  subject: BehaviorSubject<T>;
+}
+
 @Injectable()
 export class AITStorage {
   private status: 'off' | 'booting' | 'on';
   private preOpPromise: Promise<boolean>;
-
+  private subjects: Array<CacheSubject<any>>;
   constructor(public storage: Storage) {
     this.status = 'off';
+    this.subjects = [];
   }
 
-  async getPagePromise<T>(uuid: string): Promise<T> {
+  /**
+  * This is called directly by the display-page resolvers
+  *
+  * @param uuid
+  */
+  getPageObservable<T extends UUIDData>(uuid: string): Observable<BehaviorSubject<T>> {
+    return from(this.getPromiseSubject(uuid));
+  }
+
+  /**
+   * This is called directly by the settings-page. When called, it will check the storage cache
+   * for any subjects with the same `uuid`.
+   *
+   * @param uuid
+   */
+  async getPromiseSubject<T extends UUIDData>(uuid: string): Promise<BehaviorSubject<T>> {
+    const entry: CacheSubject<T> | undefined = this.subjects.find(element => element.uuid === uuid);
+
+    if (entry === undefined) {
+      return await this.getPagePromise<T>(uuid).then((value) => {
+        const subject = new BehaviorSubject(value);
+        this.subjects.push({ uuid: uuid, subject: subject });
+        return subject;
+      });
+    } else {
+      return Promise.resolve(entry.subject);
+    }
+  }
+
+  private async getPagePromise<T extends UUIDData>(uuid: string): Promise<T> {
     return await this.isReady().then(async () => {
       const value = await this.storage.get(uuid);
       if (value) {
@@ -83,13 +119,14 @@ export class AITStorage {
           this.status = 'on';
         }
 
-        // as intended, val should always be undefined.
         if (!val) {
           const app_data: UUIDData = AppUtils.getPageDataByID(StorageDefaultData.APP_ID);
           return this.storage.set(app_data.uuid, app_data);
           /*             .then((): Promise<boolean> => {
                         return this.setCached(app_data);
                       }); */
+        } else {
+          Promise.resolve(true);
         }
       })
       .catch((reason: any) => {

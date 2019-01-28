@@ -52,7 +52,7 @@ export class IntervalDisplayPage extends AITBasePage {
     this.sots.subscribe({
       next: (value: TimeEmission): void => {
         this.grandTime = this.sots.getGrandTime(value);
-
+        console.log(this.grandTime);
         if (value.interval) {
           this.currentInterval = value.interval.current;
           this.activeRestRenderer.time = Math.ceil(value.time);
@@ -70,9 +70,9 @@ export class IntervalDisplayPage extends AITBasePage {
 
           // ...now take care of audiable states...
           if (value.state.valueOf(SequenceStates.SingleBeep)) {
-            this.signal.single();
+            // this.signal.single();
           } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
-            this.signal.double();
+            // this.signal.double();
           }
         }
       },
@@ -85,7 +85,7 @@ export class IntervalDisplayPage extends AITBasePage {
       },
       complete: (): void => {
         this.timerState = SequenceStates.Completed;
-        this.signal.triple();
+        // this.signal.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
         this.setAppToRunningMode(false);
         this.floatingbuttons.setToCompletedMode();

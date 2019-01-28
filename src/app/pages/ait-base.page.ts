@@ -18,6 +18,7 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
@@ -32,6 +33,8 @@ export class AITBasePage implements OnInit {
 
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
+
+  subject: BehaviorSubject<UUIDData>;
 
   protected _uuidData: any;
   protected get uuidData(): any {
@@ -78,8 +81,12 @@ export class AITBasePage implements OnInit {
 
   ngOnInit() {
     this.sots = new SotsForAit();
-    this.route.data.subscribe((data: { uuiddata: UUIDData }) => {
-      this.uuidData = data.uuiddata;
+    this.route.data.subscribe((data: { subject: BehaviorSubject<UUIDData> }) => {
+      this.subject = data.subject;
+    }).unsubscribe();
+
+    this.subject.subscribe((uuidData: UUIDData) => {
+      this.uuidData = uuidData;
     });
   }
 
@@ -132,8 +139,8 @@ export class AITBasePage implements OnInit {
    */
   protected setAppToRunningMode(value: boolean, includeMenus: boolean = true): void {
     // this.signal.enable(value)
-    this.screen.setKeepScreenOn(value);
-    this.screen.showStatusBar(!value);
+    // this.screen.setKeepScreenOn(value);
+    // this.screen.showStatusBar(!value);
 
     if (includeMenus) {
       ['start', 'end'].forEach((id) => {
@@ -161,31 +168,37 @@ export class AITBasePage implements OnInit {
    */
   private attachSettingsAndCheckHome(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      const menuSubscription = this.menuSvc.subscribe(
-        (note) => {
-          if ((note as SideMenuResponse).response !== undefined) {
-            note = (note as SideMenuResponse);
-            if ((note.subject === 'end') && (note.response === 'loaded')) {
-              console.log('aitbase', 2, 'requesting status of start');
-              this.floatingbuttons.setProgramButtonToVisible();
-              this.menuCtrl.enable(true, 'end');
-              this.menuSvc.next({ subject: 'start', request: 'status' });
-            } else if ((note.subject === 'start') && (note.response === 'loaded')) {
-              console.log('aitbase', 6, 'start is loaded');
-              this.floatingbuttons.setHomeButtonToVisible();
-              this.menuCtrl.enable(true, 'start');
-              menuSubscription.unsubscribe();
-              resolve();
-            }
+      const menuSubscription = this.menuSvc.subscribe((note) => {
+        if ((note as SideMenuResponse).response !== undefined) {
+          note = (note as SideMenuResponse);
+
+          // when response from the 'this.menuSvc.next()' call below
+          if ((note.subject === 'end') && (note.response === 'loaded')) {
+            this.floatingbuttons.setProgramButtonToVisible();
+            this.menuCtrl.enable(true, 'end');
+            this.menuSvc.next({ subject: 'start', request: 'status' });
+
+            // when response from HomePage is loaded from App.component
+          } else if ((note.subject === 'start') && (note.response === 'loaded')) {
+            this.floatingbuttons.setHomeButtonToVisible();
+            this.menuCtrl.enable(true, 'start');
+            menuSubscription.unsubscribe();
+            resolve();
           }
-        }, () => {
-          reject();
-        }, () => {
-          resolve();
-        });
-      console.log('aitbase', 1, 'requesting component to be loaded');
+        }
+      }, () => {
+        reject();
+      }, () => {
+        resolve();
+      });
+
       const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
-      this.menuSvc.next({ subject: 'end', request: 'load', component: resolvedComponent });
+      this.menuSvc.next({
+        subject: 'end',
+        request: 'load',
+        component: resolvedComponent,
+        uuid: (this.uuidData as UUIDData).uuid
+      });
     });
   }
 
@@ -220,6 +233,5 @@ export class AITBasePage implements OnInit {
         this.setAppToRunningMode(false);
         break;
     }
-    emission.container.close();
   }
 }

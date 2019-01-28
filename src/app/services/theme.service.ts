@@ -33,15 +33,30 @@ export enum BaseTheme {
 
 @Injectable()
 export class ThemeService {
+  private _app: BehaviorSubject<AppStorageData>;
+  public get app(): BehaviorSubject<AppStorageData> {
+    return this._app;
+  }
+  public set app(value: BehaviorSubject<AppStorageData>) {
+    this._app = value;
+
+    this.subscribeApp();
+  }
   private theme: BehaviorSubject<string>;
-  _accent: AccentTheme;
-  _base: BaseTheme;
+
+  private _accent: AccentTheme;
+  private _base: BaseTheme;
 
   constructor() {
     this._accent = AccentTheme.Monokai;
     this._base = BaseTheme.Dark;
+  }
 
-    this.setCombinedTheme();
+  private subscribeApp() {
+    this.app.subscribe((value) => {
+      this.base = value.base;
+      this.accent = value.accent;
+    });
   }
 
   set accent(value: AccentTheme) {
@@ -70,11 +85,8 @@ export class ThemeService {
     }
   }
 
-  theme$(data: AppStorageData): Observable<string> {
-    this._accent = data.accent;
-    this._base = data.base;
+  theme$(): Observable<string> {
     this.setCombinedTheme();
-
     return this.theme.asObservable();
   }
 }

@@ -42,8 +42,9 @@ $font-size-time-landscape: 25vh;
         display: none;
       }
       @media screen and (orientation:landscape) {
-        display: flex;
+        display: grid;
       }
+      justify-items: end;
     }
 
     // Below exclusively adjusts font-size and color 
@@ -55,12 +56,12 @@ $font-size-time-landscape: 25vh;
       @media screen and (orientation:landscape) {
         font-size: $font-size-interval-landscape;
       }
-      color: var(--ion-color-success-shade)
+      color: var(--ion-color-success);
     }
     .intervalGetReady,
     .intervalLoaded {
       @extend .intervalGo;
-      color: var(--ion-color-success);
+      color: var(--ion-color-warning);
     }
     .intervalStop {
       @extend .intervalGo;

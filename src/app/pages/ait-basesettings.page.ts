@@ -15,59 +15,51 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterContentInit, ChangeDetectorRef, Optional } from '@angular/core';
+import { AfterContentInit, Optional } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-import { AppStorageData, UUIDData } from '../services/storage/ait-storage.interfaces';
+import { UUIDData } from '../services/storage/ait-storage.interfaces';
 import { AITStorage } from '../services/storage/ait-storage.service';
 
 export class AITBaseSettingsPage implements AfterContentInit {
-
-  _uuidDat: UUIDData;
-  get uuidDat(): UUIDData {
-    return this._uuidDat;
+  _uuid: string;
+  get uuid(): string {
+    return this._uuid;
   }
-  set uuidDat(value: UUIDData) {
-    this._uuidDat = value;
+  set uuid(value: string) {
+    this._uuid = value;
+  }
+
+  protected _subject: BehaviorSubject<UUIDData>;
+  protected get subject(): BehaviorSubject<UUIDData> {
+    return this._subject;
+  }
+  protected set subject(value: BehaviorSubject<UUIDData>) {
+    this._subject = value;
+    this.initsub();
   }
 
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
-  protected isFirstViewing: boolean;
 
   constructor(
-    @Optional() protected ngDectector: ChangeDetectorRef,
     @Optional() protected storage: AITStorage,
     @Optional() protected toastCtrl: ToastController,
   ) { }
 
-  /**
-   * Caller is `rightmenu` when it emits a `ionOpen` event. This component resides in `AITBasePage`.
-   */
-  loadAppData(): void {
-    // this.store_app = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID);
-
-    /*     this.store_app.promise.then((value: AppStorageData) => {
-          this.appSoundsDisabled = value.sound === 0;
-          this.appVibratorDisabled = !value.vibrate;
-
-          this.ngDectector.detectChanges();
-        }); */
+  ngAfterContentInit() {
+    this.storage.getPromiseSubject(this.uuid).then((value) => {
+      this.subject = value;
+    });
   }
 
-  ngAfterContentInit() { this.loadViewData(); }
-
-  private loadViewData(): void {
-    // this.store = this.storage.getPagePromiseAndSubject2<UUIDData>(this.uuid);
-
-    /*     this.store.promise.then((value: UUIDData) => {
-          this.uuidDat = value;
-        }); */
-  }
-
-  protected dataChanged(): void {
-    //  this.ngDectector.detectChanges();
-    // this.store.subject.next(this.uuidDat);
+  private initsub() {
+    this.subject.subscribe((value) => {
+      console.log('initsub', value.uuid);
+      // this.appSoundsDisabled = value.sound === 0;
+      // this.appVibratorDisabled = !value.vibrate;
+    });
   }
 
   protected inform(): void {

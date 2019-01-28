@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-
 export interface SideMenuRequest {
   subject: 'start' | 'end';
   request: 'load' | 'status';
   component?: any;
+  uuid?: string;
 }
 
 export interface SideMenuResponse {
