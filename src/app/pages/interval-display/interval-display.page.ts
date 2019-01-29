@@ -4,7 +4,7 @@ import { TimeEmission } from 'sots';
 
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 import { SequenceStates } from '../../services/sots/ait-sots.util';
-import { AITBasePage } from '../ait-base.page';
+import { DisplayPage } from '../display-page';
 import { IntervalSettingsPage } from '../interval-settings/interval-settings.page';
 
 @Component({
@@ -12,7 +12,7 @@ import { IntervalSettingsPage } from '../interval-settings/interval-settings.pag
   templateUrl: './interval-display.page.html',
   styleUrls: ['./interval-display.page.scss']
 })
-export class IntervalDisplayPage extends AITBasePage {
+export class IntervalDisplayPage extends DisplayPage {
   @ViewChild(ActiverestRendererComponent)
   private activeRestRenderer: ActiverestRendererComponent;
 

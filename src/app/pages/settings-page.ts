@@ -16,13 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { AfterContentInit, Optional } from '@angular/core';
-import { ToastController } from '@ionic/angular';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { MenuController, ToastController } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
 
-import { UUIDData } from '../services/storage/ait-storage.interfaces';
+import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
+import { AppStorageData, UUIDData } from '../services/storage/ait-storage.interfaces';
 import { AITStorage } from '../services/storage/ait-storage.service';
 
-export class AITBaseSettingsPage implements AfterContentInit {
+export class SettingsPage implements AfterContentInit {
   _uuid: string;
   get uuid(): string {
     return this._uuid;
@@ -31,14 +32,9 @@ export class AITBaseSettingsPage implements AfterContentInit {
     this._uuid = value;
   }
 
-  protected _subject: BehaviorSubject<UUIDData>;
-  protected get subject(): BehaviorSubject<UUIDData> {
-    return this._subject;
-  }
-  protected set subject(value: BehaviorSubject<UUIDData>) {
-    this._subject = value;
-    this.initsub();
-  }
+  private _appSubject: BehaviorSubject<AppStorageData>;
+  private _pageSubject: BehaviorSubject<UUIDData>;
+  protected _uuidData: UUIDData;
 
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
@@ -46,20 +42,50 @@ export class AITBaseSettingsPage implements AfterContentInit {
   constructor(
     @Optional() protected storage: AITStorage,
     @Optional() protected toastCtrl: ToastController,
+    @Optional() protected menuCtrl: MenuController
   ) { }
 
   ngAfterContentInit() {
-    this.storage.getPromiseSubject(this.uuid).then((value) => {
-      this.subject = value;
+    const getSubjects = async () => {
+      await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
+        .then((value) => {
+          this._appSubject = value;
+        });
+
+      await this.storage.getPromiseSubject(this.uuid)
+        .then((value) => {
+          this._pageSubject = value;
+        });
+
+      this.subscribe();
+    };
+    getSubjects();
+
+    // TODO: need to find when its best (or how) to unsubscribe
+    // https://ionicframework.com/docs/api/menu#events
+    /*
+    this.menuCtrl.get('end').then((val) => {
+      val.ionWillClose  = (ev) => {
+            console.log('ec', ev);
+            this.unsubscribe();
+          };
+        });
+    */
+  }
+
+  private subscribe() {
+    this._appSubject.subscribe((value) => {
+      this.appSoundsDisabled = value.sound === 0;
+      this.appVibratorDisabled = !value.vibrate;
+    });
+    this._pageSubject.subscribe((value) => {
+      this._uuidData = value;
     });
   }
 
-  private initsub() {
-    this.subject.subscribe((value) => {
-      console.log('initsub', value.uuid);
-      // this.appSoundsDisabled = value.sound === 0;
-      // this.appVibratorDisabled = !value.vibrate;
-    });
+  private unsubscribe() {
+    this._appSubject.unsubscribe();
+    this._pageSubject.unsubscribe();
   }
 
   protected inform(): void {
@@ -85,5 +111,9 @@ export class AITBaseSettingsPage implements AfterContentInit {
     });
 
     toast.present(); */
+  }
+
+  protected dataChanged(property: string, event?: any): void {
+    // this._pageSubject.next(this._uuidData);
   }
 }

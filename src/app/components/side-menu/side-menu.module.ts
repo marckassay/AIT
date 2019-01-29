@@ -22,10 +22,10 @@ import { SideMenuComponent } from './side-menu.component';
  * service needs to know what instance its working with, the `id` property of this module's
  * component is used for that purpose.
  *
- * It's important to remember that there are a total of 3 subscribers: `AppComponent`, `AITBasePage`
+ * It's important to remember that there are a total of 3 subscribers: `AppComponent`, `DisplayPage`
  * and `SideMenuComponent`.
  *
- * If log statements are place in `AppComponent` and `AITBasePage` with 'app' and 'aitbase'
+ * If log statements are place in `AppComponent` and `DisplayPage` with 'app' and 'aitbase'
  * respectively as first parameters, the algorthim should come out as the following on lauching AIT:
  *
  *  aitbase 1 requesting end menu to be loaded

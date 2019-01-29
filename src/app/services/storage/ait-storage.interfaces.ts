@@ -51,13 +51,9 @@ export interface Limits {
 export interface IntervalStorageData extends UUIDData {
   name: string;
   activerest: Limits;
-  activemaxlimit: number;
-
   intervals: number;
-  intervalmaxlimit: number;
-
   countdown: number;
-  countdownmaxlimit: number;
+  factor: 1 | 10;
 
   warnings: CountdownWarnings;
 }

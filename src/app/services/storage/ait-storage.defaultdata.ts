@@ -22,11 +22,9 @@ export class StorageDefaultData {
     uuid: StorageDefaultData.INTERVAL_ID,
     name: 'Program #1',
     activerest: { lower: 10, upper: 50 },
-    activemaxlimit: 90,
     intervals: 12,
-    intervalmaxlimit: 20,
     countdown: 10,
-    countdownmaxlimit: 60,
+    factor: 10,
     warnings: { fivesecond: false, tensecond: true, fifteensecond: false },
   };
 

@@ -18,7 +18,7 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
@@ -29,7 +29,7 @@ import { SequenceStates } from '../services/sots/ait-sots.util';
 import { UUIDData } from '../services/storage/ait-storage.interfaces';
 import { AITStorage } from '../services/storage/ait-storage.service';
 
-export class AITBasePage implements OnInit {
+export class DisplayPage implements OnInit {
 
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
@@ -94,7 +94,7 @@ export class AITBasePage implements OnInit {
    * Fired when the component being routed to is about to animate in.
    */
   ionViewWillEnter(): void {
-    throw new Error('Subclasses of AITBasePage need to implement ionViewWillEnter().');
+    throw new Error('Subclasses of DisplayPage need to implement ionViewWillEnter().');
   }
 
   /**
@@ -114,7 +114,7 @@ export class AITBasePage implements OnInit {
    * Fired when the component being routed from is about to animate.
    */
   ionViewWillLeave(): void {
-    throw new Error('Subclasses of AITBasePage need to implement ionViewWillLeave().');
+    throw new Error('Subclasses of DisplayPage need to implement ionViewWillLeave().');
   }
 
   /**
@@ -125,11 +125,11 @@ export class AITBasePage implements OnInit {
   }
 
   protected aitSubscribeTimer(): void {
-    throw new Error('Subclasses of AITBasePage need to implement aitSubscribeTimer().');
+    throw new Error('Subclasses of DisplayPage need to implement aitSubscribeTimer().');
   }
 
   protected aitUnsubscribeTimer(): void {
-    throw new Error('Subclasses of AITBasePage need to implement aitUnsubscribeTimer().');
+    throw new Error('Subclasses of DisplayPage need to implement aitUnsubscribeTimer().');
   }
 
   /**
@@ -168,6 +168,7 @@ export class AITBasePage implements OnInit {
    */
   private attachSettingsAndCheckHome(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
+      // subscribe to menu service
       const menuSubscription = this.menuSvc.subscribe((note) => {
         if ((note as SideMenuResponse).response !== undefined) {
           note = (note as SideMenuResponse);
@@ -193,6 +194,7 @@ export class AITBasePage implements OnInit {
       });
 
       const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
+      // send notification to menu service
       this.menuSvc.next({
         subject: 'end',
         request: 'load',
