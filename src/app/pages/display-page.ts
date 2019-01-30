@@ -20,6 +20,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
+import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
 import { ScreenService } from '../services/screen.service';
@@ -86,6 +87,7 @@ export class DisplayPage implements OnInit {
     }).unsubscribe();
 
     this.subject.subscribe((uuidData: UUIDData) => {
+      this.grandTime = AppUtils.totaltime(uuidData);
       this.uuidData = uuidData;
     });
   }

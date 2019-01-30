@@ -11,28 +11,12 @@ import { SettingsPage } from '../settings-page';
   styleUrls: ['./interval-settings.page.scss']
 })
 export class IntervalSettingsPage extends SettingsPage {
-
   get data(): IntervalStorageData {
     return this._uuidData as IntervalStorageData;
   }
 
-  private setComputedFactorValue() {
-    if (this.data) {
-      const lower = this.data.factor === 1 ? 1 : 0;
-      const upper = this.data.factor === 1 ? 10 : 100;
-      this.computedFactorValue = { lower: lower, upper: upper };
-    } else {
-      this.computedFactorValue = { lower: 10, upper: 100 };
-    }
-  }
-
   get totaltime(): string {
-    if (this.data) {
-      const totaltimeInSeconds = (this.data.activerest.upper + this.data.activerest.lower) * this.data.intervals;
-      return moment(totaltimeInSeconds * 1000).format('mm:ss.S');
-    } else {
-      return '00:00.0';
-    }
+    return AppUtils.totaltime(this.data);
   }
 
   get countdownLabel(): string {
@@ -43,8 +27,19 @@ export class IntervalSettingsPage extends SettingsPage {
     }
   }
 
+  private setComputedFactorValue() {
+    if (this.data) {
+      // For 'x1' factor mode, are '1' and '10' for 'lower and 'upper' limits respectively
+      // For 'x10' factor mode, are '0' and '100' for 'lower and 'upper' limits respectively
+      const lower = this.data.factor === 1 ? 1 : 0;
+      const upper = this.data.factor === 1 ? 10 : 100;
+      this.computedFactorValue = { lower: lower, upper: upper };
+    } else {
+      this.computedFactorValue = { lower: 0, upper: 100 };
+    }
+  }
+
   dataChanged(property: string, event: CustomEvent): void {
-    console.log(property, event.detail.value);
     if (property === 'activerest') {
       const value = event.detail.value as Limits;
 
@@ -109,7 +104,5 @@ export class IntervalSettingsPage extends SettingsPage {
       this.data.factor = event.detail.value === '10' ? 10 : 1;
       this.setComputedFactorValue();
     }
-
-    super.dataChanged(property, event);
   }
 }

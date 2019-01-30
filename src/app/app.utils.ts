@@ -1,11 +1,13 @@
+import moment from 'moment';
+
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
-import { AppStorageData, UUIDData } from './services/storage/ait-storage.interfaces';
+import { AppStorageData, IntervalStorageData, UUIDData } from './services/storage/ait-storage.interfaces';
 
 export class AppUtils {
     /**
      * Returns the default data for ID matching to `uuid`. Default value is declared in this class as private members.
      */
-    public static getPageDataByID(uuid: string): UUIDData {
+    static getPageDataByID(uuid: string): UUIDData {
         switch (uuid) {
             case StorageDefaultData.APP_ID: return StorageDefaultData.APP_DATA;
             case StorageDefaultData.INTERVAL_ID: return StorageDefaultData.INTERVAL_DATA;
@@ -14,7 +16,7 @@ export class AppUtils {
         }
     }
 
-    public static getPageNameByID(uuid: string): 'settings' | 'interval' | 'timer' | 'stopwatch' {
+    static getPageNameByID(uuid: string): 'settings' | 'interval' | 'timer' | 'stopwatch' {
         switch (uuid) {
             case StorageDefaultData.APP_ID: return 'settings';
             case StorageDefaultData.INTERVAL_ID: return 'interval';
@@ -23,7 +25,7 @@ export class AppUtils {
         }
     }
 
-    public static getPageClassByID(uuid: string):
+    static getPageClassByID(uuid: string):
         'AppSettingsPage' |
         'IntervalSettingsPage' |
         'TimerSettingsPage' |
@@ -36,16 +38,16 @@ export class AppUtils {
         }
     }
 
-    public static convertToStartupRoute(data: AppStorageData): string[] {
+    static convertToStartupRoute(data: AppStorageData): string[] {
         return ['/' + AppUtils.getPageNameByID(data.current_uuid), data.current_uuid];
     }
 
     /**
-     * Deep clones
+     * Deep clones an object
      *
      * @param source
      */
-    public static clone<T>(source: T): { [k: string]: any } {
+    static clone<T>(source: T): { [k: string]: any } {
         const results: { [k: string]: any } = {};
         for (const P in source) {
             if (typeof source[P] === 'object') {
@@ -55,5 +57,15 @@ export class AppUtils {
             }
         }
         return results;
+    }
+
+    static totaltime(value?: UUIDData): string {
+        if (value as IntervalStorageData) {
+            const val = value as IntervalStorageData;
+            const totaltimeInSeconds = (val.activerest.upper + val.activerest.lower) * val.intervals;
+            return moment(totaltimeInSeconds * 1000).format('mm:ss.S');
+        } else {
+            return '00:00.0';
+        }
     }
 }

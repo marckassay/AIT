@@ -64,7 +64,7 @@
       <!-- activerest -->
       <ion-item>
         <ion-range (ionChange)="dataChanged('activerest', $event)" debounce="500" [min]="computedFactorValue.lower"
-          [value]="computedFactorValue" [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true"
+          [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true" [value]="computedFactorValue"
           dualKnobs="true">
           <ion-label slot="start">rest/active</ion-label>
         </ion-range>
@@ -102,23 +102,22 @@
 
     <!-- warnings -->
     <ion-item-group>
-      <ion-item-divider>COUNTDOWN WARNINGS
-        <ion-button fill="clear">
+      <ion-item-divider>COUNTDOWN WARNINGS<ion-button (click)="inform()" fill="clear">
           <ion-icon slot="end" name="settings"></ion-icon>
         </ion-button>
       </ion-item-divider>
       <ion-item>
-        <ion-toggle (ionChange)="dataChanged('fivesecond')" [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
+        <ion-toggle [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
         <ion-label>5 second warning</ion-label>
       </ion-item>
 
       <ion-item>
-        <ion-toggle (ionChange)="dataChanged('tensecond')" [(ngModel)]="data.warnings.tensecond"></ion-toggle>
+        <ion-toggle [(ngModel)]="data.warnings.tensecond"></ion-toggle>
         <ion-label>10 second warning</ion-label>
       </ion-item>
 
       <ion-item>
-        <ion-toggle (ionChange)="dataChanged('fifteensecond')" [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
+        <ion-toggle [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
         <ion-label>15 second warning</ion-label>
       </ion-item>
     </ion-item-group>

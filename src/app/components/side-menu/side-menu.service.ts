@@ -10,7 +10,7 @@ export interface SideMenuRequest {
 
 export interface SideMenuResponse {
   subject: 'start' | 'end';
-  response: 'unloaded' | 'loaded';
+  response: 'unloaded' | 'loaded' | 'closing';
 }
 
 @Injectable({

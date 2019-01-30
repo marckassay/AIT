@@ -39,7 +39,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private componentFactoryResolver: ComponentFactoryResolver,
     private themer: ThemeService,
     private storage: AITStorage,
-    private menuService: SideMenuService
+    private menuSvc: SideMenuService
   ) { }
 
   ngOnInit(): void {
@@ -52,18 +52,18 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private subscribeMenuService(): void {
-    this.menuService.subscribe((note) => {
+    this.menuSvc.subscribe((note) => {
       if ((note as SideMenuRequest).request !== undefined) {
         note = note as SideMenuRequest;
         // if received a note on start menu's status, be nice and respond with a response. And
         // immediately followed by a request to load start menu if needed.
         if ((note.subject === 'start') && (note.request === 'status')) {
           const menuStatus = (this.startMenu.hasBeenLoaded) ? 'loaded' : 'unloaded';
-          this.menuService.next({ subject: 'start', response: menuStatus });
+          this.menuSvc.next({ subject: 'start', response: menuStatus });
 
           if (menuStatus === 'unloaded') {
             const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
-            this.menuService.next({ subject: 'start', request: 'load', component: resolvedComponent });
+            this.menuSvc.next({ subject: 'start', request: 'load', component: resolvedComponent });
           }
         }
       }

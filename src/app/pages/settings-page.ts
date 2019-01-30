@@ -15,7 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterContentInit, Host, Optional, SkipSelf } from '@angular/core';
+import { AfterContentInit, Optional, SkipSelf } from '@angular/core';
+import { MenuController, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
@@ -31,9 +32,11 @@ export class SettingsPage implements AfterContentInit {
     this._uuid = value;
   }
 
+  private ionMenu: HTMLIonMenuElement;
   private _appSubject: BehaviorSubject<AppStorageData>;
   private _pageSubject: BehaviorSubject<UUIDData>;
   protected _uuidData: UUIDData;
+  protected grandTime: string;
 
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
@@ -46,9 +49,10 @@ export class SettingsPage implements AfterContentInit {
   protected clonedForIntervalsFactor: number | undefined;
   protected clonedForCountdownFactor: number | undefined;
 
-  constructor(@Optional() @SkipSelf() protected storage: AITStorage) {
-
-  }
+  constructor(
+    @Optional() @SkipSelf() protected storage: AITStorage,
+    @Optional() @SkipSelf() protected menuCtrl: MenuController,
+    @Optional() @SkipSelf() protected toastCtrl: ToastController) { }
 
   ngAfterContentInit() {
     const getSubjects = async () => {
@@ -65,32 +69,33 @@ export class SettingsPage implements AfterContentInit {
       this.subscribe();
     };
     getSubjects();
-
-    // TODO: need to find when its best (or how) to unsubscribe
-    // https://ionicframework.com/docs/api/menu#events
-    /*
-    this.menuCtrl.get('end').then((val) => {
-      val.ionWillClose  = (ev) => {
-            console.log('ec', ev);
-            this.unsubscribe();
-          };
-        });
-    */
-
   }
 
   private subscribe() {
+    this.menuCtrl.get('end').then((menu) => {
+      this.ionMenu = menu;
+      this.ionMenu.addEventListener('ionWillClose', this.unsubscribe);
+    });
+
     this._appSubject.subscribe((value) => {
       this.appSoundsDisabled = value.sound === 0;
       this.appVibratorDisabled = !value.vibrate;
     });
+
     this._pageSubject.subscribe((value) => {
       this._uuidData = value;
     });
+
   }
 
+  private unsubscribe() {
+    this.inform();
+    // this.ionMenu.removeEventListener('ionWillClose', this.unsubscribe);
+    // this._appSubject.unsubscribe();
+    // this._pageSubject.unsubscribe();
+  }
 
-  protected inform(): void {
+  async inform(): Promise<void> {
     let bmesg = (this.appSoundsDisabled) ? 1 : 0;
     bmesg += (this.appVibratorDisabled) ? 2 : 0;
     bmesg += (bmesg === 3) ? 4 : 0;
@@ -103,19 +108,18 @@ export class SettingsPage implements AfterContentInit {
     } else {
       smesg = 'sound is muted and vibrate is turned-off';
     }
-    // TODO: toast
-    /*
-    const toast = this.toastCtrl.create({
+
+    const toast = await this.toastCtrl.create({
       message: 'AiT\'s ' + smesg + '. Go to \'AiT Settings\' page and adjust accordingly if needed.',
       duration: 5000,
-      dismissOnPageChange: true,
+      showCloseButton: true,
       position: 'top'
     });
-
-    toast.present(); */
+    toast.present();
   }
-
+  /*
   protected dataChanged(property: string, event: CustomEvent): void {
-    // this._pageSubject.next(this._uuidData);
-  }
+      this._pageSubject.next(this._uuidData);
+    }
+  */
 }

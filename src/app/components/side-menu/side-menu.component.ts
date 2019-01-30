@@ -40,4 +40,8 @@ export class SideMenuComponent implements OnInit {
       }
     });
   }
+
+  endMenuWillClose($event): void {
+    this.subject.next({ subject: 'end', response: 'closing' });
+  }
 }
