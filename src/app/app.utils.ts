@@ -39,4 +39,21 @@ export class AppUtils {
     public static convertToStartupRoute(data: AppStorageData): string[] {
         return ['/' + AppUtils.getPageNameByID(data.current_uuid), data.current_uuid];
     }
+
+    /**
+     * Deep clones
+     *
+     * @param source
+     */
+    public static clone<T>(source: T): { [k: string]: any } {
+        const results: { [k: string]: any } = {};
+        for (const P in source) {
+            if (typeof source[P] === 'object') {
+                results[P] = AppUtils.clone(source[P]);
+            } else {
+                results[P] = source[P];
+            }
+        }
+        return results;
+    }
 }

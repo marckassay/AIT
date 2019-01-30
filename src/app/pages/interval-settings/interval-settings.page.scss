@@ -30,13 +30,12 @@ ion-icon {
     color: var(--ion-color-warning);
 }
 
-/* .mini-display {
-    // eventhough ngDectector.detectChanges(); is being used, it seems to not
-    // being detecting view change when needed.  So add margin-top to prevent
-    // content from being underneath header.
-    margin-top: 46px;
-    margin-bottom: 10px;
-}  */
+// this and along with '.div-grid margin-top' is due to scrollable content seemed to have not been
+// calculated correctly (or at least in my case, ideally).
+ion-content {
+    display: contents;
+}
+
 // give use some finger room for swiping without interacting with range controls
 .controls {
     border-color: var(--ion-background-color);
@@ -46,6 +45,8 @@ ion-icon {
     margin-right: 5px;
 }
 .div-grid {
+    // for margin-top see ion-content comment above on why this is needed
+    margin-top: 46px;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
@@ -60,7 +61,7 @@ ion-icon {
     }
 }
 
-// Below exclusively adjusts font-size and color 
+// Below exclusively adjusts font-size and color (except .countdown)
 
 .go-color {
     color: var(--ion-color-success);
@@ -114,7 +115,8 @@ ion-icon {
 }
 .countdown {
     @extend .countdowninfo;
-    // margin-left: 20px;
+    // center this div towards center
+    margin-left: 7vw;
     @media screen and (orientation: portrait) {
         font-size: $font-size-countdown-portrait;
     }

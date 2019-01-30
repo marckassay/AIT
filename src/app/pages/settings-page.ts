@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterContentInit, Optional } from '@angular/core';
-import { MenuController, ToastController } from '@ionic/angular';
+import { AfterContentInit, Host, Optional, SkipSelf } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
@@ -39,11 +38,17 @@ export class SettingsPage implements AfterContentInit {
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
 
-  constructor(
-    @Optional() protected storage: AITStorage,
-    @Optional() protected toastCtrl: ToastController,
-    @Optional() protected menuCtrl: MenuController
-  ) { }
+  // TODO: not ideal place for these properties since used by a subclass. need to resolve
+  // inhertience issue with missing injections.
+  protected computedFactorValue = { lower: 10, upper: 100 };
+  protected clonedForTenFactor: { [k: string]: any; } | undefined;
+  protected clonedForOneFactor: { [k: string]: any; } | undefined;
+  protected clonedForIntervalsFactor: number | undefined;
+  protected clonedForCountdownFactor: number | undefined;
+
+  constructor(@Optional() @SkipSelf() protected storage: AITStorage) {
+
+  }
 
   ngAfterContentInit() {
     const getSubjects = async () => {
@@ -71,6 +76,7 @@ export class SettingsPage implements AfterContentInit {
           };
         });
     */
+
   }
 
   private subscribe() {
@@ -83,10 +89,6 @@ export class SettingsPage implements AfterContentInit {
     });
   }
 
-  private unsubscribe() {
-    this._appSubject.unsubscribe();
-    this._pageSubject.unsubscribe();
-  }
 
   protected inform(): void {
     let bmesg = (this.appSoundsDisabled) ? 1 : 0;
@@ -113,7 +115,7 @@ export class SettingsPage implements AfterContentInit {
     toast.present(); */
   }
 
-  protected dataChanged(property: string, event?: any): void {
+  protected dataChanged(property: string, event: CustomEvent): void {
     // this._pageSubject.next(this._uuidData);
   }
 }

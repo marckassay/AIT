@@ -41,6 +41,7 @@
     "@ionic-native/vibration": "^5.0.0-beta.23",
     "@ionic/angular": "4.0.0-rc.0",
     "@ionic/storage": "^2.2.0",
+    "clovelced-plugin-audiomanagement": "../clovelced-plugin-audiomanagement",
     "cordova-android": "7.1.4",
     "cordova-plugin-brightness": "0.2.0",
     "cordova-plugin-device": "2.0.2",

@@ -28,12 +28,14 @@ export interface CacheSubject<T extends UUIDData> {
   subject: BehaviorSubject<T>;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AITStorage {
   private status: 'off' | 'booting' | 'on';
   private preOpPromise: Promise<boolean>;
   private subjects: Array<CacheSubject<any>>;
-  constructor(public storage: Storage) {
+  constructor(private storage: Storage) {
     this.status = 'off';
     this.subjects = [];
   }

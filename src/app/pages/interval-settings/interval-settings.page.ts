@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import moment from 'moment';
+import { AppUtils } from 'src/app/app.utils';
 import { IntervalStorageData, Limits } from 'src/app/services/storage/ait-storage.interfaces';
 
 import { SettingsPage } from '../settings-page';
@@ -7,29 +8,23 @@ import { SettingsPage } from '../settings-page';
 @Component({
   selector: 'app-interval-settings',
   templateUrl: './interval-settings.page.html',
-  styleUrls: ['./interval-settings.page.scss'],
+  styleUrls: ['./interval-settings.page.scss']
 })
-
 export class IntervalSettingsPage extends SettingsPage {
+
   get data(): IntervalStorageData {
     return this._uuidData as IntervalStorageData;
   }
 
-  get computedFactorValue(): Limits {
-    const lower = this.data.factor === 1 ? 0 : 10;
-    const upper = this.data.factor === 1 ? 10 : 100;
-
-    return { lower: lower, upper: upper };
-  }
-  /*   get activerest(): any {
-      return this.data.activerest;
+  private setComputedFactorValue() {
+    if (this.data) {
+      const lower = this.data.factor === 1 ? 1 : 0;
+      const upper = this.data.factor === 1 ? 10 : 100;
+      this.computedFactorValue = { lower: lower, upper: upper };
+    } else {
+      this.computedFactorValue = { lower: 10, upper: 100 };
     }
-    set activerest(value: any) {
-      this.data.activerest = {
-        lower: value.lower + this.rangeFactor,
-        upper: value.upper + this.rangeFactor
-      };
-    } */
+  }
 
   get totaltime(): string {
     if (this.data) {
@@ -51,15 +46,68 @@ export class IntervalSettingsPage extends SettingsPage {
   dataChanged(property: string, event: CustomEvent): void {
     console.log(property, event.detail.value);
     if (property === 'activerest') {
+      const value = event.detail.value as Limits;
+
       if (this.data.factor === 10) {
-        this.data.activerest.upper = (event.detail.value as Limits).upper;
-        this.data.activerest.lower = (event.detail.value as Limits).lower;
+        if (this.clonedForTenFactor === undefined) {
+          this.clonedForOneFactor = undefined;
+          this.clonedForTenFactor = AppUtils.clone<Limits>(this.data.activerest);
+        }
+
+        if ((this.computedFactorValue.upper !== value.upper) ||
+          (this.clonedForTenFactor as Limits).upper === -1) {
+          (this.clonedForTenFactor as Limits).upper = -1;
+          this.data.activerest.upper = value.upper;
+        }
+
+        if ((this.computedFactorValue.lower !== value.lower) ||
+          (this.clonedForTenFactor as Limits).lower === -1) {
+          (this.clonedForTenFactor as Limits).lower = -1;
+          this.data.activerest.lower = value.lower;
+        }
       } else {
-        this.data.activerest.upper += (event.detail.value as Limits).upper;
-        this.data.activerest.lower += (event.detail.value as Limits).lower;
+        if (this.clonedForOneFactor === undefined) {
+          this.clonedForTenFactor = undefined;
+          this.clonedForOneFactor = AppUtils.clone<Limits>(this.data.activerest);
+        }
+
+        let proposed = this.clonedForOneFactor.upper + value.upper;
+        if ((this.computedFactorValue.upper !== value.upper) && (this.data.activerest.upper !== proposed)) {
+          this.data.activerest.upper = proposed;
+        }
+
+        proposed = this.clonedForOneFactor.lower + value.lower;
+        if ((this.computedFactorValue.lower !== value.lower) && (this.data.activerest.lower !== proposed)) {
+          this.data.activerest.lower = proposed;
+        }
+      }
+    } else if (property === 'intervals') {
+      if (this.data.factor === 10) {
+        this.clonedForIntervalsFactor = undefined;
+
+        this.data.intervals = event.detail.value as number;
+      } else {
+        if (this.clonedForIntervalsFactor === undefined) {
+          this.clonedForIntervalsFactor = this.data.intervals;
+        }
+
+        this.data.intervals = this.clonedForIntervalsFactor + event.detail.value as number;
+      }
+    } else if (property === 'countdown') {
+      if (this.data.factor === 10) {
+        this.clonedForCountdownFactor = undefined;
+
+        this.data.countdown = event.detail.value as number;
+      } else {
+        if (this.clonedForCountdownFactor === undefined) {
+          this.clonedForCountdownFactor = this.data.countdown;
+        }
+
+        this.data.countdown = this.clonedForCountdownFactor + event.detail.value as number;
       }
     } else if (property === 'factor') {
       this.data.factor = event.detail.value === '10' ? 10 : 1;
+      this.setComputedFactorValue();
     }
 
     super.dataChanged(property, event);
