@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import { AppUtils } from 'src/app/app.utils';
 
 @Component({
   selector: 'app-home',
@@ -6,9 +9,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private menuCtrl: MenuController) { }
 
   ngOnInit() {
   }
 
+  routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch') {
+    const request = AppUtils.getPageRouteByName(name);
+
+    if (this.router.url === request.join('/')) {
+      this.menuCtrl.close('start');
+    } else {
+      this.router.navigate(request)
+        .then((value) => {
+          if (value) {
+            this.menuCtrl.close('start');
+          }
+        });
+    }
+  }
 }

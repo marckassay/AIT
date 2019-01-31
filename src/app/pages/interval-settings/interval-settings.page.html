@@ -22,7 +22,7 @@
 </ion-header>
 
 <ion-content *ngIf="data" padding>
-  <div class="div-grid">
+  <ion-list>
     <ion-grid>
       <ion-row justify-content-start nowrap>
         <ion-col align-self-baseline>
@@ -53,73 +53,75 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
-  <div>
-    <span class="countdown">{{countdownLabel}}</span>
-    <span class="countdowninfo"> secs (countdown to start)</span>
-  </div>
-  <div class="controls" *ngIf="data">
-    <ion-item-group>
-      <ion-item-divider>PROGRAM SETTINGS</ion-item-divider>
-      <!-- activerest -->
-      <ion-item>
-        <ion-range (ionChange)="dataChanged('activerest', $event)" debounce="500" [min]="computedFactorValue.lower"
-          [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true" [value]="computedFactorValue"
-          dualKnobs="true">
-          <ion-label slot="start">rest/active</ion-label>
-        </ion-range>
-      </ion-item>
 
-      <!-- interval -->
-      <ion-item>
-        <ion-range (ionChange)="dataChanged('intervals', $event)" debounce="500" [min]="computedFactorValue.lower"
-          [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
-          <ion-label slot="start">intervals</ion-label>
-        </ion-range>
-      </ion-item>
+    <div>
+      <span class="countdown">{{countdownLabel}}</span>
+      <span class="countdowninfo"> secs (countdown to start)</span>
+    </div>
 
-      <!-- countdown -->
-      <ion-item>
-        <ion-range (ionChange)="dataChanged('countdown', $event)" debounce="500" [min]="computedFactorValue.lower"
-          [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
-          <ion-label slot="start">countdown</ion-label>
-        </ion-range>
-      </ion-item>
-    </ion-item-group>
+    <div class="controls" *ngIf="data">
+      <ion-item-group>
+        <ion-item-divider>PROGRAM SETTINGS</ion-item-divider>
+        <!-- activerest -->
+        <ion-item>
+          <ion-range (ionChange)="dataChanged('activerest', $event)" debounce="500" [min]="computedFactorValue.lower"
+            [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true" [value]="computedFactorValue"
+            dualKnobs="true">
+            <ion-label slot="start">rest/active</ion-label>
+          </ion-range>
+        </ion-item>
 
-    <!-- factor -->
-    <ion-radio-group (ionChange)="dataChanged('factor', $event)" allowEmptySelection="false">
-      <ion-item>
-        <ion-label>x1</ion-label>
-        <ion-radio value="1" checked="{{data.factor == 1}}"></ion-radio>
-      </ion-item>
+        <!-- interval -->
+        <ion-item>
+          <ion-range (ionChange)="dataChanged('intervals', $event)" debounce="500" [min]="computedFactorValue.lower"
+            [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
+            <ion-label slot="start">intervals</ion-label>
+          </ion-range>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>x10</ion-label>
-        <ion-radio value="10" checked="{{data.factor == 10}}"></ion-radio>
-      </ion-item>
-    </ion-radio-group>
+        <!-- countdown -->
+        <ion-item>
+          <ion-range (ionChange)="dataChanged('countdown', $event)" debounce="500" [min]="computedFactorValue.lower"
+            [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
+            <ion-label slot="start">countdown</ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-item-group>
 
-    <!-- warnings -->
-    <ion-item-group>
-      <ion-item-divider>COUNTDOWN WARNINGS<ion-button (click)="inform()" fill="clear">
-          <ion-icon slot="end" name="settings"></ion-icon>
-        </ion-button>
-      </ion-item-divider>
-      <ion-item>
-        <ion-toggle [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
-        <ion-label>5 second warning</ion-label>
-      </ion-item>
+      <!-- factor -->
+      <ion-radio-group (ionChange)="dataChanged('factor', $event)" allowEmptySelection="false">
+        <ion-item>
+          <ion-label>x1</ion-label>
+          <ion-radio value="1" checked="{{data.factor == 1}}"></ion-radio>
+        </ion-item>
 
-      <ion-item>
-        <ion-toggle [(ngModel)]="data.warnings.tensecond"></ion-toggle>
-        <ion-label>10 second warning</ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>x10</ion-label>
+          <ion-radio value="10" checked="{{data.factor == 10}}"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
 
-      <ion-item>
-        <ion-toggle [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
-        <ion-label>15 second warning</ion-label>
-      </ion-item>
-    </ion-item-group>
-  </div>
+      <!-- warnings -->
+      <ion-item-group>
+        <ion-item-divider>COUNTDOWN WARNINGS<ion-button (click)="inform()" fill="clear">
+            <ion-icon slot="end" name="settings"></ion-icon>
+          </ion-button>
+        </ion-item-divider>
+        <ion-item>
+          <ion-toggle [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
+          <ion-label>5 second warning</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-toggle [(ngModel)]="data.warnings.tensecond"></ion-toggle>
+          <ion-label>10 second warning</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-toggle [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
+          <ion-label>15 second warning</ion-label>
+        </ion-item>
+      </ion-item-group>
+    </div>
+  </ion-list>
 </ion-content>

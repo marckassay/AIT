@@ -25,6 +25,14 @@ export class AppUtils {
         }
     }
 
+    static getIDByPageName(name: 'interval' | 'timer' | 'stopwatch'): string {
+        switch (name) {
+            case 'interval': return StorageDefaultData.INTERVAL_ID;
+            case 'timer': return StorageDefaultData.TIMER_ID;
+            case 'stopwatch': return StorageDefaultData.STOPWATCH_ID;
+        }
+    }
+
     static getPageClassByID(uuid: string):
         'AppSettingsPage' |
         'IntervalSettingsPage' |
@@ -40,6 +48,14 @@ export class AppUtils {
 
     static convertToStartupRoute(data: AppStorageData): string[] {
         return ['/' + AppUtils.getPageNameByID(data.current_uuid), data.current_uuid];
+    }
+
+    static getPageRouteByName(name: 'settings' | 'interval' | 'timer' | 'stopwatch'): string[] {
+        if (name !== 'settings') {
+            return ['/' + name, AppUtils.getIDByPageName(name)];
+        } else {
+            return ['/settings'];
+        }
     }
 
     /**

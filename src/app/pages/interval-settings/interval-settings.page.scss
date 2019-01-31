@@ -26,14 +26,24 @@ $font-size-totaltime-landscape: 7vh;
 $font-size-countdown-portrait: 6vw;
 $font-size-countdown-landscape: 6vh;
 
-ion-icon {
-    color: var(--ion-color-warning);
-}
-
 // this and along with '.div-grid margin-top' is due to scrollable content seemed to have not been
 // calculated correctly (or at least in my case, ideally).
 ion-content {
-    display: contents;
+  display: contents;
+}
+
+ion-list {
+  // for margin-top see ion-content comment above on why this is needed
+  margin-top: 56px;
+}
+
+ion-grid {
+    width: 40% !important;
+    height: 100%;
+}
+
+ion-icon {
+    color: var(--ion-color-warning);
 }
 
 // give use some finger room for swiping without interacting with range controls
@@ -44,22 +54,7 @@ ion-content {
     padding-right: 5px;
     margin-right: 5px;
 }
-.div-grid {
-    // for margin-top see ion-content comment above on why this is needed
-    margin-top: 56px;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    -webkit-box-align: center;
-    align-items: center;
-    ion-grid {
-        width: 40% !important;
-        // background-color: map-get($map, weak);
-        height: 100%;
-    }
-}
+
 
 // Below exclusively adjusts font-size and color (except .countdown)
 

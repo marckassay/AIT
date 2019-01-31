@@ -1,0 +1,38 @@
+ion-content {
+  display: contents;
+}
+
+ion-list {
+  margin-top: 56px;
+}
+
+.icon {
+  font-size: 0;
+  width: 80px;
+  height: 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  padding-left: 18px;
+  svg {
+    width: inherit;
+    height: inherit;
+  }
+}
+
+.icon-interval-timer {
+  svg>g.active { fill: var(--ion-color-primary-shade) };
+  svg>g.rest { fill: var(--ion-color-primary-tint) };
+}
+
+.icon-countdown-timer {
+  svg { fill: var(--ion-color-primary) };
+}
+
+.icon-stopwatch {
+  svg { fill: var(--ion-color-primary) };
+}
+
+.icon-settings {
+  svg { fill: var(--ion-color-warning) };
+}
