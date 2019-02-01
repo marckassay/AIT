@@ -34,15 +34,16 @@
 
 <ion-content *ngIf="data">
   <ion-list>
+
     <ion-item>
       <ion-toggle [(ngModel)]="data.vibrate" checked="data.vibrate"></ion-toggle>
       <ion-label>vibrate</ion-label>
     </ion-item>
 
-    <ion-item class="soundItem">
-      <ion-toggle #soundToggleUI [checked]="soundToggleWillEnter" (ionChange)="toggleSound($event)"></ion-toggle>
+    <ion-item>
+      <ion-toggle #soundToggleUI [checked]="soundToggleWillEnter" (ionChange)="toggleSound()"></ion-toggle>
       <ion-label>sound</ion-label>
-      <ion-button [disabled]="soundToggleUI.checked == false" (click)="testVolume($event)">
+      <ion-button [disabled]="soundToggleUI.checked == false" (click)="testVolume($event)" slot="end">
         test volume
       </ion-button>
     </ion-item>
@@ -52,7 +53,7 @@
       <ion-label>remember device volume</ion-label>
     </ion-item>
 
-    <ion-item class="brightnessItem">
+    <ion-item lines="none">
       <ion-toggle #brightnessToggleUI [checked]="data.brightness > 0" (ionChange)="toggleRememberBrightness()"></ion-toggle>
       <ion-label>remember display brightness</ion-label>
     </ion-item>
@@ -60,7 +61,7 @@
     <ion-item>
       <ion-range [disabled]="brightnessToggleUI.checked == false" (ionChange)="brightnessChanged($event)" debounce="500"
         [ngModel]="absoluteBrightnessValue" min="10" max="100" step="10" snaps="true" pin="true">
-        <ion-label range-left>brightness value</ion-label>
+        <ion-label slot="start">brightness value</ion-label>
       </ion-range>
     </ion-item>
   </ion-list>

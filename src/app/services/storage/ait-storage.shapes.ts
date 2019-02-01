@@ -84,3 +84,20 @@ export enum BaseTheme {
   Dark,
   Light
 }
+
+export interface AudioModeShape {
+  currentAudioMode: number;
+}
+
+export interface VolumeShape {
+  ringVolume: number;
+  ringMaxVolume: number;
+  musicVolume: number;
+  musicMaxVolume: number;
+  notificationVolume: number;
+  notificationMaxVolume: number;
+  systemVolume: number;
+  systemMaxVolume: number;
+}
+
+export type AudioMockStorageData = AudioModeShape & VolumeShape & UUIDData;

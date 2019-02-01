@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
+import { MockStorageData, StorageDefaultData } from './services/storage/ait-storage.defaultdata';
 import { AccentTheme, AppStorageData, BaseTheme, IntervalStorageData, UUIDData } from './services/storage/ait-storage.shapes';
 
 export class AppUtils {
@@ -13,6 +13,7 @@ export class AppUtils {
             case StorageDefaultData.INTERVAL_ID: return StorageDefaultData.INTERVAL_DATA;
             case StorageDefaultData.TIMER_ID: return StorageDefaultData.TIMER_DATA;
             case StorageDefaultData.STOPWATCH_ID: return StorageDefaultData.STOPWATCH_DATA;
+            case MockStorageData.AUDIO_MOCK_STORAGE_ID: return MockStorageData.AUDIO_MOCK_DATA;
         }
     }
 

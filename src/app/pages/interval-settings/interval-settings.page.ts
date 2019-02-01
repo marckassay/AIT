@@ -1,5 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import moment from 'moment';
+import { Component } from '@angular/core';
 import { AppUtils } from 'src/app/app.utils';
 import { IntervalStorageData, Limits } from 'src/app/services/storage/ait-storage.shapes';
 

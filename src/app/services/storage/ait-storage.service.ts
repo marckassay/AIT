@@ -41,9 +41,10 @@ export class AITStorage {
   }
 
   /**
-  * This is called directly by the display-page resolvers
+  * This is called directly by the display-page resolvers. Calls `this.getPromiseSubject()` wrapped
+  * in `from()`.
   *
-  * @param uuid
+  * @param uuid the key to storage record
   */
   getPageObservable<T extends UUIDData>(uuid: string): Observable<BehaviorSubject<T>> {
     return from(this.getPromiseSubject(uuid));
@@ -51,9 +52,9 @@ export class AITStorage {
 
   /**
    * Checks the storage cache for first found subject with the same `uuid`. If not found, it will
-   * hit the device's disk and push subject into cache.
+   * hit the device's disk by calling `this.getPagePromise()` and push subject into cache.
    *
-   * @param uuid
+   * @param uuid the key to storage record
    */
   async getPromiseSubject<T extends UUIDData>(uuid: string): Promise<BehaviorSubject<T>> {
     const entry: CacheSubject<T> | undefined = this.subjects.find(element => element.uuid === uuid);
@@ -69,6 +70,13 @@ export class AITStorage {
     }
   }
 
+  /**
+   * As an internal method it has no concern to check (`this.subjects`) or write to caching. Once
+   * storage is in the `on` status it will retrieve data with `uuid` as its key. If no data is
+   * returned at this time, it will retrieve the default data by using `AppUtils.getPageDataByID()`.
+   *
+   * @param uuid the key to storage record
+   */
   private async getPagePromise<T extends UUIDData>(uuid: string): Promise<T> {
     return await this.isReady().then(async () => {
       const value = await this.storage.get(uuid);
@@ -122,11 +130,12 @@ export class AITStorage {
         }
 
         if (!val) {
-          const app_data: UUIDData = AppUtils.getPageDataByID(StorageDefaultData.APP_ID);
-          return this.storage.set(app_data.uuid, app_data);
-          /*             .then((): Promise<boolean> => {
-                        return this.setCached(app_data);
-                      }); */
+          const appdata: UUIDData = AppUtils.getPageDataByID(StorageDefaultData.APP_ID);
+          return this.storage.set(appdata.uuid, appdata);
+          // TODO: cache appdata on startup
+          /* .then((): Promise<boolean> => {
+            return this.subjects.push({ uuid: appdata.uuid, subject: subject });
+          }); */
         } else {
           Promise.resolve(true);
         }

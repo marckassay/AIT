@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 
-import { StorageDefaultData } from './storage/ait-storage.defaultdata';
+import { AudioManagementMock } from '../mocks/audiomanagement.mock';
+
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData } from './storage/ait-storage.shapes';
 
@@ -12,7 +13,7 @@ import { AppStorageData } from './storage/ait-storage.shapes';
  */
 export class SignalService {
   audioModePriorToChange: number | undefined;
-  musicVolumePriorToChange: number | undefined;
+  volumePriorToChange: number | undefined;
 
   private _data: AppStorageData;
   public get data(): AppStorageData {
@@ -22,51 +23,53 @@ export class SignalService {
     this._data = value;
   }
 
+  audio: AudioManagement;
+
   constructor(public vibration: Vibration,
-    public audioman: AudioManagement,
     public storage: AITStorage) {
-    /*     this.storage.getPagePromise<AppStorageData>(StorageDefaultData.APP_ID).then((value) => {
-          this.data = value;
-        }); */
+    // since AudioManagement is a dependency for this service, dont simply inject it. Instead
+    // instaniate and mutate `audio` instance
+    this.audio = new AudioManagementMock() as AudioManagement;
+    (this.audio as any).storage = storage;
   }
 
   /**
-   * Enables by applying previous sound volume. This is currently called only when the timer is in
-   * its active state. And called with `value` being `false` when timer is no longer in active
-   * state.
+   * Applies previous sound volume setting. This is intended to be called when the timer is entering
+   * into its active state. And called after timer is active  with `value` as `false` to revert the
+   * user's sound mode and volume.
    *
    * When the `value` is `true` and sounds for the app are enabled (`this.data.sound > 0`), it will
    * get the device's current audiomode (getAudioMode()), store that value by setting
    * `audiomodePriorToChange` and set the device's audiomode (via setAudioMode()) to
    * `AudioMode.Normal`.
    *
-   * When the `value` is `false`, it will revert the settings that were done when called with the
+   * When the `value` is `false`, it will revert the settings that were done when called with
    * `value` of `true`. This is done using the `audioModePriorToChange` and
-   * `musicVolumePriorToChange`.
+   * `volumePriorToChange`.
    *
    * @param value indicates if it should be enabled or disabled.
    */
   enable(value: boolean): Promise<void> {
     if (value && this.data.sound > 0) {
-      return this.audioman.getAudioMode()
+      return this.audio.getAudioMode()
         .then((val) => {
           this.audioModePriorToChange = val.audioMode;
           if (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL) {
-            return this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL);
+            return this.audio.setAudioMode(AudioManagement.AudioMode.NORMAL);
           } else {
             return Promise.resolve();
           }
         })
         .then(() => {
-          this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
+          this.audio.getVolume(AudioManagement.VolumeType.MUSIC)
             .then((val) => {
-              this.musicVolumePriorToChange = val.volume;
+              this.volumePriorToChange = val.volume;
               return Promise.resolve();
             });
         })
         .then(() => {
-          if (this.musicVolumePriorToChange !== this.data.sound) {
-            this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.data.sound)
+          if (this.volumePriorToChange !== this.data.sound) {
+            this.audio.setVolume(AudioManagement.VolumeType.MUSIC, this.data.sound)
               .then(() => {
                 console.log('AudioManagement restored Music volume to previous session value.');
                 return Promise.resolve();
@@ -82,21 +85,21 @@ export class SignalService {
       return Promise.resolve(this.audioModePriorToChange && (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL))
         .then((val) => {
           if (val) {
-            return this.audioman.setAudioMode(this.audioModePriorToChange);
+            return this.audio.setAudioMode(this.audioModePriorToChange);
           } else {
             return Promise.resolve();
           }
         })
         .then(() => {
-          if (this.musicVolumePriorToChange && (this.musicVolumePriorToChange > 0)) {
-            return this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.musicVolumePriorToChange);
+          if (this.volumePriorToChange && (this.volumePriorToChange > 0)) {
+            return this.audio.setVolume(AudioManagement.VolumeType.MUSIC, this.volumePriorToChange);
           } else {
             return Promise.resolve();
           }
         })
         .then(() => {
           this.audioModePriorToChange = undefined;
-          this.musicVolumePriorToChange = undefined;
+          this.volumePriorToChange = undefined;
           return Promise.resolve();
         })
         .catch((reason) => {
@@ -133,7 +136,7 @@ export class SignalService {
   }
 
   private singleBeep() {
-    /*     this.sound_1.stop();
+    /*  this.sound_1.stop();
         this.sound_1.rate(1.0);
         this.sound_1.play(); */
   }

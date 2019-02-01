@@ -19,7 +19,6 @@ import { HomePage } from './pages/home/home.page';
 import { ScreenService } from './services/screen.service';
 import { SignalService } from './services/signal.service';
 import { AITStorage } from './services/storage/ait-storage.service';
-import { ThemeService } from './services/theme.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -42,7 +41,6 @@ import { ThemeService } from './services/theme.service';
     SignalService,
     AITStorage,
     ScreenService,
-    ThemeService,
     ScreenOrientation,
     StatusBar,
     SplashScreen,
@@ -50,8 +48,8 @@ import { ThemeService } from './services/theme.service';
     Brightness,
     MenuController,
     IonicStorageModule,
+    AudioManagement,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: AudioManagement, useClass: (true) ? AudioManagement : 'AudioManagementMock' }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

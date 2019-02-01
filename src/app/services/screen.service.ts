@@ -1,20 +1,3 @@
-/**
-    AiT - Another Interval Timer
-    Copyright (C) 2018 Marc Kassay
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 import { Injectable } from '@angular/core';
 import { Brightness } from '@ionic-native/brightness/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
@@ -37,7 +20,6 @@ export class BrightnessUtil {
   }
 }
 
-
 /**
  * Sets ait's 'brightness' data field [-100,100] in intervals of tens. This value is stored as-is
  * however the device's brightness value uses a different numbering set. The following is their
@@ -52,8 +34,8 @@ export class BrightnessUtil {
  * user has the device brightness set to. Hence the term 'brightnessOffset' is used versus 'brightness'
  * which implies an absolute value.
  *
- * Upon the ait is no longer active app and its brightness feature is enabled, the device will
- * return to its default value. This is done by Android and not AiT.
+ * When ait is no longer active app and its brightness feature is enabled, the device will return
+ * to its default value. This is done by Android and not AiT.
  */
 @Injectable()
 export class ScreenService {

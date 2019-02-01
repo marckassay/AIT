@@ -8,7 +8,7 @@ import { UUIDData } from 'src/app/services/storage/ait-storage.shapes';
 @Injectable({
     providedIn: 'root',
 })
-export class IntervalDisplayResolverService<T extends UUIDData> implements Resolve<Observable<BehaviorSubject<T>>> {
+export class DisplayPageResolverService<T extends UUIDData> implements Resolve<Observable<BehaviorSubject<T>>> {
     constructor(
         protected router: Router,
         protected route: ActivatedRoute,

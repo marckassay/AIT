@@ -6,17 +6,17 @@ import { IonicModule } from '@ionic/angular';
 import { ActiverestRendererComponentModule } from 'src/app/components/activerest-renderer/activerest-renderer.module';
 import { FabContainerComponentModule } from 'src/app/components/fab-container/fab-container.module';
 
+import { DisplayPageResolverService } from '../display-page-router.service';
 import { IntervalSettingsPageModule } from '../interval-settings/interval-settings.module';
 import { IntervalSettingsPage } from '../interval-settings/interval-settings.page';
 
-import { IntervalDisplayResolverService } from './interval-display-router.service';
 import { IntervalDisplayPage } from './interval-display.page';
 
 const routes: Routes = [
   {
     path: ':id',
     component: IntervalDisplayPage,
-    resolve: { subject: IntervalDisplayResolverService }
+    resolve: { subject: DisplayPageResolverService }
   }
 ];
 

@@ -16,10 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
@@ -28,7 +27,6 @@ import { ScreenService } from '../services/screen.service';
 import { SignalService } from '../services/signal.service';
 import { SotsForAit } from '../services/sots/ait-sots';
 import { SequenceStates } from '../services/sots/ait-sots.util';
-import { AITStorage } from '../services/storage/ait-storage.service';
 import { UUIDData } from '../services/storage/ait-storage.shapes';
 
 export class DisplayPage implements OnInit {
@@ -71,13 +69,11 @@ export class DisplayPage implements OnInit {
 
   constructor(
     @Optional() protected route: ActivatedRoute,
-    @Optional() protected router: Router,
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
     @Optional() protected changeRef: ChangeDetectorRef,
     @Optional() protected menuCtrl: MenuController,
     @Optional() protected signal: SignalService,
     @Optional() protected screen: ScreenService,
-    @Optional() protected storage: AITStorage,
     @Optional() protected menuSvc: SideMenuService
   ) { }
 

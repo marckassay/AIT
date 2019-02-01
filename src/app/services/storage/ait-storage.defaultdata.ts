@@ -1,12 +1,11 @@
-import { AppStorageData, IntervalStorageData, StopwatchStorageData, TimerStorageData } from './ait-storage.shapes';
+import { AppStorageData, AudioMockStorageData, IntervalStorageData, StopwatchStorageData, TimerStorageData } from './ait-storage.shapes';
 
 export class StorageDefaultData {
-  public static readonly APP_ID: string = '00000000-0000-0000-0000-000000000001';
-  public static readonly INTERVAL_ID: string = '00000000-0000-0000-0000-000000000002';
-  public static readonly TIMER_ID: string = '00000000-0000-0000-0000-000000000003';
-  public static readonly STOPWATCH_ID: string = '00000000-0000-0000-0000-000000000004';
-  public static readonly HOME_ID: string = '00000000-0000-0000-0000-000000000005';
-
+  public static readonly APP_ID: string = '000000000001';
+  public static readonly INTERVAL_ID: string = '000000000002';
+  public static readonly TIMER_ID: string = '000000000003';
+  public static readonly STOPWATCH_ID: string = '000000000004';
+  public static readonly HOME_ID: string = '000000000005';
 
   public static readonly APP_DATA: AppStorageData = {
     uuid: StorageDefaultData.APP_ID,
@@ -43,5 +42,23 @@ export class StorageDefaultData {
     countdown: 10,
     countdownmaxlimit: 60,
     warnings: { fivesecond: false, tensecond: true, fifteensecond: true }
+  };
+}
+
+export class MockStorageData {
+  // for development purposes only
+  public static readonly AUDIO_MOCK_STORAGE_ID: string = '950fa447e45a';
+
+  public static readonly AUDIO_MOCK_DATA: AudioMockStorageData = {
+    uuid: MockStorageData.AUDIO_MOCK_STORAGE_ID,
+    currentAudioMode: 2,
+    ringVolume: 5,
+    ringMaxVolume: 8,
+    musicVolume: 5,
+    musicMaxVolume: 8,
+    notificationVolume: 5,
+    notificationMaxVolume: 8,
+    systemVolume: 5,
+    systemMaxVolume: 8
   };
 }
