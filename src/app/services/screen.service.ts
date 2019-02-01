@@ -20,8 +20,8 @@ import { Brightness } from '@ionic-native/brightness/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { BrightnessSet } from './storage/ait-storage.interfaces';
 import { AITStorage } from './storage/ait-storage.service';
+import { BrightnessSet } from './storage/ait-storage.shapes';
 
 export class BrightnessUtil {
   static convertToDeviceBrightnessNumber(value: BrightnessSet): number {

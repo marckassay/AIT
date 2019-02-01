@@ -20,15 +20,10 @@ export class HomePage implements OnInit {
   routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch') {
     const request = AppUtils.getPageRouteByName(name);
 
-    if (this.router.url === request.join('/')) {
-      this.menuCtrl.close('start');
-    } else {
-      this.router.navigate(request)
-        .then((value) => {
-          if (value) {
-            this.menuCtrl.close('start');
-          }
-        });
-    }
+    this.menuCtrl.close('start').then(() => {
+      if (this.router.url !== request.join('/')) {
+        this.router.navigate(request);
+      }
+    });
   }
 }

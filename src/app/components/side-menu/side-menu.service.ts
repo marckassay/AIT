@@ -4,13 +4,14 @@ import { Subject } from 'rxjs';
 export interface SideMenuRequest {
   subject: 'start' | 'end';
   request: 'load' | 'status';
+  uuid: string;
   component?: any;
-  uuid?: string;
 }
 
 export interface SideMenuResponse {
   subject: 'start' | 'end';
   response: 'unloaded' | 'loaded' | 'closing';
+  uuid: string;
 }
 
 @Injectable({

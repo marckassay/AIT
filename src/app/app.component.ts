@@ -4,15 +4,15 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { SideMenuRequest, SideMenuService } from './components/side-menu/side-menu.service';
 import { HomePage } from './pages/home/home.page';
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
-import { AppStorageData } from './services/storage/ait-storage.interfaces';
 import { AITStorage } from './services/storage/ait-storage.service';
-import { ThemeService } from './services/theme.service';
+import { AppStorageData } from './services/storage/ait-storage.shapes';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +37,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     private statusBar: StatusBar,
     private router: Router,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private themer: ThemeService,
     private storage: AITStorage,
     private menuSvc: SideMenuService
   ) { }
@@ -53,17 +52,17 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private subscribeMenuService(): void {
     this.menuSvc.subscribe((note) => {
-      if ((note as SideMenuRequest).request !== undefined) {
+      if (note as SideMenuRequest) {
         note = note as SideMenuRequest;
         // if received a note on start menu's status, be nice and respond with a response. And
-        // immediately followed by a request to load start menu if needed.
+        // immediately followed by a request to load start menu if status is 'unloaded'.
         if ((note.subject === 'start') && (note.request === 'status')) {
-          const menuStatus = (this.startMenu.hasBeenLoaded) ? 'loaded' : 'unloaded';
-          this.menuSvc.next({ subject: 'start', response: menuStatus });
+          const homeMenuStatus = (this.startMenu.isComponentLoaded(StorageDefaultData.HOME_ID)) ? 'loaded' : 'unloaded';
+          this.menuSvc.next({ subject: 'start', uuid: StorageDefaultData.HOME_ID, response: homeMenuStatus });
 
-          if (menuStatus === 'unloaded') {
+          if (homeMenuStatus === 'unloaded') {
             const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
-            this.menuSvc.next({ subject: 'start', request: 'load', component: resolvedComponent });
+            this.menuSvc.next({ subject: 'start', uuid: StorageDefaultData.HOME_ID, request: 'load', component: resolvedComponent });
           }
         }
       }
@@ -73,14 +72,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   async initializeApp(): Promise<void> {
     await this.platform.ready()
       .then(async () => {
-        const data = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
+        const appsubject = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
         let startroute: string[];
-        const appsubscrip = data.subscribe((appval) => {
-          startroute = AppUtils.convertToStartupRoute(appval);
+        appsubject.subscribe((appdata) => {
+          startroute = AppUtils.convertToStartupRoute(appdata);
         });
-        appsubscrip.unsubscribe();
+        this.watchTheme(appsubject);
 
-        this.initializeThemer(data);
         this.statusBar.styleDefault();
 
         return this.router.navigate(startroute)
@@ -99,8 +97,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private initializeThemer(data: BehaviorSubject<AppStorageData>): void {
-    this.themer.app = data;
-    this.themer.theme$().subscribe((value: string) => this.theme = value);
+  private watchTheme(data: BehaviorSubject<AppStorageData>): void {
+    data.pipe(
+      debounceTime(1000),
+      distinctUntilChanged<AppStorageData>((a, b) => {
+        return (a.base === b.base || a.accent === b.accent);
+      })
+    ).subscribe((value) => {
+      this.theme = AppUtils.getCombinedTheme(value);
+    });
   }
 }

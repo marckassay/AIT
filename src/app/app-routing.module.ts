@@ -3,6 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: 'settings',
+    loadChildren: './pages/app-settings/app-settings.module#AppSettingsPageModule'
+  },
+  {
     path: 'interval',
     loadChildren: './pages/interval-display/interval-display.module#IntervalDisplayPageModule'
   },

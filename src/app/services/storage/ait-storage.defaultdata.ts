@@ -1,4 +1,4 @@
-import { AppStorageData, IntervalStorageData, StopwatchStorageData, TimerStorageData } from './ait-storage.interfaces';
+import { AppStorageData, IntervalStorageData, StopwatchStorageData, TimerStorageData } from './ait-storage.shapes';
 
 export class StorageDefaultData {
   public static readonly APP_ID: string = '00000000-0000-0000-0000-000000000001';

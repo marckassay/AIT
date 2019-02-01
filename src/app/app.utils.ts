@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
-import { AppStorageData, IntervalStorageData, UUIDData } from './services/storage/ait-storage.interfaces';
+import { AccentTheme, AppStorageData, BaseTheme, IntervalStorageData, UUIDData } from './services/storage/ait-storage.shapes';
 
 export class AppUtils {
     /**
@@ -56,6 +56,11 @@ export class AppUtils {
         } else {
             return ['/settings'];
         }
+    }
+
+    static getCombinedTheme(data: AppStorageData): string {
+        const combined: string = 'theme-' + BaseTheme[data.base] + '-' + AccentTheme[data.accent];
+        return combined.toLowerCase();
     }
 
     /**

@@ -3,8 +3,8 @@ import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
-import { AppStorageData } from './storage/ait-storage.interfaces';
 import { AITStorage } from './storage/ait-storage.service';
+import { AppStorageData } from './storage/ait-storage.shapes';
 
 @Injectable()
 /**

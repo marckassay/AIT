@@ -21,7 +21,7 @@ import { from, BehaviorSubject, Observable } from 'rxjs';
 import { AppUtils } from 'src/app/app.utils';
 
 import { StorageDefaultData } from './ait-storage.defaultdata';
-import { AppStorageData, UUIDData } from './ait-storage.interfaces';
+import { AppStorageData, UUIDData } from './ait-storage.shapes';
 
 export interface CacheSubject<T extends UUIDData> {
   uuid: string;
@@ -50,8 +50,8 @@ export class AITStorage {
   }
 
   /**
-   * This is called directly by the settings-page. When called, it will check the storage cache
-   * for any subjects with the same `uuid`.
+   * Checks the storage cache for first found subject with the same `uuid`. If not found, it will
+   * hit the device's disk and push subject into cache.
    *
    * @param uuid
    */

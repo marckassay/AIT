@@ -45,6 +45,7 @@ export class IntervalDisplayPage extends DisplayPage {
 
   ionViewDidEnter() {
     this.aitSubscribeTimer();
+
     super.ionViewDidEnter();
   }
 

@@ -20,8 +20,8 @@ import { MenuController, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
-import { AppStorageData, UUIDData } from '../services/storage/ait-storage.interfaces';
 import { AITStorage } from '../services/storage/ait-storage.service';
+import { AppStorageData, UUIDData } from '../services/storage/ait-storage.shapes';
 
 export class SettingsPage implements AfterContentInit {
   _uuid: string;
@@ -32,7 +32,6 @@ export class SettingsPage implements AfterContentInit {
     this._uuid = value;
   }
 
-  private ionMenu: HTMLIonMenuElement;
   private _appSubject: BehaviorSubject<AppStorageData>;
   private _pageSubject: BehaviorSubject<UUIDData>;
   protected _uuidData: UUIDData;
@@ -72,11 +71,6 @@ export class SettingsPage implements AfterContentInit {
   }
 
   private subscribe() {
-    this.menuCtrl.get('end').then((menu) => {
-      this.ionMenu = menu;
-      this.ionMenu.addEventListener('ionWillClose', this.unsubscribe);
-    });
-
     this._appSubject.subscribe((value) => {
       this.appSoundsDisabled = value.sound === 0;
       this.appVibratorDisabled = !value.vibrate;
@@ -85,14 +79,6 @@ export class SettingsPage implements AfterContentInit {
     this._pageSubject.subscribe((value) => {
       this._uuidData = value;
     });
-
-  }
-
-  private unsubscribe() {
-    this.inform();
-    // this.ionMenu.removeEventListener('ionWillClose', this.unsubscribe);
-    // this._appSubject.unsubscribe();
-    // this._pageSubject.unsubscribe();
   }
 
   async inform(): Promise<void> {
@@ -115,11 +101,7 @@ export class SettingsPage implements AfterContentInit {
       showCloseButton: true,
       position: 'top'
     });
+
     toast.present();
   }
-  /*
-  protected dataChanged(property: string, event: CustomEvent): void {
-      this._pageSubject.next(this._uuidData);
-    }
-  */
 }

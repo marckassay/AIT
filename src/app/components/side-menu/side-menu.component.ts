@@ -13,35 +13,44 @@ export class SideMenuComponent implements OnInit {
   @Input()
   id: 'start' | 'end';
 
-  hasBeenLoaded: boolean;
+  private loadedUuid: string;
 
   constructor(protected subject: SideMenuService) { }
 
   ngOnInit(): void {
     this.subject.subscribe((note) => {
-      if ((note as SideMenuRequest).request !== undefined) {
+      if (note as SideMenuRequest) {
         note = (note as SideMenuRequest);
 
+        // since the SideMenuService is multicasting, make sure we are in the correct instance
+        // of SideMenuComponent by checking this.id
         if (this.id === note.subject) {
-
           if (note.request === 'load') {
             this.menu.clear();
             const results = this.menu.createComponent(note.component);
-            if (note.uuid) {
-              (results.instance as any).uuid = note.uuid;
-            }
-            this.hasBeenLoaded = results !== undefined;
-            this.subject.next({ subject: this.id, response: (this.hasBeenLoaded) ? 'loaded' : 'unloaded' });
+            (results.instance as any).uuid = note.uuid;
+            this.loadedUuid = note.uuid;
+
+            this.subject.next({
+              subject: this.id,
+              uuid: this.loadedUuid,
+              response: 'loaded'
+            });
 
           } else if (note.request === 'status') {
-            this.subject.next({ subject: this.id, response: (this.hasBeenLoaded) ? 'loaded' : 'unloaded' });
+            this.subject.next({
+              subject: this.id,
+              uuid: this.loadedUuid,
+              response: this.isComponentLoaded(note.uuid) ? 'loaded' : 'unloaded'
+            });
+
           }
         }
       }
     });
   }
 
-  endMenuWillClose($event): void {
-    this.subject.next({ subject: 'end', response: 'closing' });
+  isComponentLoaded(uuid: string): boolean {
+    return this.loadedUuid === uuid;
   }
 }

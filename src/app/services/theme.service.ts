@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { AppStorageData } from './storage/ait-storage.interfaces';
+import { AppStorageData } from './storage/ait-storage.shapes';
 
 export enum AccentTheme {
   Monokai,

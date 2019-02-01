@@ -19,6 +19,7 @@ import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChil
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
@@ -27,8 +28,8 @@ import { ScreenService } from '../services/screen.service';
 import { SignalService } from '../services/signal.service';
 import { SotsForAit } from '../services/sots/ait-sots';
 import { SequenceStates } from '../services/sots/ait-sots.util';
-import { UUIDData } from '../services/storage/ait-storage.interfaces';
 import { AITStorage } from '../services/storage/ait-storage.service';
+import { UUIDData } from '../services/storage/ait-storage.shapes';
 
 export class DisplayPage implements OnInit {
 
@@ -84,7 +85,7 @@ export class DisplayPage implements OnInit {
     this.sots = new SotsForAit();
     this.route.data.subscribe((data: { subject: BehaviorSubject<UUIDData> }) => {
       this.subject = data.subject;
-    }).unsubscribe();
+    });
 
     this.subject.subscribe((uuidData: UUIDData) => {
       this.grandTime = AppUtils.totaltime(uuidData);
@@ -116,22 +117,16 @@ export class DisplayPage implements OnInit {
    * Fired when the component being routed from is about to animate.
    */
   ionViewWillLeave(): void {
-    throw new Error('Subclasses of DisplayPage need to implement ionViewWillLeave().');
-  }
-
-  /**
-  * Fired when the component being routed from has animated.
-  */
-  ionViewDidLeave(): void {
-    this.aitUnsubscribeTimer();
+    this.unsubscribe();
   }
 
   protected aitSubscribeTimer(): void {
     throw new Error('Subclasses of DisplayPage need to implement aitSubscribeTimer().');
   }
 
-  protected aitUnsubscribeTimer(): void {
-    throw new Error('Subclasses of DisplayPage need to implement aitUnsubscribeTimer().');
+  protected unsubscribe(): void {
+    this.sots.unsubscribe();
+    this.subject.unsubscribe();
   }
 
   /**
@@ -146,7 +141,7 @@ export class DisplayPage implements OnInit {
 
     if (includeMenus) {
       ['start', 'end'].forEach((id) => {
-        this.menuCtrl.enable(!value, id);
+        this.menuCtrl.enable((value === false), id);
       });
     }
   }
@@ -176,11 +171,25 @@ export class DisplayPage implements OnInit {
           note = (note as SideMenuResponse);
 
           // when response from the 'this.menuSvc.next()' call below
-          if ((note.subject === 'end') && (note.response === 'loaded')) {
+          if ((note.subject === 'end') && (note.response === 'unloaded')) {
+            const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
+
+            this.menuSvc.next({
+              subject: 'end',
+              request: 'load',
+              uuid: (this.uuidData as UUIDData).uuid,
+              component: resolvedComponent
+            });
+          } else if ((note.subject === 'end') && (note.response === 'loaded')) {
+            this.floatingbuttons.setProgramButtonToVisible();
             this.floatingbuttons.setProgramButtonToVisible();
             this.menuCtrl.enable(true, 'end');
-            this.menuSvc.next({ subject: 'start', request: 'status' });
 
+            this.menuSvc.next({
+              subject: 'start',
+              request: 'status',
+              uuid: (this.uuidData as UUIDData).uuid
+            });
             // when response from HomePage is loaded from App.component
           } else if ((note.subject === 'start') && (note.response === 'loaded')) {
             this.floatingbuttons.setHomeButtonToVisible();
@@ -195,14 +204,14 @@ export class DisplayPage implements OnInit {
         resolve();
       });
 
-      const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
-      // send notification to menu service
+      // send request to see if this display-page subclass has its settings page loaded in the
+      // 'end' sidemenu.
       this.menuSvc.next({
         subject: 'end',
-        request: 'load',
-        component: resolvedComponent,
+        request: 'status',
         uuid: (this.uuidData as UUIDData).uuid
       });
+
     });
   }
 
