@@ -7,7 +7,7 @@ import { BrightnessUtil, ScreenService } from 'src/app/services/screen.service';
 import { SignalService } from 'src/app/services/signal.service';
 import { StorageDefaultData } from 'src/app/services/storage/ait-storage.defaultdata';
 import { AITStorage } from 'src/app/services/storage/ait-storage.service';
-import { AccentTheme, AppStorageData, BaseTheme, BrightnessSet } from 'src/app/services/storage/ait-storage.shapes';
+import { AccentTheme, AppStorageData, BaseTheme, BrightnessSet, VolumeSet } from 'src/app/services/storage/ait-storage.shapes';
 
 @Component({
   selector: 'app-settings',
@@ -24,12 +24,23 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this._data = value;
   }
 
+  /**
+   * this type assignment to variable is for Angular template can access enum values.
+   */
   protected BT = BaseTheme;
   protected AT = AccentTheme;
 
+  /**
+   * since the 'remember device volume' toggle can be disabled and checked simultaneously or enabled and unchecked,
+   * this property is to do logic to determine if `data.sound` is truthly or not.
+   */
+  isVolToggleChecked: boolean;
+
+  /**
+   * although BrightnessSet value may be below zero, the UI is constrained to 10 and above. so this
+   * property conforms to that contraint.
+   */
   absoluteBrightnessValue: BrightnessSet;
-  soundToggleWillEnter: boolean;
-  soundRememberToggleWillEnter: boolean;
 
   private appSubjt: BehaviorSubject<AppStorageData>;
 
@@ -74,14 +85,18 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     });
     appSubsn.unsubscribe();
 
+    this.isVolToggleChecked = this.data.sound > 0;
     this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
-    this.soundToggleWillEnter = (this.data.sound !== 0);
-    this.soundRememberToggleWillEnter = this.data.sound > 0;
   }
 
   private next(): void {
     this.appSubjt.next(this.data);
   }
+
+  toggleVibrate(): void {
+    this.next();
+  }
+
   /**
    * The 'sound' toggle handler.
    */
@@ -92,7 +107,9 @@ export class AppSettingsPage implements OnInit, OnDestroy {
           // now that sound has bee enabled, retrieve value for value. although this may be a
           // negative value, its of no consequence of for this `toggleSound()`.
           this.signalSvc.audio.getVolume(AudioManagement.VolumeType.MUSIC)
-            .then((result) => { this.data.sound = result.volume; });
+            .then((result) => {
+              this.data.sound = result.volume as VolumeSet;
+            });
           this.next();
         });
     } else if (Math.abs(this.data.sound) > 0) {
@@ -108,7 +125,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   testVolume(): void {
     this.signalSvc.audio.getVolume(AudioManagement.VolumeType.MUSIC)
       .then((result) => {
-        this.data.sound = result.volume;
+        this.data.sound = result.volume as VolumeSet;
         this.signalSvc.double();
       });
   }
@@ -120,10 +137,8 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    * of greater than 0 enables it.
    */
   toggleRememberVolume(): void {
-    if (this.data.sound !== 0) {
-      this.data.sound = (this.data.sound * -1);
-      this.next();
-    }
+    this.data.sound = (this.data.sound * -1) as VolumeSet;
+    this.next();
   }
 
   /**
@@ -137,7 +152,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   /**
   * The range UI for 'remember device brightness' toggle.
   */
-  brightnessChanged(event: CustomEvent): void {
+  rangeBrightnessValue(event: CustomEvent): void {
     // TODO: async to change device brightness momentarily
     this.data.brightness = (event.detail.value as BrightnessSet);
     this.next();

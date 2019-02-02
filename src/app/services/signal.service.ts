@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
+import { BehaviorSubject } from 'rxjs';
 
-import { AudioManagementMock } from '../mocks/audiomanagement.mock';
-
+import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData } from './storage/ait-storage.shapes';
 
@@ -23,20 +23,28 @@ export class SignalService {
     this._data = value;
   }
 
-  private _audio: AudioManagement;
-  public get audio(): AudioManagement {
-    return this._audio;
-  }
-  public set audio(value: AudioManagement) {
-    this._audio = value;
+  private subject: BehaviorSubject<AppStorageData>;
+
+  constructor(
+    private vibration: Vibration,
+    public audio: AudioManagement,
+    private storage: AITStorage) {
+    // if app.module has 'useClass' prop set to the mock version which has storage, then set it
+    if ('storage' in audio) {
+      (audio as any).storage = this.storage;
+    }
   }
 
-  constructor(private vibration: Vibration,
-    private storage: AITStorage) {
-    // since AudioManagement is a dependency for this service, dont simply inject it. Instead
-    // instaniate and mutate `audio` instance
-    this.audio = new AudioManagementMock() as AudioManagement;
-    (this.audio as any).storage = this.storage;
+  onInit(): void {
+    if (this.data === undefined) {
+      // "lock" data to prevent any others in here
+      this.data = null;
+      this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
+        .then((val) => {
+          this.subject = val;
+          this.subject.subscribe((data) => { this.data = data; });
+        });
+    }
   }
 
   /**

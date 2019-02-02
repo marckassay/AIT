@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
+import { BehaviorSubject } from 'rxjs';
 
 import { MockStorageData } from '../services/storage/ait-storage.defaultdata';
 import { AITStorage } from '../services/storage/ait-storage.service';
 import { AudioMockStorageData, VolumeShape } from '../services/storage/ait-storage.shapes';
 
+/**
+ * since no device to adjust volume, this will generate some number between 1-15
+ *      Math.ceil(Math.random() * 14);
+ */
 @Injectable()
 export class AudioManagementMock {
-
+    subject: BehaviorSubject<AudioMockStorageData>;
     data: AudioMockStorageData;
 
+    /**
+     * storage is here to emulate the device's actual disk.
+     */
     private _storage: AITStorage;
     public get storage(): AITStorage {
         return this._storage;
@@ -18,23 +26,21 @@ export class AudioManagementMock {
         this._storage = value;
         this._storage.getPromiseSubject<AudioMockStorageData>(MockStorageData.AUDIO_MOCK_STORAGE_ID)
             .then((val) => {
-                return val;
-            })
-            .then((val) => {
-                val.subscribe((data) => { this.data = data; });
-                val.unsubscribe();
+                this.subject = val;
+                this.subject.subscribe((data) => { this.data = data; });
             });
     }
 
-    setAudioMode(mode: AudioManagement.AudioMode): Promise<void> {
+    setAudioMode(mode: AudioManagementMock.AudioMode): Promise<void> {
         this.data.currentAudioMode = mode;
+        this.next();
         return new Promise((resolve, reject): void => {
             console.log('[AudioManagementMock]', 'audio mode has been set:', mode);
             resolve();
         });
     }
 
-    getAudioMode(): Promise<AudioManagement.AudioModeReturn> {
+    getAudioMode(): Promise<AudioManagementMock.AudioModeReturn> {
         return new Promise((resolve, reject): void => {
             const results = { audioMode: this.data.currentAudioMode, label: AudioManagement.AudioMode[this.data.currentAudioMode] };
             console.log('[AudioManagementMock]', 'audio mode is:', results);
@@ -42,15 +48,16 @@ export class AudioManagementMock {
         });
     }
 
-    setVolume(type: AudioManagement.VolumeType, volume: number): Promise<void> {
+    setVolume(type: AudioManagementMock.VolumeType, volume: number): Promise<void> {
         this.data[this.volTypeToField(type)] = volume;
+        this.next();
         return new Promise((resolve, reject): void => {
             console.log('[AudioManagementMock]', this.volTypeToField(type), 'volume type has been set to:', volume);
             resolve();
         });
     }
 
-    getVolume(type: AudioManagement.VolumeType): Promise<{ volume: number }> {
+    getVolume(type: AudioManagementMock.VolumeType): Promise<{ volume: number }> {
         return new Promise((resolve, reject): void => {
             const field = this.volTypeToField(type);
             const val = this.data[field];
@@ -59,7 +66,7 @@ export class AudioManagementMock {
         });
     }
 
-    getMaxVolume(type: AudioManagement.VolumeType): Promise<{ maxVolume: number }> {
+    getMaxVolume(type: AudioManagementMock.VolumeType): Promise<{ maxVolume: number }> {
         return new Promise((resolve, reject): void => {
             const field = this.volTypeToField(type, true);
             const val = this.data[field];
@@ -77,7 +84,7 @@ export class AudioManagementMock {
      * that is used to set the upper limit of the device, this parameter is used to signify the return
      * key of `MockStorageShape` should be that member.
      */
-    private volTypeToField(type: AudioManagement.VolumeType, asMaxVol: boolean = false): keyof VolumeShape {
+    private volTypeToField(type: AudioManagementMock.VolumeType, asMaxVol: boolean = false): keyof VolumeShape {
         let field: keyof VolumeShape;
 
         switch (type) {
@@ -91,5 +98,27 @@ export class AudioManagementMock {
             field = field.replace(/(?=Volume)/, 'Max') as keyof VolumeShape;
         }
         return field;
+    }
+
+    private next(): void {
+        this.subject.next(this.data);
+    }
+}
+
+export declare namespace AudioManagementMock {
+    enum AudioMode {
+        SILENT = 0,
+        VIBRATE = 1,
+        NORMAL = 2
+    }
+    enum VolumeType {
+        RING = 0,
+        MUSIC = 1,
+        NOTIFICATION = 2,
+        SYSTEM = 3
+    }
+    interface AudioModeReturn {
+        audioMode: AudioManagementMock.AudioMode;
+        label: string;
     }
 }

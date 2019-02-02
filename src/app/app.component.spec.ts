@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
 
+  // tslint:disable-next-line:typedef
   let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy;
 
   beforeEach(async(() => {

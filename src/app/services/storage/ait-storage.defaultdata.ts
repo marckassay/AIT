@@ -11,7 +11,7 @@ export class StorageDefaultData {
     uuid: StorageDefaultData.APP_ID,
     current_uuid: StorageDefaultData.INTERVAL_ID,
     vibrate: true,
-    sound: 10,
+    sound: -10,
     brightness: -50,
     base: 0,
     accent: 0

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Brightness } from '@ionic-native/brightness/ngx';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { BehaviorSubject } from 'rxjs';
 
+import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
-import { BrightnessSet } from './storage/ait-storage.shapes';
+import { AppStorageData, BrightnessSet } from './storage/ait-storage.shapes';
 
 export class BrightnessUtil {
   static convertToDeviceBrightnessNumber(value: BrightnessSet): number {
@@ -40,80 +41,73 @@ export class BrightnessUtil {
  */
 @Injectable()
 export class ScreenService {
+  private _data: AppStorageData;
+  public get data(): AppStorageData {
+    return this._data;
+  }
+  public set data(value: AppStorageData) {
+    this._data = value;
+  }
+
+  private subject: BehaviorSubject<AppStorageData>;
 
   constructor(
     private brightness: Brightness,
-    private orientation: ScreenOrientation,
     private statusBar: StatusBar,
     private splash: SplashScreen,
     private storage: AITStorage) { }
 
-  /**
-   * Sets the BrightnessSet value that the user has choosen. This value will be mapped to
-   * DeviceBrightnessSet so that it will be available to be read by the device.
-   *
-   * @param value Any positive number enables ait's brightness feature, while any negative number
-   *              disables it.
-   */
-  storeBrightnessOffset(): void {
-
-    /*     const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
-
-        store.promise.then((val) => {
-          if (val.brightness !== value) {
-            val.brightness = value;
-          }
-
-          store.subject.next(val);
-
-          if (apply === true) {
-            this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(value));
-          }
-        }); */
+  onInit(): void {
+    if (this.data === undefined) {
+      // "lock" data to prevent any others in here
+      this.data = null;
+      this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
+        .then((val) => {
+          this.subject = val;
+          this.subject.subscribe((data) => { this.data = data; });
+        });
+    }
   }
 
-  retrieveBrightnessOffset(): any {
-    /*
-        const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
+  initScreen(): void {
+    this.statusBar.styleDefault();
+    this.splash.hide();
+  }
 
-        return store.promise.then((value): BrightnessSet => {
-          return value.brightness;
-        }); */
+  setScreenToRunningMode(value: boolean): void {
+    this.setKeepScreenOn(value);
+    this.showStatusBar(!value);
+    if (value) {
+      this.applyBrightnessOffset();
+    } else {
+      this.revertBrightnessOffset();
+    }
   }
 
   /**
    * Retrieves ait's 'brightness' data field and if its defined (greater than 0), it will set the
    * device's brightness to that value.
    */
-  applyBrightnessOffset(): void {
-    /*     const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
-
-        store.promise.then((value) => {
-          const lastBrightnessValue: BrightnessSet = value.brightness;
-          if (lastBrightnessValue > 0) {
-            this.display.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(lastBrightnessValue));
-          }
-        }); */
+  private applyBrightnessOffset(): void {
+    const lastBrightnessValue = this.data.brightness;
+    if (lastBrightnessValue > 0) {
+      this.brightness.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(lastBrightnessValue));
+    }
   }
 
   /**
    * Sets the device's API brightness to -1, to remove our offset (if any) and return to the
-   * brightness value prior to AiT being launched. Calling this method doesn't modify app's storage.
+   * brightness value prior to AiT being launched.
    */
-  removeBrightnessOffset(): void {
+  private revertBrightnessOffset(): void {
     this.brightness.setBrightness(-1);
   }
 
-  setKeepScreenOn(value: boolean): void {
+  private setKeepScreenOn(value: boolean): void {
     this.brightness.setKeepScreenOn(value);
   }
 
-  showStatusBar(value: boolean): void {
+  private showStatusBar(value: boolean): void {
     (value) ? this.statusBar.hide() : this.statusBar.show();
-  }
-
-  initScreen(): void {
-    this.statusBar.styleDefault();
-    this.splash.hide();
   }
 }

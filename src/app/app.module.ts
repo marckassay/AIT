@@ -14,6 +14,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SideMenuModule } from './components/side-menu/side-menu.module';
+import { AudioManagementMock } from './mocks/audiomanagement.mock';
 import { HomePageModule } from './pages/home/home.module';
 import { HomePage } from './pages/home/home.page';
 import { ScreenService } from './services/screen.service';
@@ -45,11 +46,11 @@ import { AITStorage } from './services/storage/ait-storage.service';
     SplashScreen,
     StatusBar,
     ScreenService,
-    AudioManagement,
+    { provide: AudioManagement, useClass: AudioManagementMock },
     SignalService,
     MenuController,
     IonicStorageModule,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

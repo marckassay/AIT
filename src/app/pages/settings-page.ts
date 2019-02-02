@@ -34,6 +34,9 @@ export class SettingsPage implements AfterContentInit {
 
   private _appSubject: BehaviorSubject<AppStorageData>;
   private _pageSubject: BehaviorSubject<UUIDData>;
+
+  // note that this object exists in the display-page instance too. so any changes here will be
+  // reflect instantly in the display-page.
   protected _uuidData: UUIDData;
   protected grandTime: string;
 

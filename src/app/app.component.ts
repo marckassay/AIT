@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ComponentFactoryResolver, OnInit, ViewChild }
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
@@ -95,12 +95,23 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private watchTheme(data: BehaviorSubject<AppStorageData>): void {
     data.pipe(
-      debounceTime(1000),
-      distinctUntilChanged<AppStorageData>((a, b) => {
-        return (a.base === b.base || a.accent === b.accent);
-      })
+      debounceTime(1000)
     ).subscribe((value) => {
-      this.theme = AppUtils.getCombinedTheme(value);
+      // TODO: I attempted to subscribe with distinctUntilChanged() but that failed, hence
+      // comparison below
+      const theme = AppUtils.getCombinedTheme(value);
+      if (theme !== this.theme) {
+        // TODO: look into css vars on changing at runtime
+        /*
+        if (theme.startsWith('theme-dark')) {
+          this.theme = '.dark';
+        } else {
+          this.theme = '.light';
+        }
+        */
+        this.theme = theme;
+        console.log('theme is now:', this.theme);
+      }
     });
   }
 }

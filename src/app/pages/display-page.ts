@@ -72,13 +72,17 @@ export class DisplayPage implements OnInit {
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
     @Optional() protected changeRef: ChangeDetectorRef,
     @Optional() protected menuCtrl: MenuController,
-    @Optional() protected signal: SignalService,
-    @Optional() protected screen: ScreenService,
+    @Optional() protected signalSvc: SignalService,
+    @Optional() protected screenSvc: ScreenService,
     @Optional() protected menuSvc: SideMenuService
   ) { }
 
   ngOnInit(): void {
     this.sots = new SotsForAit();
+
+    this.signalSvc.onInit();
+    this.screenSvc.onInit();
+
     this.route.data.subscribe((data: { subject: BehaviorSubject<UUIDData> }) => {
       this.subject = data.subject;
     });
@@ -131,14 +135,12 @@ export class DisplayPage implements OnInit {
    * @param value true if timer is ticking
    */
   protected setAppToRunningMode(value: boolean, includeMenus: boolean = true): void {
-    // this.signal.enable(value)
-    // this.screen.setKeepScreenOn(value);
-    // this.screen.showStatusBar(!value);
+    this.signalSvc.enable(value);
+    this.screenSvc.setScreenToRunningMode(value);
 
     if (includeMenus) {
-      ['start', 'end'].forEach((id) => {
-        this.menuCtrl.enable((value === false), id);
-      });
+      this.menuCtrl.enable(value === false, 'start');
+      this.menuCtrl.enable(value === false, 'end');
     }
   }
 

@@ -15,14 +15,16 @@ export interface AppStorageData extends UUIDData {
   vibrate: boolean;
 
   /**
-   * Possible values is anything between these three members [-1, 0, 1]. A negative number indicates
-   * these "remember volume" is disabled, while a positive number indicates that its enabled. A
+   * Possible values is anything between these three members [-15, 0, 15]. A negative number indicates
+   * the "remember volume" is disabled, while a positive number indicates that its enabled. A
    * value of 0 indicates that sound is disabled.
+   *
+   * Default value is -5; which means this sound is enabled but the "remember volume" is disabled.
    */
-  sound: number;
+  sound: VolumeSet;
 
   /**
-   *  Default value is '-50'; which means by default this feature is disabled.
+   * Default value is '-50'; which means the "remember brightness" feature is disabled.
    */
   brightness: BrightnessSet;
 
@@ -71,6 +73,9 @@ export interface TimerStorageData extends StopwatchStorageData {
   time: number;
   warnings: CountdownWarnings;
 }
+
+// tslint:disable-next-line:max-line-length
+export type VolumeSet = -15 | -14 | -13 | -12 | -11 | -10 | -9 | -8 | -7 | -6 | -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15;
 
 export type BrightnessSet = -100 | -90 | -80 | -70 | -60 | -50 | -40 | -30 | -20 | -10 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
 
