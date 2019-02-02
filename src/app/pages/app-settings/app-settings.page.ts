@@ -44,8 +44,8 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     protected storage: AITStorage
   ) { }
 
-  ngOnInit() {
-    const getSubject = async () => {
+  ngOnInit(): void {
+    const getSubject = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
           this.appSubjt = value;
@@ -65,10 +65,10 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this.menuCtrl.enable(true, 'end');
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
   }
 
-  private subscribe() {
+  private subscribe(): void {
     const appSubsn = this.appSubjt.subscribe((value) => {
       this.data = value;
     });
@@ -79,7 +79,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this.soundRememberToggleWillEnter = this.data.sound > 0;
   }
 
-  private next() {
+  private next(): void {
     this.appSubjt.next(this.data);
   }
   /**

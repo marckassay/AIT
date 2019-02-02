@@ -28,14 +28,14 @@ export class AudioManagementMock {
 
     setAudioMode(mode: AudioManagement.AudioMode): Promise<void> {
         this.data.currentAudioMode = mode;
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject): void => {
             console.log('[AudioManagementMock]', 'audio mode has been set:', mode);
             resolve();
         });
     }
 
     getAudioMode(): Promise<AudioManagement.AudioModeReturn> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject): void => {
             const results = { audioMode: this.data.currentAudioMode, label: AudioManagement.AudioMode[this.data.currentAudioMode] };
             console.log('[AudioManagementMock]', 'audio mode is:', results);
             resolve(results);
@@ -44,14 +44,14 @@ export class AudioManagementMock {
 
     setVolume(type: AudioManagement.VolumeType, volume: number): Promise<void> {
         this.data[this.volTypeToField(type)] = volume;
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject): void => {
             console.log('[AudioManagementMock]', this.volTypeToField(type), 'volume type has been set to:', volume);
             resolve();
         });
     }
 
     getVolume(type: AudioManagement.VolumeType): Promise<{ volume: number }> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject): void => {
             const field = this.volTypeToField(type);
             const val = this.data[field];
             console.log('[AudioManagementMock]', 'volume for', field, 'is:', val);
@@ -60,7 +60,7 @@ export class AudioManagementMock {
     }
 
     getMaxVolume(type: AudioManagement.VolumeType): Promise<{ maxVolume: number }> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject): void => {
             const field = this.volTypeToField(type, true);
             const val = this.data[field];
             console.log('[AudioManagementMock]', 'max volume for', field, 'is:', val);

@@ -77,7 +77,7 @@ export class DisplayPage implements OnInit {
     @Optional() protected menuSvc: SideMenuService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sots = new SotsForAit();
     this.route.data.subscribe((data: { subject: BehaviorSubject<UUIDData> }) => {
       this.subject = data.subject;
@@ -160,7 +160,7 @@ export class DisplayPage implements OnInit {
    * method is now done subcribing.
    */
   private attachSettingsAndCheckHome(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject): void => {
       // subscribe to menu service
       const menuSubscription = this.menuSvc.subscribe((note) => {
         if ((note as SideMenuResponse).response !== undefined) {

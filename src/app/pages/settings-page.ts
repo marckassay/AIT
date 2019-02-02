@@ -53,8 +53,8 @@ export class SettingsPage implements AfterContentInit {
     @Optional() @SkipSelf() protected menuCtrl: MenuController,
     @Optional() @SkipSelf() protected toastCtrl: ToastController) { }
 
-  ngAfterContentInit() {
-    const getSubjects = async () => {
+  ngAfterContentInit(): void {
+    const getSubjects = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
           this._appSubject = value;
@@ -70,7 +70,7 @@ export class SettingsPage implements AfterContentInit {
     getSubjects();
   }
 
-  private subscribe() {
+  private subscribe(): void {
     this._appSubject.subscribe((value) => {
       this.appSoundsDisabled = value.sound === 0;
       this.appVibratorDisabled = !value.vibrate;
@@ -81,7 +81,7 @@ export class SettingsPage implements AfterContentInit {
     });
 
     this.menuCtrl.get('end').then((element) => {
-      const menuClosed = () => {
+      const menuClosed = (): void => {
         console.log('end has closed');
         this._pageSubject.next(this._uuidData);
         this._pageSubject.unsubscribe();

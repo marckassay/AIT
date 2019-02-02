@@ -176,7 +176,7 @@ export class AITStorage implements OnInit {
       .catch((reason: any) => {
         console.error(reason);
         this.status = 'off';
-        return new Promise<boolean>((resolve, reject) => { resolve(false); });
+        return new Promise<boolean>((resolve, reject): void => { resolve(false); });
       });
   }
 }

@@ -26,7 +26,7 @@ export class IntervalSettingsPage extends SettingsPage {
     }
   }
 
-  private setComputedFactorValue() {
+  private setComputedFactorValue(): void {
     if (this.data) {
       // For 'x1' factor mode, are '1' and '10' for 'lower and 'upper' limits respectively
       // For 'x10' factor mode, are '0' and '100' for 'lower and 'upper' limits respectively

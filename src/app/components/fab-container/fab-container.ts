@@ -50,7 +50,7 @@ export class FabContainerComponent {
 
   constructor(protected ngDectector: ChangeDetectorRef) { }
 
-  actionRequest(action: FabAction, fabMenu: IonFab) {
+  actionRequest(action: FabAction, fabMenu: IonFab): void {
     if (action === FabAction.Start) {
       // if action is Start, which exists in the Ready and Paused state, set the state to 'Running'
       this.setToRunningMode();
@@ -129,23 +129,23 @@ export class FabContainerComponent {
   /*
   The following 'isX' properties are for the template to evaluate what buttons are to be shown.
   */
-  public get isStartVisible() {
+  public get isStartVisible(): boolean {
     return ((this.viewState & FabState.Ready) > 0 || (this.viewState & FabState.Paused) > 0);
   }
 
-  public get isPauseVisible() {
+  public get isPauseVisible(): boolean {
     return (this.viewState & FabState.Running) > 0;
   }
 
-  public get isResetVisible() {
+  public get isResetVisible(): boolean {
     return ((this.viewState & FabState.Paused) > 0 || (this.viewState & FabState.Completed) > 0);
   }
 
-  public get isProgramVisible() {
+  public get isProgramVisible(): boolean {
     return (this.viewState & FabState.ProgramVisible) > 0;
   }
 
-  public get isHomeVisible() {
+  public get isHomeVisible(): boolean {
     return (this.viewState & FabState.HomeVisible) > 0;
   }
 }

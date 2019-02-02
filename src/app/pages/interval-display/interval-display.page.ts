@@ -18,7 +18,7 @@ export class IntervalDisplayPage extends DisplayPage {
 
   protected _remainingIntervalTime: number;
   @Input()
-  get remainingIntervalTime() {
+  get remainingIntervalTime(): number {
     return this._remainingIntervalTime;
   }
   set remainingIntervalTime(value: number) {
@@ -27,13 +27,13 @@ export class IntervalDisplayPage extends DisplayPage {
 
   currentInterval: number;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.settingsPageClass = IntervalSettingsPage;
 
     super.ngOnInit();
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter(): void {
     this.sots.build(this.uuidData.countdown,
       this.uuidData.warnings,
       this.uuidData.intervals,
@@ -43,7 +43,7 @@ export class IntervalDisplayPage extends DisplayPage {
     this.grandTime = this.sots.getGrandTime({ time: -1 });
   }
 
-  ionViewDidEnter() {
+  ionViewDidEnter(): void {
     this.aitSubscribeTimer();
 
     super.ionViewDidEnter();

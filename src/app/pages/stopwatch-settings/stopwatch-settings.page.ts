@@ -9,7 +9,7 @@ export class StopwatchSettingsPage implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }

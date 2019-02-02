@@ -55,7 +55,7 @@ export class ScreenService {
    * @param value Any positive number enables ait's brightness feature, while any negative number
    *              disables it.
    */
-  storeBrightnessOffset() {
+  storeBrightnessOffset(): void {
 
     /*     const store = this.storage.getPagePromiseAndSubject2<AppStorageData>(StorageDefaultData.APP_ID, true);
 

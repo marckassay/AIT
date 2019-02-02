@@ -9,7 +9,7 @@ export class TimerSettingsPage implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }

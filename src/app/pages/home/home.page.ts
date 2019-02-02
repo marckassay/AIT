@@ -14,10 +14,10 @@ export class HomePage implements OnInit {
     private router: Router,
     private menuCtrl: MenuController) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch') {
+  routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch'): void {
     const request = AppUtils.getPageRouteByName(name);
 
     this.menuCtrl.close('start').then(() => {

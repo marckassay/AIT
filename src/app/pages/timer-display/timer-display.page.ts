@@ -9,6 +9,6 @@ export class TimerDisplayPage implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 }

@@ -114,40 +114,40 @@ export class SignalService {
     }
   }
 
-  single() {
+  single(): void {
     if (this.data.sound !== 0) { this.singleBeep(); }
     if (this.data.vibrate) { this.singleVibrate(); }
   }
 
-  double() {
+  double(): void {
     if (this.data.sound !== 0) { this.tripleBeep(); }
     if (this.data.vibrate) { this.doubleVibrate(); }
   }
 
-  triple() {
+  triple(): void {
     if (this.data.sound !== 0) { this.completeBeep(); }
     if (this.data.vibrate) { this.tripleVibrate(); }
   }
 
-  private singleVibrate() {
+  private singleVibrate(): void {
     this.vibration.vibrate(500);
   }
 
-  private doubleVibrate() {
+  private doubleVibrate(): void {
     this.vibration.vibrate([500, 500, 500]);
   }
 
-  private tripleVibrate() {
+  private tripleVibrate(): void {
     this.vibration.vibrate([1000, 500, 1000]);
   }
 
-  private singleBeep() {
+  private singleBeep(): void {
     /*  this.sound_1.stop();
         this.sound_1.rate(1.0);
         this.sound_1.play(); */
   }
 
-  private tripleBeep() {
+  private tripleBeep(): void {
     /*     marcmod.getAudioMode((result) => {
           console.log("MUSIC VOL" + result);
         }); */
@@ -166,7 +166,7 @@ export class SignalService {
         }, 250); */
   }
 
-  private completeBeep() {
+  private completeBeep(): void {
     /*     let interval = 0;
         let intervalId = setInterval(() => {
           this.sound_1.stop();
