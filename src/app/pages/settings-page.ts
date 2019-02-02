@@ -85,10 +85,9 @@ export class SettingsPage implements AfterContentInit {
 
     this.menuCtrl.get('end').then((element) => {
       const menuClosed = (): void => {
-        console.log('end has closed');
         this._pageSubject.next(this._uuidData);
-        this._pageSubject.unsubscribe();
-        this._appSubject.unsubscribe();
+        // this._pageSubject.unsubscribe();
+        // this._appSubject.unsubscribe();
         element.removeEventListener('ionDidClose', menuClosed);
       };
 

@@ -110,7 +110,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
         */
         this.theme = theme;
-        console.log('theme is now:', this.theme);
       }
     });
   }

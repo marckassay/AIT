@@ -53,7 +53,6 @@ export class IntervalDisplayPage extends DisplayPage {
     this.sots.subscribe({
       next: (value: TimeEmission): void => {
         this.grandTime = this.sots.getGrandTime(value);
-        console.log(this.grandTime);
         if (value.interval) {
           this.currentInterval = value.interval.current;
           this.activeRestRenderer.time = Math.ceil(value.time);
@@ -67,7 +66,6 @@ export class IntervalDisplayPage extends DisplayPage {
           // tslint:disable-next-line:no-bitwise
           valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
           this.timerState = valueNoAudiable;
-          // console.log(this.activeRestRenderer.time + ': ' + value.state + '<->' + valueNoAudiable);
 
           // ...now take care of audiable states...
           if (value.state.valueOf(SequenceStates.SingleBeep)) {

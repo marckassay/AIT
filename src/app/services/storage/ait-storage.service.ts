@@ -95,7 +95,6 @@ export class AITStorage implements OnInit {
     }
 
     this.subscription = this.observable.subscribe((val) => {
-      console.log('ait-storage', val);
       this.setData(val);
     });
 
@@ -147,10 +146,8 @@ export class AITStorage implements OnInit {
     return this.storage.ready()
       .then((value: LocalForage): Promise<AppStorageData> => {
         if (value) {
-          console.log('Storage is getting data from disk.');
           return this.storage.get(StorageDefaultData.APP_ID) as Promise<AppStorageData>;
         } else {
-          console.log('Storage can\'t boot-up!');
           // TODO: need to handle this downstream...
           return Promise.reject(new Error('sum ting wong'));
         }

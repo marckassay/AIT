@@ -46,7 +46,7 @@ import { AITStorage } from './services/storage/ait-storage.service';
     SplashScreen,
     StatusBar,
     ScreenService,
-    { provide: AudioManagement, useClass: AudioManagementMock },
+    { provide: AudioManagement, useClass: AudioManagement },
     SignalService,
     MenuController,
     IonicStorageModule,

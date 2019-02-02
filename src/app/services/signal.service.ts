@@ -85,7 +85,6 @@ export class SignalService {
           if (this.volumePriorToChange !== this.data.sound) {
             this.audio.setVolume(AudioManagement.VolumeType.MUSIC, this.data.sound)
               .then(() => {
-                console.log('AudioManagement restored Music volume to previous session value.');
                 return Promise.resolve();
               });
           } else {
@@ -157,7 +156,6 @@ export class SignalService {
 
   private tripleBeep(): void {
     /*     marcmod.getAudioMode((result) => {
-          console.log("MUSIC VOL" + result);
         }); */
     /*     let interval = 0;
         let intervalId = setInterval(() => {
