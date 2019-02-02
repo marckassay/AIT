@@ -7,10 +7,10 @@ import { AudioManagementMock } from '../mocks/audiomanagement.mock';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData } from './storage/ait-storage.shapes';
 
-@Injectable()
 /**
  * References audio and vibrate features of the device.
  */
+@Injectable()
 export class SignalService {
   audioModePriorToChange: number | undefined;
   volumePriorToChange: number | undefined;
@@ -23,14 +23,20 @@ export class SignalService {
     this._data = value;
   }
 
-  audio: AudioManagement;
+  private _audio: AudioManagement;
+  public get audio(): AudioManagement {
+    return this._audio;
+  }
+  public set audio(value: AudioManagement) {
+    this._audio = value;
+  }
 
-  constructor(public vibration: Vibration,
-    public storage: AITStorage) {
+  constructor(private vibration: Vibration,
+    private storage: AITStorage) {
     // since AudioManagement is a dependency for this service, dont simply inject it. Instead
     // instaniate and mutate `audio` instance
     this.audio = new AudioManagementMock() as AudioManagement;
-    (this.audio as any).storage = storage;
+    (this.audio as any).storage = this.storage;
   }
 
   /**

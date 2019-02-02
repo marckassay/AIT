@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -10,14 +8,14 @@ import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { SideMenuRequest, SideMenuService } from './components/side-menu/side-menu.service';
 import { HomePage } from './pages/home/home.page';
+import { ScreenService } from './services/screen.service';
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
 import { AITStorage } from './services/storage/ait-storage.service';
 import { AppStorageData } from './services/storage/ait-storage.shapes';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('startMenu')
@@ -27,17 +25,16 @@ export class AppComponent implements OnInit, AfterViewInit {
   endMenu: SideMenuComponent;
 
   /**
-   * The css app theme that `themer` provides via Observable
+   * The css app theme that `this.watchTheme()` provides updates
    */
   theme: string;
 
   constructor(
     private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
     private router: Router,
     private componentFactoryResolver: ComponentFactoryResolver,
     private storage: AITStorage,
+    private screenSvc: ScreenService,
     private menuSvc: SideMenuService
   ) { }
 
@@ -73,18 +70,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     await this.platform.ready()
       .then(async () => {
         const appsubject = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
+
         let startroute: string[];
         appsubject.subscribe((appdata) => {
           startroute = AppUtils.convertToStartupRoute(appdata);
         });
         this.watchTheme(appsubject);
 
-        this.statusBar.styleDefault();
-
         return this.router.navigate(startroute)
           .then((value) => {
             if (value) {
-              this.splashScreen.hide();
+              this.screenSvc.initScreen();
             }
           });
       });

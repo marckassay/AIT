@@ -15,9 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { from, BehaviorSubject, Observable } from 'rxjs';
+import { from, merge, BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
 import { AppUtils } from 'src/app/app.utils';
 
 import { StorageDefaultData } from './ait-storage.defaultdata';
@@ -31,13 +32,19 @@ export interface CacheSubject<T extends UUIDData> {
 @Injectable({
   providedIn: 'root'
 })
-export class AITStorage {
+export class AITStorage implements OnInit {
   private status: 'off' | 'booting' | 'on';
-  private preOpPromise: Promise<boolean>;
+  private observable: Observable<UUIDData>;
+  private subscription: Subscription;
   private subjects: Array<CacheSubject<any>>;
+
   constructor(private storage: Storage) {
     this.status = 'off';
     this.subjects = [];
+  }
+
+  ngOnInit(): void {
+
   }
 
   /**
@@ -61,13 +68,42 @@ export class AITStorage {
 
     if (entry === undefined) {
       return await this.getPagePromise<T>(uuid).then((value) => {
-        const subject = new BehaviorSubject(value);
-        this.subjects.push({ uuid: uuid, subject: subject });
-        return subject;
+        return this.registerSubject(uuid, value);
       });
     } else {
       return Promise.resolve(entry.subject);
     }
+  }
+
+  private registerSubject<T extends UUIDData>(uuid: string, value: T): BehaviorSubject<T> {
+    const subject = new BehaviorSubject<T>(value);
+    this.subjects.push({ uuid: uuid, subject: subject });
+
+    if (this.observable !== undefined) {
+      this.subscription.unsubscribe();
+      this.observable = merge(this.observable, subject).pipe(
+        skip(1),
+        // debounceTime(5000),
+        //  distinctUntilChanged()
+      );
+    } else {
+      this.observable = subject.asObservable().pipe(
+        skip(1),
+        // debounceTime(5000),
+        //   distinctUntilChanged()
+      );
+    }
+
+    this.subscription = this.observable.subscribe((val) => {
+      console.log('ait-storage', val);
+      this.setData(val);
+    });
+
+    return subject;
+  }
+
+  private async setData(value: UUIDData): Promise<void> {
+    return await this.storage.set(value.uuid, value);
   }
 
   /**
@@ -94,15 +130,12 @@ export class AITStorage {
   /**
    * Ensures that storage is in its "on" state.
    */
-  private isReady(): Promise<boolean> {
+  private async isReady(): Promise<boolean> {
     if (this.status === 'on') {
       return Promise.resolve(true);
-    } else {
-      if (this.status === 'off') {
-        this.status = 'booting';
-        this.preOpPromise = this.preOperationCheck();
-      }
-      return this.preOpPromise;
+    } else if (this.status === 'off') {
+      this.status = 'booting';
+      return await this.preOperationCheck();
     }
   }
 

@@ -79,6 +79,18 @@ export class SettingsPage implements AfterContentInit {
     this._pageSubject.subscribe((value) => {
       this._uuidData = value;
     });
+
+    this.menuCtrl.get('end').then((element) => {
+      const menuClosed = () => {
+        console.log('end has closed');
+        this._pageSubject.next(this._uuidData);
+        this._pageSubject.unsubscribe();
+        this._appSubject.unsubscribe();
+        element.removeEventListener('ionDidClose', menuClosed);
+      };
+
+      element.addEventListener('ionDidClose', menuClosed);
+    });
   }
 
   async inform(): Promise<void> {

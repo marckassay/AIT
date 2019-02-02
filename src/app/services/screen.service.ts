@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Brightness } from '@ionic-native/brightness/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AITStorage } from './storage/ait-storage.service';
@@ -44,6 +45,7 @@ export class ScreenService {
     private brightness: Brightness,
     private orientation: ScreenOrientation,
     private statusBar: StatusBar,
+    private splash: SplashScreen,
     private storage: AITStorage) { }
 
   /**
@@ -108,5 +110,10 @@ export class ScreenService {
 
   showStatusBar(value: boolean): void {
     (value) ? this.statusBar.hide() : this.statusBar.show();
+  }
+
+  initScreen(): void {
+    this.statusBar.styleDefault();
+    this.splash.hide();
   }
 }

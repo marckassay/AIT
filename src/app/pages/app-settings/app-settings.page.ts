@@ -24,6 +24,9 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this._data = value;
   }
 
+  protected BT = BaseTheme;
+  protected AT = AccentTheme;
+
   absoluteBrightnessValue: BrightnessSet;
   soundToggleWillEnter: boolean;
   soundRememberToggleWillEnter: boolean;
@@ -36,8 +39,8 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected changeRef: ChangeDetectorRef,
     protected menuCtrl: MenuController,
-    protected signal: SignalService,
-    protected screen: ScreenService,
+    protected signalSvc: SignalService,
+    protected screenSvc: ScreenService,
     protected storage: AITStorage
   ) { }
 
@@ -68,27 +71,33 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   private subscribe() {
     const appSubsn = this.appSubjt.subscribe((value) => {
       this.data = value;
-      this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
-      this.soundToggleWillEnter = (this.data.sound !== 0);
-      this.soundRememberToggleWillEnter = this.data.sound > 0;
     });
     appSubsn.unsubscribe();
+
+    this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
+    this.soundToggleWillEnter = (this.data.sound !== 0);
+    this.soundRememberToggleWillEnter = this.data.sound > 0;
   }
 
+  private next() {
+    this.appSubjt.next(this.data);
+  }
   /**
    * The 'sound' toggle handler.
    */
   toggleSound(): void {
     if (this.data.sound === 0) {
-      this.signal.audio.setAudioMode(AudioManagement.AudioMode.NORMAL)
+      this.signalSvc.audio.setAudioMode(AudioManagement.AudioMode.NORMAL)
         .then(() => {
           // now that sound has bee enabled, retrieve value for value. although this may be a
           // negative value, its of no consequence of for this `toggleSound()`.
-          this.signal.audio.getVolume(AudioManagement.VolumeType.MUSIC)
+          this.signalSvc.audio.getVolume(AudioManagement.VolumeType.MUSIC)
             .then((result) => { this.data.sound = result.volume; });
+          this.next();
         });
     } else if (Math.abs(this.data.sound) > 0) {
       this.data.sound = 0;
+      this.next();
     }
   }
 
@@ -97,10 +106,10 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    * when: `Math.abs(this.data.sound) > 0`.
    */
   testVolume(): void {
-    this.signal.audio.getVolume(AudioManagement.VolumeType.MUSIC)
+    this.signalSvc.audio.getVolume(AudioManagement.VolumeType.MUSIC)
       .then((result) => {
         this.data.sound = result.volume;
-        this.signal.double();
+        this.signalSvc.double();
       });
   }
 
@@ -113,6 +122,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   toggleRememberVolume(): void {
     if (this.data.sound !== 0) {
       this.data.sound = (this.data.sound * -1);
+      this.next();
     }
   }
 
@@ -121,21 +131,25 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   toggleRememberBrightness(): void {
     this.data.brightness = BrightnessUtil.reverseSign(this.data.brightness);
+    this.next();
   }
 
   /**
   * The range UI for 'remember device brightness' toggle.
   */
-  brightnessChanged(event: any): void {
+  brightnessChanged(event: CustomEvent): void {
     // TODO: async to change device brightness momentarily
-    this.data.brightness = (event.value as BrightnessSet);
+    this.data.brightness = (event.detail.value as BrightnessSet);
+    this.next();
   }
 
   toggleBaseTheme(value: BaseTheme): void {
     this.data.base = value;
+    this.next();
   }
 
   toggleAccentTheme(value: AccentTheme): void {
     this.data.accent = value;
+    this.next();
   }
 }
