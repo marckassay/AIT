@@ -11,7 +11,7 @@
   <ion-list>
 
     <ion-item>
-      <ion-toggle [(ngModel)]="data.vibrate" [checked]="data.vibrate" (ionChange)="toggleVibrate()"></ion-toggle>
+      <ion-toggle [(ngModel)]="data.vibrate" [checked]="data.vibrate"></ion-toggle>
       <ion-label>vibrate</ion-label>
     </ion-item>
 
@@ -66,6 +66,23 @@
       <ion-item>
         <ion-label>Cool Grey</ion-label>
         <ion-radio checked="{{data.accent == 2}}" (ionSelect)="toggleAccentTheme(AT.CoolGrey)"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+  <ion-list>
+    <ion-radio-group>
+      <ion-item-divider>SCREEN ORIENTATION</ion-item-divider>
+      <ion-item>
+        <ion-label>Use current</ion-label>
+        <ion-radio checked="{{data.orientation == 0}}" value="0" (ionSelect)="toggleOrientation($event)"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>portrait</ion-label>
+        <ion-radio checked="{{data.orientation == 1}}" value="1" (ionSelect)="toggleOrientation($event)"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>landscape</ion-label>
+        <ion-radio checked="{{data.orientation == 2}}" value="2" (ionSelect)="toggleOrientation($event)"></ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>

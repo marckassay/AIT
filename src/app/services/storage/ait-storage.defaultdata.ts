@@ -14,7 +14,8 @@ export class StorageDefaultData {
     sound: -10,
     brightness: -50,
     base: 0,
-    accent: 0
+    accent: 0,
+    orientation: 0
   };
 
   public static readonly INTERVAL_DATA: IntervalStorageData = {

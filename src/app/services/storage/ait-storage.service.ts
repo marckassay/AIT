@@ -113,17 +113,18 @@ export class AITStorage implements OnInit {
    * @param uuid the key to storage record
    */
   private async getPagePromise<T extends UUIDData>(uuid: string): Promise<T> {
-    return await this.isReady().then(async () => {
-      const value = await this.storage.get(uuid);
-      if (value) {
-        return value;
-      } else {
-        const defaultpage = AppUtils.getPageDataByID(uuid);
-        return await this.storage.set(uuid, defaultpage).then(() => {
-          return defaultpage;
-        });
-      }
-    });
+    const results = await this.isReady()
+      .then(async (): Promise<T> => {
+        const value = await this.storage.get(uuid);
+        if (value) {
+          return value;
+        } else {
+          const defaultpage = AppUtils.getPageDataByID(uuid);
+          await this.storage.set(uuid, defaultpage);
+          return defaultpage as T;
+        }
+      });
+    return results;
   }
 
   /**
@@ -144,36 +145,32 @@ export class AITStorage implements OnInit {
    */
   private preOperationCheck(): Promise<boolean> {
     return this.storage.ready()
-      .then((value: LocalForage): Promise<AppStorageData> => {
+      .then(async (value: LocalForage): Promise<AppStorageData> => {
         if (value) {
-          return this.storage.get(StorageDefaultData.APP_ID) as Promise<AppStorageData>;
+          return await this.storage.get(StorageDefaultData.APP_ID) as Promise<AppStorageData>;
         } else {
-          // TODO: need to handle this downstream...
-          return Promise.reject(new Error('sum ting wong'));
+          return Promise.reject(new Error('LOCAL_STORAGE'));
         }
       })
-      .then((val: AppStorageData | undefined | null): Promise<boolean> => {
-        // if in 'booting' routine, set status to 'on' since
-        // the following set() will call preOperationCheck()...
+      .then(async (val: AppStorageData | undefined | null): Promise<boolean> => {
+
         if (this.status === 'booting') {
           this.status = 'on';
         }
 
         if (!val) {
           const appdata: UUIDData = AppUtils.getPageDataByID(StorageDefaultData.APP_ID);
-          return this.storage.set(appdata.uuid, appdata);
-          // TODO: cache appdata on startup
-          /* .then((): Promise<boolean> => {
-            return this.subjects.push({ uuid: appdata.uuid, subject: subject });
-          }); */
-        } else {
-          Promise.resolve(true);
+          await this.storage.set(appdata.uuid, appdata);
+          const subject = new BehaviorSubject<UUIDData>(appdata);
+          this.subjects.push({ uuid: appdata.uuid, subject: subject });
         }
+
+        return Promise.resolve(true);
       })
       .catch((reason: any) => {
         console.error(reason);
         this.status = 'off';
-        return new Promise<boolean>((resolve, reject): void => { resolve(false); });
+        return Promise.reject('LOCAL_STORAGE_FAILED');
       });
   }
 }

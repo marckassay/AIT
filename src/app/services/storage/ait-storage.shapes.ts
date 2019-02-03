@@ -37,6 +37,8 @@ export interface AppStorageData extends UUIDData {
    * Cool Grey, RGB and Y, monokai
    */
   accent: number;
+
+  orientation: OrientationSetting;
 }
 
 export interface CountdownWarnings {
@@ -88,6 +90,12 @@ export enum AccentTheme {
 export enum BaseTheme {
   Dark,
   Light
+}
+
+export enum OrientationSetting {
+  Current,
+  Portrait,
+  Landscape
 }
 
 export interface AudioModeShape {

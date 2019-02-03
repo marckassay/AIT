@@ -30,7 +30,9 @@ export class SideMenuComponent implements OnInit {
             const results = this.menu.createComponent(note.component);
             (results.instance as any).uuid = note.uuid;
             this.loadedUuid = note.uuid;
-
+            // TODO: determine if `result.instance` has completed its life-cycle for initiation. it
+            // may have but I can't tell from docs at this point. If it isn't initiated, this
+            // `subject.next` should then be called with `result.instance`
             this.subject.next({
               subject: this.id,
               uuid: this.loadedUuid,
@@ -43,7 +45,6 @@ export class SideMenuComponent implements OnInit {
               uuid: this.loadedUuid,
               response: this.isComponentLoaded(note.uuid) ? 'loaded' : 'unloaded'
             });
-
           }
         }
       }

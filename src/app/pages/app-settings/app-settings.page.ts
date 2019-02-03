@@ -7,7 +7,8 @@ import { BrightnessUtil, ScreenService } from 'src/app/services/screen.service';
 import { SignalService } from 'src/app/services/signal.service';
 import { StorageDefaultData } from 'src/app/services/storage/ait-storage.defaultdata';
 import { AITStorage } from 'src/app/services/storage/ait-storage.service';
-import { AccentTheme, AppStorageData, BaseTheme, BrightnessSet, VolumeSet } from 'src/app/services/storage/ait-storage.shapes';
+// tslint:disable-next-line:max-line-length
+import { AccentTheme, AppStorageData, BaseTheme, BrightnessSet, OrientationSetting, VolumeSet } from 'src/app/services/storage/ait-storage.shapes';
 
 @Component({
   selector: 'app-settings',
@@ -29,6 +30,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   protected BT = BaseTheme;
   protected AT = AccentTheme;
+  protected OR = OrientationSetting;
 
   /**
    * since the 'remember device volume' toggle can be disabled and checked simultaneously or enabled and unchecked,
@@ -77,6 +79,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.next();
   }
 
   private subscribe(): void {
@@ -93,20 +96,16 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this.appSubjt.next(this.data);
   }
 
-  toggleVibrate(): void {
-    this.next();
-  }
-
   /**
    * The 'sound' toggle handler.
    */
   toggleSound(): void {
     if (this.data.sound === 0) {
-      this.signalSvc.audio.setAudioMode(AudioManagement.AudioMode.NORMAL)
+      this.signalSvc.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL)
         .then(() => {
           // now that sound has bee enabled, retrieve value for value. although this may be a
           // negative value, its of no consequence of for this `toggleSound()`.
-          this.signalSvc.audio.getVolume(AudioManagement.VolumeType.MUSIC)
+          this.signalSvc.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
             .then((result) => {
               this.data.sound = result.volume as VolumeSet;
             });
@@ -123,7 +122,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    * when: `Math.abs(this.data.sound) > 0`.
    */
   testVolume(): void {
-    this.signalSvc.audio.getVolume(AudioManagement.VolumeType.MUSIC)
+    this.signalSvc.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
       .then((result) => {
         this.data.sound = result.volume as VolumeSet;
         this.signalSvc.double();
@@ -146,7 +145,6 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   toggleRememberBrightness(): void {
     this.data.brightness = BrightnessUtil.reverseSign(this.data.brightness);
-    this.next();
   }
 
   /**
@@ -155,7 +153,6 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   rangeBrightnessValue(event: CustomEvent): void {
     // TODO: async to change device brightness momentarily
     this.data.brightness = (event.detail.value as BrightnessSet);
-    this.next();
   }
 
   toggleBaseTheme(value: BaseTheme): void {
@@ -166,5 +163,9 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   toggleAccentTheme(value: AccentTheme): void {
     this.data.accent = value;
     this.next();
+  }
+
+  toggleOrientation(event: CustomEvent): void {
+    this.data.orientation = +(event.detail.value) as OrientationSetting;
   }
 }

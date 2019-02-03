@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { Brightness } from '@ionic-native/brightness/ngx';
+import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -42,7 +44,9 @@ import { AITStorage } from './services/storage/ait-storage.service';
     AITStorage,
     Brightness,
     Vibration,
+    NativeAudio,
     ScreenOrientation,
+    AndroidFullScreen,
     SplashScreen,
     StatusBar,
     ScreenService,

@@ -2,11 +2,11 @@ import { AfterViewInit, Component, ComponentFactoryResolver, OnInit, ViewChild }
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, skip } from 'rxjs/operators';
 
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
-import { SideMenuRequest, SideMenuService } from './components/side-menu/side-menu.service';
+import { SideMenuRequest, SideMenuResponse, SideMenuService } from './components/side-menu/side-menu.service';
 import { HomePage } from './pages/home/home.page';
 import { ScreenService } from './services/screen.service';
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
@@ -39,17 +39,16 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this.subscribeMenuService();
     this.initializeApp();
   }
 
   ngAfterViewInit(): void {
-
+    this.subscribeMenuService();
   }
 
   private subscribeMenuService(): void {
     this.menuSvc.subscribe((note) => {
-      if (note as SideMenuRequest) {
+      if ('request' in note) {
         note = note as SideMenuRequest;
         // if received a note on start menu's status, be nice and respond with a response. And
         // immediately followed by a request to load start menu if status is 'unloaded'.
@@ -62,55 +61,62 @@ export class AppComponent implements OnInit, AfterViewInit {
             this.menuSvc.next({ subject: 'start', uuid: StorageDefaultData.HOME_ID, request: 'load', component: resolvedComponent });
           }
         }
+      } else if ('response' in note) {
+        note = note as SideMenuResponse;
+
+        // post app start-up; after start and end sidemenus have been loaded
+        if ((note.subject === 'start') && (note.response === 'loaded')) {
+          this.screenSvc.hideSplashScreen();
+          this.platform.resume.subscribe(() => {
+            // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
+            // running state when they set ait to the device's background and then returns. At that point
+            // this may be called.
+            // this.brightness.applyBrightnessOffset();
+          });
+        }
       }
     });
   }
 
-  async initializeApp(): Promise<void> {
-    await this.platform.ready()
+  private initializeApp(): void {
+    this.platform.ready()
       .then(async () => {
         const appsubject = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
 
         let startroute: string[];
         appsubject.subscribe((appdata) => {
+          this.applyTheme(appdata);
           startroute = AppUtils.convertToStartupRoute(appdata);
         });
         this.watchTheme(appsubject);
 
-        return this.router.navigate(startroute)
-          .then((value) => {
-            if (value) {
-              this.screenSvc.initScreen();
-            }
-          });
+        this.router.navigate(startroute);
       });
-
-    this.platform.resume.subscribe(() => {
-      // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
-      // running state when they set ait to the device's background and then returns. At that point
-      // this may be called.
-      // this.brightness.applyBrightnessOffset();
-    });
   }
 
   private watchTheme(data: BehaviorSubject<AppStorageData>): void {
     data.pipe(
+      skip(1),
       debounceTime(1000)
     ).subscribe((value) => {
-      // TODO: I attempted to subscribe with distinctUntilChanged() but that failed, hence
-      // comparison below
-      const theme = AppUtils.getCombinedTheme(value);
-      if (theme !== this.theme) {
-        // TODO: look into css vars on changing at runtime
-        /*
-        if (theme.startsWith('theme-dark')) {
-          this.theme = '.dark';
-        } else {
-          this.theme = '.light';
-        }
-        */
-        this.theme = theme;
-      }
+      this.applyTheme(value);
     });
+  }
+
+  private applyTheme(value: AppStorageData): void {
+    // TODO: I attempted to subscribe with distinctUntilChanged() but that failed, hence
+    // comparison below
+    const theme = AppUtils.getCombinedTheme(value);
+    if (theme !== this.theme) {
+      // TODO: look into css vars on changing at runtime
+      /*
+      if (theme.startsWith('theme-dark')) {
+        this.theme = '.dark';
+      } else {
+        this.theme = '.light';
+      }
+      */
+      this.theme = theme;
+    }
   }
 }

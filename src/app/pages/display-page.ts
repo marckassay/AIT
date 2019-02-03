@@ -136,7 +136,7 @@ export class DisplayPage implements OnInit {
    */
   protected async setAppToRunningMode(value: boolean, includeMenus: boolean = true): Promise<void> {
 
-    await this.signalSvc.enable(value)
+    await this.signalSvc.enablePreferredVolume(value)
       .then(() => {
         this.screenSvc.setScreenToRunningMode(value);
 
@@ -148,8 +148,8 @@ export class DisplayPage implements OnInit {
       .catch((reason) => {
         if (reason === 'DO_NOT_DISTURB') {
           this.sots.sequencer.pause();
-          this.setAppToRunningMode(false);
           this.floatingbuttons.setToPausedMode();
+          this.setAppToRunningMode(false);
         }
       });
   }

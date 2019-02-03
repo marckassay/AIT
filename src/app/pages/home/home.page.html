@@ -43,7 +43,7 @@
           </ion-item>
         </ion-col>
         <ion-col>
-          <ion-item [routerLink]="['/timer']">
+          <ion-item (click)="routeTo('timer')">
             <div class="icon-countdown-timer icon">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24"
                 height="24" viewBox="0 0 24 24">
@@ -55,7 +55,7 @@
       </ion-row>
       <ion-row align-items-center justify-content-center>
         <ion-col>
-          <ion-item [routerLink]="['/stopwatch']">
+          <ion-item (click)="routeTo('stopwatch')">
             <div class="icon-stopwatch icon">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24"
                 height="24" viewBox="0 0 24 24">
@@ -65,7 +65,7 @@
           </ion-item>
         </ion-col>
         <ion-col>
-          <ion-item [routerLink]="['/settings']">
+          <ion-item (click)="routeTo('settings')">
             <div class="icon-settings icon">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24"
                 height="24" viewBox="0 0 24 24">
@@ -77,27 +77,3 @@
     </ion-grid>
   </ion-list>
 </ion-content>
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>home</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-list>
-    <ion-item [routerLink]="['/interval']">
-      <ion-label>
-        INTERVAL
-      </ion-label>
-    </ion-item>
-    <ion-item [routerLink]="['/timer']">
-      TIMER
-    </ion-item>
-    <ion-item [routerLink]="['/stopwatch']">
-      STOPWATCH
-    </ion-item>
-    <ion-item [routerLink]="['/settings']">
-      APP-SETTINGS
-    </ion-item>
-  </ion-list>
-</ion-content> -->

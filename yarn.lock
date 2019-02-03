@@ -283,6 +283,13 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@ionic-native/android-full-screen@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/android-full-screen/-/android-full-screen-5.0.0.tgz#9252053aa53acf10d8cb50965cf2dae7dc21c152"
+  integrity sha512-XuNBOU/EJuqQRDaR8KawhBqEqln4T4K4BL8BdCAP/90ZrzeYZcX1jqVliDksSSJafzTscsNehvWxSe03mDTP4A==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/brightness@^5.0.0-beta.23":
   version "5.0.0-beta.23"
   resolved "https://registry.yarnpkg.com/@ionic-native/brightness/-/brightness-5.0.0-beta.23.tgz#84c3ffe89d2624aeb656f0c6d6f4181d421404a6"
@@ -294,6 +301,13 @@
   version "5.0.0-beta.23"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.0.0-beta.23.tgz#47582886bc14a82e20e18489d758ee7d50e87d41"
   integrity sha512-KoBOlokVSMTthQWl+zR6Qxix67CBZTJeoJo/JbBjccCHJEurdcfKg+Iwmt87AxShiku36LQ3bZ6evA5Za0CifQ==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/native-audio@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/native-audio/-/native-audio-5.0.0.tgz#315686d32ad582dc7d0982275289767aea9c3fc3"
+  integrity sha512-GSe0lsG+dwEGfatZRR7APOlsS0xPvo2oiVuGzXSbWjPeSBx/4DMDF3A2jOhmaW1xGoHYj0qNupZhxRHa1mWxcg==
   dependencies:
     "@types/cordova" latest
 
@@ -2351,6 +2365,11 @@ cordova-plugin-device@2.0.2:
   resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.2.tgz#fc08f3722e67eef7b6c67bfc99a83df6add0baba"
   integrity sha1-/Ajzci5n7ve2xnv8mag99q3Quro=
 
+cordova-plugin-fullscreen@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-fullscreen/-/cordova-plugin-fullscreen-1.2.0.tgz#482b38e881715e1fc812d6c35bea1072efb424a7"
+  integrity sha512-cl8mE1MoTjv4JlwV6dw3nOc7Qj18WuNJLf2jHWUmRTYzCI/SW9ym/ghSVvonTVnaoECuHrOpmAfUoFzbb8kf2Q==
+
 cordova-plugin-ionic-keyboard@2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-keyboard/-/cordova-plugin-ionic-keyboard-2.0.5.tgz#c7c35ffd8f6a1ef77e27a1eee70ccaa2e94f99e1"
@@ -2360,6 +2379,11 @@ cordova-plugin-ionic-webview@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-webview/-/cordova-plugin-ionic-webview-2.0.0.tgz#ed2375835a499418d2fe15b88a92e1c113fe2593"
   integrity sha512-yRE866k9Tk2GhFJTqitS9oMBKWkZr13Hjuj2BuwKvVHkQq77OFowrsdCqzKEsfwTprF9OpHzUFZ+6Y0v93P8xg==
+
+cordova-plugin-nativeaudio@3.0.9:
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-nativeaudio/-/cordova-plugin-nativeaudio-3.0.9.tgz#16cebfdaee24beb23c05f49713cb8773bc78536c"
+  integrity sha1-Fs6/2u4kvrI8BfSXE8uHc7x4U2w=
 
 cordova-plugin-screen-orientation@3.0.1:
   version "3.0.1"

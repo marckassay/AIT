@@ -95,6 +95,7 @@ export class AppUtils {
 
 export namespace AppUtils {
     export declare enum DeviceError {
+        LOCAL_STORAGE_FAILED = 'LOCAL_STORAGE_FAILED',
         DO_NOT_DISTURB = 'DO_NOT_DISTURB'
     }
 }

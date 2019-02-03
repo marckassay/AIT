@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
+import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
@@ -22,6 +23,7 @@ export class SignalService {
     this._data = value;
   }
 
+  private MP3 = 'beep';
   private subject: BehaviorSubject<AppStorageData>;
 
   /**
@@ -34,12 +36,13 @@ export class SignalService {
 
   constructor(
     private vibration: Vibration,
-    public audio: AudioManagement,
+    private sound: NativeAudio,
+    public audioman: AudioManagement,
     private storage: AITStorage,
     private toastCtrl: ToastController) {
     // if app.module has 'useClass' prop set to the mock version which has storage, then set it
-    if ('storage' in audio) {
-      (audio as any).storage = this.storage;
+    if ('storage' in audioman) {
+      (audioman as any).storage = this.storage;
     }
   }
 
@@ -51,6 +54,9 @@ export class SignalService {
         .then((val) => {
           this.subject = val;
           this.subject.subscribe((data) => { this.data = data; });
+        })
+        .then(() => {
+          this.sound.preloadSimple(this.MP3, 'assets/sounds/beep.mp3');
         });
     }
   }
@@ -71,16 +77,16 @@ export class SignalService {
    *
    * @param value indicates if it should be enabled or disabled.
    */
-  async enable(value: boolean): Promise<void> {
+  async enablePreferredVolume(value: boolean): Promise<void> {
     if (value && this.data.sound > 0) {
 
       // get the device's audio mode and if needed adjust it to the value of AudioMode.NORMAL
-      await this.audio.getAudioMode()
+      await this.audioman.getAudioMode()
         .then((val) => {
           this.audioModePriorToChange = val.audioMode;
         });
       if (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL) {
-        await this.audio.setAudioMode(AudioManagement.AudioMode.NORMAL)
+        await this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL)
           .catch((reason) => {
             if (reason.search('Do Not Disturb')) {
               if (this.alreadyInformed === false) {
@@ -93,24 +99,24 @@ export class SignalService {
       }
 
       // get the device's volume and if needed adjust it to data.sound
-      await this.audio.getVolume(AudioManagement.VolumeType.MUSIC)
+      await this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
         .then((val) => {
           this.volumePriorToChange = val.volume;
         });
       if (this.volumePriorToChange !== this.data.sound) {
-        await this.audio.setVolume(AudioManagement.VolumeType.MUSIC, this.data.sound);
+        await this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.data.sound);
       }
 
     } else if (value === false) {
 
       // revert audio settings to what they were prior to running timer
       if (this.audioModePriorToChange && (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL)) {
-        await this.audio.setAudioMode(this.audioModePriorToChange);
+        await this.audioman.setAudioMode(this.audioModePriorToChange);
         this.audioModePriorToChange = undefined;
       }
 
       if (this.volumePriorToChange && (this.volumePriorToChange > 0)) {
-        await this.audio.setVolume(AudioManagement.VolumeType.MUSIC, this.volumePriorToChange);
+        await this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.volumePriorToChange);
         this.volumePriorToChange = undefined;
       }
     }
@@ -143,45 +149,30 @@ export class SignalService {
     this.vibration.vibrate([1000, 500, 1000]);
   }
 
-  private singleBeep(): void {
-    /*  this.sound_1.stop();
-        this.sound_1.rate(1.0);
-        this.sound_1.play(); */
+  private async singleBeep(): Promise<void> {
+    await this.sound.play(this.MP3);
   }
 
-  private tripleBeep(): void {
-    /*     marcmod.getAudioMode((result) => {
-        }); */
-    /*     let interval = 0;
-        let intervalId = setInterval(() => {
-          if (interval === 0 || interval === 2) {
-            this.sound_1.stop();
-            this.sound_1.rate(1.5);
-            this.sound_1.play();
-          } else if (interval === 1) {
-            this.sound_1.stop();
-            this.sound_1.rate(.5);
-            this.sound_1.play();
-          }
-          (interval === 2) ? clearInterval(intervalId) : interval++;
-        }, 250); */
+  private async tripleBeep(): Promise<void> {
+    await this.sound.play(this.MP3);
+    await this.sound.play(this.MP3);
+    await this.sound.play(this.MP3);
   }
 
-  private completeBeep(): void {
-    /*     let interval = 0;
-        let intervalId = setInterval(() => {
-          this.sound_1.stop();
-          this.sound_1.rate(1);
-          this.sound_1.play();
-          (interval === 50) ? clearInterval(intervalId) : interval++;
-        }, 150); */
+  private async completeBeep(): Promise<void> {
+    await this.sound.play(this.MP3);
+    await this.sound.play(this.MP3);
+    await this.sound.play(this.MP3);
+    await this.sound.play(this.MP3);
+    await this.sound.play(this.MP3);
+    await this.sound.play(this.MP3);
   }
 
   async inform(): Promise<void> {
     const toast = await this.toastCtrl.create({
       message: 'AiT is not allowed to change device\'s \'Do Not Disturb\' state. ' +
         'Go to \'AiT Settings\' page and adjust accordingly if needed. Or change notification state.',
-      duration: 5000,
+      duration: 10000,
       showCloseButton: true,
       position: 'top'
     });
