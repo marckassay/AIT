@@ -4,6 +4,7 @@ import { MockStorageData, StorageDefaultData } from './services/storage/ait-stor
 import { AccentTheme, AppStorageData, BaseTheme, IntervalStorageData, UUIDData } from './services/storage/ait-storage.shapes';
 
 export class AppUtils {
+
     /**
      * Returns the default data for ID matching to `uuid`. Default value is declared in this class as private members.
      */
@@ -89,5 +90,11 @@ export class AppUtils {
         } else {
             return '00:00.0';
         }
+    }
+}
+
+export namespace AppUtils {
+    export declare enum DeviceError {
+        DO_NOT_DISTURB = 'DO_NOT_DISTURB'
     }
 }

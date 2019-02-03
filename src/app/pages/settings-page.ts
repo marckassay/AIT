@@ -76,7 +76,7 @@ export class SettingsPage implements AfterContentInit {
   private subscribe(): void {
     this._appSubject.subscribe((value) => {
       this.appSoundsDisabled = value.sound === 0;
-      this.appVibratorDisabled = !value.vibrate;
+      this.appVibratorDisabled = value.vibrate === false;
     });
 
     this._pageSubject.subscribe((value) => {
@@ -102,16 +102,16 @@ export class SettingsPage implements AfterContentInit {
 
     let smesg: string;
     if (bmesg === 1) {
-      smesg = 'sound is muted';
+      smesg = 'sound setting is disabled';
     } else if (bmesg === 2) {
-      smesg = 'vibrate is turned-off';
+      smesg = 'vibrate setting is disabled';
     } else {
-      smesg = 'sound is muted and vibrate is turned-off';
+      smesg = 'sound and vibrate settings are disabled';
     }
 
     const toast = await this.toastCtrl.create({
       message: 'AiT\'s ' + smesg + '. Go to \'AiT Settings\' page and adjust accordingly if needed.',
-      duration: 5000,
+      duration: 10000,
       showCloseButton: true,
       position: 'top'
     });

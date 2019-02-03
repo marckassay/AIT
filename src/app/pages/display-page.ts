@@ -17,7 +17,7 @@
 */
 import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MenuController } from '@ionic/angular';
+import { MenuController, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
 import { AppUtils } from '../app.utils';
@@ -134,14 +134,24 @@ export class DisplayPage implements OnInit {
    *
    * @param value true if timer is ticking
    */
-  protected setAppToRunningMode(value: boolean, includeMenus: boolean = true): void {
-    this.signalSvc.enable(value);
-    this.screenSvc.setScreenToRunningMode(value);
+  protected async setAppToRunningMode(value: boolean, includeMenus: boolean = true): Promise<void> {
 
-    if (includeMenus) {
-      this.menuCtrl.enable(value === false, 'start');
-      this.menuCtrl.enable(value === false, 'end');
-    }
+    await this.signalSvc.enable(value)
+      .then(() => {
+        this.screenSvc.setScreenToRunningMode(value);
+
+        if (includeMenus) {
+          this.menuCtrl.enable(value === false, 'start');
+          this.menuCtrl.enable(value === false, 'end');
+        }
+      })
+      .catch((reason) => {
+        if (reason === 'DO_NOT_DISTURB') {
+          this.sots.sequencer.pause();
+          this.setAppToRunningMode(false);
+          this.floatingbuttons.setToPausedMode();
+        }
+      });
   }
 
   private resetTimer(): void {

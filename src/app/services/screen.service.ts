@@ -70,7 +70,6 @@ export class ScreenService {
   }
 
   initScreen(): void {
-    this.statusBar.styleDefault();
     this.splash.hide();
   }
 
@@ -108,6 +107,6 @@ export class ScreenService {
   }
 
   private showStatusBar(value: boolean): void {
-    (value) ? this.statusBar.hide() : this.statusBar.show();
+    (value === true) ? this.statusBar.show() : this.statusBar.hide();
   }
 }

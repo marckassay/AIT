@@ -3,7 +3,6 @@ import { IonFab } from '@ionic/angular';
 
 export interface FabEmission {
   action: FabAction;
-  container: IonFab;
 }
 
 export enum FabAction {
@@ -50,7 +49,7 @@ export class FabContainerComponent {
 
   constructor(protected ngDectector: ChangeDetectorRef) { }
 
-  actionRequest(action: FabAction, fabMenu: IonFab): void {
+  actionRequest(action: FabAction): void {
     if (action === FabAction.Start) {
       // if action is Start, which exists in the Ready and Paused state, set the state to 'Running'
       this.setToRunningMode();
@@ -67,7 +66,7 @@ export class FabContainerComponent {
     }
 
     if (action !== FabAction.Main) {
-      this.onAction.emit({ action: action, container: fabMenu });
+      this.onAction.emit({ action: action });
     }
   }
 
