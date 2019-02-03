@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
+import { AndroidFullScreen, AndroidSystemUiFlags } from '@ionic-native/android-full-screen/ngx';
 import { Brightness } from '@ionic-native/brightness/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { BehaviorSubject } from 'rxjs';
 
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
@@ -55,7 +54,6 @@ export class ScreenService {
 
   constructor(
     private brightness: Brightness,
-    private statusBar: StatusBar,
     private orientation: ScreenOrientation,
     private androidFullScreen: AndroidFullScreen,
     private splash: SplashScreen,
@@ -80,15 +78,14 @@ export class ScreenService {
    * Called by app-component during bootup
    */
   async hideSplashScreen(): Promise<void> {
-    await this.androidFullScreen.leanMode();
     this.splash.hide();
   }
 
-  setScreenToRunningMode(value: boolean): void {
+  async setScreenToRunningMode(value: boolean): Promise<void> {
     this.applyOrientation(value);
     this.applyBrightnessOffset(value);
     this.setKeepScreenOn(value);
-    this.hideStatusBar(value);
+    this.hideStatusAndNavBar(value);
   }
 
   private async applyOrientation(value: boolean): Promise<void> {
@@ -122,7 +119,17 @@ export class ScreenService {
     this.brightness.setKeepScreenOn(value);
   }
 
-  private hideStatusBar(value: boolean): void {
-    (value === true) ? this.statusBar.hide() : this.statusBar.show();
+  private async hideStatusAndNavBar(value: boolean): Promise<void> {
+    if (value) {
+      await this.androidFullScreen.setSystemUiVisibility(
+        AndroidSystemUiFlags.Fullscreen |
+        AndroidSystemUiFlags.HideNavigation |
+        AndroidSystemUiFlags.ImmersiveSticky);
+    } else {
+      await this.androidFullScreen.setSystemUiVisibility(
+        AndroidSystemUiFlags.Visible |
+        AndroidSystemUiFlags.HideNavigation |
+        AndroidSystemUiFlags.ImmersiveSticky);
+    }
   }
 }

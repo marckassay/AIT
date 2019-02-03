@@ -69,9 +69,9 @@ export class IntervalDisplayPage extends DisplayPage {
 
           // ...now take care of audiable states...
           if (value.state.valueOf(SequenceStates.SingleBeep)) {
-            // this.signal.single();
+            this.signalSvc.single();
           } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
-            // this.signal.double();
+            this.signalSvc.double();
           }
         }
       },
@@ -84,7 +84,7 @@ export class IntervalDisplayPage extends DisplayPage {
       },
       complete: (): void => {
         this.timerState = SequenceStates.Completed;
-        // this.signal.triple();
+        this.signalSvc.triple();
         this.grandTime = this.sots.getGrandTime({ time: 0 });
         this.setAppToRunningMode(false);
         this.floatingbuttons.setToCompletedMode();

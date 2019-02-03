@@ -8,7 +8,6 @@ import { Brightness } from '@ionic-native/brightness/ngx';
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { IonicModule, IonicRouteStrategy, MenuController } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
@@ -48,7 +47,6 @@ import { AITStorage } from './services/storage/ait-storage.service';
     ScreenOrientation,
     AndroidFullScreen,
     SplashScreen,
-    StatusBar,
     ScreenService,
     { provide: AudioManagement, useClass: AudioManagement },
     SignalService,
