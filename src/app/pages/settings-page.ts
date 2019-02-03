@@ -40,6 +40,8 @@ export class SettingsPage implements AfterContentInit {
   protected _uuidData: UUIDData;
   protected grandTime: string;
 
+  // TODO: move inform logic to util
+  protected showInform: boolean;
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
 
@@ -77,6 +79,7 @@ export class SettingsPage implements AfterContentInit {
     this._appSubject.subscribe((value) => {
       this.appSoundsDisabled = value.sound === 0;
       this.appVibratorDisabled = value.vibrate === false;
+      this.showInform = (this.appSoundsDisabled || this.appVibratorDisabled);
     });
 
     this._pageSubject.subscribe((value) => {

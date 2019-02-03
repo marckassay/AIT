@@ -78,6 +78,40 @@
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 
-  --ion-background-color: var(--ion-color-light);
   --ion-grid-column-padding: 0px;
  }
+
+:root {
+ .theme-light {
+  --ion-background-color: var(--ion-color-light);
+  --ion-text-color: var(--ion-color-dark);
+  color: var(--ion-color-dark);
+ }
+
+ .theme-dark {
+  --ion-background-color: var(--ion-color-dark);
+
+  ion-label, ion-title, ion-back-button {
+    color: var(--ion-color-light-shade) !important;
+  }
+
+  ion-list {
+   ion-item-divider {
+    border-bottom: 1px solid var(--ion-color-dark-tint) !important;
+   }
+   ion-item {
+    --border-color: var(--ion-color-dark-tint) !important;
+   }
+  }
+  ion-toggle {
+   --handle-background: #434852 !important;
+  }
+  // TODO: move into interval-settings SCSS file
+  app-interval-settings {
+    span.countdown,
+    span.countdowninfo{
+      color: #ababab;
+    }
+  }
+ }
+}

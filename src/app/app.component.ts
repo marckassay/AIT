@@ -107,16 +107,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     // TODO: I attempted to subscribe with distinctUntilChanged() but that failed, hence
     // comparison below
     const theme = AppUtils.getCombinedTheme(value);
-    if (theme !== this.theme) {
-      // TODO: look into css vars on changing at runtime
-      /*
-      if (theme.startsWith('theme-dark')) {
-        this.theme = '.dark';
-      } else {
-        this.theme = '.light';
-      }
-      */
-      this.theme = theme;
+    if (theme.startsWith('theme-dark')) {
+      this.theme = 'theme-dark';
+    } else {
+      this.theme = 'theme-light';
     }
   }
 }

@@ -1,9 +1,9 @@
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button (click)="actionRequest(actions.Main)">
+  <ion-fab-button (click)="actionRequest(actions.Main)" translucent="true">
   </ion-fab-button>
   <ion-fab-list side="top">
     <div *ngIf="isStartVisible">
-      <ion-fab-button (click)="actionRequest(actions.Start)">
+      <ion-fab-button (click)="actionRequest(actions.Start)" translucent="true">
         <ion-icon name="play"></ion-icon>
       </ion-fab-button>
     </div>

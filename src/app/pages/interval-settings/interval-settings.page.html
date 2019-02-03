@@ -103,7 +103,7 @@
 
       <!-- warnings -->
       <ion-item-group>
-        <ion-item-divider>COUNTDOWN WARNINGS<ion-button slot="end" (click)="inform()" fill="clear">
+        <ion-item-divider>COUNTDOWN WARNINGS<ion-button slot="end" (click)="inform()" fill="clear" [hidden]="!showInform">
             <ion-icon name="settings"></ion-icon>
           </ion-button>
         </ion-item-divider>
