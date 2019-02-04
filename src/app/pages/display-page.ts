@@ -15,12 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
-import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
 import { ScreenService } from '../services/screen.service';
@@ -29,7 +28,7 @@ import { SotsForAit } from '../services/sots/ait-sots';
 import { SequenceStates } from '../services/sots/ait-sots.util';
 import { UUIDData } from '../services/storage/ait-storage.shapes';
 
-export class DisplayPage implements OnInit, OnDestroy {
+export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
 
@@ -62,8 +61,14 @@ export class DisplayPage implements OnInit, OnDestroy {
   }
 
   protected sots: SotsForAit;
-  protected noRebuild: boolean;
   protected grandTime: string;
+
+  /**
+   * When entering into display-pages, initially or not, this flag is used to determine if the timer
+   * needs to be rebuilt. For instance, if the user changes a setting that is irrelvent to `sots`,
+   * then rebuilding of `sots` is required.
+   */
+  protected noRebuild: boolean;
 
   constructor(
     @Optional() protected route: ActivatedRoute,
@@ -88,15 +93,19 @@ export class DisplayPage implements OnInit, OnDestroy {
     this.subject.subscribe((uuidData: UUIDData) => {
       // TODO: pipe a 'distinctUntil' operator for coming back from settings
       if (this.uuidData) {
-        this.unsubscribe();
-        this.timerState = SequenceStates.Loaded;
         this.uuidData = uuidData;
         this.aitBuildTimer();
         this.aitSubscribeTimer();
+        this.aitPostBuildTimer();
       } else {
         this.uuidData = uuidData;
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    console.log('display - ngAfterViewInit');
+    this.attachSettingsAndCheckHome();
   }
 
   ngOnDestroy(): void {
@@ -115,11 +124,14 @@ export class DisplayPage implements OnInit, OnDestroy {
    * and when the user exits from the 'start' menu and returns. The 'end' menu is of no consequence.
    */
   ionViewDidEnter(): void {
+    this.aitPostBuildTimer();
+  }
+
+  aitPostBuildTimer(): void {
     if (this.noRebuild === false) {
       this.timerState = SequenceStates.Loaded;
       this.floatingbuttons.setToLoadedMode();
       this.setAppToRunningMode(false, false);
-      this.attachSettingsAndCheckHome();
     }
   }
 

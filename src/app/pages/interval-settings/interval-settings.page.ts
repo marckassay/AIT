@@ -10,6 +10,8 @@ import { SettingsPage } from '../settings-page';
   styleUrls: ['./interval-settings.page.scss']
 })
 export class IntervalSettingsPage extends SettingsPage {
+  private clonedForIntervalsFactor: number | undefined;
+
   get data(): IntervalStorageData {
     return this._uuidData as IntervalStorageData;
   }

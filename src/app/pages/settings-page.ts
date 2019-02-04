@@ -15,15 +15,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterContentInit, Optional, SkipSelf } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Optional, SkipSelf } from '@angular/core';
 import { MenuController, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
+import { SideMenuService } from '../components/side-menu/side-menu.service';
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 import { AITStorage } from '../services/storage/ait-storage.service';
 import { AppStorageData, UUIDData } from '../services/storage/ait-storage.shapes';
 
-export class SettingsPage implements AfterContentInit {
+export class SettingsPage implements AfterContentInit, AfterViewInit {
   _uuid: string;
   get uuid(): string {
     return this._uuid;
@@ -38,27 +39,28 @@ export class SettingsPage implements AfterContentInit {
   // note that this object exists in the display-page instance too. so any changes here will be
   // reflect instantly in the display-page.
   protected _uuidData: UUIDData;
-  protected grandTime: string;
 
   // TODO: move inform logic to util
   protected showInform: boolean;
   protected appSoundsDisabled: boolean;
   protected appVibratorDisabled: boolean;
+  protected grandTime: string;
 
   // TODO: not ideal place for these properties since used by a subclass. need to resolve
   // inhertience issue with missing injections.
   protected computedFactorValue = { lower: 10, upper: 100 };
   protected clonedForTenFactor: { [k: string]: any; } | undefined;
   protected clonedForOneFactor: { [k: string]: any; } | undefined;
-  protected clonedForIntervalsFactor: number | undefined;
   protected clonedForCountdownFactor: number | undefined;
 
   constructor(
     @Optional() @SkipSelf() protected storage: AITStorage,
     @Optional() @SkipSelf() protected menuCtrl: MenuController,
-    @Optional() @SkipSelf() protected toastCtrl: ToastController) { }
+    @Optional() @SkipSelf() protected toastCtrl: ToastController,
+    @Optional() @SkipSelf() protected menuSvc: SideMenuService) { }
 
   ngAfterContentInit(): void {
+    console.log('settings - ngAfterContentInit');
     const getSubjects = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
@@ -73,6 +75,15 @@ export class SettingsPage implements AfterContentInit {
       this.subscribe();
     };
     getSubjects();
+  }
+
+  ngAfterViewInit(): void {
+    console.log('settings - ngAfterViewInit');
+    this.menuSvc.next({
+      subject: 'end',
+      uuid: this._uuid,
+      response: 'loaded'
+    });
   }
 
   private subscribe(): void {

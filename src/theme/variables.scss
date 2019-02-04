@@ -77,8 +77,6 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
-
-  --ion-grid-column-padding: 0px;
  }
 
 :root {
@@ -96,13 +94,15 @@
   }
 
   ion-list {
-   ion-item-divider {
+    ion-item-divider {
     border-bottom: 1px solid var(--ion-color-dark-tint) !important;
    }
+
    ion-item {
     --border-color: var(--ion-color-dark-tint) !important;
    }
   }
+
   ion-toggle {
    --handle-background: #434852 !important;
   }

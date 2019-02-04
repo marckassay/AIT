@@ -40,8 +40,6 @@ export class FabContainerComponent {
   }
   set viewState(value: FabState) {
     this._viewState = value;
-
-    this.ngDectector.markForCheck();
   }
 
   // this is for template can access FabAction enum members
@@ -119,10 +117,12 @@ export class FabContainerComponent {
 
   setHomeButtonToVisible(): void {
     this.viewState |= FabState.HomeVisible;
+    this.ngDectector.detectChanges();
   }
 
   setProgramButtonToVisible(): void {
     this.viewState |= FabState.ProgramVisible;
+    this.ngDectector.detectChanges();
   }
 
   /*

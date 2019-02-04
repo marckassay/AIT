@@ -39,9 +39,7 @@ export class IntervalDisplayPage extends DisplayPage {
   }
 
   ionViewDidEnter(): void {
-    if (this.noRebuild === false) {
-      this.aitSubscribeTimer();
-    }
+    this.aitSubscribeTimer();
     super.ionViewDidEnter();
   }
 
@@ -49,6 +47,7 @@ export class IntervalDisplayPage extends DisplayPage {
     if (this.sots.rest !== this.uuidData.activerest.lower ||
       this.sots.active !== this.uuidData.activerest.upper ||
       this.sots.intervals !== this.uuidData.intervals) {
+      this.unsubscribe();
       this.sots.build(this.uuidData.countdown,
         this.uuidData.warnings,
         this.uuidData.intervals,
@@ -63,45 +62,47 @@ export class IntervalDisplayPage extends DisplayPage {
   }
 
   aitSubscribeTimer(): void {
-    this.sots.subscribe({
-      next: (value: TimeEmission): void => {
-        this.grandTime = this.sots.getGrandTime(value);
-        if (value.interval) {
-          this.currentInterval = value.interval.current;
-          this.activeRestRenderer.time = Math.ceil(value.time);
-        }
+    if (this.noRebuild === false) {
+      this.sots.subscribe({
+        next: (value: TimeEmission): void => {
 
-        if (value.state) {
-          // if we dont negate the audiable states the display will "blink"
-          // for a millisecond. so valueNoAudiable will be used to set viewState
-          // without any audiable state included.
-          let valueNoAudiable: number = (value.state.valueOf() as SequenceStates);
-          // tslint:disable-next-line:no-bitwise
-          valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
-          this.timerState = valueNoAudiable;
+          this.grandTime = this.sots.getGrandTime(value);
 
-          // ...now take care of audiable states...
-          if (value.state.valueOf(SequenceStates.SingleBeep)) {
-            this.signalSvc.single();
-          } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
-            this.signalSvc.double();
+          if (value.interval) {
+            this.currentInterval = value.interval.current;
+            this.activeRestRenderer.time = Math.ceil(value.time);
           }
+
+          if (value.state) {
+            // if we dont negate the audiable states the display will "blink"
+            // for a millisecond. so valueNoAudiable will be used to set viewState
+            // without any audiable state included.
+            let valueNoAudiable: number = (value.state.valueOf() as SequenceStates);
+            // tslint:disable-next-line:no-bitwise
+            valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
+            this.timerState = valueNoAudiable;
+
+            // ...now take care of audiable states...
+            if (value.state.valueOf(SequenceStates.SingleBeep)) {
+              this.signalSvc.single();
+            } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
+              this.signalSvc.double();
+            }
+          }
+        },
+        error: (error: any): void => {
+          this.timerState = SequenceStates.Error;
+          this.floatingbuttons.setToCompletedMode();
+          throw error;
+        },
+        complete: (): void => {
+          this.timerState = SequenceStates.Completed;
+          this.signalSvc.triple();
+          this.grandTime = this.sots.getGrandTime({ time: 0 });
+          this.setAppToRunningMode(false);
+          this.floatingbuttons.setToCompletedMode();
         }
-      },
-      error: (error: any): void => {
-        this.timerState = SequenceStates.Error;
-
-        this.floatingbuttons.setToCompletedMode();
-
-        throw error;
-      },
-      complete: (): void => {
-        this.timerState = SequenceStates.Completed;
-        this.signalSvc.triple();
-        this.grandTime = this.sots.getGrandTime({ time: 0 });
-        this.setAppToRunningMode(false);
-        this.floatingbuttons.setToCompletedMode();
-      }
-    });
+      });
+    }
   }
 }
