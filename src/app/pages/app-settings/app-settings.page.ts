@@ -33,8 +33,9 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   protected OR = OrientationSetting;
 
   /**
-   * since the 'remember device volume' toggle can be disabled and checked simultaneously or enabled and unchecked,
-   * this property is to do logic to determine if `data.sound` is truthly or not.
+   * since the 'remember device volume' toggle can be disabled and checked simultaneously or
+   * enabled and unchecked, this property is to do logic to determine if `data.sound` is 
+   * truthly or not.
    */
   isVolToggleChecked: boolean;
 
@@ -79,6 +80,11 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // since the user may have adjusted the volume while the 'remember volume' was enabled, we 
+    // need to check to ensure that the volume is updated
+    if (this.data.sound > 0) {
+      this.signalSvc.storeVolume();
+    }
     this.next();
   }
 
@@ -101,16 +107,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   toggleSound(): void {
     if (this.data.sound === 0) {
-      this.signalSvc.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL)
-        .then(() => {
-          // now that sound has bee enabled, retrieve value for value. although this may be a
-          // negative value, its of no consequence of for this `toggleSound()`.
-          this.signalSvc.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
-            .then((result) => {
-              this.data.sound = result.volume as VolumeSet;
-            });
-          this.next();
-        });
+      this.signalSvc.storeVolume();
     } else if (Math.abs(this.data.sound) > 0) {
       this.data.sound = 0;
       this.next();

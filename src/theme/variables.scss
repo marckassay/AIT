@@ -95,8 +95,8 @@
 
   ion-list {
     ion-item-divider {
-    border-bottom: 1px solid var(--ion-color-dark-tint) !important;
-   }
+     border-bottom: 1px solid var(--ion-color-dark-tint) !important;
+    }
 
    ion-item {
     --border-color: var(--ion-color-dark-tint) !important;
@@ -105,13 +105,6 @@
 
   ion-toggle {
    --handle-background: #434852 !important;
-  }
-  // TODO: move into interval-settings SCSS file
-  app-interval-settings {
-    span.countdown,
-    span.countdowninfo{
-      color: #ababab;
-    }
   }
  }
 }

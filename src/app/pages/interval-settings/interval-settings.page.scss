@@ -46,6 +46,13 @@ ion-icon {
     color: var(--ion-color-warning);
 }
 
+.theme-dark app-interval-settings {
+    span.countdown,
+    span.countdowninfo{
+     color: #ababab;
+    }
+}
+
 // give use some finger room for swiping without interacting with range controls
 .controls {
     border-color: var(--ion-background-color);

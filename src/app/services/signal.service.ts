@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
-import { AppStorageData } from './storage/ait-storage.shapes';
+import { AppStorageData, VolumeSet } from './storage/ait-storage.shapes';
 
 /**
  * References audio and vibrate features of the device.
@@ -61,9 +61,18 @@ export class SignalService {
     }
   }
 
+  async storeVolume(): Promise<void> {
+    await this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL);
+    await this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
+      .then((result) => {
+        this.data.sound = result.volume as VolumeSet;
+        this.subject.next(this.data);
+      });
+  }
+
   /**
    * Applies previous sound volume setting. This is intended to be called when the timer is entering
-   * into its active state. And called after timer is active  with `value` as `false` to revert the
+   * into its active state. And called after timer is active with `value` as `false` to revert the
    * user's sound mode and volume.
    *
    * When the `value` is `true` and sounds for the app are enabled (`this.data.sound > 0`), it will
@@ -103,12 +112,12 @@ export class SignalService {
         .then((val) => {
           this.volumePriorToChange = val.volume;
         });
+
       if (this.volumePriorToChange !== this.data.sound) {
         await this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.data.sound);
       }
 
     } else if (value === false) {
-
       // revert audio settings to what they were prior to running timer
       if (this.audioModePriorToChange && (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL)) {
         await this.audioman.setAudioMode(this.audioModePriorToChange);
