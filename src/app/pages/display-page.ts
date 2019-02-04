@@ -35,10 +35,10 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   subject: BehaviorSubject<UUIDData>;
 
   protected _uuidData: any;
-  protected get uuidData(): any {
+  get uuidData(): any {
     return this._uuidData;
   }
-  protected set uuidData(value: any) {
+  set uuidData(value: any) {
     this._uuidData = value;
   }
 
@@ -51,7 +51,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // this type assignment to variable is for Angular template can access enum values.
-  protected SS = SequenceStates;
+  SS = SequenceStates;
   private _timerState: SequenceStates;
   protected get timerState(): SequenceStates {
     return this._timerState;
@@ -130,8 +130,10 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
     if (this.noRebuild === false) {
       this.timerState = SequenceStates.Loaded;
       this.floatingbuttons.setToLoadedMode();
-      this.setAppToRunningMode(false, false);
     }
+
+    // exclude menus since `ngAfterViewInit()` called method to do so.
+    this.setAppToRunningMode(false, false);
   }
 
   /**
@@ -159,24 +161,24 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
    *
    * @param value true if timer is ticking
    */
-  protected async setAppToRunningMode(value: boolean, includeMenus: boolean = true): Promise<void> {
+  protected async setAppToRunningMode(value: boolean, includeMenus = true): Promise<void> {
 
     await this.signalSvc.enablePreferredVolume(value)
-      .then(() => {
-        this.screenSvc.setScreenToRunningMode(value);
-
-        if (includeMenus) {
-          this.menuCtrl.enable(value === false, 'start');
-          this.menuCtrl.enable(value === false, 'end');
-        }
-      })
       .catch((reason) => {
         if (reason === 'DO_NOT_DISTURB') {
+          // at this point toast notification (from signalSvc) should appear to inform user
           this.sots.sequencer.pause();
           this.floatingbuttons.setToPausedMode();
           this.setAppToRunningMode(false);
         }
       });
+
+    await this.screenSvc.setScreenToRunningMode(value);
+
+    if (includeMenus) {
+      await this.menuCtrl.enable(value === false, 'start');
+      await this.menuCtrl.enable(value === false, 'end');
+    }
   }
 
   private resetTimer(): void {
@@ -215,7 +217,6 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
             });
           } else if ((note.subject === 'end') && (note.response === 'loaded')) {
             this.floatingbuttons.setProgramButtonToVisible();
-            this.floatingbuttons.setProgramButtonToVisible();
             this.menuCtrl.enable(true, 'end');
 
             this.menuSvc.next({
@@ -234,7 +235,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
       }, () => {
         reject();
       }, () => {
-        resolve();
+        reject();
       });
 
       // send request to see if this display-page subclass has its settings page loaded in the
@@ -252,7 +253,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
    * When `this.fabcontainer` buttons are clicked, it will first execute code in
    * `fabcontainer.component` (Child component). afterwards it will execute this function.
    */
-  protected onAction(emission: FabEmission): void {
+  action(emission: FabEmission): void {
     switch (emission.action) {
       case FabAction.Home:
         this.sots.sequencer.pause();

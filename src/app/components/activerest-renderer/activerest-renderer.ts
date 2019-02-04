@@ -28,7 +28,7 @@ import { Limits } from '../../services/storage/ait-storage.shapes';
 export class ActiverestRendererComponent {
 
   // this type assignment to variable is for Angular template can access enum values.
-  protected SS = SequenceStates;
+  SS = SequenceStates;
 
   _state: SequenceStates;
   @Input()

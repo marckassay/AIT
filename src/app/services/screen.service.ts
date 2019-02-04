@@ -5,6 +5,8 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { BehaviorSubject } from 'rxjs';
 
+import { AppUtils } from '../app.utils';
+
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData, BrightnessSet, OrientationSetting } from './storage/ait-storage.shapes';
@@ -82,10 +84,13 @@ export class ScreenService {
   }
 
   async setScreenToRunningMode(value: boolean): Promise<void> {
-    this.applyOrientation(value);
-    this.applyBrightnessOffset(value);
-    this.setKeepScreenOn(value);
-    this.hideStatusAndNavBar(value);
+    await this.applyOrientation(value);
+    await AppUtils.delayPromise(250);
+    await this.applyBrightnessOffset(value);
+    await AppUtils.delayPromise(750);
+    await this.hideStatusAndNavBar(value);
+    await AppUtils.delayPromise(500);
+    await this.setKeepScreenOn(value);
   }
 
   private async applyOrientation(value: boolean): Promise<void> {

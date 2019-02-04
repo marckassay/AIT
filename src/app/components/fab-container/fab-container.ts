@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
-import { IonFab } from '@ionic/angular';
 
 export interface FabEmission {
   action: FabAction;
@@ -31,7 +30,7 @@ export enum FabState {
 })
 export class FabContainerComponent {
   @Output()
-  onAction = new EventEmitter<FabEmission>();
+  action = new EventEmitter<FabEmission>();
 
   public states = FabState;
   _viewState: FabState;
@@ -43,7 +42,7 @@ export class FabContainerComponent {
   }
 
   // this is for template can access FabAction enum members
-  public actions = FabAction;
+  FA = FabAction;
 
   constructor(protected ngDectector: ChangeDetectorRef) { }
 
@@ -64,7 +63,7 @@ export class FabContainerComponent {
     }
 
     if (action !== FabAction.Main) {
-      this.onAction.emit({ action: action });
+      this.action.emit({ action: action });
     }
   }
 

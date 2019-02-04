@@ -88,7 +88,9 @@
 
  .theme-dark {
   --ion-background-color: var(--ion-color-dark);
-
+  .display-content {
+    --ion-background-color: #000000;
+  }
   ion-label, ion-title, ion-back-button {
     color: var(--ion-color-light-shade) !important;
   }

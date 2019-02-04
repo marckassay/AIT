@@ -91,6 +91,18 @@ export class AppUtils {
             return '00:00.0';
         }
     }
+
+    /**
+     * Convenient to be used in between `awaits` when a delay is needed after the preceding `await`
+     * is settled.
+     *
+     * @param time duration of delay
+     */
+    static delayPromise(time: number): Promise<void> {
+        return new Promise((resolve): void => {
+            setTimeout(() => resolve(), time);
+        });
+    }
 }
 
 export namespace AppUtils {
