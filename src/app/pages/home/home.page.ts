@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { AppUtils } from 'src/app/app.utils';
@@ -10,17 +10,13 @@ import { StorageDefaultData } from 'src/app/services/storage/ait-storage.default
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit, AfterViewInit {
+export class HomePage implements AfterViewInit {
   constructor(
     private router: Router,
     protected menuSvc: SideMenuService,
     private menuCtrl: MenuController) { }
 
-  ngOnInit(): void {
-  }
-
   ngAfterViewInit(): void {
-    console.log('homepage - ngAfterViewInit');
     this.menuSvc.next({
       subject: 'start',
       uuid: StorageDefaultData.HOME_ID,

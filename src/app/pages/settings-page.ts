@@ -60,7 +60,6 @@ export class SettingsPage implements AfterContentInit, AfterViewInit {
     @Optional() @SkipSelf() protected menuSvc: SideMenuService) { }
 
   ngAfterContentInit(): void {
-    console.log('settings - ngAfterContentInit');
     const getSubjects = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
@@ -78,7 +77,6 @@ export class SettingsPage implements AfterContentInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log('settings - ngAfterViewInit');
     this.menuSvc.next({
       subject: 'end',
       uuid: this._uuid,

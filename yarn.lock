@@ -290,6 +290,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/audio-management@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/audio-management/-/audio-management-5.0.0.tgz#11e4d97be2e5d9d0185e0055fae3943a5153cc28"
+  integrity sha512-EdSsKO81d++4m6CRKkA5GiCmyaAuPDHpXtkM/0CBwTbvGqs/TCYO/NANrCMqtAbFbgEl5N/2Odh4KA6z7vVLhQ==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/brightness@^5.0.0-beta.23":
   version "5.0.0-beta.23"
   resolved "https://registry.yarnpkg.com/@ionic-native/brightness/-/brightness-5.0.0-beta.23.tgz#84c3ffe89d2624aeb656f0c6d6f4181d421404a6"
@@ -1957,8 +1964,10 @@ clone@^2.1.1, clone@^2.1.2:
   resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
   integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
 
-clovelced-plugin-audiomanagement@../clovelced-plugin-audiomanagement:
-  version "1.0.1"
+clovelced-plugin-audiomanagement@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/clovelced-plugin-audiomanagement/-/clovelced-plugin-audiomanagement-1.0.2.tgz#34cef4aa5046eba615c2634234b4d8147698b82d"
+  integrity sha1-NM70qlBG66YVwmNCNLTYFHaYuC0=
 
 co@^4.6.0:
   version "4.6.0"
@@ -2394,11 +2403,6 @@ cordova-plugin-splashscreen@5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-5.0.2.tgz#747e74f56e201cd585bc62d14bca19f6867ff1ed"
   integrity sha1-dH509W4gHNWFvGLRS8oZ9oZ/8e0=
-
-cordova-plugin-statusbar@2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.4.2.tgz#fc1fbdc0d8d7033a7e8e1f1f7ff167ac9bd4faf6"
-  integrity sha1-/B+9wNjXAzp+jh8ff/FnrJvU+vY=
 
 cordova-plugin-vibration@3.1.0:
   version "3.1.0"
@@ -4684,13 +4688,6 @@ invert-kv@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
-
-ionic-native-dev-util@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/ionic-native-dev-util/-/ionic-native-dev-util-0.7.0.tgz#e6e5ad942f127db1c5add01059244c817ea60dad"
-  integrity sha512-n+l/TmgivQllDJ7pwdk3P62bnldiRajsyORewXKHZKTTVmM/9FErFVriRGchqZtB0rMHOZF31+BAjMrE8qXtdQ==
-  dependencies:
-    fs-extra "^7.0.1"
 
 ionic@^4.6.0:
   version "4.6.0"
@@ -9471,7 +9468,7 @@ url-parse@^1.4.3:
     querystringify "^2.0.0"
     requires-port "^1.0.0"
 
-url@^0.11.0, url@~0.11.0:
+url@0.11.0, url@^0.11.0, url@~0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/url/-/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
   integrity sha1-ODjpfPxgUh63PFJajlW/3Z4uKPE=

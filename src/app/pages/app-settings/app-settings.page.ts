@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
@@ -34,7 +33,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
 
   /**
    * since the 'remember device volume' toggle can be disabled and checked simultaneously or
-   * enabled and unchecked, this property is to do logic to determine if `data.sound` is 
+   * enabled and unchecked, this property is to do logic to determine if `data.sound` is
    * truthly or not.
    */
   isVolToggleChecked: boolean;
@@ -48,9 +47,6 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   private appSubjt: BehaviorSubject<AppStorageData>;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected componentFactoryResolver: ComponentFactoryResolver,
     protected changeRef: ChangeDetectorRef,
     protected menuCtrl: MenuController,
     protected signalSvc: SignalService,
@@ -80,7 +76,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // since the user may have adjusted the volume while the 'remember volume' was enabled, we 
+    // since the user may have adjusted the volume while the 'remember volume' was enabled, we
     // need to check to ensure that the volume is updated
     if (this.data.sound > 0) {
       this.signalSvc.storeVolume();

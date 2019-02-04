@@ -1,44 +1,44 @@
 <div [ngSwitch]="state">
   <div *ngSwitchCase="SS.CountdownWarning">
     <p class="right">
-      <span class="active countdown">{{limits.upper}}</span>
-      <span class="rest countdown">/{{limits.lower}}</span>
+      <span class="active-countdown">{{limits.upper}}</span>
+      <span class="rest-countdown">/{{limits.lower}}</span>
     </p>
   </div>
   <div *ngSwitchCase="SS.Loaded">
     <p class="right">
-      <span class="active loaded">{{limits.upper}}</span>
-      <span class="rest loaded">/{{limits.lower}}</span>
+      <span class="active-loaded">{{limits.upper}}</span>
+      <span class="rest-loaded">/{{limits.lower}}</span>
     </p>
   </div>
   <div *ngSwitchCase="SS.Active">
     <p class="right">
-      <span class="active go">{{time}}</span>
-      <span class="rest stop">/{{limits.lower}}</span>
+      <span class="active-go">{{time}}</span>
+      <span class="rest-stop">/{{limits.lower}}</span>
     </p>
   </div>
   <div *ngSwitchCase="SS.ActiveWarning">
     <p class="right">
-      <span class="active go">{{time}}</span>
-      <span class="rest getReady">/{{limits.lower}}</span>
+      <span class="active-go">{{time}}</span>
+      <span class="rest-getReady">/{{limits.lower}}</span>
     </p>
   </div>
   <div *ngSwitchCase="SS.Rest">
     <p class="left">
-      <span class="active stop">{{limits.upper}}/</span>
-      <span class="rest go">{{time}}</span>
+      <span class="active-stop">{{limits.upper}}/</span>
+      <span class="rest-go">{{time}}</span>
     </p>
   </div>
   <div *ngSwitchCase="SS.RestWarning">
     <p class="left">
-      <span class="active getReady">{{limits.upper}}/</span>
-      <span class="rest go">{{time}}</span>
+      <span class="active-getReady">{{limits.upper}}/</span>
+      <span class="rest-go">{{time}}</span>
     </p>
   </div>
   <div *ngSwitchCase="SS.Completed">
     <p class="right">
-      <span class="active completed">{{limits.upper}}</span>
-      <span class="rest completed">/{{limits.lower}}</span>
+      <span class="active-completed">{{limits.upper}}</span>
+      <span class="rest-completed">/{{limits.lower}}</span>
     </p>
   </div>
   <div *ngSwitchCase="SS.Error" class="error">):</div>

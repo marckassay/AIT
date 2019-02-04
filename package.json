@@ -1,7 +1,8 @@
 {
   "name": "ait",
+  "description": "Another interval timer (AiT) that targets mobile devices for your timing needs. This application has been intended for interval activities, where there are active and inactive segments. There is a timer and stopwatch mode too.",
   "private": true,
-  "version": "1.7.0",
+  "version": "2.0.0",
   "author": "Marc Kassay",
   "homepage": "https://github.com/marckassay/ait",
   "scripts": {
@@ -11,7 +12,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "linkplugin": "node ./node_modules/ionic-native-dev-util",
     "add-spies": "node ./node_modules/spypkg --verbose",
     "remove-spies": "node ./node_modules/spypkg --remove --verbose"
   },
@@ -34,6 +34,7 @@
     "@angular/platform-browser-dynamic": "~7.1.4",
     "@angular/router": "~7.1.4",
     "@ionic-native/android-full-screen": "^5.0.0",
+    "@ionic-native/audio-management": "^5.0.0",
     "@ionic-native/brightness": "^5.0.0-beta.23",
     "@ionic-native/core": "5.0.0-beta.23",
     "@ionic-native/native-audio": "^5.0.0",
@@ -43,7 +44,7 @@
     "@ionic-native/vibration": "^5.0.0-beta.23",
     "@ionic/angular": "4.0.0-rc.0",
     "@ionic/storage": "^2.2.0",
-    "clovelced-plugin-audiomanagement": "../clovelced-plugin-audiomanagement",
+    "clovelced-plugin-audiomanagement": "1.0.2",
     "cordova-android": "7.1.4",
     "cordova-plugin-brightness": "0.2.0",
     "cordova-plugin-device": "2.0.2",
@@ -53,7 +54,6 @@
     "cordova-plugin-nativeaudio": "3.0.9",
     "cordova-plugin-screen-orientation": "3.0.1",
     "cordova-plugin-splashscreen": "5.0.2",
-    "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-vibration": "3.1.0",
     "cordova-plugin-whitelist": "1.3.3",
     "cordova-sqlite-storage": "2.6.0",
@@ -63,6 +63,7 @@
     "rxjs": "~6.3.3",
     "rxjs-compat": "^6.3.3",
     "sots": "^3.0.1",
+    "url": "0.11.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
@@ -81,7 +82,6 @@
     "codelyzer": "~4.5.0",
     "cordova": "^8.1.2",
     "ionic": "^4.6.0",
-    "ionic-native-dev-util": "^0.7.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.4",
@@ -96,11 +96,9 @@
     "tslint": "~5.12.0",
     "typescript": "~3.1.6"
   },
-  "description": "An Ionic project",
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
@@ -108,9 +106,9 @@
       "cordova-plugin-screen-orientation": {},
       "cordova-plugin-brightness": {},
       "cordova-plugin-vibration": {},
-      "clovelced-plugin-audiomanagement": {},
       "cordova-plugin-fullscreen": {},
-      "cordova-plugin-nativeaudio": {}
+      "cordova-plugin-nativeaudio": {},
+      "clovelced-plugin-audiomanagement": {}
     },
     "platforms": [
       "android"

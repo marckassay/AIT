@@ -61,6 +61,9 @@ export class SignalService {
     }
   }
 
+  /**
+   * Called from app-settings page when 'remember volume' toggle is checked.
+   */
   async storeVolume(): Promise<void> {
     await this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL);
     await this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
@@ -132,49 +135,33 @@ export class SignalService {
   }
 
   single(): void {
-    if (this.data.sound !== 0) { this.singleBeep(); }
-    if (this.data.vibrate) { this.singleVibrate(); }
+    if (this.data.sound !== 0) { this.loopBeep(1); }
+    if (this.data.vibrate) { this.loopVibrate(1); }
   }
 
   double(): void {
-    if (this.data.sound !== 0) { this.tripleBeep(); }
-    if (this.data.vibrate) { this.doubleVibrate(); }
+    if (this.data.sound !== 0) { this.loopBeep(2); }
+    if (this.data.vibrate) { this.loopVibrate(2); }
   }
 
-  triple(): void {
-    if (this.data.sound !== 0) { this.completeBeep(); }
-    if (this.data.vibrate) { this.tripleVibrate(); }
+  completed(): void {
+    if (this.data.sound !== 0) { this.loopBeep(8); }
+    if (this.data.vibrate) { this.loopVibrate(8); }
   }
 
-  private singleVibrate(): void {
-    this.vibration.vibrate(500);
+  private loopVibrate(intervals: number): void {
+    this.vibration.vibrate(Array(intervals).fill(125));
   }
 
-  private doubleVibrate(): void {
-    this.vibration.vibrate([500, 500, 500]);
-  }
-
-  private tripleVibrate(): void {
-    this.vibration.vibrate([1000, 500, 1000]);
-  }
-
-  private async singleBeep(): Promise<void> {
-    await this.sound.play(this.MP3);
-  }
-
-  private async tripleBeep(): Promise<void> {
-    await this.sound.play(this.MP3);
-    await this.sound.play(this.MP3);
-    await this.sound.play(this.MP3);
-  }
-
-  private async completeBeep(): Promise<void> {
-    await this.sound.play(this.MP3);
-    await this.sound.play(this.MP3);
-    await this.sound.play(this.MP3);
-    await this.sound.play(this.MP3);
-    await this.sound.play(this.MP3);
-    await this.sound.play(this.MP3);
+  private loopBeep(intervals: number): void {
+    let interval = 1;
+    const loop = async (): Promise<void> => {
+      if (interval <= intervals) {
+        interval++;
+        await this.sound.play(this.MP3, loop);
+      }
+    };
+    loop();
   }
 
   async inform(): Promise<void> {

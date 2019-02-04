@@ -104,7 +104,6 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log('display - ngAfterViewInit');
     this.attachSettingsAndCheckHome();
   }
 
@@ -138,8 +137,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Fired when the component being routed from is about to animate.
    */
-  ionViewWillLeave(): void {
-  }
+  // ionViewWillLeave(): void { }
 
   protected aitBuildTimer(): void {
     throw new Error('Subclasses of DisplayPage need to implement aitBuildTimer().');

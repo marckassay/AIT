@@ -12,72 +12,69 @@ p.right {
     margin: auto;
 };
 
-.active.go {
-font-family: selawksb;
-@media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
-@media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
-color: var(--ion-color-success);
+.active-go {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
+    color: var(--ion-color-success);
 }
 
-.active.loaded {
-@extend .active.go;
+.active-loaded {
+    @extend .active-go;
     color: var(--ion-color-warning);
 }
 
-.active.stop {
-@extend .active.go;
-@media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
-@media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+.active-stop {
+    @extend .active-go;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
     color: var(--ion-color-danger);
 }
 
-.active.completed {
-@extend .active.go;
+.active-completed {
+    @extend .active-go;
     color: var(--ion-color-primary);
 }
 
-.active.getReady {
-@extend .active.stop;
+.active-getReady {
+    @extend .active-stop;
     color: var(--ion-color-warning);
 }
 
-.active.countdown {
-@extend .active.go;
+.active-countdown {
+    @extend .active-go;
     color: var(--ion-color-warning);
 }
 
-
-
-
-.rest.go {
-font-family: selawksb;
-@media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
-@media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
-color: var(--ion-color-danger);
+.rest-go {
+    font-family: selawksb;
+    @media screen and (orientation:portrait) { font-size: $font-size-go-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-go-landscape; }
+    color: var(--ion-color-danger);
 }
 
-.rest.stop {
-@extend .rest.go;
-@media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
-@media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
+.rest-stop {
+    @extend .rest-go;
+    @media screen and (orientation:portrait) { font-size: $font-size-stop-portrait; }
+    @media screen and (orientation:landscape) { font-size: $font-size-stop-landscape; }
 }
 
-.rest.loaded {
-@extend .rest.stop;
-color: var(--ion-color-warning);
+.rest-loaded {
+    @extend .rest-stop;
+    color: var(--ion-color-warning);
 }
 
-.rest.getReady {
-@extend .rest.stop;
-color: var(--ion-color-warning);
+.rest-getReady {
+    @extend .rest-stop;
+    color: var(--ion-color-warning);
 }
 
-.rest.completed {
-@extend .rest.stop;
-color: var(--ion-color-primary);
+.rest-completed {
+    @extend .rest-stop;
+    color: var(--ion-color-primary);
 }
 
-.rest.countdown {
-@extend .rest.stop;
-color: var(--ion-color-warning);
+.rest-countdown {
+    @extend .rest-stop;
+    color: var(--ion-color-warning);
 }

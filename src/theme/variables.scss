@@ -106,5 +106,10 @@
   ion-toggle {
    --handle-background: #434852 !important;
   }
+
+  span.countdown,
+  span.countdowninfo {
+    color: #ababab;
+  }
  }
 }
