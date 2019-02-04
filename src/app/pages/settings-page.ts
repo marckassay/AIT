@@ -87,14 +87,23 @@ export class SettingsPage implements AfterContentInit {
     });
 
     this.menuCtrl.get('end').then((element) => {
+      // TODO: this menu business should be moved into a service
       const menuClosed = (): void => {
         this._pageSubject.next(this._uuidData);
+        // TODO: when unsubscribing, throws undefined error. i think this has to do with the way
+        // subpages are being injected.
         // this._pageSubject.unsubscribe();
         // this._appSubject.unsubscribe();
         element.removeEventListener('ionDidClose', menuClosed);
+        element.addEventListener('ionDidOpen', menuOpen);
       };
 
-      element.addEventListener('ionDidClose', menuClosed);
+      const menuOpen = (): void => {
+        element.removeEventListener('ionDidOpen', menuOpen);
+        element.addEventListener('ionDidClose', menuClosed);
+      };
+
+      menuOpen();
     });
   }
 

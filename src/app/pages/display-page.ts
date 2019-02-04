@@ -15,9 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ComponentFactoryResolver, OnInit, Optional, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MenuController, ToastController } from '@ionic/angular';
+import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
 import { AppUtils } from '../app.utils';
@@ -29,8 +29,7 @@ import { SotsForAit } from '../services/sots/ait-sots';
 import { SequenceStates } from '../services/sots/ait-sots.util';
 import { UUIDData } from '../services/storage/ait-storage.shapes';
 
-export class DisplayPage implements OnInit {
-
+export class DisplayPage implements OnInit, OnDestroy {
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
 
@@ -42,7 +41,6 @@ export class DisplayPage implements OnInit {
   }
   protected set uuidData(value: any) {
     this._uuidData = value;
-    this.changeRef.markForCheck();
   }
 
   protected _settingsPageClass: any;
@@ -64,7 +62,7 @@ export class DisplayPage implements OnInit {
   }
 
   protected sots: SotsForAit;
-
+  protected noRebuild: boolean;
   protected grandTime: string;
 
   constructor(
@@ -88,9 +86,21 @@ export class DisplayPage implements OnInit {
     });
 
     this.subject.subscribe((uuidData: UUIDData) => {
-      this.grandTime = AppUtils.totaltime(uuidData);
-      this.uuidData = uuidData;
+      // TODO: pipe a 'distinctUntil' operator for coming back from settings
+      if (this.uuidData) {
+        this.unsubscribe();
+        this.timerState = SequenceStates.Loaded;
+        this.uuidData = uuidData;
+        this.aitBuildTimer();
+        this.aitSubscribeTimer();
+      } else {
+        this.uuidData = uuidData;
+      }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe(true);
   }
 
   /**
@@ -101,32 +111,37 @@ export class DisplayPage implements OnInit {
   }
 
   /**
-   * Fired when the component being routed to has animated in.
+   * Fired when the component being routed to has animated in. This is called only during startup
+   * and when the user exits from the 'start' menu and returns. The 'end' menu is of no consequence.
    */
   ionViewDidEnter(): void {
-    this.floatingbuttons.setToLoadedMode();
-
-    this.timerState = SequenceStates.Loaded;
-
-    this.setAppToRunningMode(false, false);
-
-    this.attachSettingsAndCheckHome();
+    if (this.noRebuild === false) {
+      this.timerState = SequenceStates.Loaded;
+      this.floatingbuttons.setToLoadedMode();
+      this.setAppToRunningMode(false, false);
+      this.attachSettingsAndCheckHome();
+    }
   }
 
   /**
    * Fired when the component being routed from is about to animate.
    */
   ionViewWillLeave(): void {
-    this.unsubscribe();
+  }
+
+  protected aitBuildTimer(): void {
+    throw new Error('Subclasses of DisplayPage need to implement aitBuildTimer().');
   }
 
   protected aitSubscribeTimer(): void {
     throw new Error('Subclasses of DisplayPage need to implement aitSubscribeTimer().');
   }
 
-  protected unsubscribe(): void {
+  protected unsubscribe(includeSubject: boolean = false): void {
     this.sots.unsubscribe();
-    this.subject.unsubscribe();
+    if (includeSubject) {
+      this.subject.unsubscribe();
+    }
   }
 
   /**

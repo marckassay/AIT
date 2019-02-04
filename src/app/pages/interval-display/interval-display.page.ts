@@ -17,6 +17,7 @@ export class IntervalDisplayPage extends DisplayPage {
   private activeRestRenderer: ActiverestRendererComponent;
 
   protected _remainingIntervalTime: number;
+
   @Input()
   get remainingIntervalTime(): number {
     return this._remainingIntervalTime;
@@ -34,19 +35,31 @@ export class IntervalDisplayPage extends DisplayPage {
   }
 
   ionViewWillEnter(): void {
-    this.sots.build(this.uuidData.countdown,
-      this.uuidData.warnings,
-      this.uuidData.intervals,
-      this.uuidData.activerest.lower,
-      this.uuidData.activerest.upper
-    );
-    this.grandTime = this.sots.getGrandTime({ time: -1 });
+    this.aitBuildTimer();
   }
 
   ionViewDidEnter(): void {
-    this.aitSubscribeTimer();
-
+    if (this.noRebuild === false) {
+      this.aitSubscribeTimer();
+    }
     super.ionViewDidEnter();
+  }
+
+  aitBuildTimer(): void {
+    if (this.sots.rest !== this.uuidData.activerest.lower ||
+      this.sots.active !== this.uuidData.activerest.upper ||
+      this.sots.intervals !== this.uuidData.intervals) {
+      this.sots.build(this.uuidData.countdown,
+        this.uuidData.warnings,
+        this.uuidData.intervals,
+        this.uuidData.activerest.lower,
+        this.uuidData.activerest.upper
+      );
+      this.grandTime = this.sots.getGrandTime({ time: -1 });
+      this.noRebuild = false;
+    } else {
+      this.noRebuild = true;
+    }
   }
 
   aitSubscribeTimer(): void {
