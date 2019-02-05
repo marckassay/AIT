@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         // post app start-up; after start and end sidemenus have been loaded
         if ((note.subject === 'start') && (note.response === 'loaded')) {
-          this.screenSvc.hideSplashScreen();
+          this.screenSvc.bootupScreen();
           this.platform.resume.subscribe(() => {
             // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
             // running state when they set ait to the device's background and then returns. At that point

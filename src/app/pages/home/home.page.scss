@@ -3,8 +3,10 @@ ion-content {
 }
 
 ion-list {
-  margin-top: 56px;
+  margin-top: 81px;
 }
+
+ion-header.header-md ion-toolbar:first-child { padding-top: 25px !important; }
 
 .icon {
   font-size: 0;

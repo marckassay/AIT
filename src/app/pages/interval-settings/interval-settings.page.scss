@@ -34,8 +34,10 @@ ion-content {
 
 ion-list {
   // for margin-top see ion-content comment above on why this is needed
-  margin-top: 56px;
+  margin-top: 81px;
 }
+
+ion-header.header-md ion-toolbar:first-child { padding-top: 25px !important; }
 
 ion-grid {
     width: 40% !important;

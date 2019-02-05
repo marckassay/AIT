@@ -11,7 +11,8 @@ import { AccentTheme, AppStorageData, BaseTheme, BrightnessSet, OrientationSetti
 
 @Component({
   selector: 'app-settings',
-  templateUrl: './app-settings.page.html'
+  templateUrl: './app-settings.page.html',
+  styleUrls: ['./app-settings.page.scss']
 })
 export class AppSettingsPage implements OnInit, OnDestroy {
   readonly uuid = StorageDefaultData.APP_ID;

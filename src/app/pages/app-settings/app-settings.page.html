@@ -18,7 +18,9 @@
     <ion-item>
       <ion-toggle #soundToggleUI checked="{{data.sound != 0}}" (ionChange)="toggleSound()"></ion-toggle>
       <ion-label>sound</ion-label>
-      <ion-button [disabled]="soundToggleUI.checked == false" (click)="testVolume()" slot="end">
+
+      <ion-button [disabled]="soundToggleUI.checked == false" (click)="testVolume()" size="small" slot="end">
+        <ion-icon name="volume-high"></ion-icon>
         test volume
       </ion-button>
     </ion-item>

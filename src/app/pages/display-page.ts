@@ -162,7 +162,6 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
    * @param value true if timer is ticking
    */
   protected async setAppToRunningMode(value: boolean, includeMenus = true): Promise<void> {
-
     await this.signalSvc.enablePreferredVolume(value)
       .catch((reason) => {
         if (reason === 'DO_NOT_DISTURB') {

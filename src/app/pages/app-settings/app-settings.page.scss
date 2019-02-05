@@ -1,0 +1,12 @@
+// TODO: i cant do this; its trapped in a shadow
+/*
+:host-context(ion-range) {
+.range-disabled {
+  .range-knob {
+   transform: none !important;
+   outline: none !important;
+  }
+ }
+}
+*/
+ion-header.header-md ion-toolbar:first-child { padding-top: 25px !important; }
