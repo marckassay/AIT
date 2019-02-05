@@ -47,7 +47,9 @@ export class IntervalDisplayPage extends DisplayPage {
     if (this.sots.rest !== this.uuidData.activerest.lower ||
       this.sots.active !== this.uuidData.activerest.upper ||
       this.sots.intervals !== this.uuidData.intervals) {
+
       this.unsubscribe();
+
       this.sots.build(this.uuidData.countdown,
         this.uuidData.warnings,
         this.uuidData.intervals,
@@ -98,7 +100,7 @@ export class IntervalDisplayPage extends DisplayPage {
         complete: (): void => {
           this.timerState = SequenceStates.Completed;
           this.signalSvc.completed();
-          this.grandTime = this.sots.getGrandTime({ time: 0 });
+          this.grandTime = this.sots.getGrandTime({ time: -1 });
           this.setAppToRunningMode(false);
           this.floatingbuttons.setToCompletedMode();
         }

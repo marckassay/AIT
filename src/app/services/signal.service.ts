@@ -145,8 +145,8 @@ export class SignalService {
   }
 
   completed(): void {
-    if (this.data.sound !== 0) { this.loopBeep(8); }
-    if (this.data.vibrate) { this.loopVibrate(8); }
+    if (this.data.sound !== 0) { this.loopBeep(33); }
+    if (this.data.vibrate) { this.loopVibrate(33); }
   }
 
   private loopVibrate(intervals: number): void {

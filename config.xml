@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="200" id="github.marckassay.ait" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget android-versionCode="200" id="github.marckassay.ait" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Another interval Timer</name>
     <description>Another interval timer (AiT) that targets portable devices for your timing needs. This application has been intended for interval workouts, where there are active and inactive segments.</description>
     <author email="marckassay@gmail.com" href="https://github.com/marckassay/AIT">Marc Kassay</author>
@@ -11,20 +11,6 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <edit-config file="platforms/android/CordovaLib/AndroidManifest.xml" mode="merge" target="/manifest/application">
-        <application android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" />
-    </edit-config>
-    <resource-file src="resources/android/drawable/ic_launcher_background.xml" target="app/src/main/res/drawable/ic_launcher_background.xml" />
-    <resource-file src="resources/android/mipmap-hdpi/ic_launcher.png" target="app/src/main/res/mipmap-hdpi/ic_launcher.png" />
-    <resource-file src="resources/android/mipmap-hdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-hdpi/ic_launcher_round.png" />
-    <resource-file src="resources/android/mipmap-mdpi/ic_launcher.png" target="app/src/main/res/mipmap-mdpi/ic_launcher.png" />
-    <resource-file src="resources/android/mipmap-mdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-mdpi/ic_launcher_round.png" />
-    <resource-file src="resources/android/mipmap-xhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xhdpi/ic_launcher.png" />
-    <resource-file src="resources/android/mipmap-xhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" />
-    <resource-file src="resources/android/mipmap-xxhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" />
-    <resource-file src="resources/android/mipmap-xxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" />
-    <resource-file src="resources/android/mipmap-xxxhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
-    <resource-file src="resources/android/mipmap-xxxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
@@ -33,8 +19,43 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreenBackgroundColor" value="black" />
     <preference name="SplashScreenSpinnerColor" value="#3880ff" />
-    <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
+    <platform name="android">
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" />
+        </edit-config>
+        <allow-intent href="market:*" />
+        <splash density="land-ldpi" src="resources/android/splash/drawable-land-ldpi-screen.png" />
+        <splash density="land-mdpi" src="resources/android/splash/drawable-land-mdpi-screen.png" />
+        <splash density="land-hdpi" src="resources/android/splash/drawable-land-hdpi-screen.png" />
+        <splash density="land-xhdpi" src="resources/android/splash/drawable-land-xhdpi-screen.png" />
+        <splash density="land-xxhdpi" src="resources/android/splash/drawable-land-xxhdpi-screen.png" />
+        <splash density="land-xxxhdpi" src="resources/android/splash/drawable-land-xxxhdpi-screen.png" />
+        <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
+        <splash density="port-mdpi" src="resources/android/splash/drawable-port-mdpi-screen.png" />
+        <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.png" />
+        <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
+        <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
+        <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <resource-file src="resources/android/adaptiveicon/drawable-v24/ic_launcher_foreground.xml" target="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-anydpi-v26/ic_launcher.xml" target="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-anydpi-v26/ic_launcher_round.xml" target="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-hdpi/ic_launcher.png" target="app/src/main/res/mipmap-hdpi/ic_launcher.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-hdpi/ic_launcher_foreground.png" target="app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-hdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-hdpi/ic_launcher_round.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-mdpi/ic_launcher.png" target="app/src/main/res/mipmap-mdpi/ic_launcher.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-mdpi/ic_launcher_foreground.png" target="app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-mdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-mdpi/ic_launcher_round.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xhdpi/ic_launcher.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xhdpi/ic_launcher_foreground.png" target="app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xxhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xxhdpi/ic_launcher_foreground.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xxxhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xxxhdpi/ic_launcher_foreground.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png" />
+        <resource-file src="resources/android/adaptiveicon/mipmap-xxxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" />
+    </platform>
     <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
