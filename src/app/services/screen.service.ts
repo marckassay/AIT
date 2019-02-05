@@ -73,8 +73,8 @@ export class ScreenService {
 
   constructor(
     private brightness: Brightness,
-    private orientation: ScreenOrientation,
-    private androidFullScreen: AndroidFullScreen,
+    public orientation: ScreenOrientation,
+    private uibars: AndroidFullScreen,
     private splash: SplashScreen,
     private storage: AITStorage) { }
 
@@ -97,8 +97,8 @@ export class ScreenService {
    * Called by app-component during bootup
    */
   async bootupScreen(): Promise<void> {
-    await this.androidFullScreen.showUnderStatusBar();
-    await this.androidFullScreen.setSystemUiVisibility(AndroidSystemUiFlags.HideNavigation);
+    await this.uibars.showUnderStatusBar();
+    await this.uibars.setSystemUiVisibility(AndroidSystemUiFlags.HideNavigation);
     await AppUtils.delayPromise(500);
     this.splash.hide();
   }
@@ -146,12 +146,12 @@ export class ScreenService {
 
   private async hideStatusAndNavBar(value: boolean): Promise<void> {
     if (value) {
-      await this.androidFullScreen.setSystemUiVisibility(
+      await this.uibars.setSystemUiVisibility(
         AndroidSystemUiFlags.Immersive |
         AndroidSystemUiFlags.Fullscreen |
         AndroidSystemUiFlags.HideNavigation);
     } else {
-      await this.androidFullScreen.setSystemUiVisibility(
+      await this.uibars.setSystemUiVisibility(
         AndroidSystemUiFlags.Immersive |
         AndroidSystemUiFlags.Visible |
         AndroidSystemUiFlags.HideNavigation);

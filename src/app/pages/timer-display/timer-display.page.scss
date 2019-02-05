@@ -1,0 +1,46 @@
+$font-size-time-portrait:       52vw;
+$font-size-time-landscape:      52vh;
+
+.display-content {
+    .top-row {
+      @media screen and (orientation: portrait) {
+        display: grid;
+      }
+      @media screen and (orientation:landscape) {
+        display: flex;
+      }
+      align-items: baseline;
+      justify-content: center;
+      flex-wrap: nowrap;
+    }
+
+/*   p {
+    margin: 0px;
+    @media screen and (orientation:portrait) { line-height: $font-size-grandtime-portrait - 2; }
+    @media screen and (orientation:landscape) { line-height: $font-size-grandtime-landscape - 2; }
+  } */
+    
+    .timeGo {
+      @media screen and (orientation: portrait) {
+        font-size: $font-size-time-portrait;
+      }
+      @media screen and (orientation:landscape) {
+        font-size: $font-size-time-landscape;
+      }
+      color: var(--ion-color-success);
+    }
+    .timeGetReady,
+    .timeLoaded,
+    .timeCountdown {
+      @extend .timeGo;
+      color: var(--ion-color-warning);
+    }
+    .timeStop {
+      @extend .timeGo;
+      color: var(--ion-color-danger);
+    }
+    .timeCompleted {
+      @extend .timeGo;
+      color: var(--ion-color-primary);
+    }
+}
