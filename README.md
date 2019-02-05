@@ -1,6 +1,6 @@
 # AiT
 
-![AiT](resources\android\adaptiveicon\mipmap-xhdpi\ic_launcher.png)
+![AiT](resources/android/adaptiveicon/mipmap-xhdpi/ic_launcher.png)
 
 Another interval timer (AiT) that targets mobile devices for your timing needs. This application has been intended for interval workouts, where there are active and inactive segments. There is a timer and stopwatch mode too.
 
@@ -9,6 +9,7 @@ Another interval timer (AiT) that targets mobile devices for your timing needs. 
 ## Install
 
 Below is an example on how to clone, build, and install a release apk on a connected device. Depending on other systems adjustments will be needed.
+
 ```shell
 git clone https://github.com/marckassay/AIT.git
 yarn install
@@ -18,9 +19,11 @@ adb install .\\platforms\\android\\app\\build\\outputs\\apk\\release\\app-releas
 ```
 
 ## About
+
 This is an Ionic 4 project that is intended to target Android mobile devices.
 
 ## Feedback
+
 Use the Issues section for questions, bugs or requests.
 
 ## Technical Info
