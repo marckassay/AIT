@@ -18,7 +18,8 @@
 import moment from 'moment';
 
 import { MockStorageData, StorageDefaultData } from './services/storage/ait-storage.defaultdata';
-import { AccentTheme, AppStorageData, BaseTheme, IntervalStorageData, UUIDData } from './services/storage/ait-storage.shapes';
+// tslint:disable-next-line:max-line-length
+import { AccentTheme, AppStorageData, BaseTheme, IntervalStorageData, TimerStorageData, UUIDData } from './services/storage/ait-storage.shapes';
 
 export class AppUtils {
 
@@ -100,10 +101,13 @@ export class AppUtils {
     }
 
     static totaltime(value?: UUIDData): string {
-        if (value as IntervalStorageData) {
+        if ('activerest' in value) {
             const val = value as IntervalStorageData;
             const totaltimeInSeconds = (val.activerest.upper + val.activerest.lower) * val.intervals;
             return moment(totaltimeInSeconds * 1000).format('mm:ss.S');
+        } else if ('time' in value) {
+            const val = value as TimerStorageData;
+            return moment(val.time * 1000).format('mm:ss.S');
         } else {
             return '00:00.0';
         }

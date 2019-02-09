@@ -27,8 +27,10 @@ export class SideMenuComponent implements OnInit {
         if (this.id === note.subject) {
           if (note.request === 'load') {
             this.menu.clear();
+
             const results = this.menu.createComponent(note.component);
             (results.instance as any).uuid = note.uuid;
+            (results.instance as any).injector = note.injector;
             this.loadedUuid = note.uuid;
           } else if (note.request === 'status') {
             this.subject.next({

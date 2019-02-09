@@ -48,9 +48,9 @@ export class StorageDefaultData {
   public static readonly TIMER_DATA: TimerStorageData = {
     uuid: StorageDefaultData.TIMER_ID,
     name: 'Program #2',
-    countdown: 10,
-    countdownmaxlimit: 60,
     time: 900,
+    countdown: 10,
+    factor: 10,
     warnings: { fivesecond: false, tensecond: true, fifteensecond: true }
   };
 
@@ -58,7 +58,7 @@ export class StorageDefaultData {
     uuid: StorageDefaultData.STOPWATCH_ID,
     name: 'Program #3',
     countdown: 10,
-    countdownmaxlimit: 60,
+    factor: 10,
     warnings: { fivesecond: false, tensecond: true, fifteensecond: true }
   };
 }

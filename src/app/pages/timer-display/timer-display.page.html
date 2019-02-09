@@ -1,19 +1,19 @@
-<ion-content class="display-content" scrollX="false" scrollY="false" *ngIf="uuidData">
+<ion-content *ngIf="uuidData" class="display-content" scrollX="false" scrollY="false">
   <div>
     <ion-grid>
       <ion-row class="top-row">
         <ion-col>
-          <div [ngSwitch]="timerState">
+          <div [ngSwitch]="timerState" text-right>
             <div *ngSwitchCase="SS.Loaded" class="timeLoaded">
               <p>{{formattedGrandTime}}</p>
             </div>
             <div *ngSwitchCase="SS.CountdownWarning" class="timeCountdown">
               <p>{{formattedGrandTime}}</p>
             </div>
-            <div *ngSwitchCase="SS.Active" class="activeGo">
+            <div *ngSwitchCase="SS.Active" class="timeGo">
               <p>{{formattedGrandTime}}</p>
             </div>
-            <div *ngSwitchCase="SS.ActiveWarning" class="activeGetReady">
+            <div *ngSwitchCase="SS.ActiveWarning" class="timeGetReady">
               <p>{{formattedGrandTime}}</p>
             </div>
             <div *ngSwitchCase="SS.Completed" class="timeCompleted">

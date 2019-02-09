@@ -1,0 +1,62 @@
+$font-size-totaltime-portrait : 7vw;
+$font-size-totaltime-landscape: 7vh;
+$font-size-countdown-portrait : 6vw;
+$font-size-countdown-landscape: 6vh;
+
+ion-content {
+  display: contents;
+}
+
+// statusbar on device will overlay the title if this isnt in place.
+ion-header.header-md ion-toolbar:first-child { padding-top: 25px !important; }
+
+.top-divider {
+    padding-left: unset;
+}
+
+ion-icon {
+    color: var(--ion-color-warning);
+}
+
+ion-label, ion-range {
+    // this property is lost in the shadow, hence the important
+    font-size: inherit !important;
+}
+
+ion-range {
+    // to maximize length. this property is lost in the shadow, hence the important
+    padding-left: 0px !important;
+}
+
+.mini-display {
+    background: var(--ion-background-inset-color);
+    text-align: center;
+    width: -webkit-fill-available;
+    padding-top: 75px;
+    padding-bottom: 18px;
+    .totaltime {
+        font-family: selawk;
+        @media screen and (orientation: portrait) {
+            font-size: $font-size-totaltime-portrait;
+        }
+        @media screen and (orientation:landscape) {
+            font-size: $font-size-totaltime-landscape;
+        }
+        color: var(--ion-color-success);
+    }
+
+    .countdowninfo {
+        font-family: selawk;
+    }
+
+    .countdown {
+        @extend .countdowninfo;
+        
+        @media screen and (orientation: portrait) {
+            font-size: $font-size-countdown-portrait;
+        }
+        @media screen and (orientation:landscape) {
+            font-size: $font-size-countdown-landscape;
+        }
+    }
+}

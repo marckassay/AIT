@@ -82,12 +82,14 @@
 :root {
  .theme-light {
   --ion-background-color: var(--ion-color-light);
+  --ion-background-inset-color: #fbfbfd;
   --ion-text-color: var(--ion-color-dark);
   color: var(--ion-color-dark);
  }
 
  .theme-dark {
   --ion-background-color: var(--ion-color-dark);
+  --ion-background-inset-color: #2b2b2b;
   .display-content {
     --ion-background-color: #000000;
   }

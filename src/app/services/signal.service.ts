@@ -162,15 +162,15 @@ export class SignalService {
   }
 
   completed(): void {
-    if (this.data.sound !== 0) { this.loopBeep(33); }
     if (this.data.vibrate) { this.loopVibrate(33); }
+    if (this.data.sound !== 0) { this.loopBeep(33); }
   }
 
   private loopVibrate(intervals: number): void {
     this.vibration.vibrate(Array(intervals).fill(125));
   }
 
-  private loopBeep(intervals: number): void {
+  private async loopBeep(intervals: number): Promise<void> {
     let interval = 1;
     const loop = async (): Promise<void> => {
       if (interval <= intervals) {
@@ -178,7 +178,7 @@ export class SignalService {
         await this.sound.play(this.MP3, loop);
       }
     };
-    loop();
+    await loop();
   }
 
   async inform(): Promise<void> {

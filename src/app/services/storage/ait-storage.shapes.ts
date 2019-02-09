@@ -81,15 +81,14 @@ export interface IntervalStorageData extends UUIDData {
 
 export interface StopwatchStorageData extends UUIDData {
   name: string;
-
+  factor: 1 | 10;
   countdown: number;
-  countdownmaxlimit: number;
-
   warnings: CountdownWarnings;
 }
 
 export interface TimerStorageData extends StopwatchStorageData {
   time: number;
+  factor: 1 | 10;
   warnings: CountdownWarnings;
 }
 

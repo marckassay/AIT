@@ -22,7 +22,7 @@ import { IntervalStorageData, Limits } from 'src/app/services/storage/ait-storag
 import { SettingsPage } from '../settings-page';
 
 @Component({
-  selector: 'app-interval-settings',
+  selector: 'page-interval-settings',
   templateUrl: './interval-settings.page.html',
   styleUrls: ['./interval-settings.page.scss']
 })

@@ -68,30 +68,56 @@ export class AITStorage implements OnInit {
 
     if (entry === undefined) {
       return await this.getPagePromise<T>(uuid).then((value) => {
-        return this.registerSubject(uuid, value);
+        return this.registerSubject(value);
       });
     } else {
-      return Promise.resolve(entry.subject);
+      return this.registerSubject<T>(entry);
     }
   }
 
-  private registerSubject<T extends UUIDData>(uuid: string, value: T): BehaviorSubject<T> {
-    const subject = new BehaviorSubject<T>(value);
-    this.subjects.push({ uuid: uuid, subject: subject });
+  // TODO: enable the 2 operators
+  // merge().pipe(
+  // debounceTime(5000),
+  // distinctUntilChanged()
+  // );
+  /**
+   *
+   *
+   * @param value: T | CacheSubject<T>
+   */
+  private async registerSubject<T extends UUIDData>(value: T | CacheSubject<T>): Promise<BehaviorSubject<T>> {
+    let appcache: CacheSubject<AppStorageData> | undefined;
+    let subject: BehaviorSubject<T>;
 
-    if (this.observable !== undefined) {
-      this.subscription.unsubscribe();
-      this.observable = merge(this.observable, subject).pipe(
-        skip(1),
-        // debounceTime(5000),
-        // distinctUntilChanged()
-      );
+    // if observable is undefined, this should be the initial startup request for AppStorageData
+    if (this.observable === undefined) {
+      // create a new subject and push it into cache
+      subject = new BehaviorSubject<T>(value as T);
+      this.subjects.push({ uuid: value.uuid, subject: subject });
+      this.observable = subject.asObservable();
     } else {
-      this.observable = subject.asObservable().pipe(
-        skip(1),
-        // debounceTime(5000),
-        // distinctUntilChanged()
-      );
+      if (value.uuid === StorageDefaultData.APP_ID) {
+        return (value as CacheSubject<T>).subject;
+      }
+
+      if ('subject' in value === false) {
+        subject = new BehaviorSubject<T>(value as T);
+        this.subjects.push({ uuid: value.uuid, subject: subject });
+      } else {
+        subject = (value as CacheSubject<T>).subject;
+      }
+
+      let appdata: AppStorageData | undefined;
+      appcache = this.subjects.find(element => element.uuid === StorageDefaultData.APP_ID);
+      appcache.subject.subscribe(val => appdata = val).unsubscribe();
+
+      if (value.uuid !== appdata.current_uuid) {
+        appdata.current_uuid = value.uuid;
+        appcache.subject.next(appdata);
+      }
+
+      this.subscription.unsubscribe();
+      this.observable = merge(appcache.subject, subject);
     }
 
     this.subscription = this.observable.subscribe((val) => {

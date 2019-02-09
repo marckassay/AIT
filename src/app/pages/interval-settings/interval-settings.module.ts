@@ -30,7 +30,6 @@ import { IntervalSettingsPage } from './interval-settings.page';
     IonicModule,
     RouterModule.forChild([])
   ],
-  declarations: [IntervalSettingsPage],
-  exports: [IntervalSettingsPage]
+  declarations: [IntervalSettingsPage]
 })
 export class IntervalSettingsPageModule { }

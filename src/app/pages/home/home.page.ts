@@ -42,6 +42,8 @@ export class HomePage implements AfterViewInit {
   }
 
   routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch'): void {
+    // TODO: when visitng a display-page that wasn't loaded on startup, this close before the it 
+    // is resolved by Angular.
     this.menuCtrl.close('start')
       .then((value) => {
         const request = AppUtils.getPageRouteByName(name);

@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterContentInit, AfterViewInit, Optional, SkipSelf } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Inject, Injector, OnInit, Optional, Self, SkipSelf } from '@angular/core';
 import { MenuController, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
@@ -24,13 +24,22 @@ import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata'
 import { AITStorage } from '../services/storage/ait-storage.service';
 import { AppStorageData, UUIDData } from '../services/storage/ait-storage.shapes';
 
-export class SettingsPage implements AfterContentInit, AfterViewInit {
+export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit {
+
   _uuid: string;
   get uuid(): string {
     return this._uuid;
   }
   set uuid(value: string) {
     this._uuid = value;
+  }
+
+  _injector: Injector;
+  get injector(): Injector {
+    return this._injector;
+  }
+  set injector(value: Injector) {
+    this._injector = value;
   }
 
   private _appSubject: BehaviorSubject<AppStorageData>;
@@ -53,11 +62,24 @@ export class SettingsPage implements AfterContentInit, AfterViewInit {
   protected clonedForOneFactor: { [k: string]: any; } | undefined;
   protected clonedForCountdownFactor: number | undefined;
 
-  constructor(
-    @Optional() @SkipSelf() protected storage: AITStorage,
-    @Optional() @SkipSelf() protected menuCtrl: MenuController,
-    @Optional() @SkipSelf() protected toastCtrl: ToastController,
-    @Optional() @SkipSelf() protected menuSvc: SideMenuService) { }
+
+  protected storage: AITStorage;
+  protected menuCtrl: MenuController;
+  protected toastCtrl: ToastController;
+  protected menuSvc: SideMenuService<any>;
+  protected changeRef: ChangeDetectorRef;
+
+  constructor() { }
+
+  ngOnInit(): void {
+    // this injector is from the current display-page. this method of injection was followed by:
+    // https://stackoverflow.com/a/48723478
+    this.storage = this.injector.get(AITStorage);
+    this.menuCtrl = this.injector.get(MenuController);
+    this.toastCtrl = this.injector.get(ToastController);
+    this.menuSvc = this.injector.get(SideMenuService);
+    this.changeRef = this.injector.get(ChangeDetectorRef);
+  }
 
   ngAfterContentInit(): void {
     const getSubjects = async (): Promise<void> => {
@@ -93,6 +115,7 @@ export class SettingsPage implements AfterContentInit, AfterViewInit {
 
     this._pageSubject.subscribe((value) => {
       this._uuidData = value;
+      this.changeRef.detectChanges();
     });
 
     this.menuCtrl.get('end').then((element) => {

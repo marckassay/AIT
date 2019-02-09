@@ -32,12 +32,11 @@ ion-content {
   display: contents;
 }
 
-ion-list {
-  // for margin-top see ion-content comment above on why this is needed
-  margin-top: 81px;
-}
-
 ion-header.header-md ion-toolbar:first-child { padding-top: 25px !important; }
+
+.top-divider {
+    padding-left: unset;
+}
 
 ion-grid {
     width: 40% !important;
@@ -48,13 +47,34 @@ ion-icon {
     color: var(--ion-color-warning);
 }
 
-// give use some finger room for swiping without interacting with range controls
-.controls {
-    border-color: var(--ion-background-color);
-    border-right-width: 20px;
-    border-right-style: solid;
-    padding-right: 5px;
-    margin-right: 5px;
+ion-label, ion-range {
+    // this property is lost in the shadow, hence the important
+    font-size: inherit !important;
+}
+
+.mini-display {
+    background: var(--ion-background-inset-color);
+    text-align: center;
+    width: -webkit-fill-available;
+    padding-top: 75px;
+    padding-bottom: 18px;
+
+    text-align: center;
+    
+    .countdowninfo {
+        font-family: selawk;
+    }
+
+    .countdown {
+        @extend .countdowninfo;
+
+        @media screen and (orientation: portrait) {
+            font-size: $font-size-countdown-portrait;
+        }
+        @media screen and (orientation:landscape) {
+            font-size: $font-size-countdown-landscape;
+        }
+    }
 }
 
 // Below exclusively adjusts font-size and color (except .countdown)
@@ -62,6 +82,7 @@ ion-icon {
 .go-color {
     color: var(--ion-color-success);
 }
+
 .stop-color {
     color: var(--ion-color-danger);
 }
@@ -76,6 +97,7 @@ ion-icon {
     }
     color: var(--ion-color-success);
 }
+
 .rest {
     font-family: selawksb;
     @media screen and (orientation: portrait) {
@@ -86,6 +108,7 @@ ion-icon {
     }
     color: var(--ion-color-danger);
 }
+
 .interval {
     font-family: selawk;
     @media screen and (orientation: portrait) {
@@ -96,6 +119,7 @@ ion-icon {
     }
     color: var(--ion-color-success);
 }
+
 .totaltime {
     font-family: selawk;
     @media screen and (orientation: portrait) {
@@ -105,18 +129,4 @@ ion-icon {
         font-size: $font-size-totaltime-landscape;
     }
     color: var(--ion-color-success);
-}
-.countdowninfo {
-    font-family: selawk;
-}
-.countdown {
-    @extend .countdowninfo;
-    // center this div towards center
-    margin-left: 7vw;
-    @media screen and (orientation: portrait) {
-        font-size: $font-size-countdown-portrait;
-    }
-    @media screen and (orientation:landscape) {
-        font-size: $font-size-countdown-landscape;
-    }
 }

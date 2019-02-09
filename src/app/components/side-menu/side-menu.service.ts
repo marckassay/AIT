@@ -6,6 +6,7 @@ export interface SideMenuRequest {
   request: 'load' | 'status';
   uuid: string;
   component?: any;
+  injector?: any;
 }
 
 export interface SideMenuResponse {

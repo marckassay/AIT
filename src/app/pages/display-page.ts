@@ -15,11 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+// tslint:disable-next-line:max-line-length
+import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
+import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
 import { ScreenService } from '../services/screen.service';
@@ -73,6 +75,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     @Optional() protected route: ActivatedRoute,
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
+    @Optional() protected injector: Injector,
     @Optional() protected changeRef: ChangeDetectorRef,
     @Optional() protected menuCtrl: MenuController,
     @Optional() protected signalSvc: SignalService,
@@ -132,8 +135,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
       this.floatingbuttons.setToLoadedMode();
     }
 
-    // exclude menus since `ngAfterViewInit()` called method to do so.
-    this.setAppToRunningMode(false, false);
+    this.setAppToRunningMode(false);
   }
 
   /**
@@ -161,7 +163,17 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
    *
    * @param value true if timer is ticking
    */
-  protected async setAppToRunningMode(value: boolean, includeMenus = true): Promise<void> {
+  protected async setAppToRunningMode(value: boolean): Promise<void> {
+    await this.screenSvc.setScreenToRunningMode(value);
+    await this.menuCtrl.enable(value === false, 'start');
+    await this.menuCtrl.enable(value === false, 'end');
+
+    if (this.timerState === SequenceStates.Completed) {
+      this.floatingbuttons.setToCompletedMode();
+      this.grandTime = AppUtils.totaltime(this.uuidData);
+      this.signalSvc.completed();
+    }
+
     await this.signalSvc.enablePreferredVolume(value)
       .catch((reason) => {
         if (reason === 'DO_NOT_DISTURB') {
@@ -171,13 +183,6 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
           this.setAppToRunningMode(false);
         }
       });
-
-    await this.screenSvc.setScreenToRunningMode(value);
-
-    if (includeMenus) {
-      await this.menuCtrl.enable(value === false, 'start');
-      await this.menuCtrl.enable(value === false, 'end');
-    }
   }
 
   private resetTimer(): void {
@@ -206,15 +211,17 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
 
           // when response from the 'this.menuSvc.next()' call below
           if ((note.subject === 'end') && (note.response === 'unloaded')) {
-            const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
 
+            const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
             this.menuSvc.next({
               subject: 'end',
               request: 'load',
               uuid: (this.uuidData as UUIDData).uuid,
-              component: resolvedComponent
+              component: resolvedComponent,
+              injector: this.injector
             });
           } else if ((note.subject === 'end') && (note.response === 'loaded')) {
+
             this.floatingbuttons.setProgramButtonToVisible();
             this.menuCtrl.enable(true, 'end');
 
@@ -225,6 +232,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
             });
             // when response from HomePage is loaded from App.component
           } else if ((note.subject === 'start') && (note.response === 'loaded')) {
+
             this.floatingbuttons.setHomeButtonToVisible();
             this.menuCtrl.enable(true, 'start');
             menuSubscription.unsubscribe();
