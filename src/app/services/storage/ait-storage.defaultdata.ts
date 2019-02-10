@@ -69,6 +69,7 @@ export class MockStorageData {
 
   public static readonly AUDIO_MOCK_DATA: AudioMockStorageData = {
     uuid: MockStorageData.AUDIO_MOCK_STORAGE_ID,
+    routable: false,
     currentAudioMode: 2,
     ringVolume: 5,
     ringMaxVolume: 8,

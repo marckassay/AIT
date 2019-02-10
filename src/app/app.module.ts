@@ -32,7 +32,12 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SideMenuModule } from './components/side-menu/side-menu.module';
+import { AndroidFullScreenMock } from './mocks/androidfullscreen.mock';
 import { AudioManagementMock } from './mocks/audiomanagement.mock';
+import { BrightnessMock } from './mocks/brightness.mock';
+import { NativeAudioMock } from './mocks/native-audio.mock';
+import { SplashScreenMock } from './mocks/splashscreen.mock';
+import { VibrationMock } from './mocks/vibration.mock';
 import { HomePageModule } from './pages/home/home.module';
 import { HomePage } from './pages/home/home.page';
 import { ScreenService } from './services/screen.service';
@@ -58,17 +63,17 @@ import { AITStorage } from './services/storage/ait-storage.service';
   ],
   providers: [
     AITStorage,
-    Brightness,
-    Vibration,
-    NativeAudio,
     ScreenOrientation,
-    AndroidFullScreen,
-    SplashScreen,
     ScreenService,
-    { provide: AudioManagement, useClass: AudioManagement },
     SignalService,
     MenuController,
     IonicStorageModule,
+    { provide: Vibration, useClass: VibrationMock },
+    { provide: NativeAudio, useClass: NativeAudioMock },
+    { provide: SplashScreen, useClass: SplashScreenMock },
+    { provide: Brightness, useClass: BrightnessMock },
+    { provide: AudioManagement, useClass: AudioManagementMock },
+    { provide: AndroidFullScreen, useClass: AndroidFullScreenMock },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

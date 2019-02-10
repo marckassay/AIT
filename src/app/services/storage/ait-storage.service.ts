@@ -18,7 +18,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { from, merge, BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
 import { AppUtils } from 'src/app/app.utils';
 
 import { StorageDefaultData } from './ait-storage.defaultdata';
@@ -27,6 +26,7 @@ import { AppStorageData, UUIDData } from './ait-storage.shapes';
 export interface CacheSubject<T extends UUIDData> {
   uuid: string;
   subject: BehaviorSubject<T>;
+  routable: boolean;
 }
 
 @Injectable({
@@ -54,7 +54,7 @@ export class AITStorage implements OnInit {
   * @param uuid the key to storage record
   */
   getPageObservable<T extends UUIDData>(uuid: string): Observable<BehaviorSubject<T>> {
-    return from(this.getPromiseSubject(uuid));
+    return from(this.getPromiseSubject(uuid)) as Observable<BehaviorSubject<T>>;
   }
 
   /**
@@ -68,10 +68,18 @@ export class AITStorage implements OnInit {
 
     if (entry === undefined) {
       return await this.getPagePromise<T>(uuid).then((value) => {
-        return this.registerSubject(value);
+        if ('routable' in value === true) {
+          return this.addAsCacheSubject<T>(value);
+        } else {
+          return this.registerSubject(value);
+        }
       });
     } else {
-      return this.registerSubject<T>(entry);
+      if (entry.routable === false) {
+        return entry.subject;
+      } else {
+        return this.registerSubject<T>(entry);
+      }
     }
   }
 
@@ -92,8 +100,7 @@ export class AITStorage implements OnInit {
     // if observable is undefined, this should be the initial startup request for AppStorageData
     if (this.observable === undefined) {
       // create a new subject and push it into cache
-      subject = new BehaviorSubject<T>(value as T);
-      this.subjects.push({ uuid: value.uuid, subject: subject });
+      subject = this.addAsCacheSubject<T>(value as T);
       this.observable = subject.asObservable();
     } else {
       // app subject is never unsubscribed. so just return the cache subject
@@ -103,8 +110,7 @@ export class AITStorage implements OnInit {
 
       // if this isn't CacheSubject, then its UUIDData object. so with it create a CacheSubject
       if ('subject' in value === false) {
-        subject = new BehaviorSubject<T>(value as T);
-        this.subjects.push({ uuid: value.uuid, subject: subject });
+        subject = this.addAsCacheSubject<T>(value as T);
       } else {
         subject = (value as CacheSubject<T>).subject;
       }
@@ -152,9 +158,9 @@ export class AITStorage implements OnInit {
         if (value) {
           return value;
         } else {
-          const defaultpage = AppUtils.getPageDataByID(uuid);
-          await this.storage.set(uuid, defaultpage);
-          return defaultpage as T;
+          const defaultdata = AppUtils.getDataByID(uuid);
+          await this.storage.set(uuid, defaultdata);
+          return defaultdata as T;
         }
       });
     return results;
@@ -192,10 +198,9 @@ export class AITStorage implements OnInit {
         }
 
         if (!val) {
-          const appdata: UUIDData = AppUtils.getPageDataByID(StorageDefaultData.APP_ID);
+          const appdata: UUIDData = AppUtils.getDataByID(StorageDefaultData.APP_ID);
           await this.storage.set(appdata.uuid, appdata);
-          const subject = new BehaviorSubject<UUIDData>(appdata);
-          this.subjects.push({ uuid: appdata.uuid, subject: subject });
+          this.addAsCacheSubject(appdata);
         }
 
         return Promise.resolve(true);
@@ -205,5 +210,11 @@ export class AITStorage implements OnInit {
         this.status = 'off';
         return Promise.reject('LOCAL_STORAGE_FAILED');
       });
+  }
+
+  private addAsCacheSubject<T extends UUIDData>(data: T): BehaviorSubject<T> {
+    const subject = new BehaviorSubject<T>(data);
+    this.subjects.push({ uuid: data.uuid, subject: subject, routable: ('routable' in data) });
+    return subject;
   }
 }

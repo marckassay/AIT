@@ -129,4 +129,7 @@ export interface VolumeShape {
   systemMaxVolume: number;
 }
 
-export type AudioMockStorageData = AudioModeShape & VolumeShape & UUIDData;
+export interface NotRoutable extends UUIDData {
+  routable: false;
+}
+export type AudioMockStorageData = AudioModeShape & VolumeShape & NotRoutable;

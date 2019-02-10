@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Injector, OnInit } from '@angular/core';
+import { inject, AfterContentInit, AfterViewInit, ChangeDetectorRef, InjectionToken, Injector, OnInit } from '@angular/core';
 import { MenuController, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
@@ -23,6 +23,8 @@ import { SideMenuService, SideMenuStatusResponse } from '../components/side-menu
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 import { AITStorage } from '../services/storage/ait-storage.service';
 import { AppStorageData, UUIDData } from '../services/storage/ait-storage.shapes';
+
+import { DisplayPage } from './display-page';
 
 export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit {
 
@@ -42,6 +44,7 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit {
     this._injector = value;
   }
 
+  private menuElement: HTMLIonMenuElement;
   private _appSubject: BehaviorSubject<AppStorageData>;
   private _pageSubject: BehaviorSubject<UUIDData>;
 
@@ -62,23 +65,23 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit {
   protected clonedForOneFactor: { [k: string]: any; } | undefined;
   protected clonedForCountdownFactor: number | undefined;
 
-
   protected storage: AITStorage;
   protected menuCtrl: MenuController;
   protected toastCtrl: ToastController;
   protected menuSvc: SideMenuService<SideMenuStatusResponse>;
-  protected changeRef: ChangeDetectorRef;
+  //  protected changeRef: ChangeDetectorRef;
 
   constructor() { }
-
   ngOnInit(): void {
     // this injector is from the current display-page. this method of injection was followed by:
     // https://stackoverflow.com/a/48723478
-    this.storage = this.injector.get(AITStorage);
-    this.menuCtrl = this.injector.get(MenuController);
-    this.toastCtrl = this.injector.get(ToastController);
-    this.menuSvc = this.injector.get(SideMenuService) as SideMenuService<SideMenuStatusResponse>;
-    this.changeRef = this.injector.get(ChangeDetectorRef);
+    //  * var myInterface = injector.get(new InjectionToken<MyInterface>('SomeToken'));
+
+    this.storage = this.injector.get<AITStorage>(AITStorage);
+    this.menuCtrl = this.injector.get<MenuController>(MenuController);
+    this.toastCtrl = this.injector.get<ToastController>(ToastController);
+    this.menuSvc = this.injector.get<SideMenuService<SideMenuStatusResponse>>(SideMenuService);
+    // this.changeRef = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef);
   }
 
   ngAfterContentInit(): void {
@@ -115,28 +118,30 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit {
 
     this._pageSubject.subscribe((value) => {
       this._uuidData = value;
-      this.changeRef.detectChanges();
+      //  this.changeRef.detectChanges();
     });
 
     this.menuCtrl.get('end').then((element) => {
-      // TODO: this menu business should be moved into a service
-      const menuClosed = (): void => {
-        this._pageSubject.next(this._uuidData);
-        // TODO: when unsubscribing, throws undefined error. i think this has to do with the way
-        // subpages are being injected.
-        // this._pageSubject.unsubscribe();
-        // this._appSubject.unsubscribe();
-        element.removeEventListener('ionDidClose', menuClosed);
-        element.addEventListener('ionDidOpen', menuOpen);
-      };
-
-      const menuOpen = (): void => {
-        element.removeEventListener('ionDidOpen', menuOpen);
-        element.addEventListener('ionDidClose', menuClosed);
-      };
-
-      menuOpen();
+      this.menuElement = element;
+      this.menuOpen();
     });
+  }
+
+  // TODO: this menu business should be moved into a service
+  private menuOpen(): void {
+    this.menuElement.removeEventListener('ionDidOpen', this.menuOpen);
+    this.menuElement.addEventListener('ionDidClose', this.menuClosed);
+  }
+
+  // TODO: this menu business should be moved into a service
+  private menuClosed(): void {
+    this._pageSubject.next(this._uuidData);
+    // TODO: when unsubscribing, throws undefined error. i think this has to do with the way
+    // subpages are being injected.
+    // this._pageSubject.unsubscribe();
+    // this._appSubject.unsubscribe();
+    this.menuElement.removeEventListener('ionDidClose', this.menuClosed);
+    this.menuElement.addEventListener('ionDidOpen', this.menuOpen);
   }
 
   async inform(): Promise<void> {

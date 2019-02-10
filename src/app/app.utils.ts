@@ -26,7 +26,7 @@ export class AppUtils {
     /**
      * Returns the default data for ID matching to `uuid`. Default value is declared in this class as private members.
      */
-    static getPageDataByID(uuid: string): UUIDData {
+    static getDataByID(uuid: string): UUIDData {
         switch (uuid) {
             case StorageDefaultData.APP_ID: return StorageDefaultData.APP_DATA;
             case StorageDefaultData.INTERVAL_ID: return StorageDefaultData.INTERVAL_DATA;

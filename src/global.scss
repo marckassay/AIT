@@ -26,8 +26,3 @@ $font-path: "./assets/fonts";
   font-family: 'selawksb';
   src: url('#{$font-path}/selawksb.ttf') format('truetype');
 }
-
-@font-face {
-  font-family: 'sourcecodeprosb';
-  src: url('#{$font-path}/SourceCodePro-Semibold.ttf') format('truetype');
-}
