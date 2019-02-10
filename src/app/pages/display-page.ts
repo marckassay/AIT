@@ -23,7 +23,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
-import { SideMenuResponse, SideMenuService } from '../components/side-menu/side-menu.service';
+import { SideMenuService, SideMenuStatusResponse } from '../components/side-menu/side-menu.service';
 import { ScreenService } from '../services/screen.service';
 import { SignalService } from '../services/signal.service';
 import { SotsForAit } from '../services/sots/ait-sots';
@@ -129,15 +129,6 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
     this.aitPostBuildTimer();
   }
 
-  aitPostBuildTimer(): void {
-    if (this.noRebuild === false) {
-      this.timerState = SequenceStates.Loaded;
-      this.floatingbuttons.setToLoadedMode();
-    }
-
-    this.setAppToRunningMode(false);
-  }
-
   /**
    * Fired when the component being routed from is about to animate.
    */
@@ -149,6 +140,20 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
 
   protected aitSubscribeTimer(): void {
     throw new Error('Subclasses of DisplayPage need to implement aitSubscribeTimer().');
+  }
+
+  /**
+   * When returning from display-page setting's, this is called if the data object changed in the
+   * subject.subscribe().
+   */
+  private aitPostBuildTimer(): void {
+    if (this.noRebuild === false) {
+      this.timerState = SequenceStates.Loaded;
+      this.floatingbuttons.setToLoadedMode();
+    }
+    // TODO: i believe this is being called before this.attachSettingsAndCheckHome() is completed.
+    // move menuCtrl.enable/disable to menuSvc calls
+    this.setAppToRunningMode(false);
   }
 
   protected unsubscribe(includeSubject: boolean = false): void {
@@ -206,11 +211,11 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
     return new Promise<void>((resolve, reject): void => {
       // subscribe to menu service
       const menuSubscription = this.menuSvc.subscribe((note) => {
-        if ((note as SideMenuResponse).response !== undefined) {
-          note = (note as SideMenuResponse);
+        if ('response' in note) {
+          note = note as SideMenuStatusResponse;
 
           // when response from the 'this.menuSvc.next()' call below
-          if ((note.subject === 'end') && (note.response === 'unloaded')) {
+          if ((note.subject === 'end') && (note.response === false)) {
 
             const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
             this.menuSvc.next({
@@ -220,7 +225,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
               component: resolvedComponent,
               injector: this.injector
             });
-          } else if ((note.subject === 'end') && (note.response === 'loaded')) {
+          } else if ((note.subject === 'end') && (note.response === true)) {
 
             this.floatingbuttons.setProgramButtonToVisible();
             this.menuCtrl.enable(true, 'end');
@@ -230,8 +235,8 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
               request: 'status',
               uuid: (this.uuidData as UUIDData).uuid
             });
-            // when response from HomePage is loaded from App.component
-          } else if ((note.subject === 'start') && (note.response === 'loaded')) {
+            // when response from menuSvc about start menu
+          } else if ((note.subject === 'start') && (note.response === true)) {
 
             this.floatingbuttons.setHomeButtonToVisible();
             this.menuCtrl.enable(true, 'start');

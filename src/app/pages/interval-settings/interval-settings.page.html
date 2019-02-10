@@ -57,7 +57,7 @@
         </ion-grid>
 
         <div>
-          <span class="countdown">{{countdownLabel}}</span>
+          <span class="countdown">:{{data.countdown}}</span>
           <span class="countdowninfo"> secs (countdown to start)</span>
         </div>
       </div>
@@ -70,7 +70,7 @@
         <!-- factors -->
         <ion-item padding-top>
           <ion-label>adjust by high magnitude</ion-label>
-          <ion-toggle [(ngModel)]="data.factor"></ion-toggle>
+          <ion-toggle checked="{{data.factor == 10}}" (ionChange)="dataChanged('factor', $event)"></ion-toggle>
         </ion-item>
 
         <!-- activerest -->

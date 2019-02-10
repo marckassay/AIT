@@ -15,11 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Inject, Injector, OnInit, Optional, Self, SkipSelf } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Injector, OnInit } from '@angular/core';
 import { MenuController, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
-import { SideMenuService } from '../components/side-menu/side-menu.service';
+import { SideMenuService, SideMenuStatusResponse } from '../components/side-menu/side-menu.service';
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 import { AITStorage } from '../services/storage/ait-storage.service';
 import { AppStorageData, UUIDData } from '../services/storage/ait-storage.shapes';
@@ -66,7 +66,7 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit {
   protected storage: AITStorage;
   protected menuCtrl: MenuController;
   protected toastCtrl: ToastController;
-  protected menuSvc: SideMenuService<any>;
+  protected menuSvc: SideMenuService<SideMenuStatusResponse>;
   protected changeRef: ChangeDetectorRef;
 
   constructor() { }
@@ -77,7 +77,7 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit {
     this.storage = this.injector.get(AITStorage);
     this.menuCtrl = this.injector.get(MenuController);
     this.toastCtrl = this.injector.get(ToastController);
-    this.menuSvc = this.injector.get(SideMenuService);
+    this.menuSvc = this.injector.get(SideMenuService) as SideMenuService<SideMenuStatusResponse>;
     this.changeRef = this.injector.get(ChangeDetectorRef);
   }
 
@@ -102,7 +102,7 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit {
     this.menuSvc.next({
       subject: 'end',
       uuid: this._uuid,
-      response: 'loaded'
+      response: true
     });
   }
 

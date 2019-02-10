@@ -27,7 +27,7 @@
       <div class="mini-display">
         <p class="totaltime">{{formattedGrandTime}}</p>
         <div>
-          <span class="countdown">{{countdownLabel}}</span>
+          <span class="countdown">:{{data.countdown}}</span>
           <span class="countdowninfo"> secs (countdown to start)</span>
         </div>
       </div>
@@ -40,29 +40,29 @@
         <!-- factors -->
         <ion-item padding-top>
           <ion-label>adjust by high magnitude</ion-label>
-          <ion-toggle [(ngModel)]="data.factor"></ion-toggle>
+          <ion-toggle checked="{{data.factor == 10}}" (ionChange)="dataChanged('factor',$event)"></ion-toggle>
         </ion-item>
 
         <!-- minutes -->
         <ion-item lines="none">
-          <ion-range (ionChange)="dataChanged('minutes')" debounce="500" [(ngModel)]="_grandTime.minutes" min="1"
-            max="90" step="1" snaps="true" pin="true">
+          <ion-range (ionChange)="dataChanged('minutes', $event)" debounce="500" [min]="computedFactorValue.lower"
+            [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
             <ion-label slot="start">minutes</ion-label>
           </ion-range>
         </ion-item>
 
         <!-- seconds -->
         <ion-item lines="none">
-          <ion-range (ionChange)="dataChanged('seconds')" debounce="500" [(ngModel)]="_grandTime.seconds" min="0"
-            max="60" step="5" snaps="true" pin="true">
+          <ion-range (ionChange)="dataChanged('seconds', $event)" debounce="500" [min]="computedFactorValue.lower"
+            [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
             <ion-label slot="start">second</ion-label>
           </ion-range>
         </ion-item>
 
         <!-- countdown -->
         <ion-item margin-bottom lines="none">
-          <ion-range (ionChange)="dataChanged('countdown')" debounce="500" [(ngModel)]="data.countdown" min="5"
-            [max]="data.countdownmaxlimit" step="5" snaps="true" pin="true">
+          <ion-range (ionChange)="dataChanged('countdown', $event)" debounce="500" [min]="computedFactorValue.lower"
+            [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
             <ion-label slot="start">countdown</ion-label>
           </ion-range>
         </ion-item>

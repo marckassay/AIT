@@ -3,15 +3,15 @@ $font-size-time-landscape:      52vh;
 
 .display-content {
     .top-row {
-      @media screen and (orientation: portrait) {
+       @media screen and (orientation: portrait) {
         display: grid;
       }
       @media screen and (orientation:landscape) {
         display: flex;
       }
+
+      width: fit-content;
       align-items: start;
-      justify-content: center;
-      flex-wrap: nowrap;
     }
     
     p {

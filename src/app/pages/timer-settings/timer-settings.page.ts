@@ -34,26 +34,32 @@ export class TimerSettingsPage extends SettingsPage {
   }
 
   get formattedGrandTime(): string {
-    if (this.data) {
-      return AppUtils.totaltime(this.data);
-    }
+    return AppUtils.totaltime(this.data);
   }
 
-  get countdownLabel(): string {
-    if (this.data) {
-      return ':' + this.data.countdown;
-    } else {
-      return ':0';
-    }
+  private setComputedFactorValue(): void {
+    // For low magnitude mode, values '1' and '10' for 'lower and 'upper' limits respectively with
+    // range incrementing by 1's
+    // For high magnitude mode, values '0' and '100' for 'lower and 'upper' limits respectively with
+    // range incrementing by 10's
+    const lower = this.data.factor === 1 ? 1 : 0;
+    const upper = this.data.factor === 1 ? 10 : 100;
+    this.computedFactorValue = { lower: lower, upper: upper };
   }
 
   dataChanged(property: string, event: CustomEvent): void {
-    const value = event.detail.value;
+    const value: any = event.detail.value;
 
     if (property === 'seconds') {
       this.data.time = (this._grandTime.minutes * 60) + value;
-    } else {
+    } else if (property === 'minutes') {
       this.data.time = (value * 60) + this._grandTime.seconds;
+    } else if (property === 'countdown') {
+      this.data.countdown = +value;
+    } else if (property === 'factor') {
+      this.data.factor = event.detail.checked === true ? 10 : 1;
     }
+
+    this.setComputedFactorValue();
   }
 }

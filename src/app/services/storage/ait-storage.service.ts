@@ -96,10 +96,12 @@ export class AITStorage implements OnInit {
       this.subjects.push({ uuid: value.uuid, subject: subject });
       this.observable = subject.asObservable();
     } else {
+      // app subject is never unsubscribed. so just return the cache subject
       if (value.uuid === StorageDefaultData.APP_ID) {
         return (value as CacheSubject<T>).subject;
       }
 
+      // if this isn't CacheSubject, then its UUIDData object. so with it create a CacheSubject
       if ('subject' in value === false) {
         subject = new BehaviorSubject<T>(value as T);
         this.subjects.push({ uuid: value.uuid, subject: subject });
@@ -107,17 +109,22 @@ export class AITStorage implements OnInit {
         subject = (value as CacheSubject<T>).subject;
       }
 
+      // get appdata to determine the current_uuid
       let appdata: AppStorageData | undefined;
       appcache = this.subjects.find(element => element.uuid === StorageDefaultData.APP_ID);
       appcache.subject.subscribe(val => appdata = val).unsubscribe();
 
+      // if this requesting subject isn't the current_uuid, set it to current_uuid. And unsubscribe
+      // and merge it into appsubject to create a new observable
       if (value.uuid !== appdata.current_uuid) {
         appdata.current_uuid = value.uuid;
         appcache.subject.next(appdata);
-      }
 
-      this.subscription.unsubscribe();
-      this.observable = merge(appcache.subject, subject);
+        this.subscription.unsubscribe();
+        this.observable = merge(appcache.subject, subject);
+      } else {
+        return subject;
+      }
     }
 
     this.subscription = this.observable.subscribe((val) => {

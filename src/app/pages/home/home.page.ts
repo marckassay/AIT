@@ -28,6 +28,7 @@ import { StorageDefaultData } from 'src/app/services/storage/ait-storage.default
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements AfterViewInit {
+
   constructor(
     private router: Router,
     protected menuSvc: SideMenuService,
@@ -37,12 +38,12 @@ export class HomePage implements AfterViewInit {
     this.menuSvc.next({
       subject: 'start',
       uuid: StorageDefaultData.HOME_ID,
-      response: 'loaded'
+      response: true
     });
   }
 
   routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch'): void {
-    // TODO: when visitng a display-page that wasn't loaded on startup, this close before the it 
+    // TODO: when visitng a display-page that wasn't loaded on startup, this close before the it
     // is resolved by Angular.
     this.menuCtrl.close('start')
       .then((value) => {

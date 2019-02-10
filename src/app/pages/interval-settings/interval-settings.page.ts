@@ -37,29 +37,19 @@ export class IntervalSettingsPage extends SettingsPage {
     return AppUtils.totaltime(this.data);
   }
 
-  get countdownLabel(): string {
-    if (this.data) {
-      return ':' + this.data.countdown;
-    } else {
-      return ':0';
-    }
-  }
-
   private setComputedFactorValue(): void {
-    if (this.data) {
-      // For 'x1' factor mode, are '1' and '10' for 'lower and 'upper' limits respectively
-      // For 'x10' factor mode, are '0' and '100' for 'lower and 'upper' limits respectively
-      const lower = this.data.factor === 1 ? 1 : 0;
-      const upper = this.data.factor === 1 ? 10 : 100;
-      this.computedFactorValue = { lower: lower, upper: upper };
-    } else {
-      this.computedFactorValue = { lower: 0, upper: 100 };
-    }
+    // For low magnitude mode, values '1' and '10' for 'lower and 'upper' limits respectively
+    // For high magnitude mode, values '0' and '100' for 'lower and 'upper' limits respectively
+    const lower = this.data.factor === 1 ? 1 : 0;
+    const upper = this.data.factor === 1 ? 10 : 100;
+    this.computedFactorValue = { lower: lower, upper: upper };
   }
 
   dataChanged(property: string, event: CustomEvent): void {
+    let value: any = event.detail.value;
+
     if (property === 'activerest') {
-      const value = event.detail.value as Limits;
+      value = value as Limits;
 
       if (this.data.factor === 10) {
         if (this.clonedForTenFactor === undefined) {
@@ -98,28 +88,28 @@ export class IntervalSettingsPage extends SettingsPage {
       if (this.data.factor === 10) {
         this.clonedForIntervalsFactor = undefined;
 
-        this.data.intervals = event.detail.value as number;
+        this.data.intervals = value as number;
       } else {
         if (this.clonedForIntervalsFactor === undefined) {
           this.clonedForIntervalsFactor = this.data.intervals;
         }
 
-        this.data.intervals = this.clonedForIntervalsFactor + event.detail.value as number;
+        this.data.intervals = this.clonedForIntervalsFactor + value as number;
       }
     } else if (property === 'countdown') {
       if (this.data.factor === 10) {
         this.clonedForCountdownFactor = undefined;
 
-        this.data.countdown = event.detail.value as number;
+        this.data.countdown = value as number;
       } else {
         if (this.clonedForCountdownFactor === undefined) {
           this.clonedForCountdownFactor = this.data.countdown;
         }
 
-        this.data.countdown = this.clonedForCountdownFactor + event.detail.value as number;
+        this.data.countdown = this.clonedForCountdownFactor + value as number;
       }
     } else if (property === 'factor') {
-      this.data.factor = event.detail.value === '10' ? 10 : 1;
+      this.data.factor = event.detail.checked === true ? 10 : 1;
       this.setComputedFactorValue();
     }
   }

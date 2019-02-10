@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterViewInit, Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, Injector, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
@@ -23,7 +23,7 @@ import { debounceTime, skip } from 'rxjs/operators';
 
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
-import { SideMenuRequest, SideMenuResponse, SideMenuService } from './components/side-menu/side-menu.service';
+import { SideMenuService, SideMenuStatusRequest, SideMenuStatusResponse } from './components/side-menu/side-menu.service';
 import { HomePage } from './pages/home/home.page';
 import { ScreenService } from './services/screen.service';
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
@@ -49,6 +49,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private platform: Platform,
     private router: Router,
+    protected injector: Injector,
     private componentFactoryResolver: ComponentFactoryResolver,
     private storage: AITStorage,
     private screenSvc: ScreenService,
@@ -66,23 +67,29 @@ export class AppComponent implements OnInit, AfterViewInit {
   private subscribeMenuService(): void {
     this.menuSvc.subscribe((note) => {
       if ('request' in note) {
-        note = note as SideMenuRequest;
-        // if received a note on start menu's status, be nice and respond with a response. And
-        // immediately followed by a request to load start menu if status is 'unloaded'.
-        if ((note.subject === 'start') && (note.request === 'status')) {
-          const homeMenuStatus = (this.startMenu.isComponentLoaded(StorageDefaultData.HOME_ID)) ? 'loaded' : 'unloaded';
-          this.menuSvc.next({ subject: 'start', uuid: StorageDefaultData.HOME_ID, response: homeMenuStatus });
 
-          if (homeMenuStatus === 'unloaded') {
+        // if received a note on start menu's status call is isComponentAttached(). if false is
+        // returned, request to load start menu
+        if ((note.subject === 'start') && (note.request === 'status')) {
+          note = note as SideMenuStatusRequest;
+          const homeMenuStatus = (this.startMenu.isComponentAttached(StorageDefaultData.HOME_ID));
+
+          if (homeMenuStatus === false) {
             const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
-            this.menuSvc.next({ subject: 'start', uuid: StorageDefaultData.HOME_ID, request: 'load', component: resolvedComponent });
+            this.menuSvc.next({
+              subject: 'start',
+              uuid: StorageDefaultData.HOME_ID,
+              request: 'load',
+              component: resolvedComponent,
+              injector: this.injector
+            });
           }
         }
       } else if ('response' in note) {
-        note = note as SideMenuResponse;
+        note = note as SideMenuStatusResponse;
 
         // post app start-up; after start and end sidemenus have been loaded
-        if ((note.subject === 'start') && (note.response === 'loaded')) {
+        if ((note.subject === 'start') && (note.response)) {
           this.screenSvc.bootupScreen();
           this.platform.resume.subscribe(() => {
             // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
