@@ -27,39 +27,38 @@ import { SettingsPage } from '../settings-page';
   styleUrls: ['./timer-settings.page.scss'],
 })
 export class TimerSettingsPage extends SettingsPage {
-  _grandTime = { minutes: 15, seconds: 0 };
+  private grandTime = { minutes: 15, seconds: 0 };
+
 
   get data(): TimerStorageData {
-    return this._uuidData as TimerStorageData;
+    return this.uuidData as TimerStorageData;
   }
 
   get formattedGrandTime(): string {
     return AppUtils.totaltime(this.data);
   }
 
-  private setComputedFactorValue(): void {
-    // For low magnitude mode, values '1' and '10' for 'lower and 'upper' limits respectively with
+  get computedFactorValue(): { lower: number, upper: number } {
+    // For small magnitude mode, values '1' and '10' for 'lower and 'upper' limits respectively with
     // range incrementing by 1's
-    // For high magnitude mode, values '0' and '100' for 'lower and 'upper' limits respectively with
+    // For big magnitude mode, values '0' and '100' for 'lower and 'upper' limits respectively with
     // range incrementing by 10's
     const lower = this.data.factor === 1 ? 1 : 0;
     const upper = this.data.factor === 1 ? 10 : 100;
-    this.computedFactorValue = { lower: lower, upper: upper };
+    return { lower: lower, upper: upper };
   }
 
   dataChanged(property: string, event: CustomEvent): void {
     const value: any = event.detail.value;
 
     if (property === 'seconds') {
-      this.data.time = (this._grandTime.minutes * 60) + value;
+      this.data.time = (this.grandTime.minutes * 60) + value;
     } else if (property === 'minutes') {
-      this.data.time = (value * 60) + this._grandTime.seconds;
+      this.data.time = (value * 60) + this.grandTime.seconds;
     } else if (property === 'countdown') {
       this.data.countdown = +value;
     } else if (property === 'factor') {
       this.data.factor = event.detail.checked === true ? 10 : 1;
     }
-
-    this.setComputedFactorValue();
   }
 }

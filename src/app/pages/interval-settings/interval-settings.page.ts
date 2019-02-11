@@ -27,10 +27,14 @@ import { SettingsPage } from '../settings-page';
   styleUrls: ['./interval-settings.page.scss']
 })
 export class IntervalSettingsPage extends SettingsPage {
+  private computedFactorValue = { lower: 10, upper: 100 };
   private clonedForIntervalsFactor: number | undefined;
+  private clonedForTenFactor: { [k: string]: any; } | undefined;
+  private clonedForOneFactor: { [k: string]: any; } | undefined;
+  private clonedForCountdownFactor: number | undefined;
 
   get data(): IntervalStorageData {
-    return this._uuidData as IntervalStorageData;
+    return this.uuidData as IntervalStorageData;
   }
 
   get totaltime(): string {

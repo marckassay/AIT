@@ -17,7 +17,6 @@
 */
 import { AfterViewInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
 import { AppUtils } from 'src/app/app.utils';
 import { SideMenuService } from 'src/app/components/side-menu/side-menu.service';
 import { StorageDefaultData } from 'src/app/services/storage/ait-storage.defaultdata';
@@ -31,11 +30,10 @@ export class HomePage implements AfterViewInit {
 
   constructor(
     private router: Router,
-    protected menuSvc: SideMenuService,
-    private menuCtrl: MenuController) { }
+    protected menuSvc: SideMenuService) { }
 
   ngAfterViewInit(): void {
-    this.menuSvc.next({
+    this.menuSvc.send({
       subject: 'start',
       uuid: StorageDefaultData.HOME_ID,
       response: true
@@ -45,7 +43,7 @@ export class HomePage implements AfterViewInit {
   routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch'): void {
     // TODO: when visitng a display-page that wasn't loaded on startup, this close before the it
     // is resolved by Angular.
-    this.menuCtrl.close('start')
+    this.menuSvc.closeLeftMenu()
       .then((value) => {
         const request = AppUtils.getPageRouteByName(name);
         if ((value === true) && (this.router.url !== request.join('/'))) {

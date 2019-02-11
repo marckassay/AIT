@@ -18,7 +18,6 @@
 // tslint:disable-next-line:max-line-length
 import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
 import { AppUtils } from '../app.utils';
@@ -77,7 +76,6 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
     @Optional() protected injector: Injector,
     @Optional() protected changeRef: ChangeDetectorRef,
-    @Optional() protected menuCtrl: MenuController,
     @Optional() protected signalSvc: SignalService,
     @Optional() protected screenSvc: ScreenService,
     @Optional() protected menuSvc: SideMenuService
@@ -107,7 +105,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.attachSettingsAndCheckHome();
+
   }
 
   ngOnDestroy(): void {
@@ -127,6 +125,7 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
    */
   ionViewDidEnter(): void {
     this.aitPostBuildTimer();
+    this.attachSettingsAndCheckHome();
   }
 
   /**
@@ -170,8 +169,8 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
    */
   protected async setAppToRunningMode(value: boolean): Promise<void> {
     await this.screenSvc.setScreenToRunningMode(value);
-    await this.menuCtrl.enable(value === false, 'start');
-    await this.menuCtrl.enable(value === false, 'end');
+    await this.menuSvc.enableLeftMenu(value === false);
+    await this.menuSvc.enableRightMenu(value === false);
 
     if (this.timerState === SequenceStates.Completed) {
       this.floatingbuttons.setToCompletedMode();
@@ -210,49 +209,53 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   private attachSettingsAndCheckHome(): Promise<void> {
     return new Promise<void>((resolve, reject): void => {
       // subscribe to menu service
-      const menuSubscription = this.menuSvc.subscribe((note) => {
-        if ('response' in note) {
-          note = note as SideMenuStatusResponse;
+      const menuSubscription = this.menuSvc.listen({
+        next: (note): void => {
+          if ('response' in note) {
+            note = note as SideMenuStatusResponse;
 
-          // when response from the 'this.menuSvc.next()' call below
-          if ((note.subject === 'end') && (note.response === false)) {
+            // when response from the 'this.menuSvc.next()' call below
+            if ((note.subject === 'end') && (note.response === false)) {
 
-            const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
-            this.menuSvc.next({
-              subject: 'end',
-              request: 'load',
-              uuid: (this.uuidData as UUIDData).uuid,
-              component: resolvedComponent,
-              injector: this.injector
-            });
-          } else if ((note.subject === 'end') && (note.response === true)) {
+              const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(this.settingsPageClass);
+              this.menuSvc.send({
+                subject: 'end',
+                request: 'load',
+                uuid: (this.uuidData as UUIDData).uuid,
+                component: resolvedComponent,
+                injector: this.injector
+              });
+            } else if ((note.subject === 'end') && (note.response === true)) {
 
-            this.floatingbuttons.setProgramButtonToVisible();
-            this.menuCtrl.enable(true, 'end');
+              this.floatingbuttons.setProgramButtonToVisible();
+              this.menuSvc.enableRightMenu(true);
 
-            this.menuSvc.next({
-              subject: 'start',
-              request: 'status',
-              uuid: (this.uuidData as UUIDData).uuid
-            });
-            // when response from menuSvc about start menu
-          } else if ((note.subject === 'start') && (note.response === true)) {
+              this.menuSvc.send({
+                subject: 'start',
+                request: 'status',
+                uuid: (this.uuidData as UUIDData).uuid
+              });
+              // when response from menuSvc about start menu
+            } else if ((note.subject === 'start') && (note.response === true)) {
 
-            this.floatingbuttons.setHomeButtonToVisible();
-            this.menuCtrl.enable(true, 'start');
-            menuSubscription.unsubscribe();
-            resolve();
+              this.floatingbuttons.setHomeButtonToVisible();
+              this.menuSvc.enableLeftMenu(true);
+              menuSubscription.unsubscribe();
+              resolve();
+            }
           }
+        },
+        error: (): void => {
+          reject();
+        },
+        complete: (): void => {
+          reject();
         }
-      }, () => {
-        reject();
-      }, () => {
-        reject();
       });
 
       // send request to see if this display-page subclass has its settings page loaded in the
       // 'end' sidemenu.
-      this.menuSvc.next({
+      this.menuSvc.send({
         subject: 'end',
         request: 'status',
         uuid: (this.uuidData as UUIDData).uuid
@@ -271,13 +274,13 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
         this.sots.sequencer.pause();
         this.setAppToRunningMode(false);
         this.floatingbuttons.setToPausedMode();
-        this.menuCtrl.open('start');
+        this.menuSvc.openLeftMenu();
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
         this.setAppToRunningMode(false);
         this.floatingbuttons.setToPausedMode();
-        this.menuCtrl.open('end');
+        this.menuSvc.openRightMenu();
         break;
       case FabAction.Reset:
         this.resetTimer();

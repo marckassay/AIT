@@ -23,7 +23,7 @@ import { debounceTime, skip } from 'rxjs/operators';
 
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
-import { SideMenuService, SideMenuStatusRequest, SideMenuStatusResponse } from './components/side-menu/side-menu.service';
+import { SideMenuService, SideMenuShapes, SideMenuStatusRequest, SideMenuStatusResponse } from './components/side-menu/side-menu.service';
 import { HomePage } from './pages/home/home.page';
 import { ScreenService } from './services/screen.service';
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
@@ -65,38 +65,40 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private subscribeMenuService(): void {
-    this.menuSvc.subscribe((note) => {
-      if ('request' in note) {
+    this.menuSvc.listen({
+      next: (note: SideMenuShapes): void => {
+        if ('request' in note) {
 
-        // if received a note on start menu's status call is isComponentAttached(). if false is
-        // returned, request to load start menu
-        if ((note.subject === 'start') && (note.request === 'status')) {
-          note = note as SideMenuStatusRequest;
-          const homeMenuStatus = (this.startMenu.isComponentAttached(StorageDefaultData.HOME_ID));
+          // if received a note on start menu's status call is isComponentAttached(). if false is
+          // returned, request to load start menu
+          if ((note.subject === 'start') && (note.request === 'status')) {
+            note = note as SideMenuStatusRequest;
+            const homeMenuStatus = (this.startMenu.isComponentAttached(StorageDefaultData.HOME_ID));
 
-          if (homeMenuStatus === false) {
-            const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
-            this.menuSvc.next({
-              subject: 'start',
-              uuid: StorageDefaultData.HOME_ID,
-              request: 'load',
-              component: resolvedComponent,
-              injector: this.injector
+            if (homeMenuStatus === false) {
+              const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
+              this.menuSvc.send({
+                subject: 'start',
+                uuid: StorageDefaultData.HOME_ID,
+                request: 'load',
+                component: resolvedComponent,
+                injector: this.injector
+              });
+            }
+          }
+        } else if ('response' in note) {
+          note = note as SideMenuStatusResponse;
+
+          // post app start-up; after start and end sidemenus have been loaded
+          if ((note.subject === 'start') && (note.response)) {
+            this.screenSvc.bootupScreen();
+            this.platform.resume.subscribe(() => {
+              // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
+              // running state when they set ait to the device's background and then returns. At that point
+              // this may be called.
+              // this.brightness.applyBrightnessOffset();
             });
           }
-        }
-      } else if ('response' in note) {
-        note = note as SideMenuStatusResponse;
-
-        // post app start-up; after start and end sidemenus have been loaded
-        if ((note.subject === 'start') && (note.response)) {
-          this.screenSvc.bootupScreen();
-          this.platform.resume.subscribe(() => {
-            // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
-            // running state when they set ait to the device's background and then returns. At that point
-            // this may be called.
-            // this.brightness.applyBrightnessOffset();
-          });
         }
       }
     });
