@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { FabContainerComponentModule } from 'src/app/components/fab-container/fab-container.module';
+import { XProgressBarModule } from 'src/app/components/x-progress-bar/x-progress-bar.module';
 
 import { DisplayPageResolverService } from '../display-page-router.service';
 import { TimerSettingsPageModule } from '../timer-settings/timer-settings.module';
@@ -25,6 +26,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     FabContainerComponentModule,
+    XProgressBarModule,
     TimerSettingsPageModule,
     IonicModule,
     RouterModule.forChild(routes)

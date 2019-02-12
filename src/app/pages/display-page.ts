@@ -23,6 +23,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuService, SideMenuStatusResponse } from '../components/side-menu/side-menu.service';
+import { XProgressBarComponent } from '../components/x-progress-bar/x-progress-bar.component';
 import { ScreenService } from '../services/screen.service';
 import { SignalService } from '../services/signal.service';
 import { SotsForAit } from '../services/sots/ait-sots';
@@ -32,6 +33,9 @@ import { UUIDData } from '../services/storage/ait-storage.shapes';
 export class DisplayPage implements OnInit, AfterViewInit {
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
+
+  @ViewChild(XProgressBarComponent)
+  protected progress: XProgressBarComponent;
 
   subject: BehaviorSubject<UUIDData>;
 
@@ -85,11 +89,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.sots = new SotsForAit();
-
     this.signalSvc.onInit();
     this.screenSvc.onInit();
-
-
     this.route.data.subscribe((data: { subject: BehaviorSubject<UUIDData> }) => {
       this.subject = data.subject;
     });
@@ -131,6 +132,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * and when the user exits from the 'start' menu and returns. The 'end' menu is of no consequence.
    */
   ionViewDidEnter(): void {
+    this.progress.show = true;
     this.aitPostBuildTimer();
     this.attachSettingsAndCheckHome();
   }
@@ -250,6 +252,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
               this.floatingbuttons.setHomeButtonToVisible();
               this.menuSvc.enableLeftMenu(true);
               menuSubscription.unsubscribe();
+              this.progress.show = false;
               resolve();
             }
           }

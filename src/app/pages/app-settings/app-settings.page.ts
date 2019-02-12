@@ -15,10 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { MenuController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { XProgressBarComponent } from 'src/app/components/x-progress-bar/x-progress-bar.component';
 import { BrightnessUtil, ScreenService } from 'src/app/services/screen.service';
 import { SignalService } from 'src/app/services/signal.service';
 import { StorageDefaultData } from 'src/app/services/storage/ait-storage.defaultdata';
@@ -42,6 +43,8 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this._data = value;
   }
 
+  @ViewChild(XProgressBarComponent)
+  protected progress: XProgressBarComponent;
   /**
    * this type assignment to variable is for Angular template can access enum values.
    */
@@ -73,6 +76,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.progress.show = true;
     const getSubject = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
@@ -84,6 +88,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter(): void {
+    this.progress.show = false;
     this.menuCtrl.enable(false, 'start');
     this.menuCtrl.enable(false, 'end');
   }

@@ -8,6 +8,7 @@ $font-size-time-portrait: 25vw;
 $font-size-time-landscape: 25vh;
 
 .display-content {
+
     .top-row {
       @media screen and (orientation: portrait) {
         display: grid;

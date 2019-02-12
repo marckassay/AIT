@@ -1,5 +1,6 @@
-<ion-content class="display-content" scrollX="false" scrollY="false" *ngIf="uuidData">
-  <ion-grid>
+<ion-content class="display-content" scrollX="false" scrollY="false">
+  <x-progress-bar></x-progress-bar>
+  <ion-grid *ngIf="uuidData">
     <ion-row class="top-row">
       <ion-col>
         <activerest-renderer [state]="timerState" [limits]="uuidData.activerest"></activerest-renderer>
@@ -9,7 +10,8 @@
           <div *ngSwitchCase="SS.CountdownWarning" class="intervalCountdown">1/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.Loaded" class="intervalLoaded">1/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.Active" class="intervalGo">{{currentInterval}}/{{uuidData.intervals}}</div>
-          <div *ngSwitchCase="SS.ActiveWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SS.ActiveWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}
+          </div>
           <div *ngSwitchCase="SS.Rest" class="intervalStop">{{currentInterval}}/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.RestWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.Completed" class="intervalCompleted">{{currentInterval}}/{{uuidData.intervals}}</div>
@@ -23,7 +25,8 @@
           <div *ngSwitchCase="SS.CountdownWarning" class="intervalCountdown">1/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.Loaded" class="intervalLoaded">1/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.Active" class="intervalGo">{{currentInterval}}/{{uuidData.intervals}}</div>
-          <div *ngSwitchCase="SS.ActiveWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}</div>
+          <div *ngSwitchCase="SS.ActiveWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}
+          </div>
           <div *ngSwitchCase="SS.Rest" class="intervalStop">{{currentInterval}}/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.RestWarning" class="intervalGetReady">{{currentInterval}}/{{uuidData.intervals}}</div>
           <div *ngSwitchCase="SS.Completed" class="intervalCompleted">{{currentInterval}}/{{uuidData.intervals}}</div>
