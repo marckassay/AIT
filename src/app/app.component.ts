@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * Enables or disables sidemenus from being cached by `SideMenuComponent`.
    */
-  cacheSideMenus = false;
+  cacheSideMenus = env.enableViewCache;
 
   constructor(
     private platform: Platform,
@@ -60,11 +60,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private storage: AITStorage,
     private screenSvc: ScreenService,
     private menuSvc: SideMenuService
-  ) {
-    // tslint:disable-next-line: max-line-length
-    console.log('AppModule.env *** >>>', 'useMocks > ', env.useMocks, ', production > ', env.production, ', enableViewCache > ', env.enableViewCache);
-    // this.cacheSideMenus = env.enableViewCache;
-  }
+  ) { }
 
   ngOnInit(): void {
     this.initializeApp();

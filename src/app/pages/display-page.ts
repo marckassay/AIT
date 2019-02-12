@@ -18,7 +18,7 @@
 // tslint:disable-next-line:max-line-length
 import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
@@ -29,7 +29,7 @@ import { SotsForAit } from '../services/sots/ait-sots';
 import { SequenceStates } from '../services/sots/ait-sots.util';
 import { UUIDData } from '../services/storage/ait-storage.shapes';
 
-export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
+export class DisplayPage implements OnInit, AfterViewInit {
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
 
@@ -71,6 +71,8 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
    */
   protected noRebuild: boolean;
 
+  private subscrptn: Subscription;
+
   constructor(
     @Optional() protected route: ActivatedRoute,
     @Optional() protected componentFactoryResolver: ComponentFactoryResolver,
@@ -87,11 +89,17 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
     this.signalSvc.onInit();
     this.screenSvc.onInit();
 
+
     this.route.data.subscribe((data: { subject: BehaviorSubject<UUIDData> }) => {
       this.subject = data.subject;
     });
 
-    this.subject.subscribe((uuidData: UUIDData) => {
+
+    if (this.subscrptn && this.subscrptn.closed === false) {
+      this.subscrptn.unsubscribe();
+    }
+
+    this.subscrptn = this.subject.subscribe((uuidData: UUIDData) => {
       // TODO: pipe a 'distinctUntil' operator for coming back from settings
       if (this.uuidData) {
         this.uuidData = uuidData;
@@ -105,7 +113,6 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
   }
 
   ngOnDestroy(): void {
@@ -158,7 +165,9 @@ export class DisplayPage implements OnInit, OnDestroy, AfterViewInit {
   protected unsubscribe(includeSubject: boolean = false): void {
     this.sots.unsubscribe();
     if (includeSubject) {
-      this.subject.unsubscribe();
+      if (this.subscrptn && this.subscrptn.closed === false) {
+        this.subscrptn.unsubscribe();
+      }
     }
   }
 

@@ -17,8 +17,6 @@
 */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
-import { IonicRouteStrategy } from '@ionic/angular';
-import { environment as env } from 'src/environments/environment';
 
 import { AppRoutingStrategy } from './app-routing-strategy';
 
@@ -51,7 +49,7 @@ const routes: Routes = [
     }
   )],
   providers: [
-    { provide: RouteReuseStrategy, useClass: (env.enableViewCache === false) ? IonicRouteStrategy : AppRoutingStrategy }
+    { provide: RouteReuseStrategy, useClass: AppRoutingStrategy }
   ],
   exports: [RouterModule]
 })

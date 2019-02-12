@@ -100,12 +100,13 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit, On
   }
 
   private subscribe(): void {
-    const appData = this.appSubject.getValue();
-    this.appSoundsDisabled = appData.sound === 0;
-    this.appVibratorDisabled = appData.vibrate === false;
-    this.showInform = (this.appSoundsDisabled || this.appVibratorDisabled);
+    this.appSubject.subscribe((value) => {
+      this.appSoundsDisabled = value.sound === 0;
+      this.appVibratorDisabled = value.vibrate === false;
+      this.showInform = (this.appSoundsDisabled || this.appVibratorDisabled);
+    }).unsubscribe();
 
-    this.uuidData = this.pageSubject.getValue();
+    this.pageSubject.subscribe(value => this.uuidData = value).unsubscribe();
   }
 
   async inform(): Promise<void> {
