@@ -18,7 +18,6 @@
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { Brightness } from '@ionic-native/brightness/ngx';
@@ -26,8 +25,9 @@ import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
-import { IonicModule, IonicRouteStrategy, MenuController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
+import { environment as env } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,6 +36,7 @@ import { AndroidFullScreenMock } from './mocks/androidfullscreen.mock';
 import { AudioManagementMock } from './mocks/audiomanagement.mock';
 import { BrightnessMock } from './mocks/brightness.mock';
 import { NativeAudioMock } from './mocks/native-audio.mock';
+import { ScreenOrientationMock } from './mocks/screen-orientation.mock';
 import { SplashScreenMock } from './mocks/splashscreen.mock';
 import { VibrationMock } from './mocks/vibration.mock';
 import { HomePageModule } from './pages/home/home.module';
@@ -50,6 +51,7 @@ import { AITStorage } from './services/storage/ait-storage.service';
   imports: [
     CommonModule,
     BrowserModule,
+    AppRoutingModule,
     SideMenuModule,
     HomePageModule,
     IonicStorageModule.forRoot({
@@ -59,22 +61,19 @@ import { AITStorage } from './services/storage/ait-storage.service';
     IonicModule.forRoot({
       menuType: 'reveal'
     }),
-    AppRoutingModule
   ],
   providers: [
     AITStorage,
-    ScreenOrientation,
     ScreenService,
     SignalService,
-    MenuController,
     IonicStorageModule,
-    { provide: Vibration, useClass: VibrationMock },
-    { provide: NativeAudio, useClass: NativeAudioMock },
-    { provide: SplashScreen, useClass: SplashScreenMock },
-    { provide: Brightness, useClass: BrightnessMock },
-    { provide: AudioManagement, useClass: AudioManagementMock },
-    { provide: AndroidFullScreen, useClass: AndroidFullScreenMock },
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: Vibration, useClass: (env.useMocks === false) ? Vibration : VibrationMock },
+    { provide: NativeAudio, useClass: (env.useMocks === false) ? NativeAudio : NativeAudioMock },
+    { provide: SplashScreen, useClass: (env.useMocks === false) ? SplashScreen : SplashScreenMock },
+    { provide: ScreenOrientation, useClass: (env.useMocks === false) ? ScreenOrientation : ScreenOrientationMock },
+    { provide: Brightness, useClass: (env.useMocks === false) ? Brightness : BrightnessMock },
+    { provide: AudioManagement, useClass: (env.useMocks === false) ? AudioManagement : AudioManagementMock },
+    { provide: AndroidFullScreen, useClass: (env.useMocks === false) ? AndroidFullScreen : AndroidFullScreenMock }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

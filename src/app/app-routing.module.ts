@@ -16,7 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
+import { IonicRouteStrategy } from '@ionic/angular';
+import { environment as env } from 'src/environments/environment';
+
+import { AppRoutingStrategy } from './app-routing-strategy';
 
 const routes: Routes = [
   {
@@ -41,10 +45,14 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(
     routes,
     {
+      relativeLinkResolution: 'legacy',
       enableTracing: false, // <-- debugging purposes only
       initialNavigation: false
     }
   )],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: (env.enableViewCache === false) ? IonicRouteStrategy : AppRoutingStrategy }
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

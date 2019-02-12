@@ -31,7 +31,7 @@ import { TimerSettingsPage } from '../timer-settings/timer-settings.page';
 export class TimerDisplayPage extends DisplayPage {
   _formattedGrandTime: string;
   get formattedGrandTime(): string {
-    if (this.screenSvc.orientation.type.search('.*portrait.*') >= 0) {
+    if (this.screenSvc.isScreenPortrait()) {
       return this.grandTime.replace(':', ':\r\n').replace('.', '.\r\n');
     } else {
       return this.grandTime;

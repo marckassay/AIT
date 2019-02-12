@@ -1,9 +1,9 @@
 <ion-app ngClass="{{theme}}">
   <ion-menu side="start">
-    <side-menu id="start" #startMenu></side-menu>
+    <side-menu id="start" [cacheEnabled]="cacheSideMenus"></side-menu>
   </ion-menu>
   <ion-menu side="end">
-    <side-menu id="end" #endMenu></side-menu>
+    <side-menu id="end" [cacheEnabled]="cacheSideMenus"></side-menu>
   </ion-menu>
   <ion-router-outlet main></ion-router-outlet>
 </ion-app>

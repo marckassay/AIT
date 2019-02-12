@@ -26,7 +26,7 @@ import { AppUtils } from '../app.utils';
 
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
-import { AppStorageData, BrightnessSet, OrientationSetting } from './storage/ait-storage.shapes';
+import { AppStorageData, BrightnessSet } from './storage/ait-storage.shapes';
 
 export class BrightnessUtil {
   static convertToDeviceBrightnessNumber(value: BrightnessSet): number {
@@ -73,7 +73,7 @@ export class ScreenService {
 
   constructor(
     private brightness: Brightness,
-    public orientation: ScreenOrientation,
+    private orientation: ScreenOrientation,
     private uibars: AndroidFullScreen,
     private splash: SplashScreen,
     private storage: AITStorage) { }
@@ -93,6 +93,16 @@ export class ScreenService {
     }
   }
 
+  isScreenPortrait(): boolean {
+    // these string values can be found here:
+    //   tslint:disable-next-line: max-line-length
+    // https://github.com/ionic-team/ionic-native/blob/92140cd2db25d2d2aec04fbbcea9cf3a7fee6657/src/%40ionic-native/plugins/screen-orientation/index.ts#L66
+    const results = this.orientation.type === 'portrait' ||
+      this.orientation.type === 'portrait-primary' ||
+      this.orientation.type === 'portrait-secondary';
+
+    return results;
+  }
   /**
    * Called by app-component during bootup
    */

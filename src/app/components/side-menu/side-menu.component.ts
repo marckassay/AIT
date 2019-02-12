@@ -20,20 +20,29 @@ export class SideMenuComponent implements OnInit {
   @Input()
   id: 'start' | 'end';
 
-  private views: Array<CacheViewRef>;
-  private currentlyAttached: CacheViewRef;
+  @Input()
+  /**
+   * When set to false, `cachedViewRefs` will only store 1 viewref which will be the latest viewref
+   * attached.
+   */
+  cacheEnabled: boolean;
+
+  private cachedViewRefs: Array<CacheViewRef>;
 
   constructor(protected menuSvc: SideMenuService) {
-    this.views = [];
+    this.cachedViewRefs = [];
   }
 
   ngOnInit(): void {
     this.menuSvc.listen({
       next: (note: SideMenuShapes): void => {
+
+        // since the SideMenuService is multicasting, make sure we are in the correct instance
+        // of SideMenuComponent by checking this.id
         if (this.id === note.subject) {
+
           if ('request' in note) {
-            // since the SideMenuService is multicasting, make sure we are in the correct instance
-            // of SideMenuComponent by checking this.id
+
             if (note.request === 'load') {
               note = note as SideMenuLoadRequest;
 
@@ -68,22 +77,22 @@ export class SideMenuComponent implements OnInit {
     });
   }
 
-  isComponentAttached(uuid: string): boolean {
+  private isComponentAttached(uuid: string): boolean {
     const component = this.getAttached();
     return (component !== undefined) && (component.uuid === uuid);
   }
 
   private isComponentCached(uuid: string): boolean {
-    return this.views.findIndex(value => value.uuid === uuid) >= 0;
+    return this.cachedViewRefs.findIndex(value => value.uuid === uuid) >= 0;
   }
 
   private getAttached(): CacheViewRef | undefined {
-    return this.views.find(value => value.attached);
+    return this.cachedViewRefs.find(value => value.attached);
   }
 
   private getCache(uuid: string): CacheViewRef {
     let component: CacheViewRef;
-    this.views.forEach((value: CacheViewRef) => {
+    this.cachedViewRefs.forEach((value: CacheViewRef) => {
       if (value.uuid === uuid) {
         component = value;
       } else {
@@ -94,19 +103,26 @@ export class SideMenuComponent implements OnInit {
   }
 
   private setCache(value: ComponentRef<unknown>): void {
-    this.views.forEach((val: CacheViewRef) => val.attached = false);
-    const component: CacheViewRef = { uuid: (value.instance as any).uuid, index: this.views.length, componentRef: value, attached: true };
-    this.views.push(component);
+    this.cachedViewRefs.forEach((val: CacheViewRef) => val.attached = false);
+    const component: CacheViewRef = {
+      uuid: (value.instance as any).uuid,
+      index: this.cachedViewRefs.length,
+      componentRef: value,
+      attached: true
+    };
+
+    if (this.cacheEnabled === false) {
+      this.cachedViewRefs.shift();
+    }
+
+    this.cachedViewRefs.push(component);
   }
 
   private reattachComponent(uuid: string): void {
     const component = this.getCache(uuid);
     component.attached = true;
     this.menu.detach();
-    this.menu.insert(component.componentRef.instance);
-    // this.menu.insert(component.hostView, this.menu.length);
-    // component.hostView.reattach();
-    // To ensure that the compiler still generates a factory, add dynamically loaded components to the NgModule's entryComponents array:
+    this.menu.insert(component.componentRef.hostView);
   }
 
   private attachComponent(note: SideMenuLoadRequest): void {

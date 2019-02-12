@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
-  useMocks: false,
+  production: false,
+  useMocks: true,
   enableViewCache: false
 };

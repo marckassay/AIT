@@ -25,6 +25,9 @@ import { UUIDData } from 'src/app/services/storage/ait-storage.shapes';
 @Injectable({
     providedIn: 'root',
 })
+/**
+ * @source https://angular.io/guide/router#resolve-pre-fetching-component-data
+ */
 export class DisplayPageResolverService<T extends UUIDData> implements Resolve<Observable<BehaviorSubject<T>>> {
     constructor(
         protected router: Router,
@@ -35,7 +38,6 @@ export class DisplayPageResolverService<T extends UUIDData> implements Resolve<O
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<BehaviorSubject<T>> | Observable<never> {
         const uuid = route.paramMap.get('id');
 
-        // this block came from https://angular.io/guide/router#fetch-data-before-navigating
         return this.storage.getPageObservable<T>(uuid).pipe(
             take(1),
             mergeMap((value) => {

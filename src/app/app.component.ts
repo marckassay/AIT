@@ -20,10 +20,11 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, skip } from 'rxjs/operators';
+import { environment as env } from 'src/environments/environment';
 
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
-import { SideMenuService, SideMenuShapes, SideMenuStatusRequest, SideMenuStatusResponse } from './components/side-menu/side-menu.service';
+import { SideMenuService, SideMenuShapes, SideMenuStatusResponse } from './components/side-menu/side-menu.service';
 import { HomePage } from './pages/home/home.page';
 import { ScreenService } from './services/screen.service';
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
@@ -46,6 +47,11 @@ export class AppComponent implements OnInit, AfterViewInit {
    */
   theme: string;
 
+  /**
+   * Enables or disables sidemenus from being cached by `SideMenuComponent`.
+   */
+  cacheSideMenus = false;
+
   constructor(
     private platform: Platform,
     private router: Router,
@@ -54,7 +60,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     private storage: AITStorage,
     private screenSvc: ScreenService,
     private menuSvc: SideMenuService
-  ) { }
+  ) {
+    // tslint:disable-next-line: max-line-length
+    console.log('AppModule.env *** >>>', 'useMocks > ', env.useMocks, ', production > ', env.production, ', enableViewCache > ', env.enableViewCache);
+    // this.cacheSideMenus = env.enableViewCache;
+  }
 
   ngOnInit(): void {
     this.initializeApp();
@@ -67,30 +77,22 @@ export class AppComponent implements OnInit, AfterViewInit {
   private subscribeMenuService(): void {
     this.menuSvc.listen({
       next: (note: SideMenuShapes): void => {
-        if ('request' in note) {
-
-          // if received a note on start menu's status call is isComponentAttached(). if false is
-          // returned, request to load start menu
-          if ((note.subject === 'start') && (note.request === 'status')) {
-            note = note as SideMenuStatusRequest;
-            const homeMenuStatus = (this.startMenu.isComponentAttached(StorageDefaultData.HOME_ID));
-
-            if (homeMenuStatus === false) {
-              const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
-              this.menuSvc.send({
-                subject: 'start',
-                uuid: StorageDefaultData.HOME_ID,
-                request: 'load',
-                component: resolvedComponent,
-                injector: this.injector
-              });
-            }
-          }
-        } else if ('response' in note) {
+        if ('response' in note) {
           note = note as SideMenuStatusResponse;
 
-          // post app start-up; after start and end sidemenus have been loaded
-          if ((note.subject === 'start') && (note.response)) {
+          // during app start-up; after end sidemenu has been loaded
+          if ((note.subject === 'start') && (note.response === false)) {
+            const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
+            this.menuSvc.send({
+              subject: 'start',
+              uuid: StorageDefaultData.HOME_ID,
+              request: 'load',
+              component: resolvedComponent,
+              injector: this.injector
+            });
+
+            // post app start-up; after start and end sidemenus have been loaded
+          } else if ((note.subject === 'start') && (note.response === true)) {
             this.screenSvc.bootupScreen();
             this.platform.resume.subscribe(() => {
               // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
@@ -107,6 +109,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private initializeApp(): void {
     this.platform.ready()
       .then(async () => {
+
         const appsubject = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
 
         let startroute: string[];

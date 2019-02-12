@@ -52,7 +52,10 @@
             "platform": "serve",
             "cwd": "${workspaceFolder}",
             "devServerAddress": "localhost",
-            "devServerTimeout": 45000,
+            "runArguments": [
+                "--configuration=devlocal"
+            ],
+            "devServerTimeout": 30000,
             "sourceMaps": true,
             "livereload": true
         },

@@ -52,6 +52,7 @@ export class SideMenuService {
   private initSelf(): void {
     this.subject = new Subject<SideMenuShapes>();
 
+    // TODO: look into using `@HostListener` as an alternative to what is below:
     this.menuCtrl.get('start').then((element: HTMLIonMenuElement) => {
       element.addEventListener('ionDidClose', () => this.leftMenuClosed());
     });
