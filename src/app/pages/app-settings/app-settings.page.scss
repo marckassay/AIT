@@ -10,3 +10,15 @@
 }
 */
 ion-header.header-md ion-toolbar:first-child { padding-top: 25px !important; }
+
+.disableRange {
+    pointer-events: none;
+    filter: grayscale(100%);
+    opacity: .4;
+}
+
+/* .enableRange {
+    pointer-events: none;
+    filter: grayscale(100%);
+    opacity: .4;
+} */
