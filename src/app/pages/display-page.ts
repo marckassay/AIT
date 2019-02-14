@@ -19,11 +19,11 @@
 import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { XProgressBarComponent } from 'src/app/components/x-progress-bar/x-progress-bar.component';
 
 import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuService, SideMenuStatusResponse } from '../components/side-menu/side-menu.service';
-import { XProgressBarComponent } from '../components/x-progress-bar/x-progress-bar.component';
 import { ScreenService } from '../services/screen.service';
 import { SignalService } from '../services/signal.service';
 import { SotsForAit } from '../services/sots/ait-sots';
@@ -114,6 +114,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.progress.show();
   }
 
   ngOnDestroy(): void {
@@ -132,7 +133,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * and when the user exits from the 'start' menu and returns. The 'end' menu is of no consequence.
    */
   ionViewDidEnter(): void {
-    this.progress.show = true;
+    this.progress.show();
     this.aitPostBuildTimer();
     this.attachSettingsAndCheckHome();
   }
@@ -252,7 +253,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
               this.floatingbuttons.setHomeButtonToVisible();
               this.menuSvc.enableLeftMenu(true);
               menuSubscription.unsubscribe();
-              this.progress.show = false;
+              this.progress.hide();
               resolve();
             }
           }

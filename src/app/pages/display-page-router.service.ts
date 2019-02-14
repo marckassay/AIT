@@ -23,7 +23,7 @@ import { AITStorage } from 'src/app/services/storage/ait-storage.service';
 import { UUIDData } from 'src/app/services/storage/ait-storage.shapes';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 /**
  * @source https://angular.io/guide/router#resolve-pre-fetching-component-data

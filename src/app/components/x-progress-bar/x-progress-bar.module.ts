@@ -2,12 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-
-import { XProgressBarComponent } from './x-progress-bar.component';
+import { XProgressBarComponent } from 'src/app/components/x-progress-bar/x-progress-bar.component';
 
 @NgModule({
     declarations: [
-        XProgressBarComponent,
+        XProgressBarComponent
     ],
     imports: [
         CommonModule,
@@ -18,6 +17,6 @@ import { XProgressBarComponent } from './x-progress-bar.component';
 })
 
 /**
- * As of now, ionic-progress-bar is incomplete.
+ * As of now, ionic-progress-bar is incomplete hence XProgressBarModule
  */
 export class XProgressBarModule { }

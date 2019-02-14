@@ -59,6 +59,8 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   isVolToggleChecked: boolean;
 
+  absoluteVolumeValue: VolumeSet;
+
   /**
    * although BrightnessSet value may be below zero, the UI is constrained to 10 and above. so this
    * property conforms to that contraint.
@@ -76,7 +78,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.progress.show = true;
+    this.progress.show();
     const getSubject = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
@@ -88,7 +90,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter(): void {
-    this.progress.show = false;
+    this.progress.hide();
     this.menuCtrl.enable(false, 'start');
     this.menuCtrl.enable(false, 'end');
   }
@@ -114,6 +116,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     appSubsn.unsubscribe();
 
     this.isVolToggleChecked = this.data.sound > 0;
+    this.absoluteVolumeValue = Math.abs(this.data.sound) as VolumeSet;
     this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
   }
 
@@ -134,18 +137,6 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   /**
-   * The 'TEST VOLUME' button handler. This button is only enabled
-   * when: `Math.abs(this.data.sound) > 0`.
-   */
-  testVolume(): void {
-    this.signalSvc.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
-      .then((result) => {
-        this.data.sound = result.volume as VolumeSet;
-        this.signalSvc.double();
-      });
-  }
-
-  /**
    * The 'remember device volume' toggle handler. This toggle is only enabled
    * when: `Math.abs(this.data.sound) > 0`. And it simply will reverse the sign of `this.data.sound`
    * to indicate that a value of less than 0 disables this "remember volume" feature, while a sign
@@ -154,6 +145,15 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   toggleRememberVolume(): void {
     this.data.sound = (this.data.sound * -1) as VolumeSet;
     this.next();
+  }
+
+  /**
+  * The range UI for 'remember volume value' toggle.
+  */
+  rangeVolumeValue(event: CustomEvent): void {
+    this.data.sound = (event.detail.value as VolumeSet);
+    this.next();
+    this.signalSvc.double();
   }
 
   /**

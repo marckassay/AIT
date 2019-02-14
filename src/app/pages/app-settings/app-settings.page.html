@@ -1,3 +1,20 @@
+<!--
+    AiT - Another Interval Timer
+    Copyright (C) 2019 Marc Kassay
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -9,58 +26,78 @@
 
 <ion-content>
   <x-progress-bar></x-progress-bar>
+
   <div *ngIf="data">
     <ion-list>
-      <ion-item>
+
+      <!-- vibrate -->
+      <ion-item padding-top>
         <ion-toggle [(ngModel)]="data.vibrate" [checked]="data.vibrate"></ion-toggle>
         <ion-label>vibrate</ion-label>
       </ion-item>
 
-      <ion-item>
+      <!-- sound -->
+      <ion-item padding-top lines="none">
         <ion-toggle #soundToggleUI checked="{{data.sound != 0}}" (ionChange)="toggleSound()"></ion-toggle>
         <ion-label>sound</ion-label>
-
-        <ion-button [disabled]="soundToggleUI.checked == false" (click)="testVolume()" size="small" slot="end">
-          <ion-icon name="volume-high"></ion-icon>
-          test volume
-        </ion-button>
       </ion-item>
-      <ion-item>
-        <ion-toggle [disabled]="soundToggleUI.checked == false" [checked]="isVolToggleChecked"
+
+      <!-- toggle volume -->
+      <ion-item padding-top lines="none">
+        <ion-toggle #soundRememberToggleUI [disabled]="soundToggleUI.checked == false" [checked]="isVolToggleChecked"
           (ionChange)="toggleRememberVolume()"></ion-toggle>
         <ion-label>remember device volume</ion-label>
       </ion-item>
 
-      <ion-item lines="none">
+      <!-- volume range -->
+      <ion-item padding-top>
+        <ion-range [class.disableRange]="!soundRememberToggleUI.checked || !soundToggleUI.checked"
+          [ngModel]="absoluteVolumeValue" (ionChange)="rangeVolumeValue($event)" debounce="250" min="1" max="15"
+          step="1" snaps="true" pin="true">
+          <ion-label slot="start">volume value</ion-label>
+        </ion-range>
+      </ion-item>
+
+      <!-- toggle brightness -->
+      <ion-item padding-top lines="none">
         <ion-toggle #brightnessToggleUI checked="{{data.brightness > 0}}" (ionChange)="toggleRememberBrightness()">
         </ion-toggle>
         <ion-label>remember display brightness</ion-label>
       </ion-item>
-      <ion-item>
+
+      <!-- brightness range -->
+      <ion-item padding-top>
         <ion-range [class.disableRange]="!brightnessToggleUI.checked" [ngModel]="absoluteBrightnessValue"
-          (ionChange)="rangeBrightnessValue($event)" debounce="500" min="10" max="100" step="10" snaps="true"
+          (ionChange)="rangeBrightnessValue($event)" debounce="250" min="10" max="100" step="10" snaps="true"
           pin="true">
           <ion-label slot="start">brightness value</ion-label>
         </ion-range>
       </ion-item>
+
     </ion-list>
 
     <ion-list>
       <ion-radio-group>
+
         <ion-item-divider>BASE THEME</ion-item-divider>
-        <ion-item>
+
+        <!-- dark -->
+        <ion-item padding-top>
           <ion-label>dark theme</ion-label>
           <ion-radio checked="{{data.base == 0}}" (ionSelect)="toggleBaseTheme(BT.Dark)"></ion-radio>
         </ion-item>
-        <ion-item>
+
+        <!-- light -->
+        <ion-item padding-top>
           <ion-label>light theme</ion-label>
           <ion-radio checked="{{data.base == 1}}" (ionSelect)="toggleBaseTheme(BT.Light)"></ion-radio>
         </ion-item>
+
       </ion-radio-group>
     </ion-list>
+    <!-- TODO: template binding-to-data, data-to-CSS should work if accent themes are needed. -->
+    <!-- 
     <ion-list>
-      <!-- TODO: template binding-to-data, data-to-CSS should work if accent themes are needed. -->
-      <!-- 
     <ion-radio-group>
       <ion-item-divider>ACCENT THEME</ion-item-divider>
       <ion-item>
@@ -76,23 +113,28 @@
         <ion-radio checked="{{data.accent == 2}}" (ionSelect)="toggleAccentTheme(AT.CoolGrey)"></ion-radio>
       </ion-item>
     </ion-radio-group>
-    -->
     </ion-list>
+      -->
     <ion-list>
       <ion-radio-group>
+
         <ion-item-divider>SCREEN ORIENTATION</ion-item-divider>
-        <ion-item>
-          <ion-label>Use current</ion-label>
+
+        <ion-item padding-top>
+          <ion-label>use current</ion-label>
           <ion-radio checked="{{data.orientation == 0}}" value="0" (ionSelect)="toggleOrientation($event)"></ion-radio>
         </ion-item>
-        <ion-item>
+
+        <ion-item padding-top>
           <ion-label>portrait</ion-label>
           <ion-radio checked="{{data.orientation == 1}}" value="1" (ionSelect)="toggleOrientation($event)"></ion-radio>
         </ion-item>
-        <ion-item>
+
+        <ion-item padding-top>
           <ion-label>landscape</ion-label>
           <ion-radio checked="{{data.orientation == 2}}" value="2" (ionSelect)="toggleOrientation($event)"></ion-radio>
         </ion-item>
+
       </ion-radio-group>
     </ion-list>
   </div>
