@@ -2,11 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { from, BehaviorSubject, Observable } from 'rxjs';
 import { delay, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
-/* enum StyleDisplayString {
-    BLOCK = 'block',
-    NONE = 'none'
-} */
-
 enum StyleVisibilityString {
     VISIBLE = 'visible',
     HIDDEN = 'hidden'
@@ -17,14 +12,14 @@ enum StyleVisibilityString {
     templateUrl: './x-progress-bar.html',
 })
 export class XProgressBarComponent implements OnInit {
-    toShow$: Observable<StyleVisibilityString>;
+    protected toShow$: Observable<StyleVisibilityString>;
 
     private subject: BehaviorSubject<StyleVisibilityString[]>;
 
     private throttleTime: number;
 
     constructor() {
-        this.throttleTime = 3000;
+        this.throttleTime = 2000;
     }
 
     ngOnInit(): void {
@@ -41,6 +36,10 @@ export class XProgressBarComponent implements OnInit {
     }
 
     private getObservable(): Observable<StyleVisibilityString> {
+        // when `subject.next()` is called, this expression will check to ensure that the emit
+        // value is distinct. it will then map the outter index with emit value to be used to
+        // switch Observable. if `vi.val` is `VISIBLE` then emit the value as-is, else delay it
+        // from being emitted to prevent a glimpse of it animating.
         return this.subject.pipe(
             distinctUntilChanged((x, y) => x[0] === y[0]),
             map((val, ind) => {

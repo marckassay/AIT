@@ -16,9 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AudioManagement } from '@ionic-native/audio-management/ngx';
-import { MenuController } from '@ionic/angular';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { SideMenuService } from 'src/app/components/side-menu/side-menu.service';
 import { XProgressBarComponent } from 'src/app/components/x-progress-bar/x-progress-bar.component';
 import { BrightnessUtil, ScreenService } from 'src/app/services/screen.service';
 import { SignalService } from 'src/app/services/signal.service';
@@ -43,8 +42,8 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this._data = value;
   }
 
-  @ViewChild(XProgressBarComponent)
-  protected progress: XProgressBarComponent;
+  // @ViewChild(XProgressBarComponent)
+  // protected progress: XProgressBarComponent;
   /**
    * this type assignment to variable is for Angular template can access enum values.
    */
@@ -68,17 +67,17 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   absoluteBrightnessValue: BrightnessSet;
 
   private appSubjt: BehaviorSubject<AppStorageData>;
+  private appSubscrptn: Subscription;
 
   constructor(
     protected changeRef: ChangeDetectorRef,
-    protected menuCtrl: MenuController,
+    protected menuSvc: SideMenuService,
     protected signalSvc: SignalService,
     protected screenSvc: ScreenService,
     protected storage: AITStorage
   ) { }
 
   ngOnInit(): void {
-    this.progress.show();
     const getSubject = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
@@ -90,30 +89,33 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter(): void {
-    this.progress.hide();
-    this.menuCtrl.enable(false, 'start');
-    this.menuCtrl.enable(false, 'end');
+    // this.progress.show();
+    this.menuSvc.enableMenus(false);
+  }
+
+  ionViewDidEnter(): void {
+    // this.progress.hide();
   }
 
   ionViewWillLeave(): void {
-    this.menuCtrl.enable(true, 'start');
-    this.menuCtrl.enable(true, 'end');
+    this.menuSvc.enableMenus(true);
   }
 
   ngOnDestroy(): void {
     // since the user may have adjusted the volume while the 'remember volume' was enabled, we
     // need to check to ensure that the volume is updated
     if (this.data.sound > 0) {
-      this.signalSvc.storeVolume();
+      this.signalSvc.storeCurrentDeviceVolume();
     }
+
     this.next();
   }
 
   private subscribe(): void {
-    const appSubsn = this.appSubjt.subscribe((value) => {
+    this.appSubscrptn = this.appSubjt.subscribe((value) => {
       this.data = value;
     });
-    appSubsn.unsubscribe();
+    this.appSubscrptn.unsubscribe();
 
     this.isVolToggleChecked = this.data.sound > 0;
     this.absoluteVolumeValue = Math.abs(this.data.sound) as VolumeSet;
@@ -129,10 +131,9 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   toggleSound(): void {
     if (this.data.sound === 0) {
-      this.signalSvc.storeVolume();
+      this.signalSvc.storeCurrentDeviceVolume();
     } else if (Math.abs(this.data.sound) > 0) {
       this.data.sound = 0;
-      this.next();
     }
   }
 
@@ -144,31 +145,29 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   toggleRememberVolume(): void {
     this.data.sound = (this.data.sound * -1) as VolumeSet;
-    this.next();
   }
 
   /**
-  * The range UI for 'remember volume value' toggle.
-  */
+   * The range UI for 'remember volume value' toggle.
+   */
   rangeVolumeValue(event: CustomEvent): void {
     this.data.sound = (event.detail.value as VolumeSet);
-    this.next();
     this.signalSvc.double();
   }
 
   /**
-   * The 'remember device brightness' toggle handler.
+   * The 'remember brightness level' toggle handler.
    */
   toggleRememberBrightness(): void {
     this.data.brightness = BrightnessUtil.reverseSign(this.data.brightness);
   }
 
   /**
-  * The range UI for 'remember device brightness' toggle.
-  */
+   * The 'brightness level' range handler.
+   */
   rangeBrightnessValue(event: CustomEvent): void {
-    // TODO: async to change device brightness momentarily
-    this.data.brightness = (event.detail.value as BrightnessSet);
+    // this.data.brightness = (event.detail.value as BrightnessSet);
+    this.screenSvc.sampleBrightness(event.detail.value as BrightnessSet);
   }
 
   toggleBaseTheme(value: BaseTheme): void {

@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // tslint:disable-next-line:max-line-length
-import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, Injector, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { XProgressBarComponent } from 'src/app/components/x-progress-bar/x-progress-bar.component';
@@ -34,8 +34,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
 
-  @ViewChild(XProgressBarComponent)
-  protected progress: XProgressBarComponent;
+  // @ViewChild(XProgressBarComponent)
+  // protected progress: XProgressBarComponent;
 
   subject: BehaviorSubject<UUIDData>;
 
@@ -114,7 +114,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.progress.show();
+    // this.progress.show();
   }
 
   ngOnDestroy(): void {
@@ -133,7 +133,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * and when the user exits from the 'start' menu and returns. The 'end' menu is of no consequence.
    */
   ionViewDidEnter(): void {
-    this.progress.show();
+    // this.progress.show();
     this.aitPostBuildTimer();
     this.attachSettingsAndCheckHome();
   }
@@ -253,7 +253,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
               this.floatingbuttons.setHomeButtonToVisible();
               this.menuSvc.enableLeftMenu(true);
               menuSubscription.unsubscribe();
-              this.progress.hide();
+              // this.progress.hide();
               resolve();
             }
           }

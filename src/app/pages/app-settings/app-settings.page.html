@@ -20,13 +20,11 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>AiT SETTINGS</ion-title>
+    <ion-title>AIT SETTINGS</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <x-progress-bar></x-progress-bar>
-
   <div *ngIf="data">
     <ion-list>
 
@@ -46,7 +44,7 @@
       <ion-item padding-top lines="none">
         <ion-toggle #soundRememberToggleUI [disabled]="soundToggleUI.checked == false" [checked]="isVolToggleChecked"
           (ionChange)="toggleRememberVolume()"></ion-toggle>
-        <ion-label>remember device volume</ion-label>
+        <ion-label>remember alarm volume</ion-label>
       </ion-item>
 
       <!-- volume range -->
@@ -54,7 +52,7 @@
         <ion-range [class.disableRange]="!soundRememberToggleUI.checked || !soundToggleUI.checked"
           [ngModel]="absoluteVolumeValue" (ionChange)="rangeVolumeValue($event)" debounce="250" min="1" max="15"
           step="1" snaps="true" pin="true">
-          <ion-label slot="start">volume value</ion-label>
+          <ion-label slot="start">alarm volume</ion-label>
         </ion-range>
       </ion-item>
 
@@ -62,7 +60,7 @@
       <ion-item padding-top lines="none">
         <ion-toggle #brightnessToggleUI checked="{{data.brightness > 0}}" (ionChange)="toggleRememberBrightness()">
         </ion-toggle>
-        <ion-label>remember display brightness</ion-label>
+        <ion-label>remember brightness level</ion-label>
       </ion-item>
 
       <!-- brightness range -->
@@ -70,7 +68,7 @@
         <ion-range [class.disableRange]="!brightnessToggleUI.checked" [ngModel]="absoluteBrightnessValue"
           (ionChange)="rangeBrightnessValue($event)" debounce="250" min="10" max="100" step="10" snaps="true"
           pin="true">
-          <ion-label slot="start">brightness value</ion-label>
+          <ion-label slot="start">brightness level</ion-label>
         </ion-range>
       </ion-item>
 

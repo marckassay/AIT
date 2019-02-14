@@ -78,6 +78,12 @@ export class SideMenuService {
     return this.subject.subscribe(value);
   }
 
+  async enableMenus(value: boolean): Promise<void> {
+    await this.enableLeftMenu(value);
+    await this.enableRightMenu(value);
+    return Promise.resolve();
+  }
+
   enableLeftMenu(value: boolean): Promise<HTMLIonMenuElement> {
     return this.menuCtrl.enable(value, 'start');
   }

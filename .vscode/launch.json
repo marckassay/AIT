@@ -55,7 +55,7 @@
             "runArguments": [
                 "--configuration=devlocal"
             ],
-            "devServerTimeout": 60000,
+            "devServerTimeout": 90000,
             "sourceMaps": true,
             "livereload": true
         },

@@ -15,12 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { AndroidFullScreen, AndroidSystemUiFlags } from '@ionic-native/android-full-screen/ngx';
 import { Brightness } from '@ionic-native/brightness/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { BehaviorSubject } from 'rxjs';
+import { timer, BehaviorSubject } from 'rxjs';
+import { delayWhen, distinctUntilChanged, tap, throttleTime } from 'rxjs/operators';
 
 import { AppUtils } from '../app.utils';
 
@@ -71,6 +72,8 @@ export class ScreenService {
 
   private subject: BehaviorSubject<AppStorageData>;
 
+  private sampleBrightness$ = new EventEmitter<{ value: BrightnessSet, duration: number }>();
+
   constructor(
     private brightness: Brightness,
     private orientation: ScreenOrientation,
@@ -85,11 +88,24 @@ export class ScreenService {
     if (this.data === undefined) {
       // "lock" data to prevent any others in here
       this.data = null;
+
       this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((val) => {
           this.subject = val;
           this.subject.subscribe((data) => { this.data = data; });
         });
+
+      this.sampleBrightness$.pipe(
+        distinctUntilChanged((x, y) => x.value === y.value),
+        throttleTime(1000),
+        tap((y) => this.brightness.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(y.value))),
+        delayWhen((y) => timer(y.duration)),
+        tap(() => this.brightness.setBrightness(-1)),
+      ).subscribe((value: any): void => {
+        console.log('SUBSCRIBE', value);
+        this.data.brightness = value.value;
+        // this.subject.next(value);
+      });
     }
   }
 
@@ -103,6 +119,15 @@ export class ScreenService {
 
     return results;
   }
+
+  /**
+   * With `value`, it will be used to set the device's brightness immediately for a limited time
+   * set with `duration`. Afterwards, this will store `value` to AITStorage.
+   */
+  sampleBrightness(value: BrightnessSet, duration: number = 3000): void {
+    this.sampleBrightness$.emit({ value: value, duration: duration });
+  }
+
   /**
    * Called by app-component during bootup
    */

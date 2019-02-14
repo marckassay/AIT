@@ -79,9 +79,11 @@ export class SignalService {
   }
 
   /**
-   * Called from app-settings page when 'remember volume' toggle is checked.
+   * Called from app-settings page when 'remember alarm level' toggle is checked. In order to get
+   * volume, it needs to set the audiomode to NORMAL. After that is set, it will retrieve device
+   * volume for MUSIC and store it into AIT settings.
    */
-  async storeVolume(): Promise<void> {
+  async storeCurrentDeviceVolume(): Promise<void> {
     await this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL);
     await this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
       .then((result) => {
