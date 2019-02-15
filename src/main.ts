@@ -8,6 +8,7 @@ if (env.production) {
   enableProdMode();
 } else {
   console.clear();
+  console.log('The environment config being used is:', env);
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)

@@ -37,13 +37,14 @@ export class DisplayPage implements OnInit, AfterViewInit {
   // @ViewChild(XProgressBarComponent)
   // protected progress: XProgressBarComponent;
 
-  subject: BehaviorSubject<UUIDData>;
+  private componentSubjet: BehaviorSubject<UUIDData>;
+  private componentSubptn: Subscription;
 
   protected _uuidData: any;
-  get uuidData(): any {
+  protected get uuidData(): any {
     return this._uuidData;
   }
-  set uuidData(value: any) {
+  protected set uuidData(value: any) {
     this._uuidData = value;
   }
 
@@ -55,9 +56,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this._settingsPageClass = value;
   }
 
-  // this type assignment to variable is for Angular template can access enum values.
-  SS = SequenceStates;
-  private _timerState: SequenceStates;
+  protected _timerState: SequenceStates;
   protected get timerState(): SequenceStates {
     return this._timerState;
   }
@@ -65,6 +64,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this._timerState = value;
   }
 
+  // this type assignment to variable is for Angular template can access enum values.
+  SS = SequenceStates;
   protected sots: SotsForAit;
   protected grandTime: string;
 
@@ -74,8 +75,6 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * then rebuilding of `sots` is required.
    */
   protected noRebuild: boolean;
-
-  private subscrptn: Subscription;
 
   constructor(
     @Optional() protected route: ActivatedRoute,
@@ -91,16 +90,13 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.sots = new SotsForAit();
     this.signalSvc.onInit();
     this.screenSvc.onInit();
-    this.route.data.subscribe((data: { subject: BehaviorSubject<UUIDData> }) => {
-      this.subject = data.subject;
-    });
+    this.componentSubjet = (this.route.snapshot.data as any).subject as BehaviorSubject<any>;
 
-
-    if (this.subscrptn && this.subscrptn.closed === false) {
-      this.subscrptn.unsubscribe();
+    if (this.componentSubptn && this.componentSubptn.closed === false) {
+      this.componentSubptn.unsubscribe();
     }
 
-    this.subscrptn = this.subject.subscribe((uuidData: UUIDData) => {
+    this.componentSubptn = this.componentSubjet.subscribe((uuidData: UUIDData) => {
       // TODO: pipe a 'distinctUntil' operator for coming back from settings
       if (this.uuidData) {
         this.uuidData = uuidData;
@@ -168,8 +164,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
   protected unsubscribe(includeSubject: boolean = false): void {
     this.sots.unsubscribe();
     if (includeSubject) {
-      if (this.subscrptn && this.subscrptn.closed === false) {
-        this.subscrptn.unsubscribe();
+      if (this.componentSubptn && this.componentSubptn.closed === false) {
+        this.componentSubptn.unsubscribe();
       }
     }
   }

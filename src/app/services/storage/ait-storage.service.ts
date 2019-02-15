@@ -53,9 +53,9 @@ export class AITStorage implements OnInit {
   *
   * @param uuid the key to storage record
   */
-  getPageObservable<T extends UUIDData>(uuid: string): Observable<BehaviorSubject<T>> {
-    return from(this.getPromiseSubject(uuid)) as Observable<BehaviorSubject<T>>;
-  }
+  /*   getPageObservable<T extends UUIDData>(uuid: string): Observable<BehaviorSubject<T>> {
+      return from(this.getPromiseSubject(uuid)) as Observable<BehaviorSubject<T>>;
+    } */
 
   /**
    * Checks the storage cache (`this.subjects`) for first found subject with the same `uuid`. If
@@ -70,7 +70,7 @@ export class AITStorage implements OnInit {
     if (entry === undefined) {
       return await this.getPagePromise<T>(uuid).then((value) => {
         if (value.routable === true) {
-          return this.registerSubject(value);
+          return this.registerSubject(value).then(sub => sub);
         } else {
           return this.addAsCacheSubject<T>(value);
         }
@@ -79,7 +79,7 @@ export class AITStorage implements OnInit {
       if (entry.routable === true) {
         return this.registerSubject<T>(entry);
       } else {
-        return entry.subject;
+        return Promise.resolve(entry.subject);
       }
     }
   }
@@ -106,7 +106,7 @@ export class AITStorage implements OnInit {
     } else {
       // app subject is never unsubscribed. so just return the cache subject
       if (value.uuid === StorageDefaultData.APP_ID) {
-        return (value as CacheSubject<T>).subject;
+        return Promise.resolve((value as CacheSubject<T>).subject);
       }
 
       // if this isn't CacheSubject, then its UUIDData object. so with it create a CacheSubject
@@ -130,7 +130,7 @@ export class AITStorage implements OnInit {
         this.subscription.unsubscribe();
         this.observable = merge(appcache.subject, subject);
       } else {
-        return subject;
+        return Promise.resolve(subject);
       }
     }
 
@@ -138,7 +138,7 @@ export class AITStorage implements OnInit {
       this.setData(val);
     });
 
-    return subject;
+    return Promise.resolve(subject);
   }
 
   /**
@@ -147,14 +147,14 @@ export class AITStorage implements OnInit {
    * @param value data to store with `uuid` as its storage key
    */
   private async setData(value: UUIDData): Promise<void> {
-    console.log(value);
+    console.log('storing:', value);
     return await this.storage.set(value.uuid, value)
-      .then((results) => {
-        console.log(results);
+      .then(() => {
+        console.log('stored:', value.uuid);
       }, (rejected) => {
-        console.error(rejected, value);
+        console.error('failed to store:', rejected, value);
       })
-      .catch((reason) => { console.error(reason, value); });
+      .catch((reason) => { console.error('failed to store:', reason, value); });
   }
 
   /**
@@ -249,7 +249,7 @@ export class AITStorage implements OnInit {
       subject: subject,
       routable: data.routable
     });
-
+    console.log('adding to cache:', data.uuid, ' cache is now:', this.subjects);
     return subject;
   }
 }

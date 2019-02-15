@@ -17,10 +17,11 @@
 */
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { of, BehaviorSubject, EMPTY, Observable } from 'rxjs';
-import { mergeMap, take } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { AITStorage } from 'src/app/services/storage/ait-storage.service';
 import { UUIDData } from 'src/app/services/storage/ait-storage.shapes';
+
+import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 
 @Injectable({
     providedIn: 'root'
@@ -28,27 +29,15 @@ import { UUIDData } from 'src/app/services/storage/ait-storage.shapes';
 /**
  * @source https://angular.io/guide/router#resolve-pre-fetching-component-data
  */
-export class DisplayPageResolverService<T extends UUIDData> implements Resolve<Observable<BehaviorSubject<T>>> {
+export class DisplayPageResolverService implements Resolve<any> {
     constructor(
         protected router: Router,
         protected route: ActivatedRoute,
         protected storage: AITStorage
     ) { }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<BehaviorSubject<T>> | Observable<never> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<BehaviorSubject<UUIDData>> {
         const uuid = route.paramMap.get('id');
-
-        return this.storage.getPageObservable<T>(uuid).pipe(
-            take(1),
-            mergeMap((value) => {
-                if (value) {
-                    return of(value);
-                } else {
-                    // TODO: add route for failed retrival
-                    // this.router.navigate(['/crisis-center']);
-                    return EMPTY;
-                }
-            })
-        );
+        return this.storage.getPromiseSubject(uuid);
     }
 }
