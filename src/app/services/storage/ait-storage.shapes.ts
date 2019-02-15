@@ -16,7 +16,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 export interface UUIDData {
+
+  /**
+   * The storage key to data that implements `UUIDData` and as identifier for routes.
+   */
   readonly uuid: string;
+
+  /**
+   * If this data can be used to a routable component, then its set to true. If data is not routable
+   * such as mock storage to emulate device's storage, then its set to false.
+   */
+  readonly routable: boolean;
 }
 
 export interface AppStorageData extends UUIDData {
@@ -97,15 +107,15 @@ export type VolumeSet = -15 | -14 | -13 | -12 | -11 | -10 | -9 | -8 | -7 | -6 | 
 
 export type BrightnessSet = -100 | -90 | -80 | -70 | -60 | -50 | -40 | -30 | -20 | -10 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
 
+export enum BaseTheme {
+  Dark,
+  Light
+}
+
 export enum AccentTheme {
   Monokai,
   RGBandY,
   CoolGrey
-}
-
-export enum BaseTheme {
-  Dark,
-  Light
 }
 
 export enum OrientationSetting {
@@ -129,7 +139,9 @@ export interface VolumeShape {
   systemMaxVolume: number;
 }
 
-export interface NotRoutable extends UUIDData {
-  routable: false;
-}
-export type AudioMockStorageData = AudioModeShape & VolumeShape & NotRoutable;
+/**
+ * When app.module uses `AudioManagementMock` during web or as a Progressive Web App development, it
+ * stores its data to IndexedDB. But it needs to have a JSON key to be stored, hence `UUIDData` being
+ * intersected with its original shapes.
+ */
+export type AudioMockStorageData = AudioModeShape & VolumeShape & UUIDData;

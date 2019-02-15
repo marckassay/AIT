@@ -66,8 +66,8 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   absoluteBrightnessValue: BrightnessSet;
 
-  private appSubjt: BehaviorSubject<AppStorageData>;
-  private appSubscrptn: Subscription;
+  private appSubjet: BehaviorSubject<AppStorageData>;
+  private appSubptn: Subscription;
 
   constructor(
     protected changeRef: ChangeDetectorRef,
@@ -81,7 +81,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     const getSubject = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
-          this.appSubjt = value;
+          this.appSubjet = value;
           this.subscribe();
         });
     };
@@ -109,21 +109,22 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     }
 
     this.next();
+    this.appSubptn.unsubscribe();
+    this.data = undefined;
   }
 
   private subscribe(): void {
-    this.appSubscrptn = this.appSubjt.subscribe((value) => {
+    this.appSubptn = this.appSubjet.subscribe((value) => {
       this.data = value;
     });
-    this.appSubscrptn.unsubscribe();
-
+    // this.appSubptn.unsubscribe();
     this.isVolToggleChecked = this.data.sound > 0;
     this.absoluteVolumeValue = Math.abs(this.data.sound) as VolumeSet;
     this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
   }
 
   private next(): void {
-    this.appSubjt.next(this.data);
+    this.appSubjet.next(this.data);
   }
 
   /**
@@ -140,7 +141,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   /**
    * The 'remember device volume' toggle handler. This toggle is only enabled
    * when: `Math.abs(this.data.sound) > 0`. And it simply will reverse the sign of `this.data.sound`
-   * to indicate that a value of less than 0 disables this "remember volume" feature, while a sign
+   * to indicate that a value of less than 0 disables this "remember alarm volume" feature, while a sign
    * of greater than 0 enables it.
    */
   toggleRememberVolume(): void {
@@ -148,7 +149,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   /**
-   * The range UI for 'remember volume value' toggle.
+   * The range UI for 'alarm volume' toggle.
    */
   rangeVolumeValue(event: CustomEvent): void {
     this.data.sound = (event.detail.value as VolumeSet);
@@ -166,7 +167,6 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    * The 'brightness level' range handler.
    */
   rangeBrightnessValue(event: CustomEvent): void {
-    // this.data.brightness = (event.detail.value as BrightnessSet);
     this.screenSvc.sampleBrightness(event.detail.value as BrightnessSet);
   }
 
@@ -174,12 +174,12 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this.data.base = value;
     this.next();
   }
-
+  /*
   toggleAccentTheme(value: AccentTheme): void {
     this.data.accent = value;
     this.next();
   }
-
+  */
   toggleOrientation(event: CustomEvent): void {
     this.data.orientation = +(event.detail.value) as OrientationSetting;
   }

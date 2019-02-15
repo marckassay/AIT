@@ -58,8 +58,9 @@ export class AITStorage implements OnInit {
   }
 
   /**
-   * Checks the storage cache for first found subject with the same `uuid`. If not found, it will
-   * hit the device's disk by calling `this.getPagePromise()` and push subject into cache.
+   * Checks the storage cache (`this.subjects`) for first found subject with the same `uuid`. If
+   * not found, it will hit the device's disk by calling `this.getPagePromise()` and push subject
+   * into cache.
    *
    * @param uuid the key to storage record
    */
@@ -68,17 +69,17 @@ export class AITStorage implements OnInit {
 
     if (entry === undefined) {
       return await this.getPagePromise<T>(uuid).then((value) => {
-        if ('routable' in value === true) {
-          return this.addAsCacheSubject<T>(value);
-        } else {
+        if (value.routable === true) {
           return this.registerSubject(value);
+        } else {
+          return this.addAsCacheSubject<T>(value);
         }
       });
     } else {
-      if (entry.routable === false) {
-        return entry.subject;
-      } else {
+      if (entry.routable === true) {
         return this.registerSubject<T>(entry);
+      } else {
+        return entry.subject;
       }
     }
   }
@@ -140,26 +141,48 @@ export class AITStorage implements OnInit {
     return subject;
   }
 
+  /**
+   * The only point of access to `storage.set()` to store data
+   *
+   * @param value data to store with `uuid` as its storage key
+   */
   private async setData(value: UUIDData): Promise<void> {
-    return await this.storage.set(value.uuid, value);
+    console.log(value);
+    return await this.storage.set(value.uuid, value)
+      .then((results) => {
+        console.log(results);
+      }, (rejected) => {
+        console.error(rejected, value);
+      })
+      .catch((reason) => { console.error(reason, value); });
+  }
+
+  /**
+   * The only point of access to `storage.get()` to retrieve data
+   *
+   * @param uuid the storage key
+   */
+  private async getData<T extends UUIDData>(uuid: string): Promise<T> {
+    return await this.storage.get(uuid);
   }
 
   /**
    * As an internal method it has no concern to check (`this.subjects`) or write to caching. Once
-   * storage is in the `on` status it will retrieve data with `uuid` as its key. If no data is
-   * returned at this time, it will retrieve the default data by using `AppUtils.getPageDataByID()`.
+   * storage is in the `on` status it will retrieve data with `uuid` as its key by calling
+   * `getData()`. If no data is returned at this time, it will retrieve the default data by
+   * using `AppUtils.getPageDataByID()`.
    *
    * @param uuid the key to storage record
    */
   private async getPagePromise<T extends UUIDData>(uuid: string): Promise<T> {
     const results = await this.isReady()
       .then(async (): Promise<T> => {
-        const value = await this.storage.get(uuid);
+        const value = await this.getData<T>(uuid);
         if (value) {
           return value;
         } else {
           const defaultdata = AppUtils.getDataByID(uuid);
-          await this.storage.set(uuid, defaultdata);
+          await this.setData(defaultdata);
           return defaultdata as T;
         }
       });
@@ -179,14 +202,14 @@ export class AITStorage implements OnInit {
   }
 
   /**
-   * Algorithm to be executed once to ensure that storage is ready to be used and APP_DATA has been
-   * loaded.
+   * Algorithm to be executed just once to ensure that storage is ready to be used and
+   * AppStorageData has been loaded.
    */
   private preOperationCheck(): Promise<boolean> {
     return this.storage.ready()
       .then(async (value: LocalForage): Promise<AppStorageData> => {
         if (value) {
-          return await this.storage.get(StorageDefaultData.APP_ID) as Promise<AppStorageData>;
+          return await this.getData<AppStorageData>(StorageDefaultData.APP_ID);
         } else {
           return Promise.reject(new Error('LOCAL_STORAGE'));
         }
@@ -199,7 +222,7 @@ export class AITStorage implements OnInit {
 
         if (!val) {
           const appdata: UUIDData = AppUtils.getDataByID(StorageDefaultData.APP_ID);
-          await this.storage.set(appdata.uuid, appdata);
+          await this.setData(appdata);
           this.addAsCacheSubject(appdata);
         }
 
@@ -212,9 +235,21 @@ export class AITStorage implements OnInit {
       });
   }
 
+  /**
+   * Instantiates BehaviorSubject with `data` and stores a record of it in `this.subjects`. Returns
+   * the created BehaviorSubject instance.
+   *
+   * @param data UUID data type
+   */
   private addAsCacheSubject<T extends UUIDData>(data: T): BehaviorSubject<T> {
     const subject = new BehaviorSubject<T>(data);
-    this.subjects.push({ uuid: data.uuid, subject: subject, routable: ('routable' in data) });
+
+    this.subjects.push({
+      uuid: data.uuid,
+      subject: subject,
+      routable: data.routable
+    });
+
     return subject;
   }
 }

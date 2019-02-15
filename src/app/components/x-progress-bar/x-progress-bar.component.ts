@@ -12,7 +12,7 @@ enum StyleVisibilityString {
     templateUrl: './x-progress-bar.html',
 })
 export class XProgressBarComponent implements OnInit {
-    protected toShow$: Observable<StyleVisibilityString>;
+    public toShow$: Observable<StyleVisibilityString>;
 
     private subject: BehaviorSubject<StyleVisibilityString[]>;
 

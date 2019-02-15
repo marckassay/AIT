@@ -19,7 +19,6 @@ import { AfterViewInit, Component, ComponentFactoryResolver, Injector, OnInit, V
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
-import { debounceTime, skip } from 'rxjs/operators';
 import { environment as env } from 'src/environments/environment';
 
 import { AppUtils } from './app.utils';
@@ -51,6 +50,8 @@ export class AppComponent implements OnInit, AfterViewInit {
    * Enables or disables sidemenus from being cached by `SideMenuComponent`.
    */
   cacheSideMenus = env.enableViewCache;
+
+  private appSubjet: BehaviorSubject<AppStorageData>;
 
   constructor(
     private platform: Platform,
@@ -106,26 +107,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.platform.ready()
       .then(async () => {
 
-        const appsubject = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
+        this.appSubjet = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
 
         let startroute: string[];
-        appsubject.subscribe((appdata) => {
+        this.appSubjet.subscribe((appdata) => {
           this.applyTheme(appdata);
           startroute = AppUtils.convertToStartupRoute(appdata);
         });
-        this.watchTheme(appsubject);
 
         this.router.navigate(startroute);
       });
-  }
-
-  private watchTheme(data: BehaviorSubject<AppStorageData>): void {
-    data.pipe(
-      skip(1),
-      debounceTime(1000)
-    ).subscribe((value) => {
-      this.applyTheme(value);
-    });
   }
 
   private applyTheme(value: AppStorageData): void {

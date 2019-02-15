@@ -100,12 +100,13 @@ export class ScreenService {
         throttleTime(1000),
         tap((y) => this.brightness.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(y.value))),
         delayWhen((y) => timer(y.duration)),
-        tap(() => this.brightness.setBrightness(-1)),
-      ).subscribe((value: any): void => {
-        console.log('SUBSCRIBE', value);
-        this.data.brightness = value.value;
-        // this.subject.next(value);
-      });
+        tap(() => this.brightness.setBrightness(-1))
+      ).subscribe(
+        (brightness): void => {
+          this.data.brightness = brightness.value;
+          this.subject.next(this.data);
+        }
+      );
     }
   }
 

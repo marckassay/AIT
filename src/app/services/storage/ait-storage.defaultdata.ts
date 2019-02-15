@@ -26,6 +26,7 @@ export class StorageDefaultData {
 
   public static readonly APP_DATA: AppStorageData = {
     uuid: StorageDefaultData.APP_ID,
+    routable: true,
     current_uuid: StorageDefaultData.INTERVAL_ID,
     vibrate: true,
     sound: -10,
@@ -37,6 +38,7 @@ export class StorageDefaultData {
 
   public static readonly INTERVAL_DATA: IntervalStorageData = {
     uuid: StorageDefaultData.INTERVAL_ID,
+    routable: true,
     name: 'Program #1',
     activerest: { lower: 10, upper: 50 },
     intervals: 12,
@@ -47,6 +49,7 @@ export class StorageDefaultData {
 
   public static readonly TIMER_DATA: TimerStorageData = {
     uuid: StorageDefaultData.TIMER_ID,
+    routable: true,
     name: 'Program #2',
     time: 900,
     countdown: 10,
@@ -56,6 +59,7 @@ export class StorageDefaultData {
 
   public static readonly STOPWATCH_DATA: StopwatchStorageData = {
     uuid: StorageDefaultData.STOPWATCH_ID,
+    routable: true,
     name: 'Program #3',
     countdown: 10,
     factor: 10,
