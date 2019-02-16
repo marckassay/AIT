@@ -26,7 +26,8 @@
     <ion-grid>
       <ion-row align-items-center justify-content-center>
         <ion-col>
-          <ion-item (click)="routeTo('interval')">
+          <ion-item (click)="routeTo('interval')" class="ion-activatable">
+            <ion-ripple-effect type="unbounded"></ion-ripple-effect>
             <div class="icon-interval-timer icon">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
                 width="24" height="24" viewBox="4 0 30 24" preserveAspectRatio="xMinYMid">
@@ -40,11 +41,11 @@
                 </g>
               </svg>
             </div>
-            <ion-ripple-effect></ion-ripple-effect>
           </ion-item>
         </ion-col>
         <ion-col>
-          <ion-item (click)="routeTo('timer')">
+          <ion-item (click)="routeTo('timer')" class="ion-activatable">
+            <ion-ripple-effect type="unbounded"></ion-ripple-effect>
             <div class="icon-countdown-timer icon">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
                 width="24" height="24" viewBox="0 0 24 24">
@@ -58,7 +59,8 @@
       </ion-row>
       <ion-row align-items-center justify-content-center>
         <ion-col>
-          <ion-item (click)="routeTo('stopwatch')">
+          <ion-item (click)="routeTo('stopwatch')" class="ion-activatable">
+            <ion-ripple-effect type="unbounded"></ion-ripple-effect>
             <div class="icon-stopwatch icon">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
                 width="24" height="24" viewBox="0 0 24 24">
@@ -70,7 +72,8 @@
           </ion-item>
         </ion-col>
         <ion-col>
-          <ion-item (click)="routeTo('settings')">
+          <ion-item (click)="routeTo('settings')" class="ion-activatable">
+            <ion-ripple-effect type="unbounded"></ion-ripple-effect>
             <div class="icon-settings icon">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
                 width="24" height="24" viewBox="0 0 24 24">

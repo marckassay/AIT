@@ -68,13 +68,15 @@
         <ion-item-divider padding-top>PROGRAM SETTINGS</ion-item-divider>
 
         <!-- factors -->
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>adjust by high magnitude</ion-label>
           <ion-toggle checked="{{data.factor == 10}}" (ionChange)="dataChanged('factor', $event)"></ion-toggle>
         </ion-item>
 
         <!-- activerest -->
-        <ion-item lines="none">
+        <ion-item lines="none" class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-range (ionChange)="dataChanged('activerest', $event)" debounce="500" [min]="computedFactorValue.lower"
             [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true" [value]="computedFactorValue"
             dualKnobs="true">
@@ -83,7 +85,8 @@
         </ion-item>
 
         <!-- interval -->
-        <ion-item lines="none">
+        <ion-item lines="none" class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-range (ionChange)="dataChanged('intervals', $event)" debounce="500" [min]="computedFactorValue.lower"
             [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
             <ion-label slot="start">intervals</ion-label>
@@ -91,7 +94,8 @@
         </ion-item>
 
         <!-- countdown -->
-        <ion-item margin-bottom lines="none">
+        <ion-item margin-bottom lines="none" class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-range (ionChange)="dataChanged('countdown', $event)" debounce="500" [min]="computedFactorValue.lower"
             [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
             <ion-label slot="start">countdown</ion-label>
@@ -107,17 +111,20 @@
           </ion-button>
         </ion-item-divider>
 
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>5 second</ion-label>
           <ion-toggle [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
         </ion-item>
 
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>10 second</ion-label>
           <ion-toggle [(ngModel)]="data.warnings.tensecond"></ion-toggle>
         </ion-item>
 
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>15 second</ion-label>
           <ion-toggle [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
         </ion-item>

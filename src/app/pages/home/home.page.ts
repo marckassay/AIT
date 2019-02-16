@@ -40,9 +40,13 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-  routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch'): void {
-    // TODO: when visitng a display-page that wasn't loaded on startup, this close before the it
+  async routeTo(name: 'settings' | 'interval' | 'timer' | 'stopwatch'): Promise<void> {
+    // TODO: when visitng a display-page that wasn't loaded on startup, this closes before the data
     // is resolved by Angular.
+
+    // add a slight transition
+    await AppUtils.delayPromise(128);
+
     this.menuSvc.closeLeftMenu()
       .then((value) => {
         const request = AppUtils.getPageRouteByName(name);

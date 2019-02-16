@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject, Observer, PartialObserver, Subscription } from 'rxjs';
-import { skip } from 'rxjs/operators';
+import { distinct, skip } from 'rxjs/operators';
 import { AppUtils } from 'src/app/app.utils';
 
 import { StorageDefaultData } from './ait-storage.defaultdata';
@@ -58,17 +58,17 @@ export class AITStorage {
 
     // no softdata; then store it
     if (noSoftData === true) {
-      console.log('-->', uuid);
+      console.log('-hard->', uuid);
       hardData = await this.getHardData(uuid);
-      console.log('<--', hardData.uuid);
-      console.log('-_->', uuid);
+      console.log('<-hard-', hardData.uuid);
+      console.log('-soft->', uuid);
       this.storeSoftData(hardData);
-      console.log('<-_-', hardData.uuid);
+      console.log('<-soft-', hardData.uuid);
     }
-    console.log('-*->', uuid);
+    console.log('-resoft->', uuid);
     // now get softdata
     const soft = this.restoreSoftData<T>(uuid);
-    console.log('<-*-', soft.uuid);
+    console.log('<-resoft-', soft.uuid);
 
     if ((soft.routable === true) && (uuid !== StorageDefaultData.APP_ID)) {
       await this.updateAppsCurrentUUID(uuid);
@@ -147,7 +147,7 @@ export class AITStorage {
     const entry = this.subjects.find(element => element.uuid === uuid);
 
     if (entry.subject.observers.length === 0) {
-      const subscription = entry.subject.pipe(skip(1)).subscribe(entry.observer);
+      const subscription = entry.subject.pipe(skip(1), distinct()).subscribe(entry.observer);
       entry.subscription = subscription;
     }
 

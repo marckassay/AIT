@@ -17,6 +17,7 @@
 */
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { AppUtils } from 'src/app/app.utils';
 import { SideMenuService } from 'src/app/components/side-menu/side-menu.service';
 import { XProgressBarComponent } from 'src/app/components/x-progress-bar/x-progress-bar.component';
 import { BrightnessUtil, ScreenService } from 'src/app/services/screen.service';
@@ -51,6 +52,11 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   protected BT = BaseTheme;
   protected AT = AccentTheme;
   protected OR = OrientationSetting;
+
+  /**
+   * To be used momentary to disable interaction
+   */
+  isContentInteractive: boolean;
 
   /**
    * since the 'remember device volume' toggle can be disabled and checked simultaneously or
@@ -103,8 +109,6 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // revert to original volume, the sound level would of been saved at this point.
-    this.signalSvc.enablePreferredVolume(false);
     this.next();
     this.data = undefined;
   }
@@ -115,6 +119,8 @@ export class AppSettingsPage implements OnInit, OnDestroy {
         this.data = value;
       }
     });
+
+    this.isContentInteractive = true;
     this.isVolToggleChecked = this.data.sound > 0;
     this.absoluteVolumeValue = Math.abs(this.data.sound) as VolumeSet;
     this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
@@ -143,22 +149,25 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   toggleRememberVolume(): void {
     this.data.sound = (this.data.sound * -1) as VolumeSet;
-
-    if (this.data.sound > 0) {
-      this.signalSvc.enablePreferredVolume(true);
-    } else {
-      this.signalSvc.enablePreferredVolume(false);
-    }
   }
 
   /**
    * The range UI for 'alarm volume' toggle.
    */
-  rangeVolumeValue(event: CustomEvent): void {
+  async rangeVolumeValue(event: CustomEvent): Promise<void> {
+    // TODO: refactor this method
     this.progress.momentary(1000);
+    this.isContentInteractive = false;
+    this.signalSvc.enablePreferredVolume(true);
     this.data.sound = (event.detail.value as VolumeSet);
     this.next();
+
     this.signalSvc.double();
+
+    await AppUtils.delayPromise(1000);
+    this.isContentInteractive = true;
+    // revert to original volume, the sound level would of been saved at this point.
+    this.signalSvc.enablePreferredVolume(false);
   }
 
   /**
@@ -171,9 +180,16 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   /**
    * The 'brightness level' range handler.
    */
-  rangeBrightnessValue(event: CustomEvent): void {
-    this.progress.momentary(1000);
-    this.screenSvc.sampleBrightness(event.detail.value as BrightnessSet);
+  async rangeBrightnessValue(event: CustomEvent): Promise<void> {
+    // TODO: refactor this method
+    const duration = 2000;
+    this.progress.momentary(duration);
+    this.isContentInteractive = false;
+
+    this.screenSvc.sampleBrightness(event.detail.value as BrightnessSet, duration);
+
+    await AppUtils.delayPromise(1000);
+    this.isContentInteractive = true;
   }
 
   toggleBaseTheme(value: BaseTheme): void {

@@ -28,7 +28,7 @@
 
 <x-progress-bar></x-progress-bar>
 
-<ion-content>
+<ion-content [style.pointer-events]="isContentInteractive ? 'auto' : 'none' ">
   <div *ngIf="data">
     <ion-list>
       <!-- vibrate -->

@@ -92,10 +92,6 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.screenSvc.onInit();
     this.componentSubjet = (this.route.snapshot.data as any).subject as BehaviorSubject<any>;
 
-    if (this.componentSubptn && this.componentSubptn.closed === false) {
-      // this.componentSubptn.unsubscribe();
-    }
-
     this.componentSubptn = this.componentSubjet.subscribe((uuidData: UUIDData) => {
       // TODO: pipe a 'distinctUntil' operator for coming back from settings
       if (this.uuidData) {
@@ -114,7 +110,6 @@ export class DisplayPage implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe(true);
   }
 
   /**
@@ -161,13 +156,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.setAppToRunningMode(false);
   }
 
-  protected unsubscribe(includeSubject: boolean = false): void {
+  protected unsubscribe(): void {
     this.sots.unsubscribe();
-    if (includeSubject) {
-      if (this.componentSubptn && this.componentSubptn.closed === false) {
-        this.componentSubptn.unsubscribe();
-      }
-    }
   }
 
   /**
@@ -176,7 +166,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * @param value true if timer is ticking
    */
   protected async setAppToRunningMode(value: boolean): Promise<void> {
-    //  await this.screenSvc.setScreenToRunningMode(value);
+    this.screenSvc.setScreenToRunningMode(value);
     await this.menuSvc.enableLeftMenu(value === false);
     await this.menuSvc.enableRightMenu(value === false);
 
@@ -217,7 +207,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
   private attachSettingsAndCheckHome(): Promise<void> {
     return new Promise<void>((resolve, reject): void => {
       // subscribe to menu service
-      const menuSubscription = this.menuSvc.listen({
+      this.menuSvc.listen({
         next: (note): void => {
           if ('response' in note) {
             note = note as SideMenuStatusResponse;
@@ -248,7 +238,6 @@ export class DisplayPage implements OnInit, AfterViewInit {
 
               this.floatingbuttons.setHomeButtonToVisible();
               this.menuSvc.enableLeftMenu(true);
-              menuSubscription.unsubscribe();
               this.progress.hide();
               resolve();
             }
