@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
+import { AppUtils } from 'src/app/app.utils';
 
 export interface FabEmission {
   action: FabAction;
@@ -63,7 +64,7 @@ export class FabContainerComponent {
 
   constructor(protected ngDectector: ChangeDetectorRef) { }
 
-  actionRequest(action: FabAction): void {
+  async actionRequest(action: FabAction): Promise<void> {
     if (action === FabAction.Start) {
       // if action is Start, which exists in the Ready and Paused state, set the state to 'Running'
       this.setToRunningMode();
@@ -80,10 +81,15 @@ export class FabContainerComponent {
     }
 
     if (action !== FabAction.Main) {
+
+      // delay if home or setting button is clicked to add a slight transition effect
+      if ((action === FabAction.Home) || (action === FabAction.Program)) {
+        await AppUtils.delayPromise(128);
+      }
+
       this.action.emit({ action: action });
     }
   }
-
   /*
   methods to set viewState to modes and by preserving 'secondary' modes specifically; Home
   Program Button visibility.

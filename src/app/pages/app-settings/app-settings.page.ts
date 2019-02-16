@@ -42,8 +42,9 @@ export class AppSettingsPage implements OnInit, OnDestroy {
     this._data = value;
   }
 
-  // @ViewChild(XProgressBarComponent)
-  // protected progress: XProgressBarComponent;
+  @ViewChild(XProgressBarComponent)
+  protected progress: XProgressBarComponent;
+
   /**
    * this type assignment to variable is for Angular template can access enum values.
    */
@@ -89,12 +90,12 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter(): void {
-    // this.progress.show();
+    this.progress.show();
     this.menuSvc.enableMenus(false);
   }
 
   ionViewDidEnter(): void {
-    // this.progress.hide();
+    this.progress.hide();
   }
 
   ionViewWillLeave(): void {
@@ -154,6 +155,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    * The range UI for 'alarm volume' toggle.
    */
   rangeVolumeValue(event: CustomEvent): void {
+    this.progress.momentary(1000);
     this.data.sound = (event.detail.value as VolumeSet);
     this.next();
     this.signalSvc.double();
@@ -170,10 +172,12 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    * The 'brightness level' range handler.
    */
   rangeBrightnessValue(event: CustomEvent): void {
+    this.progress.momentary(1000);
     this.screenSvc.sampleBrightness(event.detail.value as BrightnessSet);
   }
 
   toggleBaseTheme(value: BaseTheme): void {
+    this.progress.momentary(1000);
     this.data.base = value;
     this.next();
   }

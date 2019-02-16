@@ -111,6 +111,10 @@
    --handle-background: #32343a !important;
   }
 
+  x-progress-bar {
+    background-color: var(--ion-background-color);
+  }
+
   span.countdown,
   span.countdowninfo {
     color: #ababab;

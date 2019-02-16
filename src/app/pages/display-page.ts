@@ -34,8 +34,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
   @ViewChild(FabContainerComponent)
   protected floatingbuttons: FabContainerComponent;
 
-  // @ViewChild(XProgressBarComponent)
-  // protected progress: XProgressBarComponent;
+  @ViewChild(XProgressBarComponent)
+  protected progress: XProgressBarComponent;
 
   private componentSubjet: BehaviorSubject<UUIDData>;
   private componentSubptn: Subscription;
@@ -110,7 +110,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // this.progress.show();
+    this.progress.show();
   }
 
   ngOnDestroy(): void {
@@ -129,7 +129,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * and when the user exits from the 'start' menu and returns. The 'end' menu is of no consequence.
    */
   ionViewDidEnter(): void {
-    // this.progress.show();
+    this.progress.show();
     this.aitPostBuildTimer();
     this.attachSettingsAndCheckHome();
   }
@@ -249,7 +249,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
               this.floatingbuttons.setHomeButtonToVisible();
               this.menuSvc.enableLeftMenu(true);
               menuSubscription.unsubscribe();
-              // this.progress.hide();
+              this.progress.hide();
               resolve();
             }
           }

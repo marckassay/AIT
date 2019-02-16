@@ -1,6 +1,11 @@
 // statusbar on device will overlay the title if this isnt in place.
-ion-header.header-md ion-toolbar:first-child { padding-top: 25px !important; }
+ion-header.header-md {
+    ion-toolbar:first-child { padding-top: 25px !important; }
+}
 
+/* .header-md:after {
+    background-color: var(--ion-background-color);
+} */
 .top-divider {
     padding-left: unset;
 }

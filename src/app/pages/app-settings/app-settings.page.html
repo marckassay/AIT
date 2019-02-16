@@ -18,37 +18,44 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button class="ion-activatable">
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+      </ion-back-button>
     </ion-buttons>
     <ion-title>AIT SETTINGS</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<x-progress-bar></x-progress-bar>
+
 <ion-content>
   <div *ngIf="data">
     <ion-list>
-
       <!-- vibrate -->
-      <ion-item padding-top>
+      <ion-item padding-top class="ion-activatable">
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         <ion-toggle [(ngModel)]="data.vibrate" [checked]="data.vibrate"></ion-toggle>
         <ion-label>vibrate</ion-label>
       </ion-item>
 
       <!-- sound -->
-      <ion-item padding-top lines="none">
+      <ion-item padding-top lines="none" class="ion-activatable">
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         <ion-toggle #soundToggleUI checked="{{data.sound != 0}}" (ionChange)="toggleSound()"></ion-toggle>
         <ion-label>sound</ion-label>
       </ion-item>
 
       <!-- toggle volume -->
-      <ion-item padding-top lines="none">
+      <ion-item padding-top lines="none" class="ion-activatable">
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         <ion-toggle #soundRememberToggleUI [disabled]="soundToggleUI.checked == false" [checked]="isVolToggleChecked"
           (ionChange)="toggleRememberVolume()"></ion-toggle>
         <ion-label>remember alarm volume</ion-label>
       </ion-item>
 
       <!-- volume range -->
-      <ion-item padding-top>
+      <ion-item padding-top class="ion-activatable">
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         <ion-range [class.disableRange]="!soundRememberToggleUI.checked || !soundToggleUI.checked"
           [ngModel]="absoluteVolumeValue" (ionChange)="rangeVolumeValue($event)" debounce="250" min="1" max="15"
           step="1" snaps="true" pin="true">
@@ -57,14 +64,16 @@
       </ion-item>
 
       <!-- toggle brightness -->
-      <ion-item padding-top lines="none">
+      <ion-item padding-top lines="none" class="ion-activatable">
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         <ion-toggle #brightnessToggleUI checked="{{data.brightness > 0}}" (ionChange)="toggleRememberBrightness()">
         </ion-toggle>
         <ion-label>remember brightness level</ion-label>
       </ion-item>
 
       <!-- brightness range -->
-      <ion-item padding-top>
+      <ion-item padding-top class="ion-activatable">
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
         <ion-range [class.disableRange]="!brightnessToggleUI.checked" [ngModel]="absoluteBrightnessValue"
           (ionChange)="rangeBrightnessValue($event)" debounce="250" min="10" max="100" step="10" snaps="true"
           pin="true">
@@ -80,13 +89,15 @@
         <ion-item-divider>BASE THEME</ion-item-divider>
 
         <!-- dark -->
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>dark theme</ion-label>
           <ion-radio checked="{{data.base == 0}}" (ionSelect)="toggleBaseTheme(BT.Dark)"></ion-radio>
         </ion-item>
 
         <!-- light -->
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>light theme</ion-label>
           <ion-radio checked="{{data.base == 1}}" (ionSelect)="toggleBaseTheme(BT.Light)"></ion-radio>
         </ion-item>
@@ -118,17 +129,20 @@
 
         <ion-item-divider>SCREEN ORIENTATION</ion-item-divider>
 
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>use current</ion-label>
           <ion-radio checked="{{data.orientation == 0}}" value="0" (ionSelect)="toggleOrientation($event)"></ion-radio>
         </ion-item>
 
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>portrait</ion-label>
           <ion-radio checked="{{data.orientation == 1}}" value="1" (ionSelect)="toggleOrientation($event)"></ion-radio>
         </ion-item>
 
-        <ion-item padding-top>
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>landscape</ion-label>
           <ion-radio checked="{{data.orientation == 2}}" value="2" (ionSelect)="toggleOrientation($event)"></ion-radio>
         </ion-item>
