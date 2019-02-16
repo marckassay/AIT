@@ -70,7 +70,7 @@ export class ScreenService {
     this._data = value;
   }
 
-  private subject: BehaviorSubject<AppStorageData>;
+  private appSubjet: BehaviorSubject<AppStorageData>;
 
   private sampleBrightness$ = new EventEmitter<{ value: BrightnessSet, duration: number }>();
 
@@ -88,23 +88,25 @@ export class ScreenService {
     if (this.data === undefined) {
       // "lock" data to prevent any others in here
       this.data = null;
-
-      this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
-        .then((val) => {
-          this.subject = val;
-          this.subject.subscribe((data) => { this.data = data; });
-        });
+      const getPromiseSubject = async (): Promise<void> => {
+        await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
+          .then((val) => {
+            this.appSubjet = val;
+            this.appSubjet.subscribe((data) => { this.data = data; });
+          });
+      };
+      getPromiseSubject();
 
       this.sampleBrightness$.pipe(
         distinctUntilChanged((x, y) => x.value === y.value),
-        throttleTime(1000),
+        throttleTime(500),
         tap((y) => this.brightness.setBrightness(BrightnessUtil.convertToDeviceBrightnessNumber(y.value))),
         delayWhen((y) => timer(y.duration)),
         tap(() => this.brightness.setBrightness(-1))
       ).subscribe(
         (brightness): void => {
           this.data.brightness = brightness.value;
-          this.subject.next(this.data);
+          this.appSubjet.next(this.data);
         }
       );
     }

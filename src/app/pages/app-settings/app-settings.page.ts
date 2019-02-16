@@ -78,14 +78,14 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    const getSubject = async (): Promise<void> => {
+    const getPromiseSubject = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
           this.appSubjet = value;
           this.subscribe();
         });
     };
-    getSubject();
+    getPromiseSubject();
   }
 
   ionViewWillEnter(): void {
@@ -102,22 +102,18 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // since the user may have adjusted the volume while the 'remember volume' was enabled, we
-    // need to check to ensure that the volume is updated
-    if (this.data.sound > 0) {
-      this.signalSvc.storeCurrentDeviceVolume();
-    }
-
+    // revert to original volume, the sound level would of been saved at this point.
+    this.signalSvc.enablePreferredVolume(false);
     this.next();
-    this.appSubptn.unsubscribe();
     this.data = undefined;
   }
 
   private subscribe(): void {
     this.appSubptn = this.appSubjet.subscribe((value) => {
-      this.data = value;
+      if (this.data === undefined) {
+        this.data = value;
+      }
     });
-    // this.appSubptn.unsubscribe();
     this.isVolToggleChecked = this.data.sound > 0;
     this.absoluteVolumeValue = Math.abs(this.data.sound) as VolumeSet;
     this.absoluteBrightnessValue = BrightnessUtil.absolute(this.data.brightness);
@@ -146,6 +142,12 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   toggleRememberVolume(): void {
     this.data.sound = (this.data.sound * -1) as VolumeSet;
+
+    if (this.data.sound > 0) {
+      this.signalSvc.enablePreferredVolume(true);
+    } else {
+      this.signalSvc.enablePreferredVolume(false);
+    }
   }
 
   /**
@@ -153,6 +155,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    */
   rangeVolumeValue(event: CustomEvent): void {
     this.data.sound = (event.detail.value as VolumeSet);
+    this.next();
     this.signalSvc.double();
   }
 

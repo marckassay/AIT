@@ -67,7 +67,7 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit, On
   }
 
   ngAfterContentInit(): void {
-    const getSubjects = async (): Promise<void> => {
+    const getPromiseSubject = async (): Promise<void> => {
       await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
         .then((value) => {
           this.appSubject = value;
@@ -80,7 +80,7 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit, On
 
       this.subscribe();
     };
-    getSubjects();
+    getPromiseSubject();
   }
 
   ngAfterViewInit(): void {

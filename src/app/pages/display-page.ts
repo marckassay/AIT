@@ -93,7 +93,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.componentSubjet = (this.route.snapshot.data as any).subject as BehaviorSubject<any>;
 
     if (this.componentSubptn && this.componentSubptn.closed === false) {
-      this.componentSubptn.unsubscribe();
+      // this.componentSubptn.unsubscribe();
     }
 
     this.componentSubptn = this.componentSubjet.subscribe((uuidData: UUIDData) => {
@@ -176,7 +176,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * @param value true if timer is ticking
    */
   protected async setAppToRunningMode(value: boolean): Promise<void> {
-    await this.screenSvc.setScreenToRunningMode(value);
+    //  await this.screenSvc.setScreenToRunningMode(value);
     await this.menuSvc.enableLeftMenu(value === false);
     await this.menuSvc.enableRightMenu(value === false);
 

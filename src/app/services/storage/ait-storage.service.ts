@@ -15,47 +15,35 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { from, merge, BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observer, PartialObserver, Subscription } from 'rxjs';
+import { skip } from 'rxjs/operators';
 import { AppUtils } from 'src/app/app.utils';
 
 import { StorageDefaultData } from './ait-storage.defaultdata';
 import { AppStorageData, UUIDData } from './ait-storage.shapes';
 
+
 export interface CacheSubject<T extends UUIDData> {
   uuid: string;
-  subject: BehaviorSubject<T>;
   routable: boolean;
+  subject: BehaviorSubject<T>;
+  observer: PartialObserver<T>;
+  subscription: Subscription;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class AITStorage implements OnInit {
+export class AITStorage {
   private status: 'off' | 'booting' | 'on';
-  private observable: Observable<UUIDData>;
-  private subscription: Subscription;
   private subjects: Array<CacheSubject<any>>;
 
   constructor(private storage: Storage) {
     this.status = 'off';
     this.subjects = [];
   }
-
-  ngOnInit(): void {
-
-  }
-
-  /**
-  * This is called directly by the display-page resolvers. Calls `this.getPromiseSubject()` wrapped
-  * in `from()`.
-  *
-  * @param uuid the key to storage record
-  */
-  /*   getPageObservable<T extends UUIDData>(uuid: string): Observable<BehaviorSubject<T>> {
-      return from(this.getPromiseSubject(uuid)) as Observable<BehaviorSubject<T>>;
-    } */
 
   /**
    * Checks the storage cache (`this.subjects`) for first found subject with the same `uuid`. If
@@ -65,105 +53,28 @@ export class AITStorage implements OnInit {
    * @param uuid the key to storage record
    */
   async getPromiseSubject<T extends UUIDData>(uuid: string): Promise<BehaviorSubject<T>> {
-    const entry: CacheSubject<T> | undefined = this.subjects.find(element => element.uuid === uuid);
+    let hardData: T;
+    const noSoftData: boolean = this.subjects.findIndex(element => element.uuid === uuid) === -1;
 
-    if (entry === undefined) {
-      return await this.getPagePromise<T>(uuid).then((value) => {
-        if (value.routable === true) {
-          return this.registerSubject(value).then(sub => sub);
-        } else {
-          return this.addAsCacheSubject<T>(value);
-        }
-      });
-    } else {
-      if (entry.routable === true) {
-        return this.registerSubject<T>(entry);
-      } else {
-        return Promise.resolve(entry.subject);
-      }
+    // no softdata; then store it
+    if (noSoftData === true) {
+      console.log('-->', uuid);
+      hardData = await this.getHardData(uuid);
+      console.log('<--', hardData.uuid);
+      console.log('-_->', uuid);
+      this.storeSoftData(hardData);
+      console.log('<-_-', hardData.uuid);
     }
-  }
+    console.log('-*->', uuid);
+    // now get softdata
+    const soft = this.restoreSoftData<T>(uuid);
+    console.log('<-*-', soft.uuid);
 
-  // TODO: enable the 2 operators
-  // merge().pipe(
-  // debounceTime(5000),
-  // distinctUntilChanged()
-  // );
-  /**
-   *
-   *
-   * @param value: T | CacheSubject<T>
-   */
-  private async registerSubject<T extends UUIDData>(value: T | CacheSubject<T>): Promise<BehaviorSubject<T>> {
-    let appcache: CacheSubject<AppStorageData> | undefined;
-    let subject: BehaviorSubject<T>;
-
-    // if observable is undefined, this should be the initial startup request for AppStorageData
-    if (this.observable === undefined) {
-      // create a new subject and push it into cache
-      subject = this.addAsCacheSubject<T>(value as T);
-      this.observable = subject.asObservable();
-    } else {
-      // app subject is never unsubscribed. so just return the cache subject
-      if (value.uuid === StorageDefaultData.APP_ID) {
-        return Promise.resolve((value as CacheSubject<T>).subject);
-      }
-
-      // if this isn't CacheSubject, then its UUIDData object. so with it create a CacheSubject
-      if ('subject' in value === false) {
-        subject = this.addAsCacheSubject<T>(value as T);
-      } else {
-        subject = (value as CacheSubject<T>).subject;
-      }
-
-      // get appdata to determine the current_uuid
-      let appdata: AppStorageData | undefined;
-      appcache = this.subjects.find(element => element.uuid === StorageDefaultData.APP_ID);
-      appcache.subject.subscribe(val => appdata = val).unsubscribe();
-
-      // if this requesting subject isn't the current_uuid, set it to current_uuid. And unsubscribe
-      // and merge it into appsubject to create a new observable
-      if (value.uuid !== appdata.current_uuid) {
-        appdata.current_uuid = value.uuid;
-        appcache.subject.next(appdata);
-
-        this.subscription.unsubscribe();
-        this.observable = merge(appcache.subject, subject);
-      } else {
-        return Promise.resolve(subject);
-      }
+    if ((soft.routable === true) && (uuid !== StorageDefaultData.APP_ID)) {
+      await this.updateAppsCurrentUUID(uuid);
     }
 
-    this.subscription = this.observable.subscribe((val) => {
-      this.setData(val);
-    });
-
-    return Promise.resolve(subject);
-  }
-
-  /**
-   * The only point of access to `storage.set()` to store data
-   *
-   * @param value data to store with `uuid` as its storage key
-   */
-  private async setData(value: UUIDData): Promise<void> {
-    console.log('storing:', value);
-    return await this.storage.set(value.uuid, value)
-      .then(() => {
-        console.log('stored:', value.uuid);
-      }, (rejected) => {
-        console.error('failed to store:', rejected, value);
-      })
-      .catch((reason) => { console.error('failed to store:', reason, value); });
-  }
-
-  /**
-   * The only point of access to `storage.get()` to retrieve data
-   *
-   * @param uuid the storage key
-   */
-  private async getData<T extends UUIDData>(uuid: string): Promise<T> {
-    return await this.storage.get(uuid);
+    return Promise.resolve(soft.subject);
   }
 
   /**
@@ -174,19 +85,97 @@ export class AITStorage implements OnInit {
    *
    * @param uuid the key to storage record
    */
-  private async getPagePromise<T extends UUIDData>(uuid: string): Promise<T> {
-    const results = await this.isReady()
-      .then(async (): Promise<T> => {
-        const value = await this.getData<T>(uuid);
-        if (value) {
-          return value;
-        } else {
-          const defaultdata = AppUtils.getDataByID(uuid);
-          await this.setData(defaultdata);
-          return defaultdata as T;
-        }
+  private async getHardData<T extends UUIDData>(uuid: string): Promise<T> {
+    const isReady = await this.isReady();
+
+    if (isReady) {
+      // TODO: cache these somehow
+      const keys = await this.storage.keys();
+      let results;
+      if (keys.includes(uuid) === false) {
+        const defaultdata = AppUtils.getDataByID(uuid) as T;
+        await this.setData(defaultdata);
+        results = Promise.resolve(defaultdata);
+      } else {
+        results = await this.storage.get(uuid);
+      }
+
+      return results;
+    }
+  }
+
+  /**
+   * The only point of access to `storage.set()` to store data
+   *
+   * @param value data to store with `uuid` as its storage key
+   */
+  private async setData<T extends UUIDData>(value: T): Promise<void> {
+    console.log('[', value.uuid, '] storing:', value);
+    return await this.storage.set(value.uuid, value)
+      .then(() => {
+        console.log('[', value.uuid, '] stored');
+      }, (rejected) => {
+        console.error('[', value.uuid, ']', rejected, value);
+      })
+      .catch((reason) => {
+        console.error('[', value.uuid, ']', reason);
       });
-    return results;
+  }
+
+  /**
+   * Instantiates BehaviorSubject with `data` and stores a record of it in `this.subjects`.
+   *
+   * @param data UUID data type
+   */
+  private storeSoftData<T extends UUIDData>(data: T): void {
+    this.subjects.push({
+      uuid: data.uuid,
+      routable: data.routable,
+      subject: new BehaviorSubject<T>(data),
+      observer: this.createObserver(data.uuid),
+      subscription: undefined
+    });
+    console.log('[', data.uuid, '] cache is now:', this.subjects);
+  }
+
+  /**
+   * Retrieves soft entry and if BehaviorSubject has no observers a subscription will be created.
+   *
+   * @param uuid
+   */
+  private restoreSoftData<T extends UUIDData>(uuid: string): CacheSubject<T> {
+    const entry = this.subjects.find(element => element.uuid === uuid);
+
+    if (entry.subject.observers.length === 0) {
+      const subscription = entry.subject.pipe(skip(1)).subscribe(entry.observer);
+      entry.subscription = subscription;
+    }
+
+    return entry as CacheSubject<T>;
+  }
+
+  private createObserver<T extends UUIDData>(uuid: string): Observer<T> {
+    return {
+      closed: false,
+      next: (value: T): void => {
+        this.setData(value);
+      },
+      error: (error: any): void => {
+        console.error('[', uuid, ']', error);
+      },
+      complete: (): void => {
+        console.warn('[', uuid, ']', 'completed');
+      }
+    };
+  }
+
+  private updateAppsCurrentUUID(uuid: string): Promise<void> {
+    // safely assuming appData is already stored...
+    const soft = this.restoreSoftData<AppStorageData>(StorageDefaultData.APP_ID);
+    const appData = soft.subject.getValue();
+    appData.current_uuid = uuid;
+    // since this field is only used on app startup, bypass store appData thru soft.subject.
+    return this.setData(appData);
   }
 
   /**
@@ -197,59 +186,13 @@ export class AITStorage implements OnInit {
       return Promise.resolve(true);
     } else if (this.status === 'off') {
       this.status = 'booting';
-      return await this.preOperationCheck();
-    }
-  }
-
-  /**
-   * Algorithm to be executed just once to ensure that storage is ready to be used and
-   * AppStorageData has been loaded.
-   */
-  private preOperationCheck(): Promise<boolean> {
-    return this.storage.ready()
-      .then(async (value: LocalForage): Promise<AppStorageData> => {
-        if (value) {
-          return await this.getData<AppStorageData>(StorageDefaultData.APP_ID);
-        } else {
-          return Promise.reject(new Error('LOCAL_STORAGE'));
-        }
-      })
-      .then(async (val: AppStorageData | undefined | null): Promise<boolean> => {
-
-        if (this.status === 'booting') {
+      return await this.storage.ready()
+        .then(async (value: LocalForage): Promise<any> => {
           this.status = 'on';
-        }
-
-        if (!val) {
-          const appdata: UUIDData = AppUtils.getDataByID(StorageDefaultData.APP_ID);
-          await this.setData(appdata);
-          this.addAsCacheSubject(appdata);
-        }
-
-        return Promise.resolve(true);
-      })
-      .catch((reason: any) => {
-        console.error(reason);
-        this.status = 'off';
-        return Promise.reject('LOCAL_STORAGE_FAILED');
-      });
-  }
-
-  /**
-   * Instantiates BehaviorSubject with `data` and stores a record of it in `this.subjects`. Returns
-   * the created BehaviorSubject instance.
-   *
-   * @param data UUID data type
-   */
-  private addAsCacheSubject<T extends UUIDData>(data: T): BehaviorSubject<T> {
-    const subject = new BehaviorSubject<T>(data);
-
-    this.subjects.push({
-      uuid: data.uuid,
-      subject: subject,
-      routable: data.routable
-    });
-    console.log('adding to cache:', data.uuid, ' cache is now:', this.subjects);
-    return subject;
+          return Promise.resolve(true);
+        });
+    } else {
+      return Promise.resolve(false);
+    }
   }
 }

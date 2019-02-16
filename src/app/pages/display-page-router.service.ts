@@ -36,8 +36,8 @@ export class DisplayPageResolverService implements Resolve<any> {
         protected storage: AITStorage
     ) { }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<BehaviorSubject<UUIDData>> {
+    async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<BehaviorSubject<UUIDData>> {
         const uuid = route.paramMap.get('id');
-        return this.storage.getPromiseSubject(uuid);
+        return await this.storage.getPromiseSubject(uuid);
     }
 }

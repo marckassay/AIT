@@ -21,6 +21,8 @@ import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged, throttleTime } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
@@ -41,7 +43,7 @@ export class SignalService {
   }
 
   private MP3 = 'beep';
-  private subject: BehaviorSubject<AppStorageData>;
+  private appSubjet: BehaviorSubject<AppStorageData>;
 
   /**
    * If the DO_NOT_DISTURB error occurs this is set to true, which is only set back to false when
@@ -57,8 +59,8 @@ export class SignalService {
     public audioman: AudioManagement,
     private storage: AITStorage,
     private toastCtrl: ToastController) {
-    // if app.module has 'useClass' prop set to the mock version which has storage, then set it
-    if ('storage' in audioman) {
+    // audioman mock has storage field to simulate device storage
+    if (environment.useMocks) {
       (audioman as any).storage = this.storage;
     }
   }
@@ -67,14 +69,26 @@ export class SignalService {
     if (this.data === undefined) {
       // "lock" data to prevent any others in here
       this.data = null;
-      this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
-        .then((val) => {
-          this.subject = val;
-          this.subject.subscribe((data) => { this.data = data; });
-        })
-        .then(() => {
-          this.sound.preloadSimple(this.MP3, 'assets/sounds/beep.mp3');
-        });
+      const getPromiseSubject = async (): Promise<void> => {
+        await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
+          .then((val) => {
+
+            this.appSubjet = val;
+            this.appSubjet.pipe(
+              throttleTime(500)
+            ).subscribe((v) => {
+              // no need to set music volume first emission. and change only when sound property changes
+              if (this.data && this.data.sound !== v.sound) {
+                this.setMusicVolume(v.sound);
+              }
+              this.data = v;
+            });
+          })
+          .then(() => {
+            this.sound.preloadSimple(this.MP3, 'assets/sounds/beep.mp3');
+          });
+      };
+      getPromiseSubject();
     }
   }
 
@@ -115,6 +129,7 @@ export class SignalService {
         .then((val) => {
           this.audioModePriorToChange = val.audioMode;
         });
+
       if (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL) {
         await this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL)
           .catch((reason) => {
@@ -128,6 +143,7 @@ export class SignalService {
           });
       }
 
+
       // get the device's volume and if needed adjust it to data.sound
       await this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
         .then((val) => {
@@ -135,7 +151,7 @@ export class SignalService {
         });
 
       if (this.volumePriorToChange !== this.data.sound) {
-        await this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.data.sound);
+        await this.setMusicVolume(this.data.sound);
       }
 
     } else if (value === false) {
@@ -146,7 +162,7 @@ export class SignalService {
       }
 
       if (this.volumePriorToChange && (this.volumePriorToChange > 0)) {
-        await this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, this.volumePriorToChange);
+        await this.setMusicVolume(this.volumePriorToChange);
         this.volumePriorToChange = undefined;
       }
     }
@@ -180,6 +196,10 @@ export class SignalService {
       }
     };
     await loop();
+  }
+
+  private async setMusicVolume(value: number): Promise<void> {
+    return await this.audioman.setVolume(AudioManagement.VolumeType.MUSIC, value);
   }
 
   async inform(): Promise<void> {

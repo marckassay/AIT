@@ -12,7 +12,7 @@ import { AudioMockStorageData, VolumeShape } from '../services/storage/ait-stora
  */
 @Injectable()
 export class AudioManagementMock {
-    subject: BehaviorSubject<AudioMockStorageData>;
+    appSubjet: BehaviorSubject<AudioMockStorageData>;
     data: AudioMockStorageData;
 
     /**
@@ -24,11 +24,14 @@ export class AudioManagementMock {
     }
     public set storage(value: AITStorage) {
         this._storage = value;
-        this._storage.getPromiseSubject<AudioMockStorageData>(MockStorageData.AUDIO_MOCK_STORAGE_ID)
-            .then((val) => {
-                this.subject = val;
-                this.subject.subscribe((data) => { this.data = data; });
-            });
+        const getPromiseSubject = async (): Promise<void> => {
+            await this._storage.getPromiseSubject<AudioMockStorageData>(MockStorageData.AUDIO_MOCK_STORAGE_ID)
+                .then((val) => {
+                    this.appSubjet = val;
+                    this.appSubjet.subscribe((data) => { this.data = data; });
+                });
+        };
+        getPromiseSubject();
     }
 
     setAudioMode(mode: AudioManagementMock.AudioMode): Promise<void> {
@@ -101,7 +104,7 @@ export class AudioManagementMock {
     }
 
     private next(): void {
-        this.subject.next(this.data);
+        this.appSubjet.next(this.data);
     }
 }
 
