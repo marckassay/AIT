@@ -19,6 +19,7 @@ import { AfterContentInit, AfterViewInit, Injector, OnDestroy, OnInit } from '@a
 import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
+import { error } from '../app.utils';
 import { OnClosed, SideMenuService } from '../components/side-menu/side-menu.service';
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 import { AITStorage } from '../services/storage/ait-storage.service';
@@ -96,7 +97,7 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit, On
   }
 
   ngOnDestroy(): void {
-    console.error('sidemenu ngOnDestroy()');
+    error('sidemenu ngOnDestroy()');
   }
 
   private subscribe(): void {

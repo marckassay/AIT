@@ -19,7 +19,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject, Observer, PartialObserver, Subscription } from 'rxjs';
 import { distinct, skip } from 'rxjs/operators';
-import { AppUtils } from 'src/app/app.utils';
+import { error, log, warn, AppUtils } from 'src/app/app.utils';
 
 import { StorageDefaultData } from './ait-storage.defaultdata';
 import { AppStorageData, UUIDData } from './ait-storage.shapes';
@@ -58,17 +58,17 @@ export class AITStorage {
 
     // no softdata; then store it
     if (noSoftData === true) {
-      console.log('-hard->', uuid);
+      log('-hard->', uuid);
       hardData = await this.getHardData(uuid);
-      console.log('<-hard-', hardData.uuid);
-      console.log('-soft->', uuid);
+      log('<-hard-', hardData.uuid);
+      log('-soft->', uuid);
       this.storeSoftData(hardData);
-      console.log('<-soft-', hardData.uuid);
+      log('<-soft-', hardData.uuid);
     }
-    console.log('-resoft->', uuid);
+    log('-resoft->', uuid);
     // now get softdata
     const soft = this.restoreSoftData<T>(uuid);
-    console.log('<-resoft-', soft.uuid);
+    log('<-resoft-', soft.uuid);
 
     if ((soft.routable === true) && (uuid !== StorageDefaultData.APP_ID)) {
       await this.updateAppsCurrentUUID(uuid);
@@ -110,15 +110,15 @@ export class AITStorage {
    * @param value data to store with `uuid` as its storage key
    */
   private async setData<T extends UUIDData>(value: T): Promise<void> {
-    console.log('[', value.uuid, '] storing:', value);
+    log('[', value.uuid, '] storing:', value);
     return await this.storage.set(value.uuid, value)
       .then(() => {
-        console.log('[', value.uuid, '] stored');
+        log('[', value.uuid, '] stored');
       }, (rejected) => {
-        console.error('[', value.uuid, ']', rejected, value);
+        error('[', value.uuid, ']', rejected, value);
       })
       .catch((reason) => {
-        console.error('[', value.uuid, ']', reason);
+        error('[', value.uuid, ']', reason);
       });
   }
 
@@ -135,7 +135,7 @@ export class AITStorage {
       observer: this.createObserver(data.uuid),
       subscription: undefined
     });
-    console.log('[', data.uuid, '] cache is now:', this.subjects);
+    log('[', data.uuid, '] cache is now:', this.subjects);
   }
 
   /**
@@ -160,11 +160,11 @@ export class AITStorage {
       next: (value: T): void => {
         this.setData(value);
       },
-      error: (error: any): void => {
-        console.error('[', uuid, ']', error);
+      error: (err: any): void => {
+        error('[', uuid, ']', err);
       },
       complete: (): void => {
-        console.warn('[', uuid, ']', 'completed');
+        warn('[', uuid, ']', 'completed');
       }
     };
   }

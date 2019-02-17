@@ -133,3 +133,94 @@ export namespace AppUtils {
         DO_NOT_DISTURB = 'DO_NOT_DISTURB'
     }
 }
+
+/**
+ * A simple assertion test that verifies whether `value` is truthy.
+ * If it is not, an `AssertionError` is thrown.
+ * If provided, the error `message` is formatted using `util.format()` and used as the error message.
+ */
+export function assert(value: any, message?: string, ...optionalParams: any[]): void {
+    console.assert(value, message, ...optionalParams);
+}
+/**
+ * When `stdout` is a TTY, calling `console.clear()` will attempt to clear the TTY.
+ * When `stdout` is not a TTY, this method does nothing.
+ */
+export function clear(): void {
+    console.clear();
+}
+/**
+ * Maintains an internal counter specific to `label` and outputs to `stdout` the number of
+ * times `console.count()` has been called with the given `label`.
+ */
+export function count(label?: string): void {
+    console.count(label);
+}
+/**
+ * This method calls {@link console.log()} passing it the arguments received. Please note that
+ * this method does not produce any XML formatting
+ */
+export function dirxml(...data: any[]): void {
+    console.dirxml(data);
+}
+/**
+ * Prints to `stderr` with newline.
+ */
+export function error(message?: any, ...optionalParams: any[]): void {
+    console.error(message, optionalParams);
+}
+/**
+ * The `console.groupCollapsed()` function is an alias for {@link console.group()}.
+ */
+export function groupCollapsed(): void {
+    console.groupCollapsed();
+}
+/**
+ * Decreases indentation of subsequent lines by two spaces.
+ */
+export function groupEnd(): void {
+    console.groupEnd();
+}
+/**
+ * Prints to `stdout` with newline.
+ */
+export function log(message?: any, ...optionalParams: any[]): void {
+    console.log(message, optionalParams);
+}
+/**
+ * This method does not display anything unless used in the inspector.
+ * Prints to `stdout` the array `array` formatted as a table.
+ */
+export function table(tabularData: any, properties?: string[]): void {
+    console.table(tabularData, properties);
+}
+
+/**
+ * The {@link console.warn()} function is an alias for {@link console.error()}.
+ */
+export function warn(message?: any, ...optionalParams: any[]): void {
+    console.warn(message, optionalParams);
+}
+/**
+ * This method does not display anything unless used in the inspector.
+ * Starts a JavaScript CPU profile with an optional label.
+ */
+export function profile(label?: string): void {
+    console.profile(label);
+}
+/**
+ * This method does not display anything unless used in the inspector.
+ *  Stops the current JavaScript CPU profiling session if one has been started and prints the report
+ * to the Profiles panel of the inspector.
+ */
+export function profileEnd(label?: string): void {
+    console.profileEnd(label);
+}
+/**
+ * This method does not display anything unless used in the inspector.
+ *  Adds an event with the label `label` to the Timeline panel of the inspector.
+ */
+export function timeStamp(label?: string): void {
+    console.timeStamp(label);
+}
+

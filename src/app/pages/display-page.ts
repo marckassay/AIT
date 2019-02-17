@@ -41,10 +41,10 @@ export class DisplayPage implements OnInit, AfterViewInit {
   private componentSubptn: Subscription;
 
   protected _uuidData: any;
-  protected get uuidData(): any {
+  public get uuidData(): any {
     return this._uuidData;
   }
-  protected set uuidData(value: any) {
+  public set uuidData(value: any) {
     this._uuidData = value;
   }
 

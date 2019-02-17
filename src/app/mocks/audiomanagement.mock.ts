@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AudioManagement } from '@ionic-native/audio-management/ngx';
 import { BehaviorSubject } from 'rxjs';
 
+import { log } from '../app.utils';
 import { MockStorageData } from '../services/storage/ait-storage.defaultdata';
 import { AITStorage } from '../services/storage/ait-storage.service';
 import { AudioMockStorageData, VolumeShape } from '../services/storage/ait-storage.shapes';
@@ -38,7 +39,7 @@ export class AudioManagementMock {
         this.data.currentAudioMode = mode;
         this.next();
         return new Promise((resolve, reject): void => {
-            console.log('[AudioManagementMock]', 'audio mode has been set:', mode);
+            log('[AudioManagementMock]', 'audio mode has been set:', mode);
             resolve();
         });
     }
@@ -46,7 +47,7 @@ export class AudioManagementMock {
     getAudioMode(): Promise<AudioManagementMock.AudioModeReturn> {
         return new Promise((resolve, reject): void => {
             const results = { audioMode: this.data.currentAudioMode, label: AudioManagement.AudioMode[this.data.currentAudioMode] };
-            console.log('[AudioManagementMock]', 'audio mode is:', results);
+            log('[AudioManagementMock]', 'audio mode is:', results);
             resolve(results);
         });
     }
@@ -55,7 +56,7 @@ export class AudioManagementMock {
         this.data[this.volTypeToField(type)] = volume;
         this.next();
         return new Promise((resolve, reject): void => {
-            console.log('[AudioManagementMock]', this.volTypeToField(type), 'volume type has been set to:', volume);
+            log('[AudioManagementMock]', this.volTypeToField(type), 'volume type has been set to:', volume);
             resolve();
         });
     }
@@ -64,7 +65,7 @@ export class AudioManagementMock {
         return new Promise((resolve, reject): void => {
             const field = this.volTypeToField(type);
             const val = this.data[field];
-            console.log('[AudioManagementMock]', 'volume for', field, 'is:', val);
+            log('[AudioManagementMock]', 'volume for', field, 'is:', val);
             resolve({ volume: val });
         });
     }
@@ -73,7 +74,7 @@ export class AudioManagementMock {
         return new Promise((resolve, reject): void => {
             const field = this.volTypeToField(type, true);
             const val = this.data[field];
-            console.log('[AudioManagementMock]', 'max volume for', field, 'is:', val);
+            log('[AudioManagementMock]', 'max volume for', field, 'is:', val);
             resolve({ maxVolume: val });
         });
     }
