@@ -136,7 +136,7 @@ export class AppSettingsPage implements OnInit, OnDestroy {
   toggleSound(): void {
     if (this.data.sound === 0) {
       this.signalSvc.storeCurrentDeviceVolume();
-    } else if (Math.abs(this.data.sound) > 0) {
+    } else {
       this.data.sound = 0;
     }
   }
@@ -155,19 +155,30 @@ export class AppSettingsPage implements OnInit, OnDestroy {
    * The range UI for 'alarm volume' toggle.
    */
   async rangeVolumeValue(event: CustomEvent): Promise<void> {
-    // TODO: refactor this method
-    this.progress.momentary(1000);
     this.isContentInteractive = false;
-    this.signalSvc.enablePreferredVolume(true);
+    this.progress.show();
+
     this.data.sound = (event.detail.value as VolumeSet);
     this.next();
 
-    this.signalSvc.double();
+    await Promise.all([
+      AppUtils.delayPromise(1000),
+      this.signalSvc.enablePreferredVolume(true)
+        .then(() => {
+          this.signalSvc.double();
+        })
+        .catch((reason) => {
+          if (reason === 'DO_NOT_DISTURB') {
+          }
+        })
+    ]);
 
-    await AppUtils.delayPromise(1000);
+    // revert device to original volume, this "remember volume" feature only applies
+    // when timer is currently running
+    await this.signalSvc.enablePreferredVolume(false);
+
     this.isContentInteractive = true;
-    // revert to original volume, the sound level would of been saved at this point.
-    this.signalSvc.enablePreferredVolume(false);
+    this.progress.hide();
   }
 
   /**

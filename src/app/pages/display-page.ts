@@ -191,6 +191,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.timerState = SequenceStates.Loaded;
     this.grandTime = this.sots.getGrandTime({ time: -1 });
     this.sots.sequencer.reset();
+    this.signalSvc.clearHasBeenInformed();
   }
 
   /**

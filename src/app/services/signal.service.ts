@@ -21,8 +21,10 @@ import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged, throttleTime } from 'rxjs/operators';
+import { throttleTime } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+
+import { AppUtils } from '../app.utils';
 
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
@@ -38,7 +40,7 @@ export class SignalService {
     return this._data;
   }
   public set data(value: AppStorageData) {
-    this.alreadyInformed = false;
+    this.clearHasBeenInformed();
     this._data = value;
   }
 
@@ -46,10 +48,12 @@ export class SignalService {
   private appSubjet: BehaviorSubject<AppStorageData>;
 
   /**
-   * If the DO_NOT_DISTURB error occurs this is set to true, which is only set back to false when
-   * the `data` property has changed. Intention with this boolean flag to prevent annoying the user
+   * If the DO_NOT_DISTURB error occurs, this is set to true, which is only set back to false when
+   * the `clearHasBeenInformed()`. Intention with this boolean flag to prevent annoying the user
+   * by overly notifying them. If they wish to proceed running timer with 'Do Not Distrub' enabled,
+   * it will bypass vibrate and sounds.
    */
-  private alreadyInformed: boolean;
+  private hasBeenInformed: boolean;
   private audioModePriorToChange: number | undefined;
   private volumePriorToChange: number | undefined;
 
@@ -93,8 +97,7 @@ export class SignalService {
   }
 
   /**
-   * Called from app-settings page when 'remember alarm level' toggle is checked. In order to get
-   * volume, it needs to set the audiomode to NORMAL. After that is set, it will retrieve device
+   * In order to get volume, it needs to set the audiomode to NORMAL. After that is set, it will retrieve device
    * volume for MUSIC and set it into its copy of `AppStorageData`.
    */
   async storeCurrentDeviceVolume(): Promise<void> {
@@ -111,8 +114,8 @@ export class SignalService {
    * user's sound mode and volume.
    *
    * When the `value` is `true` and sounds for the app are enabled (`this.data.sound > 0`), it will
-   * get the device's current audiomode (getAudioMode()), store that value by setting
-   * `audiomodePriorToChange` and set the device's audiomode (via setAudioMode()) to
+   * get the device's current audiomode (`getAudioMode()`), store that value by setting
+   * `audiomodePriorToChange` and set the device's audiomode (via `setAudioMode()`) to
    * `AudioMode.Normal`.
    *
    * When the `value` is `false`, it will revert the settings that were done when called with
@@ -122,65 +125,88 @@ export class SignalService {
    * @param value indicates if it should be enabled or disabled.
    */
   async enablePreferredVolume(value: boolean): Promise<void> {
-    if (value && this.data.sound > 0) {
+    if ((value === true) && (this.data.sound !== 0)) {
 
-      // get the device's audio mode and if needed adjust it to the value of AudioMode.NORMAL
-      await this.audioman.getAudioMode()
-        .then((val) => {
-          this.audioModePriorToChange = val.audioMode;
-        });
-
-      if (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL) {
-        await this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL)
-          .catch((reason) => {
-            if (reason.search('Do Not Disturb')) {
-              if (this.alreadyInformed === false) {
-                this.alreadyInformed = true;
-                this.inform();
-                return Promise.reject('DO_NOT_DISTURB');
-              }
-            }
+      if (this.hasBeenInformed === false) {
+        // get the device's audio mode...
+        await this.audioman.getAudioMode()
+          .then((val) => {
+            this.audioModePriorToChange = val.audioMode;
           });
+
+        // ... if needed adjust it to the value of AudioMode.NORMAL
+        if (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL) {
+          await this.audioman.setAudioMode(AudioManagement.AudioMode.NORMAL)
+            .catch((reason) => {
+              // this will set `hasBeenInformed`
+              return this.settleRejection(reason);
+            });
+        }
       }
 
-
-      // get the device's volume and if needed adjust it to data.sound
-      await this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
-        .then((val) => {
-          this.volumePriorToChange = val.volume;
-        });
-
-      if (this.volumePriorToChange !== this.data.sound) {
-        await this.setMusicVolume(this.data.sound);
+      if (this.hasBeenInformed === false) {
+        if (this.data.sound > 0) {
+          // get the device's volume...
+          await this.audioman.getVolume(AudioManagement.VolumeType.MUSIC)
+            .then((val) => {
+              this.volumePriorToChange = val.volume;
+            });
+        } else {
+          this.volumePriorToChange = Math.abs(this.data.sound);
+        }
+        // ... and if needed adjust it to data.sound
+        if (this.volumePriorToChange !== this.data.sound) {
+          await this.setMusicVolume(this.data.sound)
+            .catch((reason) => {
+              return this.settleRejection(reason);
+            });
+        }
       }
+
+      return Promise.resolve();
 
     } else if (value === false) {
-      // revert audio settings to what they were prior to running timer
-      if (this.audioModePriorToChange && (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL)) {
-        await this.audioman.setAudioMode(this.audioModePriorToChange);
-        this.audioModePriorToChange = undefined;
+
+      if (this.hasBeenInformed === false) {
+        // revert audio settings to what device had prior to calling this as: enablePreferredVolume(true)
+        if (this.audioModePriorToChange && (this.audioModePriorToChange !== AudioManagement.AudioMode.NORMAL)) {
+          await this.audioman.setAudioMode(this.audioModePriorToChange);
+          this.audioModePriorToChange = undefined;
+        }
+
+        if (this.volumePriorToChange && (this.volumePriorToChange > 0)) {
+          await this.setMusicVolume(this.volumePriorToChange);
+          this.volumePriorToChange = undefined;
+        }
       }
 
-      if (this.volumePriorToChange && (this.volumePriorToChange > 0)) {
-        await this.setMusicVolume(this.volumePriorToChange);
-        this.volumePriorToChange = undefined;
-      }
+      return Promise.resolve();
     }
   }
 
+  clearHasBeenInformed(): void {
+    this.hasBeenInformed = false;
+  }
+
   single(): void {
-    if (this.data.sound !== 0) { this.loopBeep(1); }
-    if (this.data.vibrate) { this.loopVibrate(1); }
+    if (this.hasBeenInformed === false) {
+      if (this.data.sound !== 0) { this.loopBeep(1); }
+      if (this.data.vibrate) { this.loopVibrate(1); }
+    }
   }
 
   double(): void {
-    if (this.data.sound !== 0) { this.loopBeep(2); }
-    if (this.data.vibrate) { this.loopVibrate(2); }
+    if (this.hasBeenInformed === false) {
+      if (this.data.sound !== 0) { this.loopBeep(2); }
+      if (this.data.vibrate) { this.loopVibrate(2); }
+    }
   }
 
   completed(): void {
-    if (this.data.vibrate) { this.loopVibrate(33); }
-    if (this.data.sound !== 0) { this.loopBeep(33); }
+    if (this.hasBeenInformed === false) {
+      if (this.data.vibrate) { this.loopVibrate(33); }
+      if (this.data.sound !== 0) { this.loopBeep(33); }
+    }
   }
 
   private loopVibrate(intervals: number): void {
@@ -212,5 +238,18 @@ export class SignalService {
     });
 
     toast.present();
+  }
+
+  private settleRejection(reason): Promise<AppUtils.DeviceError> {
+    if (reason.search('Do Not Disturb')) {
+      if (this.hasBeenInformed === false) {
+        this.hasBeenInformed = true;
+        this.inform();
+        return Promise.reject(AppUtils.DeviceError.DO_NOT_DISTURB);
+      }
+    }
+
+    // if reason is unknown or hasBeenInformed is true, settle with Promise as resolved
+    return Promise.resolve(AppUtils.DeviceError.UNKNOWN);
   }
 }

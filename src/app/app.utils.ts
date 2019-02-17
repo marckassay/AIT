@@ -127,7 +127,8 @@ export class AppUtils {
 }
 
 export namespace AppUtils {
-    export declare enum DeviceError {
+    export enum DeviceError {
+        UNKNOWN = 'UNKNOWN',
         LOCAL_STORAGE_FAILED = 'LOCAL_STORAGE_FAILED',
         DO_NOT_DISTURB = 'DO_NOT_DISTURB'
     }
