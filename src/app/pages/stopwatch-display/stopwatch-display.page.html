@@ -1,19 +1,30 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>stopwatch-display</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content padding>
-  <ion-list class="items">
-    <ion-item [routerLink]="['/home']">
-      HOME
-    </ion-item>
-    <ion-item [routerLink]="['/stopwatch-settings']">
-      SETTINGS
-    </ion-item>
-    <ion-item [routerLink]="['/settings']">
-      APP-SETTINGS
-    </ion-item>
-  </ion-list>
+<ion-content class="display-content" scrollX="false" scrollY="false">
+  <x-progress-bar></x-progress-bar>
+  <div *ngIf="uuidData">
+    <ion-grid>
+      <ion-row class="top-row">
+        <ion-col>
+          <div [ngSwitch]="timerState" text-right>
+            <div *ngSwitchCase="SS.Loaded" class="timeLoaded">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="SS.CountdownWarning" class="timeCountdown">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="SS.Active" class="timeGo">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="SS.ActiveWarning" class="timeGetReady">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="SS.Completed" class="timeCompleted">
+              <p>{{formattedGrandTime}}</p>
+            </div>
+            <div *ngSwitchCase="SS.Error" class="timeStop">:?</div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
+<fab-container (action)="action($event)"></fab-container>

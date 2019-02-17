@@ -1,16 +1,85 @@
+<!--
+    AiT - Another Interval Timer
+    Copyright (C) 2019 Marc Kassay
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <ion-header>
   <ion-toolbar>
-    <ion-title>stopwatch-settings</ion-title>
+    <ion-title>STOPWATCH SETTINGS</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-list class="items">
-    <ion-item [routerLink]="['/stopwatch']">
-      STOPWATCH
-    </ion-item>
-    <ion-item [routerLink]="['/settings']">
-      APP-SETTINGS
-    </ion-item>
+<ion-content *ngIf="data">
+  <ion-list>
+    <ion-item-divider sticky class="top-divider">
+      <div class="mini-display">
+        <br>
+        <div>
+          <span class="countdown">:{{data.countdown}}</span>
+          <span class="countdowninfo"> secs (countdown to start)</span>
+        </div>
+      </div>
+    </ion-item-divider>
+
+    <div>
+      <ion-item-group>
+        <ion-item-divider padding-top>PROGRAM SETTINGS</ion-item-divider>
+
+        <!-- factors -->
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+          <ion-label>adjust by high magnitude</ion-label>
+          <ion-toggle checked="{{data.factor == 10}}" (ionChange)="dataChanged('factor',$event)"></ion-toggle>
+        </ion-item>
+
+        <!-- countdown -->
+        <ion-item margin-bottom lines="none" class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+          <ion-range (ionChange)="dataChanged('countdown', $event)" debounce="500" [min]="computedFactorValue.lower"
+            [max]="computedFactorValue.upper" [step]="data.factor" snaps="true" pin="true">
+            <ion-label slot="start">countdown</ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-item-group>
+
+      <!-- warnings -->
+      <ion-item-group>
+        <ion-item-divider>COUNTDOWN WARNINGS<ion-button slot="end" (click)="inform()" fill="clear"
+            [hidden]="!showInform">
+            <ion-icon name="settings"></ion-icon>
+          </ion-button>
+        </ion-item-divider>
+
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+          <ion-label>5 second</ion-label>
+          <ion-toggle [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
+        </ion-item>
+
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+          <ion-label>10 second</ion-label>
+          <ion-toggle [(ngModel)]="data.warnings.tensecond"></ion-toggle>
+        </ion-item>
+
+        <ion-item padding-top class="ion-activatable">
+          <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+          <ion-label>15 second</ion-label>
+          <ion-toggle [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
+        </ion-item>
+      </ion-item-group>
+    </div>
   </ion-list>
 </ion-content>
