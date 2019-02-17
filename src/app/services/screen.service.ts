@@ -74,6 +74,9 @@ export class ScreenService {
 
   private sampleBrightness$ = new EventEmitter<{ value: BrightnessSet, duration: number }>();
 
+  private _isSplashHidden = false;
+  isSplashHidden = (): boolean => this._isSplashHidden;
+
   constructor(
     private brightness: Brightness,
     private orientation: ScreenOrientation,
@@ -135,10 +138,17 @@ export class ScreenService {
    * Called by app-component during bootup
    */
   async bootupScreen(): Promise<void> {
-    await this.uibars.showUnderStatusBar();
-    await this.uibars.setSystemUiVisibility(AndroidSystemUiFlags.HideNavigation);
-    await AppUtils.delayPromise(500);
-    this.splash.hide();
+    this._isSplashHidden = true;
+    await Promise.all([
+      this.uibars.showUnderStatusBar(),
+      this.uibars.setSystemUiVisibility(AndroidSystemUiFlags.HideNavigation)
+    ]);
+
+    // delay here for animating navigation away is completed. setSystemUiVisibility()'s Promise
+    // seems to be settling before its completed.
+    await AppUtils.delayPromise(500).then(() => {
+      this.splash.hide();
+    });
   }
 
   async setScreenToRunningMode(value: boolean): Promise<void> {

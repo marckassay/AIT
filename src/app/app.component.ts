@@ -89,7 +89,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             });
 
             // post app start-up; after start and end sidemenus have been loaded
-          } else if ((note.subject === 'start') && (note.response === true)) {
+          } else if ((note.subject === 'start') && (note.response === true) && (this.screenSvc.isSplashHidden() === false)) {
             this.screenSvc.bootupScreen();
             this.platform.resume.subscribe(() => {
               // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
