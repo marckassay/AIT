@@ -1,5 +1,5 @@
 /**
-    AiT - Another Interval Timer
+    AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 
     This program is free software: you can redistribute it and/or modify
@@ -58,7 +58,7 @@ export class BrightnessUtil {
  * which implies an absolute value.
  *
  * When ait is no longer active app and its brightness feature is enabled, the device will return
- * to its default value. This is done by Android and not AiT.
+ * to its default value. This is done by Android and not AIT.
  */
 @Injectable()
 export class ScreenService {
@@ -173,7 +173,7 @@ export class ScreenService {
   /**
    * Retrieves ait's 'brightness' data field and if its defined (greater than 0), it will set the
    * device's brightness to that value. If value is false, sets the device's API brightness to -1,
-   * to remove offset (if any) and return to the brightness value prior to AiT being launched.
+   * to remove offset (if any) and return to the brightness value prior to AIT being launched.
    *
    * @param value to apply or revert brightness offset
    */
