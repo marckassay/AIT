@@ -2,7 +2,7 @@
 
 ![AIT](resources/icon.png)
 
-Another interval timer (AIT) that targets mobile devices for your timing needs. This application has been intended for interval activities, where there are active and inactive segments. There is also a timer and stopwatch mode too.
+Another interval timer (AIT) that targets mobile devices for your timing needs. This application has been intended for interval activities, where there are active and inactive segments. There is a timer and stopwatch mode too.
 
 ![AIT's GitHub Feature Graphic](resources/media/1024x500.png)
 
@@ -47,24 +47,24 @@ $ ionic info
 
 Ionic:
 
-  ionic (Ionic CLI)             : 4.6.0
-  Ionic Framework               : @ionic/angular 4.0.0-rc.0
-  @angular-devkit/build-angular : 0.11.4
-  @angular-devkit/schematics    : 7.1.4
-  @angular/cli                  : 7.1.4
-  @ionic/angular-toolkit        : 1.2.2
+  ionic (Ionic CLI)             : 4.10.2
+  Ionic Framework               : @ionic/angular 4.0.1
+  @angular-devkit/build-angular : 0.13.1
+  @angular-devkit/schematics    : 7.3.1
+  @angular/cli                  : 7.3.1
+  @ionic/angular-toolkit        : 1.3.0
 
 Cordova:
 
   cordova (Cordova CLI) : 8.1.2 (cordova-lib@8.1.1)
   Cordova Platforms     : android 7.1.4
-  Cordova Plugins       : cordova-plugin-ionic-keyboard 2.0.5, cordova-plugin-ionic-webview 2.0.0, (and 9 other plugins)
+  Cordova Plugins       : cordova-plugin-ionic-keyboard 2.1.3, cordova-plugin-ionic-webview 3.1.2, (and 9 other plugins)
 
 System:
 
   Android SDK Tools : 26.1.1 (C:\Users\marck\AppData\Local\Android\Sdk)
   NodeJS            : v10.13.0 (C:\Program Files\nodejs\node.exe)
-  npm               : 1.10.1
+  yarn              : 1.13.0
   OS                : Windows 10
 ```
 
