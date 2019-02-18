@@ -38,7 +38,7 @@ In an addition to those frameworks, I have also developed: a couple of JS module
 
 - [`clovelced-plugin-audiomanagement`](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/clovelced-plugin-audiomanagement) - in an addition to creating an ionic-native plugin, a TypeScript typing is now available for this Cordova plugin.
 
-Gimp was used for media content that I created for Google Play and GitHub.
+[GIMP](https://www.gimp.org/) was used for media content that I created for Google Play and GitHub.
 
 ## Technical Info
 

@@ -75,18 +75,8 @@ export class SignalService {
       this.data = null;
       const getPromiseSubject = async (): Promise<void> => {
         await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID)
-          .then((val) => {
-
-            this.appSubjet = val;
-            this.appSubjet.pipe(
-              throttleTime(500)
-            ).subscribe((v) => {
-              // no need to set music volume first emission. and change only when sound property changes
-              if (this.data && this.data.sound !== v.sound) {
-                this.setMusicVolume(v.sound);
-              }
-              this.data = v;
-            });
+          .then((value) => {
+            this.subscribe(value);
           })
           .then(() => {
             this.sound.preloadSimple(this.MP3, 'assets/sounds/beep.mp3');
@@ -113,19 +103,21 @@ export class SignalService {
    * into its active state. And called after timer is active with `value` as `false` to revert the
    * user's sound mode and volume.
    *
-   * When the `value` is `true` and sounds for the app are enabled (`this.data.sound > 0`), it will
+   * When the `value` is `true` and sounds for the app are enabled (`this.data.sound !== 0`), it will
    * get the device's current audiomode (`getAudioMode()`), store that value by setting
    * `audiomodePriorToChange` and set the device's audiomode (via `setAudioMode()`) to
-   * `AudioMode.Normal`.
+   * `AudioMode.Normal`, if it isn't already.
    *
    * When the `value` is `false`, it will revert the settings that were done when called with
    * `value` of `true`. This is done using the `audioModePriorToChange` and
    * `volumePriorToChange`.
+   * 
+   * This method is used for when the app has 'remember alarm volume' enabled or disabled. 
    *
    * @param value indicates if it should be enabled or disabled.
    */
   async enablePreferredVolume(value: boolean): Promise<void> {
-    if ((value === true) && (this.data.sound !== 0)) {
+    if ((value === true) && (this.data.sound > 0)) {
 
       if (this.hasBeenInformed === false) {
         // get the device's audio mode...
@@ -151,9 +143,8 @@ export class SignalService {
             .then((val) => {
               this.volumePriorToChange = val.volume;
             });
-        } else {
-          this.volumePriorToChange = Math.abs(this.data.sound);
         }
+
         // ... and if needed adjust it to data.sound
         if (this.volumePriorToChange !== this.data.sound) {
           await this.setMusicVolume(this.data.sound)
@@ -162,10 +153,7 @@ export class SignalService {
             });
         }
       }
-
-      return Promise.resolve();
-
-    } else if (value === false) {
+    } else if ((value === false) && (this.data.sound > 0)) {
 
       if (this.hasBeenInformed === false) {
         // revert audio settings to what device had prior to calling this as: enablePreferredVolume(true)
@@ -178,10 +166,17 @@ export class SignalService {
           await this.setMusicVolume(this.volumePriorToChange);
           this.volumePriorToChange = undefined;
         }
+      } else {
+        if (this.audioModePriorToChange) {
+          this.audioModePriorToChange = undefined;
+        }
+        if (this.volumePriorToChange) {
+          this.volumePriorToChange = undefined;
+        }
       }
-
-      return Promise.resolve();
     }
+
+    return Promise.resolve();
   }
 
   clearHasBeenInformed(): void {
@@ -204,9 +199,22 @@ export class SignalService {
 
   completed(): void {
     if (this.hasBeenInformed === false) {
-      if (this.data.vibrate) { this.loopVibrate(33); }
       if (this.data.sound !== 0) { this.loopBeep(33); }
+      if (this.data.vibrate) { this.loopVibrate(33); }
     }
+  }
+
+  private subscribe(value: BehaviorSubject<AppStorageData>): void {
+    this.appSubjet = value;
+    this.appSubjet.pipe(
+      throttleTime(500)
+    ).subscribe((val) => {
+      // no need to set music volume first emission. and change only when sound property changes
+      if (this.data && this.data.sound !== val.sound) {
+        this.setMusicVolume(val.sound);
+      }
+      this.data = val;
+    });
   }
 
   private loopVibrate(intervals: number): void {

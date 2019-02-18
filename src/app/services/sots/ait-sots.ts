@@ -35,6 +35,14 @@ export class SotsForAit implements ISotsForAit {
   constructor() {
   }
 
+  /**
+   * Calls `unsubscribe()` and then instantiates `Sequencer`. Depending on parameters passed, it will
+   * execute defined configurations for: interval, timer, stopwatch modes
+   *
+   * @param countdown
+   * @param warnings
+   * @param time
+   */
   build(countdown: number, warnings: CountdownWarnings, time?: number): void;
   build(countdown: number, warnings: CountdownWarnings, intervals: number, rest: number, active: number): void;
   build(countdown: number, warnings: CountdownWarnings, timeOrIntervals?: number, rest?: number, active?: number): void {
@@ -83,6 +91,7 @@ export class SotsForAit implements ISotsForAit {
       // else if, this is called by timer-display
     } else if (timeOrIntervals !== undefined) {
       this.grandTotalTime = timeOrIntervals;
+
       this.sequencer
         .add(CountdownSegment, {
           duration: SotsUtil.secToMilli(countdown),
@@ -96,7 +105,7 @@ export class SotsForAit implements ISotsForAit {
           duration: SotsUtil.secToMilli(timeOrIntervals),
           states: [
             { state: SequenceStates.Active, timeLessThanOrEqualTo: timeOrIntervals.toString() },
-            { state: SequenceStates.DoubleBeep, timeAt: SotsUtil.constructModDoubleAudiblesTimes(warnings, timeOrIntervals.toString()) },
+            { state: SequenceStates.DoubleBeep, timeAt: SotsUtil.constructModDoubleAudiblesTimes(warnings) },
             { state: SequenceStates.SingleBeep, timeAt: SotsUtil.constructModSingleAudiblesTimes(warnings, '2,1') }
           ]
         });
@@ -116,7 +125,7 @@ export class SotsForAit implements ISotsForAit {
           duration: Number.MAX_SAFE_INTEGER,
           states: [
             { state: SequenceStates.Active, timeGreaterThanOrEqualTo: '0' },
-            { state: SequenceStates.DoubleBeep, timeAt: SotsUtil.constructModDoubleAudiblesTimes(warnings, '0') },
+            { state: SequenceStates.DoubleBeep, timeAt: SotsUtil.constructModDoubleAudiblesTimes(warnings) },
             { state: SequenceStates.SingleBeep, timeAt: SotsUtil.constructModSingleAudiblesTimes(warnings) }
           ]
         });

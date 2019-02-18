@@ -56,27 +56,28 @@
 
       <!-- warnings -->
       <ion-item-group>
-        <ion-item-divider>COUNTDOWN WARNINGS<ion-button slot="end" (click)="inform()" fill="clear"
-            [hidden]="!showInform">
+        <ion-item-divider>AUDIBLE<ion-button slot="end" (click)="inform()" fill="clear" [hidden]="!showInform">
             <ion-icon name="settings"></ion-icon>
           </ion-button>
         </ion-item-divider>
 
+        <!--
         <ion-item padding-top class="ion-activatable">
           <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           <ion-label>5 second</ion-label>
           <ion-toggle [(ngModel)]="data.warnings.fivesecond"></ion-toggle>
         </ion-item>
+        -->
 
         <ion-item padding-top class="ion-activatable">
           <ion-ripple-effect type="unbounded"></ion-ripple-effect>
-          <ion-label>10 second</ion-label>
+          <ion-label>single at 30 second</ion-label>
           <ion-toggle [(ngModel)]="data.warnings.tensecond"></ion-toggle>
         </ion-item>
 
         <ion-item padding-top class="ion-activatable">
           <ion-ripple-effect type="unbounded"></ion-ripple-effect>
-          <ion-label>15 second</ion-label>
+          <ion-label>double at 1 minute</ion-label>
           <ion-toggle [(ngModel)]="data.warnings.fifteensecond"></ion-toggle>
         </ion-item>
       </ion-item-group>

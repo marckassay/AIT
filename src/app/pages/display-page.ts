@@ -71,8 +71,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
 
   /**
    * When entering into display-pages, initially or not, this flag is used to determine if the timer
-   * needs to be rebuilt. For instance, if the user changes a setting that is irrelvent to `sots`,
-   * then rebuilding of `sots` is required.
+   * needs to be rebuilt. For instance, if the user changes a setting that is irrelevant to `sots`,
+   * then rebuilding of `sots` is not required.
    */
   protected noRebuild: boolean;
 
@@ -95,8 +95,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.componentSubptn = this.componentSubjet.subscribe((uuidData: UUIDData) => {
       // TODO: pipe a 'distinctUntil' operator for coming back from settings
       if (this.uuidData) {
-        this.uuidData = uuidData;
-        this.aitBuildTimer();
+        this.aitBuildTimer(uuidData);
         this.aitSubscribeTimer();
         this.aitPostBuildTimer();
       } else {
@@ -134,7 +133,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    */
   // ionViewWillLeave(): void { }
 
-  protected aitBuildTimer(): void {
+  protected aitBuildTimer(uuidData: UUIDData): void {
     throw new Error('Subclasses of DisplayPage need to implement aitBuildTimer().');
   }
 
@@ -154,10 +153,6 @@ export class DisplayPage implements OnInit, AfterViewInit {
     // TODO: i believe this is being called before this.attachSettingsAndCheckHome() is completed.
     // move menuCtrl.enable/disable to menuSvc calls
     this.setAppToRunningMode(false);
-  }
-
-  protected unsubscribe(): void {
-    this.sots.unsubscribe();
   }
 
   /**
@@ -205,8 +200,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * And if or when `start` menu is loaded, the last response received will verify this and this
    * method is now done subcribing.
    */
-  private attachSettingsAndCheckHome(): Promise<void> {
-    return new Promise<void>((resolve, reject): void => {
+  private async attachSettingsAndCheckHome(): Promise<void> {
+    await new Promise<void>((resolve, reject): void => {
       // subscribe to menu service
       this.menuSvc.listen({
         next: (note): void => {

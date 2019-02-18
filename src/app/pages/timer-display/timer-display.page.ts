@@ -18,6 +18,7 @@
 import { Component } from '@angular/core';
 import { TimeEmission } from 'sots';
 import { SequenceStates } from 'src/app/services/sots/ait-sots.util';
+import { TimerStorageData } from 'src/app/services/storage/ait-storage.shapes';
 
 import { DisplayPage } from '../display-page';
 import { TimerSettingsPage } from '../timer-settings/timer-settings.page';
@@ -48,7 +49,7 @@ export class TimerDisplayPage extends DisplayPage {
   }
 
   ionViewWillEnter(): void {
-    this.aitBuildTimer();
+    this.aitBuildTimer(this.uuidData);
   }
 
   ionViewDidEnter(): void {
@@ -56,11 +57,15 @@ export class TimerDisplayPage extends DisplayPage {
     super.ionViewDidEnter();
   }
 
-  aitBuildTimer(): void {
-    if (this.sots.grandTotalTime !== this.uuidData.time) {
+  aitBuildTimer(timerData: TimerStorageData): void {
+    if (this.sots.grandTotalTime !== this.uuidData.time ||
+      (this.uuidData as TimerStorageData).warnings !== timerData.warnings
+    ) {
+
       this.sots.build(this.uuidData.countdown,
         this.uuidData.warnings,
-        this.uuidData.time);
+        this.uuidData.time
+      );
 
       this.grandTime = this.sots.getGrandTime({ time: -1 });
       this.noRebuild = false;
@@ -78,16 +83,17 @@ export class TimerDisplayPage extends DisplayPage {
 
           if (value.state) {
             // if we dont negate the audiable states the display will "blink"
-            // for a millisecond.
+            // for a millisecond. so valueNoAudiable will be used to set viewState
+            // without any audiable state included.
             let valueNoAudiable = (value.state.valueOf() as SequenceStates);
             valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
             this.timerState = valueNoAudiable;
 
             // ...now take care of audiable states...
-            if (value.state.valueOf(SequenceStates.SingleBeep)) {
-              this.signalSvc.single();
-            } else if (value.state.valueOf(SequenceStates.DoubleBeep)) {
+            if (value.state.valueOf(SequenceStates.DoubleBeep)) {
               this.signalSvc.double();
+            } else if (value.state.valueOf(SequenceStates.SingleBeep)) {
+              this.signalSvc.single();
             }
           }
         },

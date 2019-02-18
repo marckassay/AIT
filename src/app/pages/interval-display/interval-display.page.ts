@@ -18,6 +18,7 @@
 import { Component, Input } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { TimeEmission } from 'sots';
+import { IntervalStorageData, UUIDData } from 'src/app/services/storage/ait-storage.shapes';
 
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 import { SequenceStates } from '../../services/sots/ait-sots.util';
@@ -52,7 +53,7 @@ export class IntervalDisplayPage extends DisplayPage {
   }
 
   ionViewWillEnter(): void {
-    this.aitBuildTimer();
+    this.aitBuildTimer(this.uuidData);
   }
 
   ionViewDidEnter(): void {
@@ -61,12 +62,12 @@ export class IntervalDisplayPage extends DisplayPage {
     super.ionViewDidEnter();
   }
 
-  aitBuildTimer(): void {
+  aitBuildTimer(intervalData: IntervalStorageData): void {
     if (this.sots.rest !== this.uuidData.activerest.lower ||
       this.sots.active !== this.uuidData.activerest.upper ||
-      this.sots.intervals !== this.uuidData.intervals) {
-
-      this.unsubscribe();
+      this.sots.intervals !== this.uuidData.intervals ||
+      (this.uuidData as IntervalStorageData).warnings !== intervalData.warnings
+    ) {
 
       this.sots.build(this.uuidData.countdown,
         this.uuidData.warnings,
@@ -98,7 +99,6 @@ export class IntervalDisplayPage extends DisplayPage {
             // for a millisecond. so valueNoAudiable will be used to set viewState
             // without any audiable state included.
             let valueNoAudiable: number = (value.state.valueOf() as SequenceStates);
-            // tslint:disable-next-line:no-bitwise
             valueNoAudiable &= (~SequenceStates.SingleBeep & ~SequenceStates.DoubleBeep);
             this.timerState = valueNoAudiable;
 

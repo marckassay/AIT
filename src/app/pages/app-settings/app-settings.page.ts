@@ -169,11 +169,13 @@ export class AppSettingsPage implements OnInit, OnDestroy {
         })
         .catch((reason) => {
           if (reason === 'DO_NOT_DISTURB') {
+            // revert to AIT's value when user entered view
+            this.data.sound = this.absoluteVolumeValue;
           }
         })
     ]);
 
-    // revert device to original volume, this "remember volume" feature only applies
+    // revert to device's original volume, this "remember volume" feature only applies
     // when timer is currently running
     await this.signalSvc.enablePreferredVolume(false);
 
