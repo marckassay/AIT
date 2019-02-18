@@ -2,7 +2,7 @@
 
 ![AIT](resources/icon.png)
 
-Another interval timer (AIT) that targets mobile devices for your timing needs. This application has been intended for interval activites, where there are active and inactive segments. There is also a timer and stopwatch mode too.
+Another interval timer (AIT) that targets mobile devices for your timing needs. This application has been intended for interval activities, where there are active and inactive segments. There is also a timer and stopwatch mode too.
 
 ![AIT's GitHub Feature Graphic](resources/media/1024x500.png)
 
