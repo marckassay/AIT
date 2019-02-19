@@ -111,8 +111,8 @@ export class SignalService {
    * When the `value` is `false`, it will revert the settings that were done when called with
    * `value` of `true`. This is done using the `audioModePriorToChange` and
    * `volumePriorToChange`.
-   * 
-   * This method is used for when the app has 'remember alarm volume' enabled or disabled. 
+   *
+   * This method is used for when the app has 'remember alarm volume' enabled or disabled.
    *
    * @param value indicates if it should be enabled or disabled.
    */

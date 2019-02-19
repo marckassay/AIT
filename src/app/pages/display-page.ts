@@ -28,6 +28,7 @@ import { ScreenService } from '../services/screen.service';
 import { SignalService } from '../services/signal.service';
 import { SotsForAit } from '../services/sots/ait-sots';
 import { SequenceStates } from '../services/sots/ait-sots.util';
+import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 import { UUIDData } from '../services/storage/ait-storage.shapes';
 
 export class DisplayPage implements OnInit, AfterViewInit {
@@ -93,9 +94,11 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.componentSubjet = (this.route.snapshot.data as any).subject as BehaviorSubject<any>;
 
     this.componentSubptn = this.componentSubjet.subscribe((uuidData: UUIDData) => {
-      // TODO: pipe a 'distinctUntil' operator for coming back from settings
+      // TODO: pipe a 'distinctUntil' operator for coming back from settings - but this is the same reference
       if (this.uuidData) {
-        this.aitBuildTimer(uuidData);
+        this.uuidData = uuidData;
+
+        this.aitBuildTimer();
         this.aitSubscribeTimer();
         this.aitPostBuildTimer();
       } else {
@@ -133,7 +136,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    */
   // ionViewWillLeave(): void { }
 
-  protected aitBuildTimer(uuidData: UUIDData): void {
+  protected aitBuildTimer(): void {
     throw new Error('Subclasses of DisplayPage need to implement aitBuildTimer().');
   }
 
@@ -227,7 +230,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
               this.menuSvc.send({
                 subject: 'start',
                 request: 'status',
-                uuid: (this.uuidData as UUIDData).uuid
+                uuid: StorageDefaultData.HOME_ID
               });
               // when response from menuSvc about start menu
             } else if ((note.subject === 'start') && (note.response === true)) {

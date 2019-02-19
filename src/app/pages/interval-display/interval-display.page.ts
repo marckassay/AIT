@@ -53,7 +53,7 @@ export class IntervalDisplayPage extends DisplayPage {
   }
 
   ionViewWillEnter(): void {
-    this.aitBuildTimer(this.uuidData);
+    this.aitBuildTimer();
   }
 
   ionViewDidEnter(): void {
@@ -62,24 +62,15 @@ export class IntervalDisplayPage extends DisplayPage {
     super.ionViewDidEnter();
   }
 
-  aitBuildTimer(intervalData: IntervalStorageData): void {
-    if (this.sots.rest !== this.uuidData.activerest.lower ||
-      this.sots.active !== this.uuidData.activerest.upper ||
-      this.sots.intervals !== this.uuidData.intervals ||
-      (this.uuidData as IntervalStorageData).warnings !== intervalData.warnings
-    ) {
-
-      this.sots.build(this.uuidData.countdown,
-        this.uuidData.warnings,
-        this.uuidData.intervals,
-        this.uuidData.activerest.lower,
-        this.uuidData.activerest.upper
-      );
-      this.grandTime = this.sots.getGrandTime({ time: -1 });
-      this.noRebuild = false;
-    } else {
-      this.noRebuild = true;
-    }
+  aitBuildTimer(): void {
+    this.sots.build(this.uuidData.countdown,
+      this.uuidData.warnings,
+      this.uuidData.intervals,
+      this.uuidData.activerest.lower,
+      this.uuidData.activerest.upper
+    );
+    this.grandTime = this.sots.getGrandTime({ time: -1 });
+    this.noRebuild = false;
   }
 
   aitSubscribeTimer(): void {

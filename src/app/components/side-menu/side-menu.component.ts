@@ -52,11 +52,6 @@ export class SideMenuComponent implements OnInit {
                 this.reattachComponent(note.uuid);
               }
 
-              this.menuSvc.send({
-                subject: this.id,
-                uuid: note.uuid,
-                response: true
-              });
             } else if (note.request === 'status') {
               note = note as SideMenuStatusRequest;
 
@@ -79,11 +74,13 @@ export class SideMenuComponent implements OnInit {
 
   private isComponentAttached(uuid: string): boolean {
     const component = this.getAttached();
-    return (component !== undefined) && (component.uuid === uuid);
+    const results = (component !== undefined) && (component.uuid === uuid);
+    return results;
   }
 
   private isComponentCached(uuid: string): boolean {
-    return this.cachedViewRefs.findIndex(value => value.uuid === uuid) >= 0;
+    const results = this.cachedViewRefs.findIndex(value => value.uuid === uuid) >= 0;
+    return results;
   }
 
   private getAttached(): CacheViewRef | undefined {
@@ -133,6 +130,7 @@ export class SideMenuComponent implements OnInit {
     const component: ComponentRef<unknown> = this.menu.createComponent(note.component);
     (component.instance as any).uuid = note.uuid;
     (component.instance as any).injector = note.injector;
+    component.changeDetectorRef.detectChanges();
 
     this.setCache(component);
   }

@@ -1,4 +1,4 @@
-<ion-app ngClass="{{theme}}">
+<ion-app ngClass="{{theme}}" [style.pointer-events]="isContentInteractive ? 'auto' : 'none' ">
   <ion-menu side="start">
     <side-menu id="start" [cacheEnabled]="cacheSideMenus"></side-menu>
   </ion-menu>

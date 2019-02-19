@@ -49,7 +49,7 @@ export class StopwatchDisplayPage extends DisplayPage {
   }
 
   ionViewWillEnter(): void {
-    this.aitBuildTimer(this.uuidData);
+    this.aitBuildTimer();
   }
 
   ionViewDidEnter(): void {
@@ -57,20 +57,12 @@ export class StopwatchDisplayPage extends DisplayPage {
     super.ionViewDidEnter();
   }
 
-  aitBuildTimer(stopwatchData: StopwatchStorageData): void {
-    if (this.timerState === undefined ||
-      this.timerState === SequenceStates.Loaded ||
-      (this.uuidData as StopwatchStorageData).warnings !== stopwatchData.warnings
-    ) {
+  aitBuildTimer(): void {
+    this.sots.build(this.uuidData.countdown,
+      this.uuidData.warnings);
 
-      this.sots.build(this.uuidData.countdown,
-        this.uuidData.warnings);
-
-      this.grandTime = this.sots.getGrandTime({ time: -1 });
-      this.noRebuild = false;
-    } else {
-      this.noRebuild = true;
-    }
+    this.grandTime = this.sots.getGrandTime({ time: -1 });
+    this.noRebuild = false;
   }
 
   aitSubscribeTimer(): void {

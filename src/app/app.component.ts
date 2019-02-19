@@ -51,6 +51,11 @@ export class AppComponent implements OnInit, AfterViewInit {
    */
   cacheSideMenus = env.enableViewCache;
 
+  /**
+   * To be used momentary to disable interaction
+   */
+  isContentInteractive: boolean;
+
   private appSubjet: BehaviorSubject<AppStorageData>;
 
   constructor(
@@ -78,7 +83,9 @@ export class AppComponent implements OnInit, AfterViewInit {
           note = note as SideMenuStatusResponse;
 
           // during app start-up; after end sidemenu has been loaded
-          if ((note.subject === 'start') && (note.response === false)) {
+          if ((note.subject === 'start') &&
+            (note.response === false)) {
+
             const resolvedComponent = this.componentFactoryResolver.resolveComponentFactory(HomePage);
             this.menuSvc.send({
               subject: 'start',
@@ -89,12 +96,22 @@ export class AppComponent implements OnInit, AfterViewInit {
             });
 
             // post app start-up; after start and end sidemenus have been loaded
-          } else if ((note.subject === 'start') && (note.response === true) && (this.screenSvc.isSplashHidden() === false)) {
-            this.screenSvc.bootupScreen();
+          } else if ((note.subject === 'start') &&
+            (note.response === true) &&
+            (this.screenSvc.isSplashHidden() === false)) {
+
+            this.isContentInteractive = false;
+            this.screenSvc.bootupScreen()
+              .then(() => {
+                // TODO: delay here for animating navigation away is completed. Angular or Cordova
+                // or Ionic, seems to not be fully completed. And will lock navigation to sidemenu
+                // or cause both sidemenus on the same side.
+                AppUtils.delayPromise(2000).then(() => this.isContentInteractive = true);
+              });
             this.platform.resume.subscribe(() => {
-              // TODO: in an unlikely event, this perhaps can be used. That is, if the user has display in
-              // running state when they set ait to the device's background and then returns. At that point
-              // this may be called.
+              // TODO: in an unlikely event, this perhaps can be used. That is, if the user has
+              // display in running state when they set ait to the device's background and then
+              // returns. At that point this may be called.
               // this.brightness.applyBrightnessOffset();
             });
           }

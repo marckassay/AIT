@@ -49,7 +49,7 @@ export class TimerDisplayPage extends DisplayPage {
   }
 
   ionViewWillEnter(): void {
-    this.aitBuildTimer(this.uuidData);
+    this.aitBuildTimer();
   }
 
   ionViewDidEnter(): void {
@@ -57,21 +57,14 @@ export class TimerDisplayPage extends DisplayPage {
     super.ionViewDidEnter();
   }
 
-  aitBuildTimer(timerData: TimerStorageData): void {
-    if (this.sots.grandTotalTime !== this.uuidData.time ||
-      (this.uuidData as TimerStorageData).warnings !== timerData.warnings
-    ) {
+  aitBuildTimer(): void {
+    this.sots.build(this.uuidData.countdown,
+      this.uuidData.warnings,
+      this.uuidData.time
+    );
 
-      this.sots.build(this.uuidData.countdown,
-        this.uuidData.warnings,
-        this.uuidData.time
-      );
-
-      this.grandTime = this.sots.getGrandTime({ time: -1 });
-      this.noRebuild = false;
-    } else {
-      this.noRebuild = true;
-    }
+    this.grandTime = this.sots.getGrandTime({ time: -1 });
+    this.noRebuild = false;
   }
 
   aitSubscribeTimer(): void {

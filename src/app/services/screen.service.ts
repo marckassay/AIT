@@ -144,11 +144,7 @@ export class ScreenService {
       this.uibars.setSystemUiVisibility(AndroidSystemUiFlags.HideNavigation)
     ]);
 
-    // delay here for animating navigation away is completed. setSystemUiVisibility()'s Promise
-    // seems to be settling before its completed.
-    await AppUtils.delayPromise(500).then(() => {
-      this.splash.hide();
-    });
+    await AppUtils.delayPromise(500).then(() => this.splash.hide());
   }
 
   async setScreenToRunningMode(value: boolean): Promise<void> {
