@@ -1,6 +1,6 @@
 {
   "name": "ait",
-  "description": "Another interval timer (AIT) that targets mobile devices for your timing needs. This application has been intended for interval activities, where there are active and inactive segments. There is a timer and stopwatch mode too.",
+  "description": "An interval timer designed to be read and heard from a distance.",
   "private": true,
   "version": "2.1.2",
   "author": "Marc Kassay",

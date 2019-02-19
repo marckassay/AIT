@@ -2,9 +2,24 @@
 
 ![AIT](resources/icon.png)
 
-Another interval timer (AIT) that targets mobile devices for your timing needs. This application has been intended for interval activities, where there are active and inactive segments. There is a timer and stopwatch mode too.
+An interval timer designed to be read and heard from a distance.
 
 ![AIT's GitHub Feature Graphic](resources/media/1024x500.png)
+
+Another Interval Timer (AIT) that targets devices for your timing needs. This application has been intended for interval activities, where there are active and inactive segments. There is also a timer and stopwatch mode too. Designed by inspiration from tactical racing instruments for yacht racing where such devices are needed to be read just by a glance from a distance.
+
+The 3 timing modes for this application are: Interval, Timer and Stopwatch. Each of these modes has its own setting modes to program its timer and options for audible or warnings.
+
+‘AIT Settings’ gives you the option to control vibration, sound, brightness, themes and screen orientation.
+
+- About Brightness Feature:
+
+  When the brightness is enabled, you’re telling AIT to remember the desired brightness level to be used when AIT is running an active timer. When you adjust the brightness level by the ‘brightness level’ component, it will adjust the device’s brightness momentary for a couple of seconds. This is intended so you can determine if the level is ideal for the environment where the device will be located. Afterwards the device’s brightness will revert to previous level.
+
+- About Sound Feature:
+
+  Similarly to the brightness feature, the sound or specifically the alarm can be set to be remembered when AIT is running an active timer. When the ‘remember alarm volume’ is enabled, you adjust the level by the ‘alarm volume’ component. You may notice that the device’s volume menu will appear and will set the alarm level you have chosen when the preview alarm is played. Immediately after the alarm is played, it will revert your device to previous level as it only sets the level when the AIT is running an active timer.
+If your device, is in the ‘Do Not Disturb’ state while attempting to adjust alarm volume, a notification will appear stating it will not adjust the volume.
 
 [![Google Play Badge](resources/android/google-play-badge.png)](https://play.google.com/store/apps/details?id=github.marckassay.ait)
 
