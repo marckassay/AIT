@@ -4,11 +4,15 @@
 
 An interval timer designed to be read and heard from a distance.
 
-![AIT's GitHub Feature Graphic](resources/media/1024x500.png)
+![AIT's GitHub Feature Graphic](resources/media/readme/1024x350.png)
 
 Another Interval Timer (AIT) that targets devices for your timing needs. This application has been intended for interval activities, where there are active and inactive segments. There is also a timer and stopwatch mode too. Designed by inspiration from tactical racing instruments for yacht racing where such devices are needed to be read just by a glance from a distance.
 
 The 3 timing modes for this application are: Interval, Timer and Stopwatch. Each of these modes has its own setting modes to program its timer and options for audible or warnings.
+
+- About Interval Settings:
+
+  In this menu, you program Interval timer and set audible warnings. In the 'Countdown Audible' section, you can set the option of having an audible at: fifteenth, tenth and/or fifth second. These options only apply to the active time segment of the interval timer. In an addition, an audible at the second, first and zero second are applied to all active, rest and countdown segments.
 
 ‘AIT Settings’ gives you the option to control vibration, sound, brightness, themes and screen orientation.
 
@@ -21,21 +25,25 @@ The 3 timing modes for this application are: Interval, Timer and Stopwatch. Each
   Similarly to the brightness feature, the sound or specifically the alarm can be set to be remembered when AIT is running an active timer. When the ‘remember alarm volume’ is enabled, you adjust the level by the ‘alarm volume’ component. You may notice that the device’s volume menu will appear and will set the alarm level you have chosen when the preview alarm is played. Immediately after the alarm is played, it will revert your device to previous level as it only sets the level when the AIT is running an active timer.
 If your device, is in the ‘Do Not Disturb’ state while attempting to adjust alarm volume, a notification will appear stating it will not adjust the volume.
 
-[![Google Play Badge](resources/android/google-play-badge.png)](https://play.google.com/store/apps/details?id=github.marckassay.ait)
-
 ## Install
 
-The shell commands below demonstrates on how to clone, build, and install a release apk on a connected device. As its being a release build, it would need to be signed by your Google Play private key. Adjustments may be needed depending on your system and/or desires.
+- Option 1:
 
-```shell
-git clone https://github.com/marckassay/AIT.git
-yarn install
-yarn run add-spies
-ionic cordova build android --prod --release --buildConfig=temp/build.json
-adb install .\\platforms\\android\\app\\build\\outputs\\apk\\release\\app-release.apk
-```
+  [![Google Play Badge](resources/media/readme/google-play-badge.png)](https://play.google.com/store/apps/details?id=github.marckassay.ait)
 
-As stated on this webpage, this software is licensed under the "GNU General Public License v3.0".
+- Option 2:
+
+  The shell commands below demonstrates on how to clone, build, and install a release apk on a connected device. As it's being a release build, it would need to be signed by your Google Play private key. Adjustments may be needed depending on your system and/or desires.
+
+  ```shell
+  git clone https://github.com/marckassay/AIT.git
+  yarn install
+  yarn run add-spies
+  ionic cordova build android --prod --release --buildConfig=temp/build.json
+  adb install .\\platforms\\android\\app\\build\\outputs\\apk\\release\\app-release.apk
+  ```
+
+  As stated on this webpage, this software is licensed under the "GNU General Public License v3.0".
 
 ## About
 
@@ -85,4 +93,4 @@ System:
 
 ## Feedback
 
-Use the Issues section for questions, bugs or requests.
+Use the Issues section for questions, bugs and requests.
