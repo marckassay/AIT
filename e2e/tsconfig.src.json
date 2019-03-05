@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.config.json",
+  "compilerOptions": {
+    "outDir": "./out-e2e/",
+    "baseUrl": "./",
+  },
+  "includes": [
+    "./src/**/*spec.ts"
+  ]
+}
