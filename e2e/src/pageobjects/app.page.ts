@@ -1,13 +1,16 @@
-class AppPage {
-    constructor() {
+import { Element } from '@wdio/sync';
+import Page from './page';
 
+class AppPage extends Page {
+    constructor() {
+        super();
     }
     /**
      * define elements
      */
-    get leftMenu() { return $('.menu-side-start'); }
-    get rightMenu() { return $('.menu-side-end'); }
-    get appHome() { return $('app-home.ion-page'); }
+    get leftMenu(): Element { return $('.menu-side-start'); }
+    get rightMenu(): Element { return $('.menu-side-end'); }
+    get appHome(): Element { return $('app-home.ion-page'); }
 }
 
 export default new AppPage();

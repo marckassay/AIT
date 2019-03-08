@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { NAME, ACTIVITY } from './constants';
 // NOTE: this is comment out to prevent tsc server from error
 // import { remote } from 'webdriverio';
 const remote = (val: any) => val;
@@ -25,10 +26,10 @@ const remote = (val: any) => val;
             platformName: 'Android',
             maxInstances: 1,
             app: join(process.cwd(), './platforms/android/app/build/outputs/apk/debug/app-debug.apk'),
-            appPackage: 'io.ionic.starter',
-            appActivity: '.MainActivity',
-            appWaitPackage: 'io.ionic.starter',
-            appWaitActivity: '.MainActivity',
+            appPackage: NAME,
+            appActivity: ACTIVITY,
+            appWaitPackage: NAME,
+            appWaitActivity: ACTIVITY,
             autoGrantPermissions: true,
             // if automationName is set to 'Appium', then have autoWebview set to true
             // automationName: 'Appium',

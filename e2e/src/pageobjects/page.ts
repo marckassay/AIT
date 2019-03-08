@@ -1,5 +1,5 @@
 export default class Page {
-    open (path) {
+    open(path: string): void {
         browser.url(path);
     }
 }

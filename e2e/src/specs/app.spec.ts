@@ -1,8 +1,9 @@
-import WebViewScreen from './helpers/WebView';
-import { CONTEXT_REF } from './helpers/WebView';
-import Gestures from './helpers/Gestures';
 import { Element } from '@wdio/sync';
-import AppPage from './pageobjects/app.page';
+
+import Gestures from '../helpers/Gestures';
+import WebViewScreen from '../helpers/WebView';
+import { CONTEXT_REF } from '../helpers/WebView';
+import AppPage from '../pageobjects/app.page';
 
 describe('Replicating sidemenuissue', () => {
   let appHome: Element;

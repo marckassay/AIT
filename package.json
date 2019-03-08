@@ -11,7 +11,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "wdio:standalone": "node ./e2e/config/wdio.standalone.js",
+    "wdio:test": "npx wdio ./e2e/config/wdio.config.js"
   },
   "dependencies": {
     "@angular/common": "~7.2.4",

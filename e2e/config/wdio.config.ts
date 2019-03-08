@@ -1,5 +1,6 @@
-import { join } from 'path';
 import { Config } from '@wdio/sync';
+import { join } from 'path';
+import { NAME, ACTIVITY } from './constants';
 
 /**
  * @ref https://github.com/webdriverio/webdriverio/blob/master/docs/Options.md
@@ -70,7 +71,7 @@ export const config: AppiumConfig = {
     connectionRetryCount: 3,
     reporters: ['spec'],
     specs: [
-        './e2e/src/**/*spec.ts',
+        './e2e/src/specs/*.spec.ts',
     ],
     logLevel: 'debug',
     outputDir: './temp',
@@ -88,16 +89,16 @@ export const config: AppiumConfig = {
         platformName: 'Android',
         maxInstances: 1,
         app: join(process.cwd(), './platforms/android/app/build/outputs/apk/debug/app-debug.apk'),
-        appPackage: 'io.ionic.starter',
-        appActivity: '.MainActivity',
-        appWaitPackage: 'io.ionic.starter',
-        appWaitActivity: '.MainActivity',
+        appPackage: NAME,
+        appActivity: ACTIVITY,
+        appWaitPackage: NAME,
+        appWaitActivity: ACTIVITY,
         autoGrantPermissions: true,
         automationName: 'UiAutomator2',
         autoWebview: true,
         autoWebviewTimeout: 4000
     }],
-    onPrepare: () => {
+    onPrepare: (): void => {
         require('ts-node').register({ files: true });
     }
 };

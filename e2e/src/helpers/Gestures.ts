@@ -1,4 +1,17 @@
-let SCREEN_SIZE;
+import { Element } from '@wdio/sync';
+
+interface LocationCords {
+    x: number;
+    y: number;
+}
+
+interface Dimensions {
+    width: number;
+    height: number;
+}
+
+let SCREEN_SIZE: Dimensions;
+
 /**
  * The values in the below object are percentages of the screen
  */
@@ -31,11 +44,11 @@ class Gestures {
      * Check if an element is visible and if not scroll down a portion of the screen to
      * check if it visible after a x amount of scrolls
      *
-     * @param {element} element
-     * @param {number} maxScrolls
-     * @param {number} amount
+     * @param element
+     * @param maxScrolls
+     * @param amount
      */
-    static checkIfDisplayedWithScrollDown(element, maxScrolls, amount = 0) {
+    static checkIfDisplayedWithScrollDown(element: Element, maxScrolls: number, amount = 0): void {
         if ((!element.isExisting() || !element.isDisplayed()) && amount <= maxScrolls) {
             this.swipeUp(0.85);
             this.checkIfDisplayedWithScrollDown(element, maxScrolls, amount + 1);
@@ -47,9 +60,9 @@ class Gestures {
     /**
      * Swipe down based on a percentage
      *
-     * @param {number} percentage from 0 - 1
+     * @param percentage from 0 - 1
      */
-    static swipeDown(percentage = 1) {
+    static swipeDown(percentage = 1): void {
         this.swipeOnPercentage(
             this.calculateXY(SWIPE_DIRECTION.down.start, percentage),
             this.calculateXY(SWIPE_DIRECTION.down.end, percentage),
@@ -59,9 +72,9 @@ class Gestures {
     /**
      * Swipe Up based on a percentage
      *
-     * @param {number} percentage from 0 - 1
+     * @param percentage from 0 - 1
      */
-    static swipeUp(percentage = 1) {
+    static swipeUp(percentage = 1): void {
         this.swipeOnPercentage(
             this.calculateXY(SWIPE_DIRECTION.up.start, percentage),
             this.calculateXY(SWIPE_DIRECTION.up.end, percentage),
@@ -71,9 +84,9 @@ class Gestures {
     /**
      * Swipe left based on a percentage
      *
-     * @param {number} percentage from 0 - 1
+     * @param percentage from 0 - 1
      */
-    static swipeLeft(percentage = 1) {
+    static swipeLeft(percentage = 1): void {
         this.swipeOnPercentage(
             this.calculateXY(SWIPE_DIRECTION.left.start, percentage),
             this.calculateXY(SWIPE_DIRECTION.left.end, percentage),
@@ -83,9 +96,9 @@ class Gestures {
     /**
      * Swipe right based on a percentage
      *
-     * @param {number} percentage from 0 - 1
+     * @param percentage from 0 - 1
      */
-    static swipeRight(percentage = 1) {
+    static swipeRight(percentage = 1): void {
         this.swipeOnPercentage(
             this.calculateXY(SWIPE_DIRECTION.right.start, percentage),
             this.calculateXY(SWIPE_DIRECTION.right.end, percentage),
@@ -95,14 +108,14 @@ class Gestures {
     /**
      * Single tap on right side of display
      */
-    static tapLeft() {
+    static tapLeft(): void {
         this.tapOnPercentage(TAP_LOCATION.left);
     }
 
     /**
      * Single tap on right side of display
      */
-    static tapRight() {
+    static tapRight(): void {
         this.tapOnPercentage(TAP_LOCATION.right);
     }
 
@@ -110,8 +123,8 @@ class Gestures {
      * Swipe from coordinates (from) to the new coordinates (to). The given coordinates are
      * percentages of the screen.
      *
-     * @param {object} from { x: 50, y: 50 }
-     * @param {object} to { x: 25, y: 25 }
+     * @param from { x: 50, y: 50 }
+     * @param to { x: 25, y: 25 }
      *
      * @example
      * <pre>
@@ -120,8 +133,8 @@ class Gestures {
      *   const to = { x: 25, y:50 }
      * </pre>
      */
-    static swipeOnPercentage(from, to) {
-        SCREEN_SIZE = SCREEN_SIZE || browser.getWindowRect();
+    static swipeOnPercentage(from: LocationCords, to: LocationCords): void {
+        SCREEN_SIZE = SCREEN_SIZE || browser.getWindowRect() as Dimensions;
         const pressOptions = this.getDeviceScreenCoordinates(SCREEN_SIZE, from);
         const moveToScreenCoordinates = this.getDeviceScreenCoordinates(SCREEN_SIZE, to);
         this.swipe(
@@ -130,8 +143,8 @@ class Gestures {
         );
     }
 
-    static tapOnPercentage(location) {
-        SCREEN_SIZE = SCREEN_SIZE || browser.getWindowRect();
+    static tapOnPercentage(location: LocationCords): void {
+        SCREEN_SIZE = SCREEN_SIZE || browser.getWindowRect() as Dimensions;
         const tapCoordinates = this.getDeviceScreenCoordinates(SCREEN_SIZE, location);
         this.tap(tapCoordinates);
     }
@@ -139,8 +152,8 @@ class Gestures {
     /**
      * Swipe from coordinates (from) to the new coordinates (to). The given coordinates are in pixels.
      *
-     * @param {object} from { x: 50, y: 50 }
-     * @param {object} to { x: 25, y: 25 }
+     * @param from { x: 50, y: 50 }
+     * @param to { x: 25, y: 25 }
      *
      * @example
      * <pre>
@@ -149,7 +162,7 @@ class Gestures {
      *   const to = { x: 25, y:50 }
      * </pre>
      */
-    static swipe(from, to) {
+    static swipe(from: LocationCords, to: LocationCords): void {
         browser.touchPerform([{
             action: 'press',
             options: from,
@@ -165,7 +178,7 @@ class Gestures {
         browser.pause(1000);
     }
 
-    static tap(location) {
+    static tap(location: LocationCords): void {
         browser.touchPerform([{
             action: 'tap',
             options: location
@@ -176,14 +189,14 @@ class Gestures {
     /**
      * Get the screen coordinates based on a device his screensize
      *
-     * @param {number} screenSize the size of the screen
-     * @param {object} coordinates like { x: 50, y: 50 }
+     * @param screenSize the size of the screen
+     * @param coordinates like { x: 50, y: 50 }
      *
      * @return {{x: number, y: number}}
      *
      * @private
      */
-    private static getDeviceScreenCoordinates(screenSize, coordinates) {
+    private static getDeviceScreenCoordinates(screenSize: Dimensions, coordinates: LocationCords): LocationCords {
         return {
             x: Math.round(screenSize.width * (coordinates.x / 100)),
             y: Math.round(screenSize.height * (coordinates.y / 100)),
@@ -193,14 +206,14 @@ class Gestures {
     /**
      * Calculate the x y coordinates based on a percentage
      *
-     * @param {object} coordinates
-     * @param {number} percentage
+     * @param coordinates
+     * @param percentage
      *
      * @return {{x: number, y: number}}
      *
      * @private
      */
-    private static calculateXY({ x, y }, percentage) {
+    private static calculateXY({ x, y }, percentage): LocationCords {
         return {
             x: x * percentage,
             y: y * percentage,
