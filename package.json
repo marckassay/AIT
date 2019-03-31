@@ -2,7 +2,7 @@
   "name": "ait",
   "description": "An interval timer designed to be read and heard from a distance.",
   "private": true,
-  "version": "2.1.2",
+  "version": "2.1.3",
   "author": "Marc Kassay",
   "homepage": "https://github.com/marckassay/ait",
   "scripts": {
@@ -35,7 +35,7 @@
     "@ionic/angular": "4.0.1",
     "@ionic/storage": "^2.2.0",
     "clovelced-plugin-audiomanagement": "^1.0.2",
-    "cordova-android": "7.1.4",
+    "cordova-android": "8.0.0",
     "cordova-plugin-brightness": "^0.2.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-fullscreen": "^1.2.0",
@@ -61,7 +61,7 @@
     "@angular-devkit/build-angular": "~0.13.1",
     "@angular-devkit/core": "~7.3.1",
     "@angular-devkit/schematics": "~7.3.1",
-    "@angular/cli": "~7.3.1",
+    "@angular/cli": "7.3.7",
     "@angular/compiler": "~7.2.4",
     "@angular/compiler-cli": "~7.2.4",
     "@angular/language-service": "~7.2.4",
@@ -97,8 +97,6 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       }
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   }
 }
