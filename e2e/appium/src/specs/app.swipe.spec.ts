@@ -1,8 +1,6 @@
 import { Element } from '@wdio/sync';
-
 import Gestures from '../helpers/Gestures';
-import WebViewScreen from '../helpers/WebView';
-import { CONTEXT_REF } from '../helpers/WebView';
+import WebViewScreen, { CONTEXT_REF } from '../helpers/WebView';
 import AppPage from '../pageobjects/app.page';
 
 describe('Replicating sidemenuissue', () => {
@@ -31,9 +29,15 @@ describe('Replicating sidemenuissue', () => {
     expect(rightMenu.isDisplayed()).toBe(false);
   });
 
-  it('right menu test', () => {
+  it('return home test', () => {
     Gestures.tapRight();
 
+    WebViewScreen.switchToContext(CONTEXT_REF.WEBVIEW);
+
+    expect(appHome.isDisplayed()).toBe(true);
+  });
+
+  it('right menu test', () => {
     Gestures.swipeLeft();
 
     WebViewScreen.switchToContext(CONTEXT_REF.WEBVIEW);

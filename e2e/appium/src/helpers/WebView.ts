@@ -1,14 +1,14 @@
-import Gestures from './Gestures';
 
-export const CONTEXT_REF = {
-    NATIVE: 'native',
-    WEBVIEW: 'webview',
-};
-const DOCUMENT_READY_STATE = {
-    COMPLETE: 'complete',
-    INTERACTIVE: 'interactive',
-    LOADING: 'loading',
-};
+export enum CONTEXT_REF {
+    NATIVE = 'native',
+    WEBVIEW = 'webview'
+}
+
+enum DOCUMENT_READY_STATE {
+    COMPLETE = 'complete',
+    INTERACTIVE = 'interactive',
+    LOADING = 'loading'
+}
 
 class WebView {
     constructor() {
@@ -43,18 +43,18 @@ class WebView {
     /**
      * Switch to native or webview context
      *
-     * @param {string} context should be native of webview
+     * @param context should be native of webview
      */
-    switchToContext(context) {
+    switchToContext(context: CONTEXT_REF.WEBVIEW | CONTEXT_REF.NATIVE) {
         browser.switchContext(this.getCurrentContexts()[context === CONTEXT_REF.WEBVIEW ? 1 : 0]);
     }
 
     /**
      * Returns an object with the list of all available contexts
      *
-     * @return {object} An object containing the list of all available contexts
+     * @return An object containing the list of all available contexts
      */
-    getCurrentContexts() {
+    getCurrentContexts(): any {
         return browser.getContexts();
     }
 
@@ -79,20 +79,6 @@ class WebView {
         this.waitForDocumentFullyLoaded();
         this.switchToContext(CONTEXT_REF.NATIVE);
     }
-
-    /*     swipeLeftUntilWebsiteLoaded() {
-            browser.waitUntil(() => browser.execute(() => {
-                if (document && document.readyState === 'loading') {
-                    Gestures.swipeLeft();
-                    console.log('swiping!');
-                }
-                return document && document.readyState === 'complete';
-            }),
-                15000,
-                'Website not loaded',
-                100
-            );
-        } */
 }
 
 export default new WebView();

@@ -12,7 +12,7 @@ class NativeAlert {
     /**
      * Wait for the alert to exist
      */
-    static waitForIsShown(isShown = true): void {
+    static waitForIsShown(isShown = true) {
         const selector = browser.isAndroid ? SELECTORS.ANDROID.ALERT_TITLE : SELECTORS.IOS.ALERT;
         ($(selector) as any).waitForExist(11000, !isShown);
     }
@@ -26,10 +26,8 @@ class NativeAlert {
      * ANDROID:
      *  Use the text of the button, provide a string and it will automatically transform it to uppercase
      *  and click on the button
-     *
-     * @param selector
      */
-    static pressButton(selector: string): void {
+    static pressButton(selector) {
         const buttonSelector = browser.isAndroid
             ? SELECTORS.ANDROID.ALERT_BUTTON.replace(/{BUTTON_TEXT}/, selector.toUpperCase())
             : `~${selector}`;
@@ -38,8 +36,10 @@ class NativeAlert {
 
     /**
      * Get the alert text
+     *
+     * @return string
      */
-    static text(): void {
+    static text() {
         return browser.getAlertText();
     }
 }

@@ -1,5 +1,3 @@
-import { Element } from '@wdio/sync';
-
 const SELECTORS = {
     ANDROID: {
         TEXT: '*//android.widget.TextView',
@@ -18,11 +16,10 @@ const SELECTORS = {
  *      This method will contain all the text of the component,
  *      including all the child components
  *
- * @param element
- * @param isXpath
+ * @return string
  */
-export function getTextOfElement(element: Element | any, isXpath = false): string {
-    let visualText: string | string[] | any;
+export function getTextOfElement(element: WebdriverIO.Element | any, isXpath = false) {
+    let visualText;
     try {
         if (browser.isAndroid) {
             visualText = element.getText(SELECTORS.ANDROID.TEXT);
@@ -46,7 +43,7 @@ export function getTextOfElement(element: Element | any, isXpath = false): strin
  * @param start    the time in milliseconds
  * @param end      the time in milliseconds
  */
-export function timeDifference(start: number, end: number): void {
+export function timeDifference(start: number, end: number) {
     const elapsed = (end - start) / 1000;
     console.log('elapsed = ', elapsed, ' seconds');
 }
