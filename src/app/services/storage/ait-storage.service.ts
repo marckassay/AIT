@@ -19,10 +19,10 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject, Observer, PartialObserver, Subscription } from 'rxjs';
 import { distinct, skip } from 'rxjs/operators';
-import { error, log, warn, AppUtils } from 'src/app/app.utils';
-
+import { AppUtils, error, log, warn } from 'src/app/app.utils';
 import { StorageDefaultData } from './ait-storage.defaultdata';
 import { AppStorageData, UUIDData } from './ait-storage.shapes';
+
 
 
 export interface CacheSubject<T extends UUIDData> {
@@ -53,7 +53,7 @@ export class AITStorage {
    * @param uuid the key to storage record
    */
   async getPromiseSubject<T extends UUIDData>(uuid: string): Promise<BehaviorSubject<T>> {
-    let hardData: T;
+    let hardData: T | any;
     const noSoftData: boolean = this.subjects.findIndex(element => element.uuid === uuid) === -1;
 
     // no softdata; then store it
@@ -140,8 +140,6 @@ export class AITStorage {
 
   /**
    * Retrieves soft entry and if BehaviorSubject has no observers a subscription will be created.
-   *
-   * @param uuid
    */
   private restoreSoftData<T extends UUIDData>(uuid: string): CacheSubject<T> {
     const entry = this.subjects.find(element => element.uuid === uuid);

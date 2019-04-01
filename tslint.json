@@ -1,7 +1,8 @@
 {
   "linterOptions": {
     "exclude": [
-      "./temp/**/*"
+      "./temp/**/*",
+      "./node_modules/**/*",
     ]
   },
   "rulesDirectory": [

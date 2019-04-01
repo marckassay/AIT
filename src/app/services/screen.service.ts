@@ -20,14 +20,14 @@ import { AndroidFullScreen, AndroidSystemUiFlags } from '@ionic-native/android-f
 import { Brightness } from '@ionic-native/brightness/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { timer, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, timer } from 'rxjs';
 import { delayWhen, distinctUntilChanged, tap, throttleTime } from 'rxjs/operators';
-
 import { AppUtils } from '../app.utils';
-
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData, BrightnessSet } from './storage/ait-storage.shapes';
+
+
 
 export class BrightnessUtil {
   static convertToDeviceBrightnessNumber(value: BrightnessSet): number {

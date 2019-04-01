@@ -1,27 +1,26 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-        "preserveSymlinks": true,
-        "baseUrl": "./",
-        "outDir": "./dist/out-tsc",
-        "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
-        "declaration": false,
-        "module": "es2015",
-        "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": true,
-        "target": "es6",
-        "typeRoots": [
-            "node_modules/@types"
-        ],
-        "lib": [
-            "es2018",
-            "dom"
-        ]
-    },
-    "include": [
-        "./src/**/*"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
+    "preserveSymlinks": true,
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es6",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
     ]
+  },
+  "include": [
+    "./src/**/*"
+  ]
 }

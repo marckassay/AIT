@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "types": [
+            "node",
+            "typings",
+            "@wdio/sync",
+            "@wdio/jasmine-framework"
+        ]
+    },
+    "includes": [
+        "./conf/wdio.conf.ts",
+        "./src/specs/**/*.spec.ts"
+    ]
+}

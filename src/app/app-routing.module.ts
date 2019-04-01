@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, RouteReuseStrategy } from '@angular/router';
-
+import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router';
 import { AppRoutingStrategy } from './app-routing-strategy';
+
 
 const routes: Routes = [
   {

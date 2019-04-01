@@ -9,7 +9,7 @@
 log.txt
 *.sublime-project
 *.sublime-workspace
-# .vscode/
+.vscode/
 npm-debug.log*
 
 .idea/
@@ -19,13 +19,11 @@ npm-debug.log*
 .tmp/
 .versions/
 coverage/
+www/
+node_modules/
 tmp/
 temp
 temp/
-www/
-node_modules/
-build/
-dist/
 platforms/
 plugins/
 plugins/android.json
