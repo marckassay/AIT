@@ -20,7 +20,6 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { environment as env } from 'src/environments/environment';
-
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { SideMenuService, SideMenuShapes, SideMenuStatusResponse } from './components/side-menu/side-menu.service';
@@ -29,6 +28,7 @@ import { ScreenService } from './services/screen.service';
 import { StorageDefaultData } from './services/storage/ait-storage.defaultdata';
 import { AITStorage } from './services/storage/ait-storage.service';
 import { AppStorageData } from './services/storage/ait-storage.shapes';
+
 
 @Component({
   selector: 'app-root',
@@ -106,7 +106,8 @@ export class AppComponent implements OnInit, AfterViewInit {
                 // TODO: delay here for animating navigation away is completed. Angular or Cordova
                 // or Ionic, seems to not be fully completed. And will lock navigation to sidemenu
                 // or cause both sidemenus on the same side.
-                AppUtils.delayPromise(2000).then(() => this.isContentInteractive = true);
+                // AppUtils.delayPromise(2000).then(() => this.isContentInteractive = true);
+                this.isContentInteractive = true;
               });
             this.platform.resume.subscribe(() => {
               // TODO: in an unlikely event, this perhaps can be used. That is, if the user has

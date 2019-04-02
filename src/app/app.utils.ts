@@ -17,10 +17,10 @@
 */
 import moment from 'moment';
 import { environment } from 'src/environments/environment';
-
 import { MockStorageData, StorageDefaultData } from './services/storage/ait-storage.defaultdata';
 // tslint:disable-next-line:max-line-length
 import { AccentTheme, AppStorageData, BaseTheme, IntervalStorageData, TimerStorageData, UUIDData } from './services/storage/ait-storage.shapes';
+
 
 export class AppUtils {
 
@@ -178,7 +178,7 @@ export function dirxml(...data: any[]): void {
  */
 export function error(message?: any, ...optionalParams: any[]): void {
     if (environment.production === false) {
-        console.error(message, optionalParams);
+        console.error(message, ...optionalParams);
     }
 }
 /**
@@ -202,7 +202,7 @@ export function groupEnd(): void {
  */
 export function log(message?: any, ...optionalParams: any[]): void {
     if (environment.production === false) {
-        console.log(message, optionalParams);
+        console.log(message, ...optionalParams);
     }
 }
 /**
@@ -219,7 +219,7 @@ export function table(tabularData: any, properties?: string[]): void {
  */
 export function warn(message?: any, ...optionalParams: any[]): void {
     if (environment.production === false) {
-        console.warn(message, optionalParams);
+        console.warn(message, ...optionalParams);
     }
 }
 /**
