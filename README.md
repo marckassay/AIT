@@ -31,9 +31,17 @@ If your device, is in the ‘Do Not Disturb’ state while attempting to adjust 
 
   [![Google Play Badge](resources/media/readme/google-play-badge.png)](https://play.google.com/store/apps/details?id=github.marckassay.ait)
 
-- Option 2:
+- Option 2 - Download any of the original APK file and install it with `adb`:
 
-  The shell commands below demonstrates on how to clone, build, and install a release apk on a connected device. As it's being a release build, it would need to be signed by your Google Play private key. Adjustments may be needed depending on your system and/or desires.
+  - [2.1.5 apk](https://github.com/marckassay/AIT/raw/master/releases/215.apk)
+
+  - [2.1.4 apk](https://github.com/marckassay/AIT/raw/master/releases/214.apk)
+
+  - [2.1.2 apk](https://github.com/marckassay/AIT/raw/master/releases/212.apk)
+
+  - [2.1.1 apk](https://github.com/marckassay/AIT/raw/master/releases/211.apk)
+
+- Option 3 - The shell commands below demonstrates on how to clone, build, and install a release apk on a connected device. As it's being a release build, it would need to be signed by your Google Play private key. Adjustments may be needed depending on your system and/or desires.
 
   ```shell
   git clone https://github.com/marckassay/AIT.git
