@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="214" id="github.marckassay.ait" version="2.1.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="215" id="github.marckassay.ait" version="2.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Another Interval Timer</name>
     <description>An interval timer designed to be read and heard from a distance.</description>
     <author email="marckassay@gmail.com" href="https://github.com/marckassay/AIT">Marc Kassay</author>
