@@ -23,12 +23,12 @@ import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-
 import { AppUtils } from '../app.utils';
-
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData, VolumeSet } from './storage/ait-storage.shapes';
+
+
 
 /**
  * References audio and vibrate features of the device.
@@ -197,11 +197,16 @@ export class SignalService {
     }
   }
 
-  completed(): void {
+  completed(): Promise<[void, void]> {
+    let soundPromise = new Promise<void>((resolve): void => resolve());
+    let vibratePromise = new Promise<void>((resolve): void => resolve());
+
     if (this.hasBeenInformed === false) {
-      if (this.data.sound !== 0) { this.loopBeep(33); }
-      if (this.data.vibrate) { this.loopVibrate(33); }
+      if (this.data.sound !== 0) { soundPromise = this.loopBeep(45); }
+      if (this.data.vibrate) { vibratePromise = this.loopVibrate(45); }
     }
+
+    return Promise.all([soundPromise, vibratePromise]);
   }
 
   private subscribe(value: BehaviorSubject<AppStorageData>): void {
@@ -217,8 +222,12 @@ export class SignalService {
     });
   }
 
-  private loopVibrate(intervals: number): void {
-    this.vibration.vibrate(Array(intervals).fill(125));
+  private loopVibrate(intervals: number): Promise<void> {
+    const vibratePulse = 125;
+    const totalDuration = intervals * vibratePulse;
+    this.vibration.vibrate(Array(intervals).fill(vibratePulse));
+
+    return AppUtils.delayPromise(totalDuration);
   }
 
   private async loopBeep(intervals: number): Promise<void> {

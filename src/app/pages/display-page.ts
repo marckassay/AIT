@@ -20,7 +20,6 @@ import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, Injector, O
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { XProgressBarComponent } from 'src/app/components/x-progress-bar/x-progress-bar.component';
-
 import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuService, SideMenuStatusResponse } from '../components/side-menu/side-menu.service';
@@ -30,6 +29,7 @@ import { SotsForAit } from '../services/sots/ait-sots';
 import { SequenceStates } from '../services/sots/ait-sots.util';
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 import { UUIDData } from '../services/storage/ait-storage.shapes';
+
 
 export class DisplayPage implements OnInit, AfterViewInit {
   @ViewChild(FabContainerComponent)
@@ -164,14 +164,19 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * @param value true if timer is ticking
    */
   protected async setAppToRunningMode(value: boolean): Promise<void> {
-    this.screenSvc.setScreenToRunningMode(value);
     await this.menuSvc.enableLeftMenu(value === false);
     await this.menuSvc.enableRightMenu(value === false);
 
     if (this.timerState === SequenceStates.Completed) {
       this.floatingbuttons.setToCompletedMode();
       this.grandTime = AppUtils.totaltime(this.uuidData);
-      this.signalSvc.completed();
+
+      // wait until completed sequence is done until proceeding to set screen to running mode...
+      await this.signalSvc.completed();
+
+      this.screenSvc.setScreenToRunningMode(value);
+    } else {
+      this.screenSvc.setScreenToRunningMode(value);
     }
 
     await this.signalSvc.enablePreferredVolume(value)
