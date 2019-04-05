@@ -4,7 +4,6 @@
     "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "preserveSymlinks": true,
-    "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "module": "es2015",
@@ -12,6 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es6",
+    "removeComments": true,
     "typeRoots": [
       "node_modules/@types"
     ],
