@@ -33,13 +33,12 @@ If your device, is in the ‘Do Not Disturb’ state while attempting to adjust 
 
 - Option 2 - Download any of the original APK file and install it with `adb`:
 
-  - [2.1.5 apk](https://github.com/marckassay/AIT/raw/master/releases/215.apk)
-
-  - [2.1.4 apk](https://github.com/marckassay/AIT/raw/master/releases/214.apk)
-
-  - [2.1.2 apk](https://github.com/marckassay/AIT/raw/master/releases/212.apk)
-
-  - [2.1.1 apk](https://github.com/marckassay/AIT/raw/master/releases/211.apk)
+  | AIT APK | MD5 Checksum |
+  | ----------- | ----------- |
+  | [2.1.5](https://github.com/marckassay/AIT/raw/master/releases/215.apk) | F80E7C0B38FC9C2AD09066253B52E07E |
+  | [2.1.4](https://github.com/marckassay/AIT/raw/master/releases/214.apk) | D5B240CFC0E78BBE23B771AFF43FE646 |
+  | [2.1.2](https://github.com/marckassay/AIT/raw/master/releases/212.apk) | 3F7E085AF9CFEBBD9F5E48050B14C958 |
+  | [2.1.1](https://github.com/marckassay/AIT/raw/master/releases/211.apk) | 82CBFB75EE4197D93A3D8EFD6BA6ECE8 |
 
 - Option 3 - The shell commands below demonstrates on how to clone, build, and install a release apk on a connected device. As it's being a release build, it would need to be signed by your Google Play private key. Adjustments may be needed depending on your system and/or desires.
 
@@ -78,25 +77,28 @@ $ ionic info
 
 Ionic:
 
-  ionic (Ionic CLI)             : 4.10.2
-  Ionic Framework               : @ionic/angular 4.0.1
-  @angular-devkit/build-angular : 0.13.1
-  @angular-devkit/schematics    : 7.3.1
-  @angular/cli                  : 7.3.1
-  @ionic/angular-toolkit        : 1.3.0
+   ionic (Ionic CLI)             : 4.12.0 (C:\Users\marck\AppData\Roaming\nvm\v11.0.0\node_modules\ionic)
+   Ionic Framework               : @ionic/angular 4.1.2
+   @angular-devkit/build-angular : 0.13.7
+   @angular-devkit/schematics    : 7.2.4
+   @angular/cli                  : 7.3.7
+   @ionic/angular-toolkit        : 1.4.1
 
 Cordova:
 
-  cordova (Cordova CLI) : 8.1.2 (cordova-lib@8.1.1)
-  Cordova Platforms     : android 7.1.4
-  Cordova Plugins       : cordova-plugin-ionic-keyboard 2.1.3, cordova-plugin-ionic-webview 3.1.2, (and 9 other plugins)
+   cordova (Cordova CLI) : not installed
+   Cordova Platforms     : android 8.0.0
+   Cordova Plugins       : cordova-plugin-ionic-keyboard 2.1.3, cordova-plugin-ionic-webview 3.1.2, (and 10 other plugins)
 
 System:
 
-  Android SDK Tools : 26.1.1 (C:\Users\marck\AppData\Local\Android\Sdk)
-  NodeJS            : v10.13.0 (C:\Program Files\nodejs\node.exe)
-  yarn              : 1.13.0
-  OS                : Windows 10
+   Android SDK Tools : 26.1.1 (C:\Users\marck\AppData\Local\Android\Sdk)
+   NodeJS            : v11.0.0 (C:\Program Files\nodejs\node.exe)
+   npm               : 6.9.0
+   OS                : Windows 10
+
+$ cordova -v
+9.0.0
 ```
 
 ## Feedback

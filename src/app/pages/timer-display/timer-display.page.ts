@@ -16,12 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Component } from '@angular/core';
-import { TimeEmission } from 'sots';
+import { ITimeEmission } from 'sots';
 import { SequenceStates } from 'src/app/services/sots/ait-sots.util';
-import { TimerStorageData } from 'src/app/services/storage/ait-storage.shapes';
-
 import { DisplayPage } from '../display-page';
 import { TimerSettingsPage } from '../timer-settings/timer-settings.page';
+
 
 
 @Component({
@@ -70,7 +69,7 @@ export class TimerDisplayPage extends DisplayPage {
   aitSubscribeTimer(): void {
     if (this.noRebuild === false) {
       this.sots.subscribe({
-        next: (value: TimeEmission): void => {
+        next: (value: ITimeEmission): void => {
 
           this.grandTime = this.sots.getGrandTime(value);
 

@@ -15,11 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, Input } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { TimeEmission } from 'sots';
-import { IntervalStorageData, UUIDData } from 'src/app/services/storage/ait-storage.shapes';
-
+import { Component, Input, ViewChild } from '@angular/core';
+import { ITimeEmission } from 'sots';
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 import { SequenceStates } from '../../services/sots/ait-sots.util';
 import { DisplayPage } from '../display-page';
@@ -76,7 +73,7 @@ export class IntervalDisplayPage extends DisplayPage {
   aitSubscribeTimer(): void {
     if (this.noRebuild === false) {
       this.sots.subscribe({
-        next: (value: TimeEmission): void => {
+        next: (value: ITimeEmission): void => {
 
           this.grandTime = this.sots.getGrandTime(value);
 

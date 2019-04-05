@@ -17,11 +17,11 @@
 */
 import * as moment from 'moment';
 import { PartialObserver } from 'rxjs';
-import { add, CountdownSegment, CountupSegment, Sequencer, TimeEmission } from 'sots';
-
+import { add, CountdownSegment, CountupSegment, ITimeEmission, Sequencer } from 'sots';
 import { CountdownWarnings } from '../storage/ait-storage.shapes';
-
 import { ISotsForAit, SequenceStates, SotsUtil } from './ait-sots.util';
+
+
 
 export class SotsForAit implements ISotsForAit {
   sequencer: Sequencer;
@@ -132,7 +132,7 @@ export class SotsForAit implements ISotsForAit {
     }
   }
 
-  subscribe(observer: PartialObserver<TimeEmission>): void {
+  subscribe(observer: PartialObserver<ITimeEmission>): void {
     this.unsubscribe();
     this.sequencer.subscribe(observer);
   }
@@ -143,7 +143,7 @@ export class SotsForAit implements ISotsForAit {
     }
   }
 
-  getGrandTime(value: TimeEmission): string {
+  getGrandTime(value: ITimeEmission): string {
     let totalTimeRemaining: number;
 
     if (value.interval) {
