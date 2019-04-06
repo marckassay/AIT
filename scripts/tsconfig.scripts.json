@@ -1,15 +1,11 @@
 {
     "compilerOptions": {
-        "allowJs": true,
         "strict": true,
-        "outDir": "./out",
         "module": "commonjs",
+        "noImplicitAny": false,
         "lib": [
             "dom",
             "es2018"
         ]
-    },
-    "includes": [
-        "release.ts"
-    ]
+    }
 }
