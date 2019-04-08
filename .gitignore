@@ -24,6 +24,7 @@ node_modules/
 tmp/
 temp
 temp/
+out/
 platforms/
 plugins/
 plugins/android.json

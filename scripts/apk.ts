@@ -96,18 +96,20 @@ async function call(command: string) {
             await call('adb install -r ./platforms/android/app/build/outputs/apk/release/app-release.apk');
         }
 
-        try {
-            const artifactExits = await pathExists(releaseSigningArtifact);
-            if (artifactExits) {
-                console.log('Deleting Build Artifact');
-                await remove(releaseSigningArtifact);
-                console.log('Success');
-                console.log();
-            } else {
-                console.log('Unable to find the following file for deletion:', releaseSigningArtifact);
+        if (releaseBuildSwitch) {
+            try {
+                const artifactExits = await pathExists(releaseSigningArtifact);
+                if (artifactExits) {
+                    console.log('Deleting Build Artifact');
+                    await remove(releaseSigningArtifact);
+                    console.log('Success');
+                    console.log();
+                } else {
+                    console.log('Unable to find the following file for deletion:', releaseSigningArtifact);
+                }
+            } catch (err) {
+                console.error(err);
             }
-        } catch (err) {
-            console.error(err);
         }
 
     } else {

@@ -16,7 +16,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "wdio:test": "wdio ./e2e/appium/conf/wdio.conf.js",
+    "wdio:standalone": "node ./e2e/appium/conf/wdio.standalone.js",
     "release:device": "ts-node -P ./scripts/tsconfig.scripts.json ./scripts/apk.ts --release --device",
+    "debug:device": "ts-node -P ./scripts/tsconfig.scripts.json ./scripts/apk.ts --device",
     "kill": "adb kill-server"
   },
   "dependencies": {
