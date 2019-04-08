@@ -18,8 +18,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AndroidFullScreen, AndroidSystemUiFlags } from '@ionic-native/android-full-screen/ngx';
 import { Brightness } from '@ionic-native/brightness/ngx';
+import { LottieSplashScreen } from '@ionic-native/lottie-splash-screen/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { BehaviorSubject, timer } from 'rxjs';
 import { delayWhen, distinctUntilChanged, tap, throttleTime } from 'rxjs/operators';
 import { AppUtils } from '../app.utils';
@@ -81,7 +81,7 @@ export class ScreenService {
     private brightness: Brightness,
     private orientation: ScreenOrientation,
     private uibars: AndroidFullScreen,
-    private splash: SplashScreen,
+    private splash: LottieSplashScreen,
     private storage: AITStorage) { }
 
   /**

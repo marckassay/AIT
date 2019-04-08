@@ -88,13 +88,20 @@ async function call(command: string) {
 
         if (releaseBuildSwitch) {
             await call('ionic cordova build android --prod --release --buildConfig=' + buildFilePath);
+
+            if (deployToDeviceSwitch) {
+                await call('adb install -r ./platforms/android/app/build/outputs/apk/release/app-release.apk');
+            }
+
         } else {
-            await call('ionic cordova build android --debug --buildConfig=' + buildFilePath);
+            await call('ionic cordova build android --debug');
+
+            if (deployToDeviceSwitch) {
+                await call('adb install -r ./platforms/android/app/build/outputs/apk/debug/app-debug.apk');
+            }
         }
 
-        if (deployToDeviceSwitch) {
-            await call('adb install -r ./platforms/android/app/build/outputs/apk/release/app-release.apk');
-        }
+
 
         if (releaseBuildSwitch) {
             try {

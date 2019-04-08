@@ -10,6 +10,8 @@ import { APP, DEVICE_NAME, PLATFORM_VERSION } from '../constants';
  * Usage:
  *  `node ./e2e/config/wdio.standalone.js`
  * 
+ * Ideally call this CLI command from package script object.
+ * 
  * Afterwards, in Appium Desktop, click on the magnifying glass icon ('Start Inspector Session'). In
  * the popup, click to 'Attach to Session' > 'Attach to Session'.
  */
