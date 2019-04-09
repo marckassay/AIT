@@ -1,8 +1,8 @@
-<ion-app ngClass="{{theme}}" [style.pointer-events]="isContentInteractive ? 'auto' : 'none' ">
-  <ion-menu side="start">
+<ion-app ngClass="{{theme}}">
+  <ion-menu side="start" swipeGesture="areSideMenusInteractive">
     <side-menu id="start" [cacheEnabled]="cacheSideMenus"></side-menu>
   </ion-menu>
-  <ion-menu side="end">
+  <ion-menu side="end" swipeGesture="areSideMenusInteractive">
     <side-menu id="end" [cacheEnabled]="cacheSideMenus"></side-menu>
   </ion-menu>
   <ion-router-outlet main></ion-router-outlet>

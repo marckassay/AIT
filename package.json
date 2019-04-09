@@ -20,6 +20,7 @@
     "wdio:standalone": "node ./e2e/appium/conf/wdio.standalone.js",
     "release:device": "ts-node -P ./scripts/tsconfig.scripts.json ./scripts/apk.ts --release --device",
     "debug:device": "ts-node -P ./scripts/tsconfig.scripts.json ./scripts/apk.ts --device",
+    "fix": "node plugins/cordova-plugin-lottie-splashscreen/hooks/android/copy_build_extras.js",
     "kill": "adb kill-server"
   },
   "dependencies": {

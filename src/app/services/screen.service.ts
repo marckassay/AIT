@@ -138,13 +138,18 @@ export class ScreenService {
    * Called by app-component during bootup
    */
   async bootupScreen(): Promise<void> {
-    this._isSplashHidden = true;
+
     await Promise.all([
       this.uibars.showUnderStatusBar(),
       this.uibars.setSystemUiVisibility(AndroidSystemUiFlags.HideNavigation)
     ]);
 
-    await AppUtils.delayPromise(500).then(() => this.splash.hide());
+    // TODO: im not convinced that these 2 uibars calls are settled when they are actually done
+    // animating hence the delayPromise
+    await AppUtils.delayPromise(2500).then(() => {
+      this.splash.hide();
+      this._isSplashHidden = true;
+    });
   }
 
   async setScreenToRunningMode(value: boolean): Promise<void> {

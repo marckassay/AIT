@@ -254,15 +254,6 @@ export class DisplayPage implements OnInit, AfterViewInit {
           reject();
         }
       });
-
-      // send request to see if this display-page subclass has its settings page loaded in the
-      // 'end' sidemenu.
-      this.menuSvc.send({
-        subject: 'end',
-        request: 'status',
-        uuid: (this.uuidData as UUIDData).uuid
-      });
-
     });
   }
 

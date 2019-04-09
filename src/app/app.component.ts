@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { AfterViewInit, Component, ComponentFactoryResolver, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, Injector, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
@@ -34,7 +34,7 @@ import { AppStorageData } from './services/storage/ait-storage.shapes';
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   @ViewChild('startMenu')
   startMenu: SideMenuComponent;
 
@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    * To be used momentary to disable interaction
    */
-  isContentInteractive: boolean;
+  areSideMenusInteractive: boolean;
 
   private appSubjet: BehaviorSubject<AppStorageData>;
 
@@ -66,14 +66,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     private storage: AITStorage,
     private screenSvc: ScreenService,
     private menuSvc: SideMenuService
-  ) { }
+  ) {
+    this.areSideMenusInteractive = false;
+  }
 
   ngOnInit(): void {
     this.initializeApp();
-  }
-
-  ngAfterViewInit(): void {
-    this.subscribeMenuService();
   }
 
   private subscribeMenuService(): void {
@@ -98,23 +96,8 @@ export class AppComponent implements OnInit, AfterViewInit {
             // post app start-up; after start and end sidemenus have been loaded
           } else if ((note.subject === 'start') &&
             (note.response === true) &&
-            (this.screenSvc.isSplashHidden() === false)) {
-
-            this.isContentInteractive = false;
-            this.screenSvc.bootupScreen()
-              .then(() => {
-                // TODO: delay here for animating navigation away is completed. Angular or Cordova
-                // or Ionic, seems to not be fully completed. And will lock navigation to sidemenu
-                // or cause both sidemenus on the same side.
-                // AppUtils.delayPromise(2000).then(() => this.isContentInteractive = true);
-                this.isContentInteractive = true;
-              });
-            this.platform.resume.subscribe(() => {
-              // TODO: in an unlikely event, this perhaps can be used. That is, if the user has
-              // display in running state when they set ait to the device's background and then
-              // returns. At that point this may be called.
-              // this.brightness.applyBrightnessOffset();
-            });
+            (this.areSideMenusInteractive === false)) {
+            this.areSideMenusInteractive = true;
           }
         }
       }
@@ -124,16 +107,33 @@ export class AppComponent implements OnInit, AfterViewInit {
   private initializeApp(): void {
     this.platform.ready()
       .then(async () => {
+        let appSubjetUUID: string;
 
         this.appSubjet = await this.storage.getPromiseSubject<AppStorageData>(StorageDefaultData.APP_ID);
 
         let startroute: string[];
         this.appSubjet.subscribe((appdata) => {
+          appSubjetUUID = appdata.uuid;
           this.applyTheme(appdata);
           startroute = AppUtils.convertToStartupRoute(appdata);
         });
 
-        this.router.navigate(startroute);
+        // launch last know page...
+        await this.router.navigate(startroute);
+
+        // hide ui bars and hide splashsceeen...
+        await this.screenSvc.bootupScreen().then(() => {
+          this.subscribeMenuService();
+        });
+
+        // load content for sidemenus
+        // send request to see if this display-page subclass has its settings page loaded in the
+        // 'end' sidemenu.
+        this.menuSvc.send({
+          subject: 'end',
+          request: 'status',
+          uuid: appSubjetUUID
+        });
       });
   }
 

@@ -1,8 +1,24 @@
 # Resource How-Tos
 
+- Remove and add platform without Ionic generating icons:
+
+```shell
+ionic cordova platform remove android
+ionic cordova platform add android --no-resources
+```
+
+- Edit config.xml is someway related to icons. Perhaps that will force a change.
+
 ## How to set SplashScreen
 
-`node plugins/cordova-plugin-lottie-splashscreen/hooks/android/copy_build_extras.js`
+```shell
+node plugins/cordova-plugin-lottie-splashscreen/hooks/android/copy_build_extras.js
+ionic cordova plugin add cordova-plugin-lottie-splashscreen
+```
+
+When building apk, disregard the CLI output message that starts with:
+
+  "Explanation for issues of type "MissingDefaultResource":"
 
 ## How to Generate Icons for Ionic for Android
 

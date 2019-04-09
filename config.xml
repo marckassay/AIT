@@ -13,15 +13,17 @@
     <preference name="LottieLoopAnimation" value="true" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <preference name="LottieAnimationLocation" value="www/assets/animation-w500-h500.json" />
+        <preference name="LottieAnimationLocation" value="www/assets/animation.json" />
         <preference name="LottieEnableHardwareAcceleration" value="true" />
-        <preference name="LottieBackgroundColor" value="#101010a3" />
+        <preference name="LottieBackgroundColor" value="#100000FF" />
         <preference name="LottieFullScreen" value="true" />
-        <icon background="resources/android/icon/values/ic_ait_launcher_background.xml" density="mdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-mdpi/ic_ait_launcher.png" />
-        <icon background="resources/android/icon/values/ic_ait_launcher_background.xml" density="hdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-hdpi/ic_ait_launcher.png" />
-        <icon background="resources/android/icon/values/ic_ait_launcher_background.xml" density="xhdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-xhdpi/ic_ait_launcher.png" />
-        <icon background="resources/android/icon/values/ic_ait_launcher_background.xml" density="xxhdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-xxhdpi/ic_ait_launcher.png" />
-        <icon background="resources/android/icon/values/ic_ait_launcher_background.xml" density="xxxhdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-xxxhdpi/ic_ait_launcher.png" />
+        <resource-file src="resources/android/icon/values/ic_ait_launcher_background.xml" target="/app/src/main/res/values/colors.xml" />
+        <icon background="@color/background" density="ldpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-mdpi/ic_ait_launcher.png" />
+        <icon background="@color/background" density="mdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-mdpi/ic_ait_launcher.png" />
+        <icon background="@color/background" density="hdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-hdpi/ic_ait_launcher.png" />
+        <icon background="@color/background" density="xhdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-xhdpi/ic_ait_launcher.png" />
+        <icon background="@color/background" density="xxhdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-xxhdpi/ic_ait_launcher.png" />
+        <icon background="@color/background" density="xxxhdpi" foreground="resources/android/icon/drawable/ic_ait_launcher_foreground.xml" src="resources/android/icon/mipmap-xxxhdpi/ic_ait_launcher.png" />
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
