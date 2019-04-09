@@ -1,4 +1,10 @@
-# How to Generate Icons for Ionic for Android
+# Resource How-Tos
+
+## How to set SplashScreen
+
+`node plugins/cordova-plugin-lottie-splashscreen/hooks/android/copy_build_extras.js`
+
+## How to Generate Icons for Ionic for Android
 
 The gist of this procedure is to use Android Studio to genrate icons and then to copy those files into
 this Ionic project's `resources/android` directory.
@@ -76,6 +82,18 @@ this Ionic project's `resources/android` directory.
     ```
 
 - Step Six
+
+  - What I did:
+
+    - Removed previous workaround:
+
+    ```xml
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" />
+        </edit-config>
+    ```
+
+- Step Seven
 
   - What i did:
 
