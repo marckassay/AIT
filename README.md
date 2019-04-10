@@ -35,6 +35,7 @@ If your device, is in the ‘Do Not Disturb’ state while attempting to adjust 
 
   | AIT APK | MD5 Checksum |
   | ----------- | ----------- |
+  | [2.1.6](https://github.com/marckassay/AIT/raw/master/releases/216.apk) | 828467AFA53BEB7A4291242D049627E1 |
   | [2.1.5](https://github.com/marckassay/AIT/raw/master/releases/215.apk) | F80E7C0B38FC9C2AD09066253B52E07E |
   | [2.1.4](https://github.com/marckassay/AIT/raw/master/releases/214.apk) | D5B240CFC0E78BBE23B771AFF43FE646 |
   | [2.1.2](https://github.com/marckassay/AIT/raw/master/releases/212.apk) | 3F7E085AF9CFEBBD9F5E48050B14C958 |
