@@ -40,6 +40,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
 
   private componentSubjet: BehaviorSubject<UUIDData>;
   private componentSubptn: Subscription;
+  private isStartUp: boolean;
 
   protected _uuidData: any;
   public get uuidData(): any {
@@ -91,6 +92,8 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.sots = new SotsForAit();
     this.signalSvc.onInit();
     this.screenSvc.onInit();
+
+    this.isStartUp = !!(this.route.snapshot.queryParams.isStartUp);
     this.componentSubjet = (this.route.snapshot.data as any).subject as BehaviorSubject<any>;
 
     this.componentSubptn = this.componentSubjet.subscribe((uuidData: UUIDData) => {
@@ -209,6 +212,13 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * method is now done subcribing.
    */
   private async attachSettingsAndCheckHome(): Promise<void> {
+    const resolveSideMenus = (resolve) => {
+      this.floatingbuttons.setHomeButtonToVisible();
+      this.menuSvc.enableLeftMenu(true);
+      this.progress.hide();
+      resolve();
+    };
+
     await new Promise<void>((resolve, reject): void => {
       // subscribe to menu service
       this.menuSvc.listen({
@@ -232,18 +242,18 @@ export class DisplayPage implements OnInit, AfterViewInit {
               this.floatingbuttons.setProgramButtonToVisible();
               this.menuSvc.enableRightMenu(true);
 
-              this.menuSvc.send({
-                subject: 'start',
-                request: 'status',
-                uuid: StorageDefaultData.HOME_ID
-              });
+              if (this.isStartUp === true) {
+                this.menuSvc.send({
+                  subject: 'start',
+                  request: 'status',
+                  uuid: StorageDefaultData.HOME_ID
+                });
+              } else {
+                resolveSideMenus(resolve);
+              }
               // when response from menuSvc about start menu
             } else if ((note.subject === 'start') && (note.response === true)) {
-
-              this.floatingbuttons.setHomeButtonToVisible();
-              this.menuSvc.enableLeftMenu(true);
-              this.progress.hide();
-              resolve();
+              resolveSideMenus(resolve);
             }
           }
         },
@@ -254,7 +264,15 @@ export class DisplayPage implements OnInit, AfterViewInit {
           reject();
         }
       });
-    });
+
+      if (this.isStartUp === false) {
+        this.menuSvc.send({
+          subject: 'end',
+          request: 'status',
+          uuid: (this.uuidData as UUIDData).uuid
+        });
+      }
+    }); 
   }
 
   /**

@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Component, ComponentFactoryResolver, Injector, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { environment as env } from 'src/environments/environment';
@@ -118,17 +118,21 @@ export class AppComponent implements OnInit {
           startroute = AppUtils.convertToStartupRoute(appdata);
         });
 
+        // Set our navigation extras object
+        // that contains our global query params and fragment
+        let navigationExtras: NavigationExtras = {
+          queryParams: { 'isStartUp': true }
+        };
+
         // launch last know page...
-        await this.router.navigate(startroute);
+        await this.router.navigate(startroute, navigationExtras);
 
         // hide ui bars and hide splashsceeen...
         await this.screenSvc.bootupScreen().then(() => {
           this.subscribeMenuService();
         });
 
-        // load content for sidemenus
-        // send request to see if this display-page subclass has its settings page loaded in the
-        // 'end' sidemenu.
+        // send request to that will start side menu loading
         this.menuSvc.send({
           subject: 'end',
           request: 'status',
