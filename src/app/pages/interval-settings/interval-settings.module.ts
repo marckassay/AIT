@@ -1,4 +1,4 @@
-/**
+/*
     AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 
@@ -20,8 +20,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
 import { IntervalSettingsPage } from './interval-settings.page';
+
 
 @NgModule({
   imports: [

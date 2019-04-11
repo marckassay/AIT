@@ -1,4 +1,4 @@
-/**
+/*
     AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 
@@ -18,12 +18,12 @@
 import { AfterContentInit, AfterViewInit, Injector, OnDestroy, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
-
 import { error } from '../app.utils';
 import { OnClosed, SideMenuService } from '../components/side-menu/side-menu.service';
 import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 import { AITStorage } from '../services/storage/ait-storage.service';
 import { AppStorageData, UUIDData } from '../services/storage/ait-storage.shapes';
+
 
 
 export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit, OnClosed, OnDestroy {

@@ -1,4 +1,4 @@
-/**
+/*
     AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 

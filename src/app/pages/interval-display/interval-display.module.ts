@@ -1,4 +1,4 @@
-/**
+/*
     AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 
@@ -23,12 +23,12 @@ import { IonicModule } from '@ionic/angular';
 import { ActiverestRendererComponentModule } from 'src/app/components/activerest-renderer/activerest-renderer.module';
 import { FabContainerComponentModule } from 'src/app/components/fab-container/fab-container.module';
 import { XProgressBarModule } from 'src/app/components/x-progress-bar/x-progress-bar.module';
-
 import { DisplayPageResolverService } from '../display-page-router.service';
 import { IntervalSettingsPageModule } from '../interval-settings/interval-settings.module';
 import { IntervalSettingsPage } from '../interval-settings/interval-settings.page';
-
 import { IntervalDisplayPage } from './interval-display.page';
+
+
 
 const routes: Routes = [
   {

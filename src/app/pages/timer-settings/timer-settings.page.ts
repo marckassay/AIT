@@ -1,4 +1,4 @@
-/**
+/*
     AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 
@@ -18,8 +18,8 @@
 import { Component } from '@angular/core';
 import { AppUtils } from 'src/app/app.utils';
 import { TimerStorageData } from 'src/app/services/storage/ait-storage.shapes';
-
 import { SettingsPage } from '../settings-page';
+
 
 @Component({
   selector: 'page-timer-settings',

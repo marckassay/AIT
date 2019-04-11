@@ -1,4 +1,4 @@
-/**
+/*
     AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 
@@ -21,7 +21,6 @@ import { BehaviorSubject } from 'rxjs';
 import { AITStorage } from 'src/app/services/storage/ait-storage.service';
 import { UUIDData } from 'src/app/services/storage/ait-storage.shapes';
 
-import { StorageDefaultData } from '../services/storage/ait-storage.defaultdata';
 
 @Injectable({
     providedIn: 'root'

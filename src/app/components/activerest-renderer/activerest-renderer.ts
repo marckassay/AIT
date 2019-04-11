@@ -1,4 +1,4 @@
-/**
+/*
     AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 
@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Component, Input } from '@angular/core';
-
 import { SequenceStates } from '../../services/sots/ait-sots.util';
 import { Limits } from '../../services/storage/ait-storage.shapes';
+
 
 @Component({
   selector: 'activerest-renderer',

@@ -1,4 +1,4 @@
-/**
+/*
     AIT - Another Interval Timer
     Copyright (C) 2019 Marc Kassay
 
@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Sequencer } from 'sots';
-
 import { CountdownWarnings } from '../storage/ait-storage.shapes';
+
 
 export enum SequenceStates {
   SingleBeep = 2,
