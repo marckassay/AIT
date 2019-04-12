@@ -12,7 +12,7 @@ The 3 timing modes for this application are: Interval, Timer and Stopwatch. Each
 
 - About Interval Settings:
 
-  In this menu, you program Interval timer and set audible warnings. In the 'Countdown Audible' section, you can set the option of having an audible at: fifteenth, tenth and/or fifth second. These options only apply to the active time segment of the interval timer. In an addition, an audible at the second, first and zero second are applied to all active, rest and countdown segments.
+  In this menu, you program Interval timer and set audible warnings. In the 'Countdown Audible' section, you can set the option of having an audible at the final: fifteenth, tenth and/or fifth second of the time segment. These options only apply to the active time segment of the interval timer. In an addition, an audible at the second, first and zero second are applied to all active, rest and countdown segments.
 
 ‘AIT Settings’ gives you the option to control vibration, sound, brightness, themes and screen orientation.
 
@@ -22,8 +22,9 @@ The 3 timing modes for this application are: Interval, Timer and Stopwatch. Each
 
 - About Sound Feature:
 
-  Similarly to the brightness feature, the sound or specifically the alarm can be set to be remembered when AIT is running an active timer. When the ‘remember alarm volume’ is enabled, you adjust the level by the ‘alarm volume’ component. You may notice that the device’s volume menu will appear and will set the alarm level you have chosen when the preview alarm is played. Immediately after the alarm is played, it will revert your device to previous level as it only sets the level when the AIT is running an active timer.
-If your device, is in the ‘Do Not Disturb’ state while attempting to adjust alarm volume, a notification will appear stating it will not adjust the volume.
+  Similarly to the brightness feature, the sound or specifically the alarm can be set to be remembered when AIT is running an active timer. When the ‘remember alarm volume’ is enabled, you adjust the level by the ‘alarm volume’ component. You may notice that the device’s volume menu will appear and will set the alarm level you have chosen when the preview alarm is played. Immediately after the alarm is played, it will revert your device to previous level as it only sets the level when the AIT is running an active timer. 
+  
+  If your device, is in the ‘Do Not Disturb’ state while attempting to adjust alarm volume, a notification will appear stating it will not adjust the volume.
 
 ## Install
 
@@ -35,20 +36,24 @@ If your device, is in the ‘Do Not Disturb’ state while attempting to adjust 
 
   | AIT APK | MD5 Checksum |
   | ----------- | ----------- |
+  | [2.1.7](https://github.com/marckassay/AIT/raw/master/releases/217.apk) | B75BC1F17F1886CDF1D2570CF0143988 |
   | [2.1.6](https://github.com/marckassay/AIT/raw/master/releases/216.apk) | 828467AFA53BEB7A4291242D049627E1 |
   | [2.1.5](https://github.com/marckassay/AIT/raw/master/releases/215.apk) | F80E7C0B38FC9C2AD09066253B52E07E |
   | [2.1.4](https://github.com/marckassay/AIT/raw/master/releases/214.apk) | D5B240CFC0E78BBE23B771AFF43FE646 |
   | [2.1.2](https://github.com/marckassay/AIT/raw/master/releases/212.apk) | 3F7E085AF9CFEBBD9F5E48050B14C958 |
   | [2.1.1](https://github.com/marckassay/AIT/raw/master/releases/211.apk) | 82CBFB75EE4197D93A3D8EFD6BA6ECE8 |
 
-- Option 3 - The shell commands below demonstrates on how to clone, build, and install a release apk on a connected device. As it's being a release build, it would need to be signed by your Google Play private key. Adjustments may be needed depending on your system and/or desires.
+- Option 3 - The shell commands below demonstrates on how to clone, build, and install a release apk on a connected device. As it's being a release build, it would need to be signed by your Google Play private key that needs to be referenced in the build.json file. Removing and adding `cordova-plugin-lottie-splashscreen` is to circumvent an issue that may be limited to my system. Adjustments may be needed depending on your system and/or desires.
 
   ```shell
   git clone https://github.com/marckassay/AIT.git
-  yarn install
-  yarn run add-spies
-  ionic cordova build android --prod --release --buildConfig=temp/build.json
-  adb install .\\platforms\\android\\app\\build\\outputs\\apk\\release\\app-release.apk
+  npm install
+  ionic cordova build android
+  ionic cordova plugin remove cordova-plugin-lottie-splashscreen
+  ionic cordova plugin add cordova-plugin-lottie-splashscreen --save
+  npm run fix
+  ionic cordova build android --prod --release --buildConfig=./build.json
+  adb install -r .\platforms\android\app\build\outputs\apk\release\app-release.apk
   ```
 
   As stated on this webpage, this software is licensed under the "GNU General Public License v3.0".
@@ -87,9 +92,9 @@ Ionic:
 
 Cordova:
 
-   cordova (Cordova CLI) : not installed
+   cordova (Cordova CLI) : 9.0.0
    Cordova Platforms     : android 8.0.0
-   Cordova Plugins       : cordova-plugin-ionic-keyboard 2.1.3, cordova-plugin-ionic-webview 3.1.2, (and 10 other plugins)
+   Cordova Plugins       : cordova-plugin-ionic-webview 3.1.2, (and 9 other plugins)
 
 System:
 
@@ -98,8 +103,23 @@ System:
    npm               : 6.9.0
    OS                : Windows 10
 
-$ cordova -v
-9.0.0
+```
+
+```shell
+$ ionic cordova plugin list
+
+clovelced-plugin-audiomanagement 1.0.2 "AudioManagement"
+cordova-plugin-brightness 0.1.5 "Brightness"
+cordova-plugin-device 2.0.2 "Device"
+cordova-plugin-fullscreen 1.1.0 "cordova-plugin-fullscreen"
+cordova-plugin-ionic-webview 3.1.2 "cordova-plugin-ionic-webview"
+cordova-plugin-lottie-splashscreen 0.5.0 "LottieSplashScreen"
+cordova-plugin-nativeaudio 3.0.9 "Cordova Native Audio"
+cordova-plugin-screen-orientation 3.0.1 "Screen Orientation"
+cordova-plugin-vibration 3.1.0 "Vibration"
+cordova-plugin-whitelist 1.3.3 "Whitelist"
+es6-promise-plugin 4.2.2 "Promise"
+
 ```
 
 ## Feedback

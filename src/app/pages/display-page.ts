@@ -135,6 +135,13 @@ export class DisplayPage implements OnInit, AfterViewInit {
   }
 
   /**
+   * Runs when the page has finished leaving and is no longer the active page.
+   */
+  ionViewDidLeave(): void {
+    this.isStartUp = false;
+  }
+
+  /**
    * Fired when the component being routed from is about to animate.
    */
   // ionViewWillLeave(): void { }
@@ -156,9 +163,10 @@ export class DisplayPage implements OnInit, AfterViewInit {
       this.timerState = SequenceStates.Loaded;
       this.floatingbuttons.setToLoadedMode();
     }
-    // TODO: i believe this is being called before this.attachSettingsAndCheckHome() is completed.
-    // move menuCtrl.enable/disable to menuSvc calls
-    this.setAppToRunningMode(false);
+
+    if (this.isStartUp === false) {
+      this.setAppToRunningMode(false);
+    }
   }
 
   /**
@@ -272,7 +280,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
           uuid: (this.uuidData as UUIDData).uuid
         });
       }
-    }); 
+    });
   }
 
   /**

@@ -138,18 +138,14 @@ export class ScreenService {
    * Called by app-component during bootup
    */
   async bootupScreen(): Promise<void> {
+    this.uibars.showUnderSystemUI();
 
-    await Promise.all([
-      this.uibars.showUnderStatusBar(),
-      this.uibars.setSystemUiVisibility(AndroidSystemUiFlags.HideNavigation)
-    ]);
+    await AppUtils.delayPromise(1000);
+    this.splash.hide();
+    this._isSplashHidden = true;
+    await AppUtils.delayPromise(1000);
 
-    // TODO: im not convinced that these 2 uibars calls are settled when they are actually done
-    // animating hence the delayPromise
-    await AppUtils.delayPromise(2500).then(() => {
-      this.splash.hide();
-      this._isSplashHidden = true;
-    });
+    await this.immersiveMode();
   }
 
   async setScreenToRunningMode(value: boolean): Promise<void> {
@@ -157,7 +153,7 @@ export class ScreenService {
     await AppUtils.delayPromise(250);
     await this.applyBrightnessOffset(value);
     await AppUtils.delayPromise(750);
-    await this.hideStatusAndNavBar(value);
+    await (value) ? this.immersiveMode() : this.immersiveSticky();
     await AppUtils.delayPromise(500);
     await this.setKeepScreenOn(value);
   }
@@ -193,17 +189,30 @@ export class ScreenService {
     this.brightness.setKeepScreenOn(value);
   }
 
-  private async hideStatusAndNavBar(value: boolean): Promise<void> {
-    if (value) {
-      await this.uibars.setSystemUiVisibility(
-        AndroidSystemUiFlags.Immersive |
-        AndroidSystemUiFlags.Fullscreen |
-        AndroidSystemUiFlags.HideNavigation);
-    } else {
-      await this.uibars.setSystemUiVisibility(
-        AndroidSystemUiFlags.Immersive |
-        AndroidSystemUiFlags.Visible |
-        AndroidSystemUiFlags.HideNavigation);
-    }
+  /**
+   * Enables regular immersive mode.
+   * 
+   * @ref https://developer.android.com/training/system-ui/immersive#EnableFullscreen
+   */
+  private immersiveMode() {
+    return this.uibars.immersiveMode();
+  }
+
+  /**
+   * Enables regular immersive sticky mode.
+   * 
+   * @ref https://developer.android.com/training/system-ui/immersive#EnableFullscreen
+   */
+  private immersiveSticky() {
+    return this.uibars.setSystemUiVisibility(
+      AndroidSystemUiFlags.ImmersiveSticky |
+      // Set the content to appear under the system bars so that the
+      // content doesn't resize when the system bars hide and show.
+      AndroidSystemUiFlags.LayoutStable |
+      AndroidSystemUiFlags.LayoutHideNavigation |
+      AndroidSystemUiFlags.LayoutFullscreen |
+      // Hide the nav bar and status bar
+      AndroidSystemUiFlags.HideNavigation |
+      AndroidSystemUiFlags.Fullscreen);
   }
 }

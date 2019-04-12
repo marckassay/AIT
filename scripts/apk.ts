@@ -50,6 +50,7 @@ let deployToDeviceSwitch = false;
  * @param command same as if typed in the CLI
  */
 async function call(command: string) {
+    console.log('[ait] scripts/apk.ts:', command);
     let resultPromise = spawnAsync(command);
     let spawnedChildProcess = resultPromise.child;
 

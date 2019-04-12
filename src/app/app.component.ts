@@ -97,7 +97,11 @@ export class AppComponent implements OnInit {
           } else if ((note.subject === 'start') &&
             (note.response === true) &&
             (this.areSideMenusInteractive === false)) {
-            this.areSideMenusInteractive = true;
+
+            this.screenSvc.bootupScreen().then(() => {
+              this.areSideMenusInteractive = true;
+            });
+
           }
         }
       }
@@ -124,13 +128,11 @@ export class AppComponent implements OnInit {
           queryParams: { 'isStartUp': true }
         };
 
-        // launch last know page...
+        // launch last known page...
         await this.router.navigate(startroute, navigationExtras);
 
-        // hide ui bars and hide splashsceeen...
-        await this.screenSvc.bootupScreen().then(() => {
-          this.subscribeMenuService();
-        });
+        await AppUtils.delayPromise(2000);
+        this.subscribeMenuService();
 
         // send request to that will start side menu loading
         this.menuSvc.send({
