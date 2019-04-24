@@ -184,11 +184,9 @@ export class DisplayPage implements OnInit, AfterViewInit {
 
       // wait until completed sequence is done until proceeding to set screen to running mode...
       await this.signalSvc.completed();
-
-      this.screenSvc.setScreenToRunningMode(value);
-    } else {
-      this.screenSvc.setScreenToRunningMode(value);
     }
+
+    this.screenSvc.setScreenToRunningMode(value);
 
     await this.signalSvc.enablePreferredVolume(value)
       .catch((reason) => {

@@ -241,6 +241,16 @@ export function profileEnd(label?: string): void {
         console.profileEnd(label);
     }
 }
+export function timeStart(label = 'timer1'): void {
+    if (environment.production === false) {
+        console.time(label);
+    }
+}
+export function timeEnd(label = 'timer1'): void {
+    if (environment.production === false) {
+        console.timeEnd(label);
+    }
+}
 /**
  * This method does not display anything unless used in the inspector.
  *  Adds an event with the label `label` to the Timeline panel of the inspector.

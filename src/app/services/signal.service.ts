@@ -225,20 +225,31 @@ export class SignalService {
   private loopVibrate(intervals: number): Promise<void> {
     const vibratePulse = 125;
     const totalDuration = intervals * vibratePulse;
+
     this.vibration.vibrate(Array(intervals).fill(vibratePulse));
 
     return AppUtils.delayPromise(totalDuration);
   }
 
   private async loopBeep(intervals: number): Promise<void> {
+    // this value is roughly the length of `this.MP3` file.
+    const beepBurst = 250;
     let interval = 1;
-    const loop = async (): Promise<void> => {
+    const totalDuration = intervals * beepBurst;
+
+    const loop = (): void => {
       if (interval <= intervals) {
         interval++;
-        await this.sound.play(this.MP3, loop);
+        // Promise is settling to earlier and NativeAudio seems to be an inactive plugin for 
+        // development. Circumventing  this issue by doing the same as its done in loopVibrate(),
+        // that is, calculate the totalDuration of the sound sequence.
+        // issue: https://github.com/floatinghotpot/cordova-plugin-nativeaudio/issues/147
+        this.sound.play(this.MP3, loop);
       }
     };
-    await loop();
+    loop();
+
+    return AppUtils.delayPromise(totalDuration);
   }
 
   private async setMusicVolume(value: number): Promise<void> {
