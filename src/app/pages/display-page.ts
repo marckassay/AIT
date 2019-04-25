@@ -126,7 +126,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
 
   /**
    * Fired when the component being routed to has animated in. This is called only during startup
-   * and when the user exits from the 'start' menu and returns. The 'end' menu is of no consequence.
+   * and when the user exits from the 'start' menu and returns. The 'end' menu has no consequence.
    */
   ionViewDidEnter(): void {
     this.progress.show();
@@ -192,7 +192,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
       .catch((reason) => {
         if (reason === 'DO_NOT_DISTURB') {
           // at this point toast notification (from signalSvc) should appear to inform user
-          this.floatingbuttons.setToCompletedMode();
+          this.floatingbuttons.setToLoadedMode();
           this.resetTimer();
           this.setAppToRunningMode(false);
         }
@@ -285,19 +285,19 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * When `this.fabcontainer` buttons are clicked, it will first execute code in
    * `fabcontainer.component` (Child component). afterwards it will execute this function.
    */
-  action(emission: FabEmission): void {
+  async action(emission: FabEmission): Promise<void> {
     switch (emission.action) {
       case FabAction.Home:
         this.sots.sequencer.pause();
-        this.setAppToRunningMode(false);
         this.floatingbuttons.setToPausedMode();
-        this.menuSvc.openLeftMenu();
+        await this.setAppToRunningMode(false);
+        await this.menuSvc.openLeftMenu();
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
-        this.setAppToRunningMode(false);
         this.floatingbuttons.setToPausedMode();
-        this.menuSvc.openRightMenu();
+        await this.setAppToRunningMode(false);
+        await this.menuSvc.openRightMenu();
         break;
       case FabAction.Reset:
         this.resetTimer();

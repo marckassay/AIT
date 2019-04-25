@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
-import { AppUtils } from 'src/app/app.utils';
 
 export interface FabEmission {
   action: FabAction;
@@ -81,12 +80,6 @@ export class FabContainerComponent {
     }
 
     if (action !== FabAction.Main) {
-
-      // delay if home or setting button is clicked to add a slight transition effect
-      if ((action === FabAction.Home) || (action === FabAction.Program)) {
-        await AppUtils.delayPromise(128);
-      }
-
       this.action.emit({ action: action });
     }
   }
