@@ -125,7 +125,7 @@ export class SettingsPage implements OnInit, AfterContentInit, AfterViewInit, On
     }
 
     const toast = await this.toastCtrl.create({
-      message: '\r\nAIT\'s ' + smesg + '. Go to \'AIT SETTINGS\' page and adjust accordingly if needed.',
+      message: '\r\nAIT\'s ' + smesg + '. Go to \'AIT SETTINGS\' page to adjust vibrate and sound settings accordingly.',
       duration: 10000,
       showCloseButton: true,
       position: 'top'

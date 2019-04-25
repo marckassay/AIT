@@ -259,7 +259,8 @@ export class SignalService {
   async inform(): Promise<void> {
     const toast = await this.toastCtrl.create({
       message: '\r\nAIT is not allowed to change device\'s \'Do Not Disturb\' state. ' +
-        'Go to \'AIT SETTINGS\' page and adjust accordingly if needed. Or change notification state.',
+        'Go to \'AIT SETTINGS\' page to adjust vibrate and sound settings accordingly. ' +
+        'Or disable \'Do Not Disturb\' state.',
       duration: 10000,
       showCloseButton: true,
       position: 'top'

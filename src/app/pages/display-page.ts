@@ -192,16 +192,16 @@ export class DisplayPage implements OnInit, AfterViewInit {
       .catch((reason) => {
         if (reason === 'DO_NOT_DISTURB') {
           // at this point toast notification (from signalSvc) should appear to inform user
-          this.sots.sequencer.pause();
-          this.floatingbuttons.setToPausedMode();
+          this.floatingbuttons.setToCompletedMode();
+          this.resetTimer();
           this.setAppToRunningMode(false);
         }
       });
   }
 
   private resetTimer(): void {
-    this.timerState = SequenceStates.Loaded;
     this.grandTime = this.sots.getGrandTime({ time: -1 });
+    this.timerState = SequenceStates.Loaded;
     this.sots.sequencer.reset();
     this.signalSvc.clearHasBeenInformed();
   }
