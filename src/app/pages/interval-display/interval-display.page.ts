@@ -17,6 +17,7 @@
 */
 import { Component, Input, ViewChild } from '@angular/core';
 import { ITimeEmission } from 'sots';
+import { AppUtils } from 'src/app/app.utils';
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 import { SequenceStates } from '../../services/sots/ait-sots.util';
 import { DisplayPage } from '../display-page';
@@ -54,20 +55,26 @@ export class IntervalDisplayPage extends DisplayPage {
   }
 
   ionViewDidEnter(): void {
-
     this.aitSubscribeTimer();
     super.ionViewDidEnter();
   }
 
   aitBuildTimer(): void {
-    this.sots.build(this.uuidData.countdown,
-      this.uuidData.warnings,
-      this.uuidData.intervals,
-      this.uuidData.activerest.lower,
-      this.uuidData.activerest.upper
-    );
-    this.grandTime = this.sots.getGrandTime({ time: -1 });
     this.noRebuild = false;
+    const currentSotsGrandTime = this.sots.getGrandTime();
+    const incomingGrandTime = AppUtils.totaltime(this.uuidData);
+    if (currentSotsGrandTime === '-1' ||
+      currentSotsGrandTime !== incomingGrandTime) {
+      this.sots.build(this.uuidData.countdown,
+        this.uuidData.warnings,
+        this.uuidData.intervals,
+        this.uuidData.activerest.lower,
+        this.uuidData.activerest.upper
+      );
+      this.grandTime = this.sots.getGrandTime({ time: -1 });
+    } else {
+      this.noRebuild = true;
+    }
   }
 
   aitSubscribeTimer(): void {

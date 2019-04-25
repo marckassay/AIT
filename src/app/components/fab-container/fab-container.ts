@@ -95,9 +95,13 @@ export class FabContainerComponent {
   private setToReadyMode(): void {
     if (this.viewState & FabState.Loading) {
       this.viewState &= ~FabState.Loading;
-    } else if (this.viewState & FabState.Completed) {
+    }
+
+    if (this.viewState & FabState.Completed) {
       this.viewState &= ~FabState.Completed;
-    } else if (this.viewState & FabState.Paused) {
+    }
+
+    if (this.viewState & FabState.Paused) {
       this.viewState &= ~FabState.Paused;
     }
 

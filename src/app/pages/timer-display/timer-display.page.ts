@@ -17,6 +17,7 @@
 */
 import { Component } from '@angular/core';
 import { ITimeEmission } from 'sots';
+import { AppUtils } from 'src/app/app.utils';
 import { SequenceStates } from 'src/app/services/sots/ait-sots.util';
 import { DisplayPage } from '../display-page';
 import { TimerSettingsPage } from '../timer-settings/timer-settings.page';
@@ -57,13 +58,21 @@ export class TimerDisplayPage extends DisplayPage {
   }
 
   aitBuildTimer(): void {
-    this.sots.build(this.uuidData.countdown,
-      this.uuidData.warnings,
-      this.uuidData.time
-    );
-
-    this.grandTime = this.sots.getGrandTime({ time: -1 });
     this.noRebuild = false;
+    const currentSotsGrandTime = this.sots.getGrandTime();
+    const incomingGrandTime = AppUtils.totaltime(this.uuidData);
+    if (currentSotsGrandTime === '-1' ||
+      currentSotsGrandTime !== incomingGrandTime) {
+
+      this.sots.build(this.uuidData.countdown,
+        this.uuidData.warnings,
+        this.uuidData.time
+      );
+
+      this.grandTime = this.sots.getGrandTime({ time: -1 });
+    } else {
+      this.noRebuild = true;
+    }
   }
 
   aitSubscribeTimer(): void {

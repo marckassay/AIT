@@ -21,18 +21,17 @@ import { add, CountdownSegment, CountupSegment, ITimeEmission, Sequencer } from 
 import { CountdownWarnings } from '../storage/ait-storage.shapes';
 import { ISotsForAit, SequenceStates, SotsUtil } from './ait-sots.util';
 
-
-
 export class SotsForAit implements ISotsForAit {
-  sequencer: Sequencer;
-  intervals: number;
-  rest: number;
-  active: number;
+  public sequencer: Sequencer;
+  private intervalz: number;
+  private rest: number;
+  private active: number;
   // this value if calculating minus countdown.  It DOES calculate
   // the rest segment that is omitted via omitFirst
-  grandTotalTime: number;
+  private grandTotalTime: number | undefined;
 
   constructor() {
+    this.grandTotalTime = undefined;
   }
 
   /**
@@ -53,7 +52,7 @@ export class SotsForAit implements ISotsForAit {
 
     // if this assertion is true, its has been called by interval-display...
     if (rest !== undefined && active !== undefined) {
-      this.intervals = timeOrIntervals!;
+      this.intervalz = timeOrIntervals!;
       this.rest = rest;
       this.active = active;
       this.grandTotalTime = (rest + active) * timeOrIntervals!;
@@ -143,28 +142,34 @@ export class SotsForAit implements ISotsForAit {
     }
   }
 
-  getGrandTime(value: ITimeEmission): string {
-    let totalTimeRemaining: number;
+  getGrandTime(value?: ITimeEmission): string {
+    if (value) {
+      let totalTimeRemaining: number;
 
-    if (value.interval) {
-      // * note: the first interval will not have a rest segment.
-      const remainingIntervals: number = value.interval.total - value.interval.current;
-      const remainingSecondsOfWholeIntervals: number = (this.rest + this.active) * remainingIntervals;
-      const remainingSecondsOfWholeIntervalsMinusFirstRest: number = remainingSecondsOfWholeIntervals;
+      if (value.interval) {
+        // * note: the first interval will not have a rest segment.
+        const remainingIntervals: number = value.interval.total - value.interval.current;
+        const remainingSecondsOfWholeIntervals: number = (this.rest + this.active) * remainingIntervals;
+        const remainingSecondsOfWholeIntervalsMinusFirstRest: number = remainingSecondsOfWholeIntervals;
 
-      if (value.state!.valueOf(SequenceStates.Rest)) {
-        totalTimeRemaining = remainingSecondsOfWholeIntervalsMinusFirstRest + this.active + value.time;
-      } else {
-        totalTimeRemaining = remainingSecondsOfWholeIntervalsMinusFirstRest + value.time;
+        if (value.state!.valueOf(SequenceStates.Rest)) {
+          totalTimeRemaining = remainingSecondsOfWholeIntervalsMinusFirstRest + this.active + value.time;
+        } else {
+          totalTimeRemaining = remainingSecondsOfWholeIntervalsMinusFirstRest + value.time;
+        }
+      } else if (value.time > 0) {
+        totalTimeRemaining = value.time;
+      } else if (value.time === -1) {
+        totalTimeRemaining = this.grandTotalTime;
+      } else { // else if (value.time === 0)
+        return '00:00.0';
       }
-    } else if (value.time > 0) {
-      totalTimeRemaining = value.time;
-    } else if (value.time === -1) {
-      totalTimeRemaining = this.grandTotalTime;
-    } else { // else if (value.time === 0)
-      return '00:00.0';
-    }
 
-    return moment(totalTimeRemaining * 1000).format('mm:ss.S');
+      // format the time with moment
+      return moment(totalTimeRemaining * 1000).format('mm:ss.S');
+
+    } else {
+      return (this.grandTotalTime !== undefined) ? moment(this.grandTotalTime * 1000).format('mm:ss.S') : '-1';
+    }
   }
 }
