@@ -22,7 +22,7 @@ The 3 timing modes for this application are: Interval, Timer and Stopwatch. Each
 
 - About Sound Feature:
 
-  Similarly to the brightness feature, the sound or specifically the alarm can be set to be remembered when AIT is running an active timer. When the ‘remember alarm volume’ is enabled, you adjust the level by the ‘alarm volume’ component. You may notice that the device’s volume menu will appear and will set the alarm level you have chosen when the preview alarm is played. Immediately after the alarm is played, it will revert your device to previous level as it only sets the level when the AIT is running an active timer. 
+  Similarly to the brightness feature, the sound or specifically the alarm can be set to be remembered when AIT is running an active timer. When the ‘remember alarm volume’ is enabled, you adjust the level by the ‘alarm volume’ component. You may notice that the device’s volume menu will appear and will set the alarm level you have chosen when the preview alarm is played. Immediately after the alarm is played, it will revert your device to previous level as it only sets the level when the AIT is running an active timer.
   
   If your device, is in the ‘Do Not Disturb’ state while attempting to adjust alarm volume, a notification will appear stating it will not adjust the volume.
 
@@ -36,12 +36,13 @@ The 3 timing modes for this application are: Interval, Timer and Stopwatch. Each
 
   | AIT APK | MD5 Checksum |
   | ----------- | ----------- |
-  | [2.1.7](https://github.com/marckassay/AIT/raw/master/releases/217.apk) | B75BC1F17F1886CDF1D2570CF0143988 |
-  | [2.1.6](https://github.com/marckassay/AIT/raw/master/releases/216.apk) | 828467AFA53BEB7A4291242D049627E1 |
-  | [2.1.5](https://github.com/marckassay/AIT/raw/master/releases/215.apk) | F80E7C0B38FC9C2AD09066253B52E07E |
-  | [2.1.4](https://github.com/marckassay/AIT/raw/master/releases/214.apk) | D5B240CFC0E78BBE23B771AFF43FE646 |
-  | [2.1.2](https://github.com/marckassay/AIT/raw/master/releases/212.apk) | 3F7E085AF9CFEBBD9F5E48050B14C958 |
-  | [2.1.1](https://github.com/marckassay/AIT/raw/master/releases/211.apk) | 82CBFB75EE4197D93A3D8EFD6BA6ECE8 |
+  | [2.1.8](https://github.com/marckassay/AIT/raw/master/releases/218.apk) | `CD7AF99F9E010F470DE8FE743E8C4C79` |
+  | [2.1.7](https://github.com/marckassay/AIT/raw/master/releases/217.apk) | `B75BC1F17F1886CDF1D2570CF0143988` |
+  | [2.1.6](https://github.com/marckassay/AIT/raw/master/releases/216.apk) | `828467AFA53BEB7A4291242D049627E1` |
+  | [2.1.5](https://github.com/marckassay/AIT/raw/master/releases/215.apk) | `F80E7C0B38FC9C2AD09066253B52E07E` |
+  | [2.1.4](https://github.com/marckassay/AIT/raw/master/releases/214.apk) | `D5B240CFC0E78BBE23B771AFF43FE646` |
+  | [2.1.2](https://github.com/marckassay/AIT/raw/master/releases/212.apk) | `3F7E085AF9CFEBBD9F5E48050B14C958` |
+  | [2.1.1](https://github.com/marckassay/AIT/raw/master/releases/211.apk) | `82CBFB75EE4197D93A3D8EFD6BA6ECE8` |
 
 - Option 3 - The shell commands below demonstrates on how to clone, build, and install a release apk on a connected device. As it's being a release build, it would need to be signed by your Google Play private key that needs to be referenced in the build.json file. Removing and adding `cordova-plugin-lottie-splashscreen` is to circumvent an issue that may be limited to my system. Adjustments may be needed depending on your system and/or desires.
 
