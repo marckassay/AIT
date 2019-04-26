@@ -142,6 +142,10 @@ export class AppComponent implements OnInit {
           uuid: appSubjetUUID
         });
       });
+
+    this.platform.resume.subscribe(() => {
+      this.screenSvc.immersiveMode();
+    });
   }
 
   private applyTheme(value: AppStorageData): void {

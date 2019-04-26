@@ -195,7 +195,7 @@ export class ScreenService {
    *
    * @ref https://developer.android.com/training/system-ui/immersive#EnableFullscreen
    */
-  private immersiveMode(): Promise<void> {
+  public immersiveMode(): Promise<void> {
     return this.uibars.immersiveMode();
   }
 
