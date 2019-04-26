@@ -2,7 +2,7 @@
   "linterOptions": {
     "exclude": [
       "./temp/**/*",
-      "./node_modules/**/*",
+      "./node_modules/**/*"
     ]
   },
   "rulesDirectory": [
@@ -17,9 +17,6 @@
       "check-space"
     ],
     "curly": true,
-    "deprecation": {
-      "severity": "warn"
-    },
     "eofline": true,
     "forin": true,
     "import-spacing": true,
@@ -56,6 +53,10 @@
       "trace"
     ],
     "no-construct": true,
+    "no-consecutive-blank-lines": [
+      true,
+      2
+    ],
     "no-debugger": true,
     "no-duplicate-super": true,
     "no-empty": false,
@@ -74,7 +75,7 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
+    "no-use-before-declare": false,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [

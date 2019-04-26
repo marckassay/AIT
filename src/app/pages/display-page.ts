@@ -20,6 +20,7 @@ import { AfterViewInit, ChangeDetectorRef, ComponentFactoryResolver, Injector, O
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { XProgressBarComponent } from 'src/app/components/x-progress-bar/x-progress-bar.component';
+
 import { AppUtils } from '../app.utils';
 import { FabAction, FabContainerComponent, FabEmission } from '../components/fab-container/fab-container';
 import { SideMenuService, SideMenuStatusResponse } from '../components/side-menu/side-menu.service';
@@ -218,7 +219,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * method is now done subcribing.
    */
   private async attachSettingsAndCheckHome(): Promise<void> {
-    const resolveSideMenus = (resolve) => {
+    const resolveSideMenus = (resolve: () => void): void => {
       this.floatingbuttons.setHomeButtonToVisible();
       this.menuSvc.enableLeftMenu(true);
       this.progress.hide();

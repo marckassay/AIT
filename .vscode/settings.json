@@ -1,5 +1,9 @@
 {
     "typescript.tsdk": "./node_modules/typescript/lib",
     "npm.packageManager": "npm",
-    "tslint.configFile": "tslint.json"
+    "tslint.configFile": "tslint.json",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": false,
+        "source.organizeImports": false,
+    }
 }

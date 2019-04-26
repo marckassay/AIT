@@ -20,6 +20,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { environment as env } from 'src/environments/environment';
+
 import { AppUtils } from './app.utils';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { SideMenuService, SideMenuShapes, SideMenuStatusResponse } from './components/side-menu/side-menu.service';
@@ -124,7 +125,7 @@ export class AppComponent implements OnInit {
 
         // Set our navigation extras object
         // that contains our global query params and fragment
-        let navigationExtras: NavigationExtras = {
+        const navigationExtras: NavigationExtras = {
           queryParams: { 'isStartUp': true }
         };
 

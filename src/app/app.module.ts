@@ -28,6 +28,7 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 import { IonicModule } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { environment as env } from 'src/environments/environment';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SideMenuModule } from './components/side-menu/side-menu.module';

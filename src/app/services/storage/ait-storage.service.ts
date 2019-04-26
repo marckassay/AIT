@@ -19,10 +19,10 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject, Observer, PartialObserver, Subscription } from 'rxjs';
 import { distinct, skip } from 'rxjs/operators';
-import { AppUtils, error, log, warn } from 'src/app/app.utils';
+import { error, log, warn, AppUtils } from 'src/app/app.utils';
+
 import { StorageDefaultData } from './ait-storage.defaultdata';
 import { AppStorageData, UUIDData } from './ait-storage.shapes';
-
 
 
 export interface CacheSubject<T extends UUIDData> {

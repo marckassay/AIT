@@ -18,7 +18,9 @@
 import * as moment from 'moment';
 import { PartialObserver } from 'rxjs';
 import { add, CountdownSegment, CountupSegment, ITimeEmission, Sequencer } from 'sots';
+
 import { CountdownWarnings } from '../storage/ait-storage.shapes';
+
 import { ISotsForAit, SequenceStates, SotsUtil } from './ait-sots.util';
 
 export class SotsForAit implements ISotsForAit {

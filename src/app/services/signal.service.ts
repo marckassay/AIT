@@ -23,11 +23,12 @@ import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+
 import { AppUtils } from '../app.utils';
+
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData, VolumeSet } from './storage/ait-storage.shapes';
-
 
 
 /**
@@ -240,7 +241,7 @@ export class SignalService {
     const loop = (): void => {
       if (interval <= intervals) {
         interval++;
-        // Promise is settling to earlier and NativeAudio seems to be an inactive plugin for 
+        // Promise is settling to earlier and NativeAudio seems to be an inactive plugin for
         // development. Circumventing  this issue by doing the same as its done in loopVibrate(),
         // that is, calculate the totalDuration of the sound sequence.
         // issue: https://github.com/floatinghotpot/cordova-plugin-nativeaudio/issues/147

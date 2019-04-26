@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import { Component, Input } from '@angular/core';
+
 import { SequenceStates } from '../../services/sots/ait-sots.util';
 import { Limits } from '../../services/storage/ait-storage.shapes';
 

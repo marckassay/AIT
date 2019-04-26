@@ -17,6 +17,7 @@
 */
 import moment from 'moment';
 import { environment } from 'src/environments/environment';
+
 import { MockStorageData, StorageDefaultData } from './services/storage/ait-storage.defaultdata';
 // tslint:disable-next-line:max-line-length
 import { AccentTheme, AppStorageData, BaseTheme, IntervalStorageData, TimerStorageData, UUIDData } from './services/storage/ait-storage.shapes';
@@ -243,11 +244,13 @@ export function profileEnd(label?: string): void {
 }
 export function timeStart(label = 'timer1'): void {
     if (environment.production === false) {
+        // tslint:disable-next-line: no-console
         console.time(label);
     }
 }
 export function timeEnd(label = 'timer1'): void {
     if (environment.production === false) {
+        // tslint:disable-next-line: no-console
         console.timeEnd(label);
     }
 }

@@ -18,10 +18,12 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ITimeEmission } from 'sots';
 import { AppUtils } from 'src/app/app.utils';
+
 import { ActiverestRendererComponent } from '../../components/activerest-renderer/activerest-renderer';
 import { SequenceStates } from '../../services/sots/ait-sots.util';
 import { DisplayPage } from '../display-page';
 import { IntervalSettingsPage } from '../interval-settings/interval-settings.page';
+
 
 @Component({
   selector: 'page-interval-display',

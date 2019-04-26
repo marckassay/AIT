@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { XProgressBarModule } from 'src/app/components/x-progress-bar/x-progress-bar.module';
+
 import { AppSettingsPage } from './app-settings.page';
 
 

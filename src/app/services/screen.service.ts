@@ -20,13 +20,14 @@ import { AndroidFullScreen, AndroidSystemUiFlags } from '@ionic-native/android-f
 import { Brightness } from '@ionic-native/brightness/ngx';
 import { LottieSplashScreen } from '@ionic-native/lottie-splash-screen/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { BehaviorSubject, timer } from 'rxjs';
+import { timer, BehaviorSubject } from 'rxjs';
 import { delayWhen, distinctUntilChanged, tap, throttleTime } from 'rxjs/operators';
+
 import { AppUtils } from '../app.utils';
+
 import { StorageDefaultData } from './storage/ait-storage.defaultdata';
 import { AITStorage } from './storage/ait-storage.service';
 import { AppStorageData, BrightnessSet } from './storage/ait-storage.shapes';
-
 
 
 export class BrightnessUtil {
@@ -191,19 +192,19 @@ export class ScreenService {
 
   /**
    * Enables regular immersive mode.
-   * 
+   *
    * @ref https://developer.android.com/training/system-ui/immersive#EnableFullscreen
    */
-  private immersiveMode() {
+  private immersiveMode(): Promise<void> {
     return this.uibars.immersiveMode();
   }
 
   /**
    * Enables regular immersive sticky mode.
-   * 
+   *
    * @ref https://developer.android.com/training/system-ui/immersive#EnableFullscreen
    */
-  private immersiveSticky() {
+  private immersiveSticky(): Promise<void> {
     return this.uibars.setSystemUiVisibility(
       AndroidSystemUiFlags.ImmersiveSticky |
       // Set the content to appear under the system bars so that the

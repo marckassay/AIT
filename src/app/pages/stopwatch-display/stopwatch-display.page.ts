@@ -19,8 +19,10 @@ import { Component } from '@angular/core';
 import { ITimeEmission } from 'sots';
 import { AppUtils } from 'src/app/app.utils';
 import { SequenceStates } from 'src/app/services/sots/ait-sots.util';
+
 import { DisplayPage } from '../display-page';
 import { StopwatchSettingsPage } from '../stopwatch-settings/stopwatch-settings.page';
+
 
 @Component({
   selector: 'page-stopwatch-display',
