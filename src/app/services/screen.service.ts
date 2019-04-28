@@ -141,12 +141,18 @@ export class ScreenService {
   async bootupScreen(): Promise<void> {
     this.uibars.showUnderSystemUI();
 
+    // delay to prevent seeing the infamous "white flash" that developers come across in Ionic
     await AppUtils.delayPromise(1000);
     this.splash.hide();
-    this._isSplashHidden = true;
-    await AppUtils.delayPromise(1000);
 
+    this._isSplashHidden = true;
+
+    // delay further execution post splash hide to show egress of UI from immersiveMode
+    await AppUtils.delayPromise(1000);
     await this.immersiveMode();
+
+    await AppUtils.delayPromise(5000);
+    await this.uibars.immersiveWidth();
   }
 
   async setScreenToRunningMode(value: boolean): Promise<void> {

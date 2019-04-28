@@ -93,7 +93,6 @@ export class DisplayPage implements OnInit, AfterViewInit {
     this.sots = new SotsForAit();
     this.signalSvc.onInit();
     this.screenSvc.onInit();
-
     this.isStartUp = !!(this.route.snapshot.queryParams.isStartUp);
     this.componentSubjet = (this.route.snapshot.data as any).subject as BehaviorSubject<any>;
 
@@ -219,10 +218,16 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * method is now done subcribing.
    */
   private async attachSettingsAndCheckHome(): Promise<void> {
+    // enable side menus at the same time in an attempts to circumvent issue #16985 (https://github.com/ionic-team/ionic/issues/16985)
     const resolveSideMenus = (resolve: () => void): void => {
       this.floatingbuttons.setHomeButtonToVisible();
       this.menuSvc.enableLeftMenu(true);
+
+      this.floatingbuttons.setProgramButtonToVisible();
+      this.menuSvc.enableRightMenu(true);
+
       this.progress.hide();
+
       resolve();
     };
 
@@ -245,10 +250,6 @@ export class DisplayPage implements OnInit, AfterViewInit {
                 injector: this.injector
               });
             } else if ((note.subject === 'end') && (note.response === true)) {
-
-              this.floatingbuttons.setProgramButtonToVisible();
-              this.menuSvc.enableRightMenu(true);
-
               if (this.isStartUp === true) {
                 this.menuSvc.send({
                   subject: 'start',
@@ -272,13 +273,11 @@ export class DisplayPage implements OnInit, AfterViewInit {
         }
       });
 
-      if (this.isStartUp === false) {
-        this.menuSvc.send({
-          subject: 'end',
-          request: 'status',
-          uuid: (this.uuidData as UUIDData).uuid
-        });
-      }
+      this.menuSvc.send({
+        subject: 'end',
+        request: 'status',
+        uuid: (this.uuidData as UUIDData).uuid
+      });
     });
   }
 

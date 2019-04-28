@@ -99,10 +99,12 @@ export class AppComponent implements OnInit {
             (note.response === true) &&
             (this.areSideMenusInteractive === false)) {
 
-            this.screenSvc.bootupScreen().then(() => {
-              this.areSideMenusInteractive = true;
-            });
+            this.screenSvc.bootupScreen()
+              .then(() => {
+                this.areSideMenusInteractive = true;
 
+                // TODO: progress.hide()
+              });
           }
         }
       }
@@ -129,18 +131,10 @@ export class AppComponent implements OnInit {
           queryParams: { 'isStartUp': true }
         };
 
-        // launch last known page...
-        await this.router.navigate(startroute, navigationExtras);
-
-        await AppUtils.delayPromise(2000);
         this.subscribeMenuService();
 
-        // send request to that will start side menu loading
-        this.menuSvc.send({
-          subject: 'end',
-          request: 'status',
-          uuid: appSubjetUUID
-        });
+        // launch last known page...
+        await this.router.navigate(startroute, navigationExtras);
       });
 
     this.platform.resume.subscribe(() => {
