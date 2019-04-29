@@ -2,9 +2,9 @@ import * as spawnAsync from '@expo/spawn-async';
 import { pathExists, remove } from 'fs-extra';
 
 /**
- * The `json` file that contains a path to `.keystore` file. This `json` file also needs passwords 
+ * The `json` file that contains a path to `.keystore` file. This `json` file also needs passwords
  * since nodejs when spawned doesnt prompt user for password (at least that seems to be the case).
- * 
+ *
  * Below is what is expected:
 ```
 {
@@ -46,13 +46,13 @@ let deployToDeviceSwitch = false;
 
 /**
  * Asynchronous spawns a CLI command. This is function is copied from `spawn-async` homepage example.
- * 
+ *
  * @param command same as if typed in the CLI
  */
-async function call(command: string) {
+async function call(command: string): Promise<number> {
     console.log('[ait] scripts/apk.ts:', command);
-    let resultPromise = spawnAsync(command);
-    let spawnedChildProcess = resultPromise.child;
+    const resultPromise = spawnAsync(command);
+    const spawnedChildProcess = resultPromise.child;
 
     spawnedChildProcess.stdout.on('data', (data) => {
         console.log(`${data}`);
@@ -63,20 +63,16 @@ async function call(command: string) {
     });
 
     try {
-        let {
-            pid,
-            stdout,
-            stderr,
-            status,
-            signal,
-        } = await resultPromise;
+        await resultPromise;
+        return 0;
     } catch (e) {
         console.error(e.stack);
         // The error object also has the same properties as the result object
+        return 1;
     }
-};
+}
 
-(async function () {
+(async function (): Promise<void> {
     const buildFileExists = await pathExists(buildFilePath);
     if (buildFileExists) {
         for (let j = 0; j < process.argv.length; j++) {
@@ -88,20 +84,19 @@ async function call(command: string) {
         }
 
         if (releaseBuildSwitch) {
-            await call('ionic cordova build android --prod --release --buildConfig=' + buildFilePath);
+            const status = await call('ionic cordova build android --prod --release --buildConfig=' + buildFilePath);
 
-            if (deployToDeviceSwitch) {
+            if (status === 0 && deployToDeviceSwitch) {
                 await call('adb install -r ./platforms/android/app/build/outputs/apk/release/app-release.apk');
             }
 
         } else {
-            await call('ionic cordova build android --debug');
+            const status = await call('ionic cordova build android --debug');
 
-            if (deployToDeviceSwitch) {
+            if (status === 0 && deployToDeviceSwitch) {
                 await call('adb install -r ./platforms/android/app/build/outputs/apk/debug/app-debug.apk');
             }
         }
-
 
 
         if (releaseBuildSwitch) {
