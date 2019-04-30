@@ -101,9 +101,8 @@ export class AppComponent implements OnInit {
 
             this.screenSvc.bootupScreen()
               .then(() => {
-                this.areSideMenusInteractive = true;
-
-                // TODO: progress.hide()
+                this.screenSvc.fix();
+                this.areSideMenusInteractive = false;
               });
           }
         }

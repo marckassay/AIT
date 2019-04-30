@@ -292,12 +292,14 @@ export class DisplayPage implements OnInit, AfterViewInit {
         this.floatingbuttons.setToPausedMode();
         await this.setAppToRunningMode(false);
         await this.menuSvc.openLeftMenu();
+
         break;
       case FabAction.Program:
         this.sots.sequencer.pause();
         this.floatingbuttons.setToPausedMode();
         await this.setAppToRunningMode(false);
         await this.menuSvc.openRightMenu();
+
         break;
       case FabAction.Reset:
         this.resetTimer();

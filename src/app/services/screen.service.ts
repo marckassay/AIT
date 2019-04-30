@@ -150,9 +150,10 @@ export class ScreenService {
     // delay further execution post splash hide to show egress of UI from immersiveMode
     await AppUtils.delayPromise(1000);
     await this.immersiveMode();
+  }
 
-    await AppUtils.delayPromise(5000);
-    await this.uibars.immersiveWidth();
+  fix(): void {
+    this.uibars.clearFixFlags();
   }
 
   async setScreenToRunningMode(value: boolean): Promise<void> {
