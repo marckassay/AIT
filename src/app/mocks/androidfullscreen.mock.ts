@@ -68,6 +68,15 @@ export class AndroidFullScreenMock extends IonicNativePlugin {
         });
     }
     /**
+     * Hack to circumvent issue #9
+     * @return {Promise<void>}
+     */
+    clearFixFlags(): Promise<void> {
+        return new Promise((resolve): void => {
+            setTimeout(() => resolve(), 250);
+        });
+    }
+    /**
      * Extend your app underneath the system UI (Android 4.4+ only).
      * @return {Promise<void>}
      */
