@@ -1,6 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { NextObserver, Subject, Subscription } from 'rxjs';
+import { error, log } from 'src/app/app.utils';
 
 export interface OnClosed {
   smOnClosed(): void;
@@ -20,8 +21,10 @@ export interface SideMenuStatusRequest {
   uuid: string;
 }
 
+
 export interface SideMenuStatusResponse {
-  subject: 'start' | 'end';
+  // The '*' value is for this hack: https://github.com/ionic-team/ionic/issues/16002
+  subject: 'start' | 'end' | '*';
   /**
    * If `true`, the `subject` menu has been loaded. Otherwise `false`
    */
@@ -53,6 +56,7 @@ export class SideMenuService {
     this.subject = new Subject<SideMenuShapes>();
 
     // TODO: look into using `@HostListener` as an alternative to what is below:
+
     this.menuCtrl.get('start').then((element: HTMLIonMenuElement) => {
       element.addEventListener('ionDidClose', () => this.leftMenuClosed());
     });
@@ -60,6 +64,7 @@ export class SideMenuService {
     this.menuCtrl.get('end').then((element: HTMLIonMenuElement) => {
       element.addEventListener('ionDidClose', () => this.rightMenuClosed());
     });
+
   }
 
   send(value: SideMenuShapes): void {
@@ -81,23 +86,44 @@ export class SideMenuService {
   async enableMenus(value: boolean): Promise<void> {
     await this.enableLeftMenu(value);
     await this.enableRightMenu(value);
+
     return Promise.resolve();
   }
 
-  enableLeftMenu(value: boolean): Promise<HTMLIonMenuElement> {
-    return this.menuCtrl.enable(value, 'start');
+  enableLeftMenu(value: boolean): Promise<void> {
+    return Promise.all([
+      this.menuCtrl.enable(value, 'start')])
+      .then(() => {
+        return Promise.resolve();
+      })
+      .catch((reason) => {
+        error(reason);
+      });
   }
 
-  enableRightMenu(value: boolean): Promise<HTMLIonMenuElement> {
-    return this.menuCtrl.enable(value, 'end');
+  enableRightMenu(value: boolean): Promise<void> {
+    return Promise.all([
+      this.menuCtrl.enable(value, 'end')])
+      .then(() => {
+        return Promise.resolve();
+      })
+      .catch((reason) => {
+        error(reason);
+      });
   }
 
   openLeftMenu(): Promise<boolean> {
-    return this.menuCtrl.open('start');
+    return this.menuCtrl.open('start')
+      .then((value) => {
+        return Promise.resolve<boolean>(value);
+      });
   }
 
   openRightMenu(): Promise<boolean> {
-    return this.menuCtrl.open('end');
+    return this.menuCtrl.open('end')
+      .then((value) => {
+        return Promise.resolve<boolean>(value);
+      });
   }
 
   closeLeftMenu(): Promise<boolean> {
@@ -108,11 +134,27 @@ export class SideMenuService {
     return this.menuCtrl.close('end');
   }
 
-  leftMenuClosed(): void {
+  private leftMenuClosed(): void {
     this.send({ subject: 'start', event: 'ionDidClose' });
   }
 
-  rightMenuClosed(): void {
+  private rightMenuClosed(): void {
     this.send({ subject: 'end', event: 'ionDidClose' });
+  }
+
+  // Hack for: https://github.com/ionic-team/ionic/issues/16002
+  swipeGestureEnabled(): void {
+    this.send({ subject: '*', response: true, uuid: '' });
+  }
+  // Broken: https://github.com/ionic-team/ionic/issues/16002
+  private swipeGesture(value: boolean, id: 'start' | 'end'): Promise<void> {
+    return this.menuCtrl.get(id)
+      .then((element) => {
+        element.swipeGesture = value;
+        return Promise.resolve();
+      })
+      .catch((reason) => {
+        error(reason);
+      });
   }
 }

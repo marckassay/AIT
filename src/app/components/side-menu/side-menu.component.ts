@@ -1,4 +1,5 @@
 import { Component, ComponentRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { environment as env } from 'src/environments/environment';
 
 import { OnClosed, SideMenuEvent, SideMenuLoadRequest, SideMenuService, SideMenuShapes, SideMenuStatusRequest } from './side-menu.service';
 
@@ -12,26 +13,31 @@ export interface CacheViewRef {
 
 @Component({
   selector: 'side-menu',
-  template: '<ng-template #menu></ng-template>'
+  template: `<ng-template #menuContent></ng-template>`
 })
 export class SideMenuComponent implements OnInit {
-  @ViewChild('menu', { read: ViewContainerRef })
-  protected menu: ViewContainerRef;
+  @ViewChild('menuContent', { read: ViewContainerRef })
+  protected menuContent: ViewContainerRef;
 
   @Input()
   id: 'start' | 'end';
 
   @Input()
+  swipeGestureEnabled: boolean;
+
   /**
    * When set to false, `cachedViewRefs` will only store 1 viewref which will be the latest viewref
    * attached.
    */
-  cacheEnabled: boolean;
+  private cacheEnabled: boolean;
+
 
   private cachedViewRefs: Array<CacheViewRef>;
 
   constructor(protected menuSvc: SideMenuService) {
     this.cachedViewRefs = [];
+    this.swipeGestureEnabled = false;
+    this.cacheEnabled = env.enableViewCache;
   }
 
   ngOnInit(): void {
@@ -119,20 +125,19 @@ export class SideMenuComponent implements OnInit {
   private reattachComponent(uuid: string): void {
     const component = this.getCache(uuid);
     component.attached = true;
-    this.menu.detach();
-    this.menu.insert(component.componentRef.hostView);
+    this.menuContent.detach();
+    this.menuContent.insert(component.componentRef.hostView);
   }
 
   private attachComponent(note: SideMenuLoadRequest): void {
-    if (this.menu.length) {
-      this.menu.detach();
+    if (this.menuContent.length) {
+      this.menuContent.detach();
     }
 
-    const component: ComponentRef<unknown> = this.menu.createComponent(note.component);
+    const component: ComponentRef<unknown> = this.menuContent.createComponent(note.component);
     (component.instance as any).uuid = note.uuid;
     (component.instance as any).injector = note.injector;
     component.changeDetectorRef.detectChanges();
-
     this.setCache(component);
   }
 

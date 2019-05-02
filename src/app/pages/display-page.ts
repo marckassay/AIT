@@ -138,7 +138,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * Runs when the page has finished leaving and is no longer the active page.
    */
   ionViewDidLeave(): void {
-    this.isStartUp = false;
+    // this.isStartUp = false;
   }
 
   /**
@@ -175,8 +175,7 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * @param value true if timer is ticking
    */
   protected async setAppToRunningMode(value: boolean): Promise<void> {
-    await this.menuSvc.enableLeftMenu(value === false);
-    await this.menuSvc.enableRightMenu(value === false);
+    await this.menuSvc.enableMenus(value === false);
 
     if (this.timerState === SequenceStates.Completed) {
       this.floatingbuttons.setToCompletedMode();
@@ -221,10 +220,11 @@ export class DisplayPage implements OnInit, AfterViewInit {
     // enable side menus at the same time in an attempts to circumvent issue #16985 (https://github.com/ionic-team/ionic/issues/16985)
     const resolveSideMenus = (resolve: () => void): void => {
       this.floatingbuttons.setHomeButtonToVisible();
-      this.menuSvc.enableLeftMenu(true);
-
       this.floatingbuttons.setProgramButtonToVisible();
-      this.menuSvc.enableRightMenu(true);
+
+      if (this.isStartUp === false) {
+        this.menuSvc.enableMenus(true);
+      }
 
       this.progress.hide();
 
@@ -286,6 +286,13 @@ export class DisplayPage implements OnInit, AfterViewInit {
    * `fabcontainer.component` (Child component). afterwards it will execute this function.
    */
   async action(emission: FabEmission): Promise<void> {
+
+    if (this.isStartUp === true) {
+      this.isStartUp = false;
+      this.menuSvc.swipeGestureEnabled();
+      await this.menuSvc.enableMenus(true);
+    }
+
     switch (emission.action) {
       case FabAction.Home:
         this.sots.sequencer.pause();

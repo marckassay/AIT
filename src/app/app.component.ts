@@ -15,14 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import { Component, ComponentFactoryResolver, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, Injector, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
-import { environment as env } from 'src/environments/environment';
 
-import { AppUtils } from './app.utils';
-import { SideMenuComponent } from './components/side-menu/side-menu.component';
+import { error, AppUtils } from './app.utils';
 import { SideMenuService, SideMenuShapes, SideMenuStatusResponse } from './components/side-menu/side-menu.service';
 import { HomePage } from './pages/home/home.page';
 import { ScreenService } from './services/screen.service';
@@ -36,21 +34,12 @@ import { AppStorageData } from './services/storage/ait-storage.shapes';
   templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
-  @ViewChild('startMenu')
-  startMenu: SideMenuComponent;
-
-  @ViewChild('endMenu')
-  endMenu: SideMenuComponent;
-
   /**
    * The css app theme that `this.watchTheme()` provides updates
    */
   theme: string;
 
-  /**
-   * Enables or disables sidemenus from being cached by `SideMenuComponent`.
-   */
-  cacheSideMenus = env.enableViewCache;
+  private isStartUp: boolean;
 
   /**
    * To be used momentary to disable interaction
@@ -69,6 +58,7 @@ export class AppComponent implements OnInit {
     private menuSvc: SideMenuService
   ) {
     this.areSideMenusInteractive = false;
+    this.isStartUp = true;
   }
 
   ngOnInit(): void {
@@ -94,16 +84,20 @@ export class AppComponent implements OnInit {
               injector: this.injector
             });
 
-            // post app start-up; after start and end sidemenus have been loaded
           } else if ((note.subject === 'start') &&
             (note.response === true) &&
-            (this.areSideMenusInteractive === false)) {
+            (this.isStartUp === true)) {
 
+            this.isStartUp = false;
             this.screenSvc.bootupScreen()
               .then(() => {
                 this.screenSvc.fix();
-                this.areSideMenusInteractive = false;
+              })
+              .catch((reason) => {
+                error(reason);
               });
+          } else if (note.subject === '*') {
+            this.areSideMenusInteractive = true;
           }
         }
       }
