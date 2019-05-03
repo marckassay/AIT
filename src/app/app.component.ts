@@ -90,9 +90,6 @@ export class AppComponent implements OnInit {
 
             this.isStartUp = false;
             this.screenSvc.bootupScreen()
-              .then(() => {
-                this.screenSvc.fix();
-              })
               .catch((reason) => {
                 error(reason);
               });

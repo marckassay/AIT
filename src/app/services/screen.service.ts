@@ -152,10 +152,6 @@ export class ScreenService {
     await this.immersiveMode();
   }
 
-  fix(): void {
-    this.uibars.clearFixFlags();
-  }
-
   async setScreenToRunningMode(value: boolean): Promise<void> {
     await this.applyOrientation(value);
     await AppUtils.delayPromise(250);
