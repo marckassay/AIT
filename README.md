@@ -36,7 +36,7 @@ The 3 timing modes for this application are: Interval, Timer and Stopwatch. Each
 
   | AIT APK | MD5 Checksum |
   | ----------- | ----------- |
-  | [2.1.9](https://github.com/marckassay/AIT/raw/master/releases/219.apk) | `1C5644579B418CCE154BF28AA4910C27` |
+  | [2.1.9](https://github.com/marckassay/AIT/raw/master/releases/219.apk) | `773135170417C5CD54E551FFC4958578` |
   | [2.1.8](https://github.com/marckassay/AIT/raw/master/releases/218.apk) | `CD7AF99F9E010F470DE8FE743E8C4C79` |
   | [2.1.7](https://github.com/marckassay/AIT/raw/master/releases/217.apk) | `B75BC1F17F1886CDF1D2570CF0143988` |
   | [2.1.6](https://github.com/marckassay/AIT/raw/master/releases/216.apk) | `828467AFA53BEB7A4291242D049627E1` |
