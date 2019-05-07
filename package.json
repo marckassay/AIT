@@ -48,7 +48,7 @@
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-fullscreen": "1.2.0",
     "cordova-plugin-ionic-webview": "^3.1.2",
-    "cordova-plugin-lottie-splashscreen": "0.5.0",
+    "cordova-plugin-lottie-splashscreen": "0.6.0",
     "cordova-plugin-nativeaudio": "^3.0.9",
     "cordova-plugin-screen-orientation": "^3.0.1",
     "cordova-plugin-statusbar": "^2.4.2",
@@ -66,6 +66,7 @@
     "@angular-devkit/build-angular": "^0.13.8",
     "@angular-devkit/core": "^7.3.8",
     "@angular-devkit/schematics": "^7.3.8",
+    "@angular/cli": "7.3.8",
     "@angular/compiler": "^7.2.14",
     "@angular/compiler-cli": "^7.2.14",
     "@angular/language-service": "^7.2.14",
@@ -107,8 +108,8 @@
       "cordova-plugin-vibration": {},
       "cordova-plugin-nativeaudio": {},
       "clovelced-plugin-audiomanagement": {},
-      "cordova-plugin-lottie-splashscreen": {},
-      "cordova-plugin-fullscreen": {}
+      "cordova-plugin-fullscreen": {},
+      "cordova-plugin-lottie-splashscreen": {}
     },
     "platforms": [
       "android"
